@@ -1,0 +1,64 @@
+/*
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+package net.nicholaswilliams.java.licensing.immutable;
+
+import java.io.Serializable;
+import java.util.LinkedHashSet;
+import java.util.Set;
+
+/**
+ * Wraps a set such that it cannot be modified. There is some overhead
+ * associated with this due to verification of hash codes on every call to
+ * prevent tampering with via reflection, but this is well worth it if your goal
+ * is security and you truly need an unmodifiable set.
+ *
+ * @author Nick Williams
+ * @version 1.0.0
+ * @since 1.0.0
+ */
+public final class ImmutableLinkedHashSet<E> extends ImmutableAbstractCollection<E>
+		implements Set<E>, Serializable, Cloneable
+{
+	private final static long serialVersionUID = 2284350955829958161L;
+
+	private final LinkedHashSet<E> internalSet;
+
+	/**
+	 * Constructor that copies.
+	 *
+	 * @param list the set to decorate, must not be null
+	 * @throws IllegalArgumentException if list is null
+	 */
+	public ImmutableLinkedHashSet(Set<E> list)
+	{
+		super(new LinkedHashSet<E>(list));
+
+		this.internalSet = (LinkedHashSet<E>)this.internalCollection;
+	}
+
+	@Override
+	@SuppressWarnings({"unchecked", "CloneDoesntCallSuperClone"})
+	public final ImmutableLinkedHashSet<E> clone()
+	{
+		synchronized(this.internalSet)
+		{
+			this.checkValidity();
+			return new ImmutableLinkedHashSet<E>((Set<E>)this.internalSet.clone());
+		}
+	}
+}

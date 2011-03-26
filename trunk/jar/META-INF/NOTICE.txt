@@ -1,0 +1,5 @@
+NWTS LicenseManager
+Copyright 2010-2011 Nicholas Williams
+
+This product includes software developed by
+The Apache Software Foundation (http://www.apache.org/).

@@ -1,0 +1,280 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  ~ Licensed to the Apache Software Foundation (ASF) under one or more
+  ~ contributor license agreements.  See the NOTICE file distributed with
+  ~ this work for additional information regarding copyright ownership.
+  ~ The ASF licenses this file to You under the Apache License, Version 2.0
+  ~ (the "License"); you may not use this file except in compliance with
+  ~ the License.  You may obtain a copy of the License at
+  ~
+  ~     http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+
+<project name="licensemanager" default="all">
+
+	<property file="ant-build.properties" />
+
+	<dirname property="module.licensemanager.basedir" file="${ant.file}" />
+
+	<taskdef resource="net/sf/antcontrib/antcontrib.properties">
+		<classpath>
+			<pathelement location="${module.licensemanager.basedir}/test/lib/net.sf.antcontrib-1.0b3.jar" />
+		</classpath>
+	</taskdef>
+
+	<!-- Compiler options -->
+
+	<property name="compiler.debug" value="on" />
+	<property name="compiler.generate.no.warnings" value="off" />
+	<property name="compiler.args" value="" />
+	<property name="compiler.max.memory" value="256m" />
+
+	<!-- JDK definitions -->
+
+	<property name="jdk.bin.1.6" value="${jdk.home.1.6}/bin" />
+	<path id="jdk.classpath.1.6">
+		<fileset dir="${jdk.home.1.6}">
+			<include name="../../../../Support/Deploy.bundle/Contents/Resources/Java/deploy.jar" />
+			<include name="lib/dt.jar" />
+			<include name="lib/javaws.jar" />
+			<include name="lib/jce.jar" />
+			<include name="lib/jconsole.jar" />
+			<include name="lib/management-agent.jar" />
+			<include name="lib/plugin.jar" />
+			<include name="lib/sa-jdi.jar" />
+			<include name="../Classes/alt-rt.jar" />
+			<include name="../Classes/charsets.jar" />
+			<include name="../Classes/classes.jar" />
+			<include name="../Classes/jsse.jar" />
+			<include name="../Classes/ui.jar" />
+			<include name="lib/ext/apple_provider.jar" />
+			<include name="lib/ext/dnsns.jar" />
+			<include name="lib/ext/localedata.jar" />
+			<include name="lib/ext/sunjce_provider.jar" />
+			<include name="lib/ext/sunpkcs11.jar" />
+		</fileset>
+	</path>
+
+	<property name="project.jdk.home" value="${jdk.home.1.6}" />
+	<property name="project.jdk.bin" value="${jdk.bin.1.6}" />
+	<property name="project.jdk.classpath" value="jdk.classpath.1.6" />
+
+	<!-- Application Server Libraries -->
+
+	<!-- Modules -->
+
+	<!-- Module LicenseManager -->
+
+	<dirname property="module.licensemanager.basedir" file="${ant.file}" />
+
+	<property name="module.jdk.home.licensemanager" value="${project.jdk.home}" />
+	<property name="module.jdk.bin.licensemanager" value="${project.jdk.bin}" />
+	<property name="module.jdk.classpath.licensemanager" value="${project.jdk.classpath}" />
+
+	<property name="compiler.args.licensemanager" value="${compiler.args}" />
+
+	<property name="licensemanager.dir.output" value="${module.licensemanager.basedir}/out/production/LicenseManager" />
+	<property name="licensemanager.dir.testOutput" value="${module.licensemanager.basedir}/out/test/LicenseManager" />
+	<property name="licensemanager.dir.artifactOutput" value="${module.licensemanager.basedir}/out/artifacts" />
+	<property name="licensemanager.dir.javaDoc" value="${module.licensemanager.basedir}/out/javadoc" />
+
+	<path id="licensemanager.module.bootClasspath">
+		<!-- Paths to be included in compilation boot classpath -->
+	</path>
+
+	<property name="licensemanager.dependencies.runtime" value="dependencies.runtime" />
+	<path id="dependencies.runtime">
+		<fileset dir="${basedir}/lib">
+			<include name="*.jar" />
+		</fileset>
+	</path>
+
+	<property name="licensemanager.dependencies.test" value="dependencies.test" />
+	<path id="dependencies.test">
+		<fileset dir="${basedir}/test/lib">
+			<include name="*.jar" />
+		</fileset>
+	</path>
+
+	<path id="licensemanager.classpath.build">
+		<path refid="${module.jdk.classpath.licensemanager}" />
+		<path refid="${licensemanager.dependencies.runtime}" />
+	</path>
+
+	<path id="licensemanager.classpath.runtime">
+		<path refid="${module.jdk.classpath.licensemanager}" />
+		<pathelement location="${licensemanager.dir.output}" />
+		<path refid="${licensemanager.dependencies.runtime}" />
+	</path>
+
+	<path id="licensemanager.classpath.test.build">
+		<path refid="${module.jdk.classpath.licensemanager}" />
+		<pathelement location="${licensemanager.dir.output}" />
+		<path refid="${licensemanager.dependencies.runtime}" />
+		<path refid="${licensemanager.dependencies.test}" />
+	</path>
+
+	<path id="licensemanager.classpath.test.runtime">
+		<path refid="${module.jdk.classpath.licensemanager}" />
+		<pathelement location="${licensemanager.dir.output}" />
+		<pathelement location="${licensemanager.dir.testOutput}" />
+		<path refid="${licensemanager.dependencies.runtime}" />
+		<path refid="${licensemanager.dependencies.test}" />
+	</path>
+
+	<path id="licensemanager.path.build.source">
+		<dirset dir="${module.licensemanager.basedir}">
+			<include name="src" />
+		</dirset>
+	</path>
+
+	<path id="licensemanager.path.build.test.unit">
+		<dirset dir="${module.licensemanager.basedir}">
+			<include name="test/unit" />
+		</dirset>
+	</path>
+
+	<target name="clean" description="Cleanup">
+		<delete dir="${licensemanager.dir.output}" />
+		<delete dir="${licensemanager.dir.testOutput}" />
+		<delete dir="${licensemanager.dir.artifactOutput}" />
+		<delete dir="${licensemanager.dir.javaDoc}" />
+	</target>
+
+	<target name="init" description="Build initialization">
+		<mkdir dir="${licensemanager.dir.output}" />
+		<mkdir dir="${licensemanager.dir.testOutput}" />
+		<mkdir dir="${licensemanager.dir.artifactOutput}" />
+		<mkdir dir="${licensemanager.dir.javaDoc}" />
+
+		<!-- Determining the Java version for the compiler that we're actually using -->
+		<exec executable="${project.jdk.bin}/javac" outputproperty="java.jvm.version" failonerror="true" failifexecutionfails="true">
+			<arg value="-version" />
+		</exec>
+		<propertyregex property="java.jvm.version" input="${java.jvm.version}" casesensitive="false" override="true"
+					   regexp="javac ([0-9a-b\.\_]+)" select="\1" />
+		<echo message="Java compiler version is ${java.jvm.version}" />
+	</target>
+
+	<target name="compile.module.all"
+			depends="compile.module.source, compile.module.test.unit, generate.module.javaDoc"
+			description="Compile module LicenseManager" />
+
+	<target name="compile.module.source" depends="clean, init" description="Compile production classes">
+		<mkdir dir="${licensemanager.dir.output}" />
+		<javac destdir="${licensemanager.dir.output}" debug="${compiler.debug}"
+			   nowarn="${compiler.generate.no.warnings}" memorymaximumsize="${compiler.max.memory}" fork="true"
+			   executable="${module.jdk.bin.licensemanager}/javac">
+			<compilerarg line="${compiler.args.licensemanager}" />
+			<bootclasspath refid="licensemanager.module.bootClasspath" />
+			<classpath refid="licensemanager.classpath.build" />
+			<src refid="licensemanager.path.build.source" />
+		</javac>
+	</target>
+
+	<target name="compile.module.test.unit" depends="clean, init, compile.module.source" description="Compile test classes"
+			unless="skip.tests">
+		<mkdir dir="${licensemanager.dir.testOutput}" />
+		<javac destdir="${licensemanager.dir.testOutput}" debug="${compiler.debug}"
+			   nowarn="${compiler.generate.no.warnings}" memorymaximumsize="${compiler.max.memory}" fork="true"
+			   executable="${module.jdk.bin.licensemanager}/javac">
+			<compilerarg line="${compiler.args.licensemanager}" />
+			<bootclasspath refid="licensemanager.module.bootClasspath" />
+			<classpath refid="licensemanager.classpath.test.build" />
+			<src refid="licensemanager.path.build.test.unit" />
+		</javac>
+	</target>
+
+	<target name="generate.module.javaDoc" depends="clean, init" description="Generates the JavaDoc for the project">
+		<javadoc sourcepath="${module.licensemanager.basedir}/src"
+				 destdir="${licensemanager.dir.javaDoc}"
+				 maxmemory="${compiler.max.memory}"
+				 access="protected"
+				 version="true"
+				 use="true"
+				 author="true"
+				 windowtitle="LicenseManager"
+				 breakiterator="yes"
+				 failonerror="true">
+			<doctitle><![CDATA[<h2>LicenseManager</h2>]]></doctitle>
+			<bottom>
+				<![CDATA[<i>Copyright &#169; 2010-2011 Nicholas Williams. All Rights Reserved. Licensed Under the
+				<a href="http://www.apache.org/licenses/LICENSE-2.0">Apache License 2.0</a>.</i>]]>
+			</bottom>
+			<link href="http://download.oracle.com/javase/6/docs/api/" />
+			<link href="http://commons.apache.org/cli/api-1.2/" />
+			<link href="http://commons.apache.org/codec/api-1.4/" />
+			<link href="http://commons.apache.org/io/api-2.0.1/" />
+		</javadoc>
+	</target>
+
+	<target name="package.artifact.all"
+			depends="package.artifact.embeddable, package.artifact.sources, package.artifact.javadoc"
+			description="Build all artifacts" />
+
+	<target name="package.artifact.embeddable" depends="clean, init, compile.module.source" description="Package Embeddable Jar">
+		<!-- Determine the manifest class-path property -->
+		<pathconvert property="manifest.classpath" pathsep=" ">
+			<path refid="${licensemanager.dependencies.runtime}" />
+			<!-- <map from="${basedir}/lib" to="lib" /> Maybe not needed? -->
+			<flattenmapper />
+		</pathconvert>
+		<echo message="Manifest class-path is ${manifest.classpath}" />
+
+		<!-- Package the JAR file -->
+		<jar destfile="${licensemanager.dir.artifactOutput}/net.nicholaswilliams.java.licensing-${licensemanager.version}.jar"
+			 duplicate="preserve" filesetmanifest="skip" index="true">
+			<manifest>
+				<attribute name="Manifest-Version" value="1.0" />
+				<attribute name="Ant-Version" value="${ant.version}" />
+				<attribute name="Java-Version" value="${java.jvm.version}" />
+				<attribute name="Created-By" value="TeamCity" />
+				<attribute name="Bundle-Vendor" value="Nicholas Williams" />
+				<attribute name="Specification-Title" value="LicenseManager" />
+				<attribute name="Specification-Version" value="${licensemanager.version}" />
+				<attribute name="Implementation-Version" value="${licensemanager.version}" />
+				<attribute name="Sealed" value="true" />
+				<attribute name="Class-Path" value="${manifest.classpath}" />
+			</manifest>
+			<zipfileset file="${basedir}/jar/META-INF/LICENSE.txt" prefix="META-INF" />
+			<zipfileset file="${basedir}/jar/META-INF/NOTICE.txt" prefix="META-INF" />
+			<zipfileset dir="${licensemanager.dir.output}" />
+		</jar>
+	</target>
+
+	<target name="package.artifact.sources" depends="clean, init" description="Package Sources Jar">
+		<!-- Package the JAR file -->
+		<jar destfile="${licensemanager.dir.artifactOutput}/net.nicholaswilliams.java.licensing-sources-${licensemanager.version}.jar"
+			 duplicate="preserve" filesetmanifest="skip" index="false">
+			<manifest>
+				<attribute name="Manifest-Version" value="1.0" />
+				<attribute name="Ant-Version" value="${ant.version}" />
+				<attribute name="Java-Version" value="${java.jvm.version}" />
+				<attribute name="Created-By" value="TeamCity" />
+				<attribute name="Bundle-Vendor" value="Nicholas Williams" />
+				<attribute name="Specification-Title" value="LicenseManager" />
+				<attribute name="Specification-Version" value="${licensemanager.version}" />
+				<attribute name="Implementation-Version" value="${licensemanager.version}" />
+			</manifest>
+			<zipfileset file="${basedir}/jar/META-INF/LICENSE.txt" prefix="META-INF" />
+			<zipfileset file="${basedir}/jar/META-INF/NOTICE.txt" prefix="META-INF" />
+			<zipfileset dir="${module.licensemanager.basedir}/src" />
+		</jar>
+	</target>
+
+	<target name="package.artifact.javadoc" depends="clean, init, generate.module.javaDoc" description="Package JavaDoc Jar">
+		<!-- Package the JAR file -->
+		<zip destfile="${licensemanager.dir.artifactOutput}/net.nicholaswilliams.java.licensing-javadoc-${licensemanager.version}.jar"
+			 duplicate="preserve">
+			<zipfileset dir="${licensemanager.dir.javaDoc}" />
+		</zip>
+	</target>
+
+	<target name="all" depends="compile.module.all, package.artifact.all" description="Build and package all" />
+</project>

@@ -22,10 +22,12 @@ import net.nicholaswilliams.java.licensing.exception.AlgorithmNotSupportedExcept
 import net.nicholaswilliams.java.licensing.exception.InappropriateKeyException;
 import net.nicholaswilliams.java.licensing.exception.InappropriateKeySpecificationException;
 import net.nicholaswilliams.java.licensing.exception.RSA2048NotSupportedException;
+import net.nicholaswilliams.java.licensing.licensor.interfaces.text.abstraction.CliOptionsBuilder;
 import net.nicholaswilliams.java.licensing.licensor.interfaces.text.abstraction.TextInterfaceDevice;
 import net.nicholaswilliams.java.mock.StateFlag;
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
+import org.apache.commons.cli.Option;
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
 import org.apache.commons.io.FileUtils;
@@ -46,6 +48,7 @@ import java.security.NoSuchAlgorithmException;
 import java.security.PrivateKey;
 import java.security.PublicKey;
 import java.util.Arrays;
+import java.util.Collection;
 
 import static org.junit.Assert.*;
 
@@ -87,15 +90,18 @@ public class TestConsoleRSAKeyPairGenerator
 	}
 
 	@Test
+	@SuppressWarnings("unchecked")
 	public void testProcessCommandLineOptions01() throws ParseException
 	{
-		Capture<Options> options = new Capture<Options>();
-		Capture<String[]> arguments = new Capture<String[]>();
+		final String[] arguments = new String[] {};
+
+		Capture<Options> capturedOptions = new Capture<Options>();
+		Capture<String[]> capturedArguments = new Capture<String[]>();
 
 		PrintStream outStream = new PrintStream(this.out);
 		PrintStream errStream = new PrintStream(this.out);
 
-		EasyMock.expect(this.parser.parse(EasyMock.capture(options), EasyMock.capture(arguments), true)).
+		EasyMock.expect(this.parser.parse(EasyMock.capture(capturedOptions), EasyMock.capture(capturedArguments), EasyMock.eq(true))).
 				andThrow(new ParseException("message01"));
 		EasyMock.expect(this.device.err()).andReturn(errStream);
 		EasyMock.expect(this.device.out()).andReturn(outStream);
@@ -103,7 +109,198 @@ public class TestConsoleRSAKeyPairGenerator
 		EasyMock.expectLastCall();
 		this.control.replay();
 
-		this.console.processCommandLineOptions(new String[] {});
+		CommandLine returned = this.console.processCommandLineOptions(arguments);
+
+		assertNull("The returned value should be null.", returned);
+
+		assertSame("The arguments arrays should be the same object.", arguments, capturedArguments.getValue());
+
+		Options options = capturedOptions.getValue();
+		assertNotNull("The captured options are not correct.", options);
+		Collection<Option> optionCollection = options.getOptions();
+		assertNotNull("The list of options should not be null.", optionCollection);
+		assertEquals("The list of options should have one element.", 1, optionCollection.size());
+		assertEquals("The only option is not correct.",
+					 CliOptionsBuilder.get().withDescription("Display this help message").hasArg(false).create("help"),
+					 options.getOption("help"));
+
+		assertEquals("The output is not correct.",
+					 "message01\n" +
+						 "usage: ConsoleRSAKeyPairGenerator\n" +
+						 " -help                 Display this help message\n" +
+						 " -private <key file>   The name of the private key file to generate\n" +
+						 " -public <key file>    The name of the public key file to generate\n",
+					 new String(this.out.toByteArray()));
+	}
+
+	@Test
+	@SuppressWarnings("unchecked")
+	public void testProcessCommandLineOptions02() throws ParseException
+	{
+		final String[] arguments = new String[] {};
+
+		Capture<Options> capturedOptions = new Capture<Options>();
+		Capture<String[]> capturedArguments = new Capture<String[]>();
+
+		PrintStream outStream = new PrintStream(this.out);
+
+		final CommandLine cli = this.control.createMock(CommandLine.class);
+
+		EasyMock.expect(this.parser.parse(EasyMock.capture(capturedOptions), EasyMock.capture(capturedArguments),
+										  EasyMock.eq(true))).
+				andReturn(cli);
+		EasyMock.expect(cli.hasOption("help")).andReturn(true);
+		EasyMock.expect(this.device.out()).andReturn(outStream);
+		this.device.exit(0);
+		EasyMock.expectLastCall();
+		this.control.replay();
+
+		CommandLine returned = this.console.processCommandLineOptions(arguments);
+
+		assertNull("The returned value should be null.", returned);
+
+		assertSame("The arguments arrays should be the same object.", arguments, capturedArguments.getValue());
+
+		Options options = capturedOptions.getValue();
+		assertNotNull("The captured options are not correct.", options);
+		Collection<Option> optionCollection = options.getOptions();
+		assertNotNull("The list of options should not be null.", optionCollection);
+		assertEquals("The list of options should have one element.", 1, optionCollection.size());
+		assertEquals("The only option is not correct.",
+					 CliOptionsBuilder.get().withDescription("Display this help message").hasArg(false).create("help"),
+					 options.getOption("help"));
+
+		assertEquals("The output is not correct.",
+					 "usage: ConsoleRSAKeyPairGenerator\n" +
+						 " -help                 Display this help message\n" +
+						 " -private <key file>   The name of the private key file to generate\n" +
+						 " -public <key file>    The name of the public key file to generate\n",
+					 new String(this.out.toByteArray()));
+	}
+
+	@Test
+	@SuppressWarnings("unchecked")
+	public void testProcessCommandLineOptions03() throws ParseException
+	{
+		final String[] arguments = new String[] {};
+
+		Capture<Options> firstCapturedOptions = new Capture<Options>();
+		Capture<Options> secondCapturedOptions = new Capture<Options>();
+		Capture<String[]> firstCapturedArguments = new Capture<String[]>();
+		Capture<String[]> secondCapturedArguments = new Capture<String[]>();
+
+		PrintStream outStream = new PrintStream(this.out);
+		PrintStream errStream = new PrintStream(this.out);
+
+		final CommandLine cli = this.control.createMock(CommandLine.class);
+
+		EasyMock.expect(this.parser.parse(EasyMock.capture(firstCapturedOptions), EasyMock.capture(firstCapturedArguments), EasyMock.eq(true))).
+				andReturn(cli);
+		EasyMock.expect(cli.hasOption("help")).andReturn(false);
+		EasyMock.expect(this.parser.parse(EasyMock.capture(secondCapturedOptions), EasyMock.capture(
+				secondCapturedArguments))).
+				andThrow(new ParseException("message02"));
+		EasyMock.expect(this.device.err()).andReturn(errStream);
+		EasyMock.expect(this.device.out()).andReturn(outStream);
+		this.device.exit(1);
+		EasyMock.expectLastCall();
+		this.control.replay();
+
+		CommandLine returned = this.console.processCommandLineOptions(arguments);
+
+		assertNull("The returned value should be null.", returned);
+
+		assertSame("The arguments arrays should be the same object (1).", arguments, firstCapturedArguments.getValue());
+		assertSame("The arguments arrays should be the same object (2).", arguments, secondCapturedArguments.getValue());
+
+		Options options = firstCapturedOptions.getValue();
+		assertNotNull("The captured options are not correct.", options);
+		Collection<Option> optionCollection = options.getOptions();
+		assertNotNull("The list of options should not be null.", optionCollection);
+		assertEquals("The list of options should have one element.", 1, optionCollection.size());
+		assertEquals("The only option is not correct.",
+					 CliOptionsBuilder.get().withDescription("Display this help message").hasArg(false).create("help"),
+					 options.getOption("help"));
+
+		options = secondCapturedOptions.getValue();
+		assertNotNull("The captured options are not correct.", options);
+		optionCollection = options.getOptions();
+		assertNotNull("The list of options should not be null.", optionCollection);
+		assertEquals("The list of options should have one element.", 3, optionCollection.size());
+		assertEquals("The help option is not correct.",
+					 CliOptionsBuilder.get().withDescription("Display this help message").hasArg(false).create("help"),
+					 options.getOption("help"));
+		assertEquals("The privateKeyFile option is not correct.",
+					 CliOptionsBuilder.get().withArgName("key file").withDescription("The name of the private key file to generate").isRequired(true).hasArg(true).create("private"),
+					 options.getOption("private"));
+		assertEquals("The publicKeyFile option is not correct.",
+					 CliOptionsBuilder.get().withArgName("key file").withDescription("The name of the public key file to generate").isRequired(true).hasArg(true).create("public"),
+					 options.getOption("public"));
+
+		assertEquals("The output is not correct.",
+					 "message02\n" +
+						 "usage: ConsoleRSAKeyPairGenerator\n" +
+						 " -help                 Display this help message\n" +
+						 " -private <key file>   The name of the private key file to generate\n" +
+						 " -public <key file>    The name of the public key file to generate\n",
+					 new String(this.out.toByteArray()));
+	}
+
+	@Test
+	@SuppressWarnings("unchecked")
+	public void testProcessCommandLineOptions04() throws ParseException
+	{
+		final String[] arguments = new String[] {};
+
+		Capture<Options> firstCapturedOptions = new Capture<Options>();
+		Capture<Options> secondCapturedOptions = new Capture<Options>();
+		Capture<String[]> firstCapturedArguments = new Capture<String[]>();
+		Capture<String[]> secondCapturedArguments = new Capture<String[]>();
+
+		final CommandLine cli = this.control.createMock(CommandLine.class);
+
+		EasyMock.expect(this.parser.parse(EasyMock.capture(firstCapturedOptions), EasyMock.capture(
+				firstCapturedArguments), EasyMock.eq(true))).
+				andReturn(cli);
+		EasyMock.expect(cli.hasOption("help")).andReturn(false);
+		EasyMock.expect(this.parser.parse(EasyMock.capture(secondCapturedOptions), EasyMock.capture(secondCapturedArguments))).
+				andReturn(cli);
+		EasyMock.expectLastCall();
+		this.control.replay();
+
+		CommandLine returned = this.console.processCommandLineOptions(arguments);
+
+		assertNotNull("The returned value should not be null.", returned);
+		assertSame("The returned value is not correct.", cli, returned);
+
+		assertSame("The arguments arrays should be the same object (1).", arguments, firstCapturedArguments.getValue());
+		assertSame("The arguments arrays should be the same object (2).", arguments, secondCapturedArguments.getValue());
+
+		Options options = firstCapturedOptions.getValue();
+		assertNotNull("The captured options are not correct.", options);
+		Collection<Option> optionCollection = options.getOptions();
+		assertNotNull("The list of options should not be null.", optionCollection);
+		assertEquals("The list of options should have one element.", 1, optionCollection.size());
+		assertEquals("The only option is not correct.",
+					 CliOptionsBuilder.get().withDescription("Display this help message").hasArg(false).create("help"),
+					 options.getOption("help"));
+
+		options = secondCapturedOptions.getValue();
+		assertNotNull("The captured options are not correct.", options);
+		optionCollection = options.getOptions();
+		assertNotNull("The list of options should not be null.", optionCollection);
+		assertEquals("The list of options should have one element.", 3, optionCollection.size());
+		assertEquals("The help option is not correct.",
+					 CliOptionsBuilder.get().withDescription("Display this help message").hasArg(false).create("help"),
+					 options.getOption("help"));
+		assertEquals("The privateKeyFile option is not correct.",
+					 CliOptionsBuilder.get().withArgName("key file").withDescription("The name of the private key file to generate").isRequired(true).hasArg(true).create("private"),
+					 options.getOption("private"));
+		assertEquals("The publicKeyFile option is not correct.",
+					 CliOptionsBuilder.get().withArgName("key file").withDescription("The name of the public key file to generate").isRequired(true).hasArg(true).create("public"),
+					 options.getOption("public"));
+
+		assertEquals("The output is not correct.", "", new String(this.out.toByteArray()));
 	}
 
 	@Test

@@ -20,7 +20,7 @@ package net.nicholaswilliams.java.licensing.licensor;
 import javax.security.auth.x500.X500Principal;
 
 /**
- * This class builds {@code X500Principal)s.
+ * This class builds {@code X500Principal}s.
  *
  * @author Nick Williams
  * @version 1.0.0

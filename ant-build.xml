@@ -38,32 +38,9 @@
 	<!-- JDK definitions -->
 
 	<property name="jdk.bin.1.6" value="${jdk.home.1.6}/bin" />
-	<!--<path id="jdk.classpath.1.6">
-		<fileset dir="${jdk.home.1.6}">
-			<include name="lib/deploy.jar" />
-			<include name="lib/dt.jar" />
-			<include name="lib/javaws.jar" />
-			<include name="lib/jce.jar" />
-			<include name="lib/jconsole.jar" />
-			<include name="lib/management-agent.jar" />
-			<include name="lib/plugin.jar" />
-			<include name="lib/sa-jdi.jar" />
-			<include name="../Classes/alt-rt.jar" />
-			<include name="../Classes/charsets.jar" />
-			<include name="../Classes/classes.jar" />
-			<include name="../Classes/jsse.jar" />
-			<include name="../Classes/ui.jar" />
-			<include name="lib/ext/apple_provider.jar" />
-			<include name="lib/ext/dnsns.jar" />
-			<include name="lib/ext/localedata.jar" />
-			<include name="lib/ext/sunjce_provider.jar" />
-			<include name="lib/ext/sunpkcs11.jar" />
-		</fileset>
-	</path>-->
 
 	<property name="project.jdk.home" value="${jdk.home.1.6}" />
 	<property name="project.jdk.bin" value="${jdk.bin.1.6}" />
-	<!--<property name="project.jdk.classpath" value="jdk.classpath.1.6" />-->
 
 	<!-- Application Server Libraries -->
 
@@ -75,7 +52,6 @@
 
 	<property name="module.jdk.home.licensemanager" value="${project.jdk.home}" />
 	<property name="module.jdk.bin.licensemanager" value="${project.jdk.bin}" />
-	<!--<property name="module.jdk.classpath.licensemanager" value="${project.jdk.classpath}" />-->
 
 	<property name="compiler.args.licensemanager" value="${compiler.args}" />
 
@@ -105,25 +81,21 @@
 	</path>
 
 	<path id="licensemanager.classpath.build">
-		<!--<path refid="${module.jdk.classpath.licensemanager}" />-->
 		<path refid="${licensemanager.dependencies.runtime}" />
 	</path>
 
 	<path id="licensemanager.classpath.runtime">
-		<!--<path refid="${module.jdk.classpath.licensemanager}" />-->
 		<pathelement location="${licensemanager.dir.output}" />
 		<path refid="${licensemanager.dependencies.runtime}" />
 	</path>
 
 	<path id="licensemanager.classpath.test.build">
-		<!--<path refid="${module.jdk.classpath.licensemanager}" />-->
 		<pathelement location="${licensemanager.dir.output}" />
 		<path refid="${licensemanager.dependencies.runtime}" />
 		<path refid="${licensemanager.dependencies.test}" />
 	</path>
 
 	<path id="licensemanager.classpath.test.unit.runtime">
-		<!--<path refid="${module.jdk.classpath.licensemanager}" />-->
 		<pathelement location="${licensemanager.dir.output}" />
 		<pathelement location="${licensemanager.dir.testOutput.unit}" />
 		<path refid="${licensemanager.dependencies.runtime}" />
@@ -161,7 +133,7 @@
 	</target>
 
 	<target name="compile.module.all"
-			depends="compile.module.source, compile.module.test.unit, generate.module.javaDoc"
+			depends="clean, init, compile.module.source, compile.module.test.unit, generate.module.javaDoc"
 			description="Compile module LicenseManager" />
 
 	<target name="compile.module.source" depends="clean, init" description="Compile production classes">
@@ -220,7 +192,7 @@
 	</target>
 
 	<target name="test.module.all"
-			depends="test.module.unit"
+			depends="compile.module.all, test.module.unit"
 			description="Runs all unit, integration and regression tests" />
 
 	<target name="test.module.unit" depends="clean, init, compile.module.test.unit" description="Run all unit tests">
@@ -246,7 +218,7 @@
 	</target>
 
 	<target name="package.artifact.all"
-			depends="package.artifact.embeddable, package.artifact.licensor, package.artifact.samples, package.artifact.sources, package.artifact.javadoc"
+			depends="test.module.all, package.artifact.embeddable, package.artifact.licensor, package.artifact.samples, package.artifact.sources, package.artifact.javadoc"
 			description="Build all artifacts" />
 
 	<target name="package.artifact.embeddable" depends="clean, init, compile.module.source" description="Package Embeddable Jar">
@@ -409,6 +381,14 @@
 			 duplicate="preserve">
 			<zipfileset dir="${licensemanager.dir.javaDoc}" />
 		</zip>
+	</target>
+
+	<target name="distribute.artifact.all" depends="package.artifact.all" description="Distributes JAR files">
+		<copy todir="${directory.distribute}">
+			<fileset dir="${licensemanager.dir.artifactOutput}">
+				<include name="*.jar" />
+			</fileset>
+		</copy>
 	</target>
 
 	<target name="all" depends="compile.module.all, test.module.all, package.artifact.all" description="Build and package all" />

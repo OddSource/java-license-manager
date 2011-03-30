@@ -18,7 +18,6 @@
 package net.nicholaswilliams.java.licensing;
 
 import net.nicholaswilliams.java.licensing.exception.InsecureEnvironmentException;
-import sun.security.util.SecurityConstants;
 
 import java.io.FileDescriptor;
 import java.lang.reflect.Member;
@@ -56,6 +55,12 @@ import java.security.Permission;
 final class LicenseSecurityManager extends SecurityManager
 {
 	private static LicenseSecurityManager instance;
+
+	private static final RuntimePermission CHECK_MEMBER_ACCESS_PERMISSION =
+			new RuntimePermission("accessDeclaredMembers");
+
+	private static final RuntimePermission SET_SECURITY_MANAGER_PERMISSION =
+			new RuntimePermission("setSecurityManager");
 
 	static
 	{
@@ -105,7 +110,7 @@ final class LicenseSecurityManager extends SecurityManager
 		// Make sure we can't call java.lang.System#setSecurityManager()
 		try
 		{
-			securityManager.checkPermission(new RuntimePermission("setSecurityManager"));
+			securityManager.checkPermission(LicenseSecurityManager.SET_SECURITY_MANAGER_PERMISSION);
 			return false;
 		}
 		catch(SecurityException ignore)
@@ -212,7 +217,7 @@ final class LicenseSecurityManager extends SecurityManager
 					 */
 					if((stack.length < 4) || (stack[3].getClassLoader() != reflectionClass.getClassLoader()))
 					{
-						this.checkPermission(SecurityConstants.CHECK_MEMBER_ACCESS_PERMISSION);
+						this.checkPermission(LicenseSecurityManager.CHECK_MEMBER_ACCESS_PERMISSION);
 					}
 				}
 			}

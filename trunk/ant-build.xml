@@ -384,7 +384,7 @@
 	</target>
 
 	<target name="distribute.artifact.all" depends="package.artifact.all" description="Distributes JAR files">
-		<copy todir="${directory.distribute}">
+		<copy todir="${directory.distribute}" failonerror="true">
 			<fileset dir="${licensemanager.dir.artifactOutput}">
 				<include name="*.jar" />
 			</fileset>

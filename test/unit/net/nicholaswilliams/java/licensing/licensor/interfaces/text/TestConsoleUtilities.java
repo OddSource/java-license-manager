@@ -51,6 +51,12 @@ public class TestConsoleUtilities
 	}
 
 	@Test
+	public void testConstruction()
+	{
+		new ConsoleUtilities();
+	}
+
+	@Test
 	public void testConfigureInterfaceDevice()
 	{
 		final StateFlag registerShutdownHookCalled = new StateFlag();

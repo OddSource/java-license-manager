@@ -18,6 +18,7 @@
 package net.nicholaswilliams.java.licensing.immutable;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
@@ -38,6 +39,8 @@ public final class ImmutableLinkedHashSet<E> extends ImmutableAbstractCollection
 
 	private final LinkedHashSet<E> internalSet;
 
+	private final ArrayList<E> internalList;
+
 	/**
 	 * Constructor that copies.
 	 *
@@ -49,6 +52,7 @@ public final class ImmutableLinkedHashSet<E> extends ImmutableAbstractCollection
 		super(new LinkedHashSet<E>(list));
 
 		this.internalSet = (LinkedHashSet<E>)this.internalCollection;
+		this.internalList = new ArrayList<E>(list);
 	}
 
 	@Override
@@ -60,5 +64,27 @@ public final class ImmutableLinkedHashSet<E> extends ImmutableAbstractCollection
 			this.checkValidity();
 			return new ImmutableLinkedHashSet<E>((Set<E>)this.internalSet.clone());
 		}
+	}
+
+	/**
+	 * Retrieves the indexed element specified.
+	 *
+	 * @param index The element to retrieve.
+	 * @return The element requested.
+	 */
+	public E get(int index)
+	{
+		return index < 0 ? null : this.internalList.get(index);
+	}
+
+	/**
+	 * Retrieves the matching element specified.
+	 *
+	 * @param object The element to match.
+	 * @return The element requested.
+	 */
+	public E get(E object)
+	{
+		return this.get(this.internalList.indexOf(object));
 	}
 }

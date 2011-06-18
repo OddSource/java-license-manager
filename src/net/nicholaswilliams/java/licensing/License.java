@@ -21,7 +21,6 @@ import net.nicholaswilliams.java.licensing.immutable.ImmutableLinkedHashSet;
 
 import javax.security.auth.x500.X500Principal;
 import java.io.Serializable;
-import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Collection;
 import java.util.LinkedHashSet;
@@ -54,7 +53,7 @@ public final class License implements Serializable, Cloneable
 
 	private final int numberOfLicenses;
 
-	private final ImmutableLinkedHashSet<String> features;
+	private final ImmutableLinkedHashSet<License.Feature> features;
 
 	public License(License.Builder builder)
 	{
@@ -65,7 +64,7 @@ public final class License implements Serializable, Cloneable
 		this.goodAfterDate = builder.goodAfterDate;
 		this.goodBeforeDate = builder.goodBeforeDate;
 		this.numberOfLicenses = builder.numberOfLicenses;
-		this.features = new ImmutableLinkedHashSet<String>(builder.features);
+		this.features = new ImmutableLinkedHashSet<License.Feature>(builder.features);
 	}
 
 	protected byte[] serialize()
@@ -78,17 +77,19 @@ public final class License implements Serializable, Cloneable
 		String string = new String(data);
 		String[] parts = string.substring(1, string.length() - 1).split("\\]\\[");
 
-		return new License(
-				new License.Builder().
-						withHolder( new X500Principal(parts[0]) ).
-						withIssuer( new X500Principal(parts[1]) ).
-						withSubject( parts[2] ).
-						withIssueDate( Long.parseLong(parts[3]) ).
-						withGoodAfterDate( Long.parseLong(parts[4]) ).
-						withGoodBeforeDate( Long.parseLong(parts[5]) ).
-						withNumberOfLicenses( Integer.parseInt(parts[6]) ).
-						withFeatures( Arrays.asList(parts[7].split("\\, ")) )
-		);
+		License.Builder builder = new License.Builder().
+				withHolder(new X500Principal(parts[0])).
+				withIssuer(new X500Principal(parts[1])).
+				withSubject(parts[2]).
+				withIssueDate(Long.parseLong(parts[3])).
+				withGoodAfterDate(Long.parseLong(parts[4])).
+				withGoodBeforeDate(Long.parseLong(parts[5])).
+				withNumberOfLicenses(Integer.parseInt(parts[6]));
+
+		for(String feature : parts[7].split("\\, "))
+			builder.withFeature(License.Feature.fromString(feature));
+
+		return new License(builder);
 	}
 	
 	public final X500Principal getIssuer()
@@ -126,26 +127,32 @@ public final class License implements Serializable, Cloneable
 		return this.numberOfLicenses;
 	}
 
-	public final ImmutableLinkedHashSet<String> getFeatures()
+	public final ImmutableLinkedHashSet<License.Feature> getFeatures()
 	{
 		return this.features.clone();
 	}
 
-	public final boolean hasLicenseForAllFeatures(String... features)
+	public final boolean hasLicenseForAllFeatures(String... featureNames)
 	{
-		for(String feature : features)
+		long date = Calendar.getInstance().getTimeInMillis();
+		for(String featureName : featureNames)
 		{
-			if(!this.features.contains(feature))
+			License.Feature feature = new License.Feature(featureName);
+			License.Feature contained = this.features.get(feature);
+			if(contained == null || (contained.getGoodBeforeDate() >= 0 && contained.getGoodBeforeDate() < date))
 				return false;
 		}
 		return true;
 	}
 
-	public final boolean hasLicenseForAnyFeature(String... features)
+	public final boolean hasLicenseForAnyFeature(String... featureNames)
 	{
-		for(String feature : features)
+		long date = Calendar.getInstance().getTimeInMillis();
+		for(String featureName : featureNames)
 		{
-			if(this.features.contains(feature))
+			License.Feature feature = new License.Feature(featureName);
+			License.Feature contained = this.features.get(feature);
+			if(contained != null && (contained.getGoodBeforeDate() < 0 || contained.getGoodBeforeDate() >= date))
 				return true;
 		}
 		return false;
@@ -159,14 +166,23 @@ public final class License implements Serializable, Cloneable
 
 		License license = (License)object;
 
-		return ((license.holder == null && this.holder == null) || (license.holder != null && license.holder.equals(this.holder))) &&
+		boolean equals = ((license.holder == null && this.holder == null) || (license.holder != null && license.holder.equals(this.holder))) &&
 			   ((license.issuer == null && this.issuer == null) || (license.issuer != null && license.issuer.equals(this.issuer))) &&
 			   ((license.subject == null && this.subject == null) || (license.subject != null && license.subject.equals(this.subject))) &&
 			   license.issueDate == this.issueDate &&
 			   license.goodAfterDate == this.goodAfterDate &&
 			   license.goodBeforeDate == this.goodBeforeDate &&
-			   license.numberOfLicenses == this.numberOfLicenses &&
-			   license.hasLicenseForAllFeatures( this.features.toArray(new String[this.features.size()]) );
+			   license.numberOfLicenses == this.numberOfLicenses;
+		if(!equals)
+			return false;
+
+		for(License.Feature feature : this.features)
+		{
+			if(!license.hasLicenseForAllFeatures(feature.getName()))
+				return false;
+		}
+
+		return true;
 	}
 
 	@Override
@@ -223,10 +239,68 @@ public final class License implements Serializable, Cloneable
 				withGoodBeforeDate(this.goodBeforeDate).
 				withNumberOfLicenses(this.numberOfLicenses);
 
-		for(String feature : this.features)
+		for(License.Feature feature : this.features)
 			builder.withFeature(feature);
 
 		return new License(builder);
+	}
+
+	public static final class Feature
+	{
+		private final String name;
+
+		private final long goodBeforeDate;
+
+		private Feature(String name)
+		{
+			this(name, -1);
+		}
+
+		private Feature(String name, long goodBeforeDate)
+		{
+			this.name = name;
+			this.goodBeforeDate = goodBeforeDate;
+		}
+
+		public final String getName()
+		{
+			return name;
+		}
+
+		public final long getGoodBeforeDate()
+		{
+			return goodBeforeDate;
+		}
+
+		@Override
+		public final int hashCode()
+		{
+			return this.name.hashCode();
+		}
+
+		@Override
+		public final boolean equals(Object object)
+		{
+			if(object == null || object.getClass() != License.Feature.class)
+				return false;
+			License.Feature feature = (License.Feature)object;
+			return feature.name.equals(this.name);
+		}
+
+		@Override
+		public final String toString()
+		{
+			return this.name + (char)0x1F + Long.toString(this.goodBeforeDate);
+		}
+
+		private static License.Feature fromString(String input)
+		{
+			String[] parts = input.split("" + (char)0x1F);
+			if(parts == null || parts.length != 2)
+				throw new IllegalArgumentException("The input argument did not contain exactly two parts.");
+
+			return new License.Feature(parts[0], Long.parseLong(parts[1]));
+		}
 	}
 
 	public static final class Builder
@@ -245,7 +319,7 @@ public final class License implements Serializable, Cloneable
 
 		private int numberOfLicenses = Integer.MAX_VALUE;
 
-		private Set<String> features = new LinkedHashSet<String>();
+		private Set<License.Feature> features = new LinkedHashSet<License.Feature>();
 
 		public Builder withHolder(X500Principal holder)
 		{
@@ -289,13 +363,26 @@ public final class License implements Serializable, Cloneable
 			return this;
 		}
 
-		public Builder withFeature(String feature)
+		public Builder withFeature(String featureName)
+		{
+			this.features.add(new License.Feature(featureName));
+			return this;
+		}
+
+		public Builder withFeature(String featureName, long goodBeforeDate)
+		{
+			this.features.add(new License.Feature(featureName, goodBeforeDate));
+			return this;
+		}
+
+		public Builder withFeature(License.Feature feature)
 		{
 			this.features.add(feature);
 			return this;
 		}
 
-		public Builder withFeatures(Collection<String> features)
+		@SuppressWarnings("unused")
+		public Builder withFeatures(Collection<License.Feature> features)
 		{
 			this.features.addAll(features);
 			return this;

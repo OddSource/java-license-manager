@@ -45,7 +45,7 @@ public class TestLicense
 						withGoodAfterDate(2348907325000L).
 						withGoodBeforeDate(2348917325000L).
 						withNumberOfLicenses(57).
-						withFeature("nickFeature1").withFeature("allisonFeature2")
+						withFeature("nickFeature1").withFeature("allisonFeature2", 2348917325000L)
 		);
 	}
 
@@ -101,11 +101,14 @@ public class TestLicense
 	@Test
 	public void testFeatures01()
 	{
-		ImmutableLinkedHashSet<String> features = this.license.getFeatures();
+		ImmutableLinkedHashSet<License.Feature> features = this.license.getFeatures();
 
 		assertEquals("The size of the features is not correct.", 2, features.size());
-		assertTrue("Feature 1 is missing.", features.contains("nickFeature1"));
-		assertTrue("Feature 2 is missing.", features.contains("allisonFeature2"));
+		assertNotNull("Feature 1 is missing.", features.get(0));
+		assertEquals("Feature 1 is not correct.", "nickFeature1", features.get(0).getName());
+		assertNotNull("Feature 2 is missing.", features.get(1));
+		assertEquals("Feature 2 is not correct.", "allisonFeature2", features.get(1).getName());
+		assertEquals("Feature 2 is not correct.", 2348917325000L, features.get(1).getGoodBeforeDate());
 	}
 
 	@Test
@@ -369,12 +372,11 @@ public class TestLicense
 		assertEquals("The hash codes should match.", this.license.hashCode(), duplicate.hashCode());
 	}
 
-
 	@Test
 	public void testToString()
 	{
 		assertEquals("The string was not correct.",
-					 "[CN=Tim Williams, C=US, ST=AL][CN=Nick Williams, C=US, ST=TN][Simple Product Name(TM)][2348907324983][2348907325000][2348917325000][57][nickFeature1, allisonFeature2]",
+					 "[CN=Tim Williams, C=US, ST=AL][CN=Nick Williams, C=US, ST=TN][Simple Product Name(TM)][2348907324983][2348907325000][2348917325000][57][nickFeature1"+(char)0x1F+"-1, allisonFeature2"+(char)0x1F+"2348917325000]",
 					 this.license.toString());
 	}
 
@@ -382,14 +384,14 @@ public class TestLicense
 	public void testSerialization()
 	{
 		assertEquals("The serialization was not correct.",
-					 "[CN=Tim Williams, C=US, ST=AL][CN=Nick Williams, C=US, ST=TN][Simple Product Name(TM)][2348907324983][2348907325000][2348917325000][57][nickFeature1, allisonFeature2]",
+					 "[CN=Tim Williams, C=US, ST=AL][CN=Nick Williams, C=US, ST=TN][Simple Product Name(TM)][2348907324983][2348907325000][2348917325000][57][nickFeature1"+(char)0x1F+"-1, allisonFeature2"+(char)0x1F+"2348917325000]",
 					 new String(this.license.serialize()));
 	}
 
 	@Test
-	public void testDeserialization()
+	public void testDeserialization01()
 	{
-		License license = License.deserialize("[CN=John E. Smith, C=CA, ST=QE][CN=OurCompany, C=US, ST=KY][Cool Product, by Company][14429073214631][1443907325000][1443917325000][12][fordFeature1, chevyFeature2, hondaFeature3, toyotaFeature4]".getBytes());
+		License license = License.deserialize(("[CN=John E. Smith, C=CA, ST=QE][CN=OurCompany, C=US, ST=KY][Cool Product, by Company][14429073214631][1443907325000][1443917325000][12][fordFeature1"+(char)0x1F+"-1, chevyFeature2"+(char)0x1F+Long.MAX_VALUE+", hondaFeature3"+(char)0x1F+Long.MAX_VALUE+", toyotaFeature4"+(char)0x1F+"-1]").getBytes());
 
 		assertEquals("The holder is not correct.", "CN=John E. Smith, C=CA, ST=QE", license.getHolder().toString());
 		assertEquals("The issuer is not correct.", "CN=OurCompany, C=US, ST=KY", license.getIssuer().toString());
@@ -402,6 +404,27 @@ public class TestLicense
 		assertTrue("Feature 1 is missing.", license.hasLicenseForAllFeatures("fordFeature1"));
 		assertTrue("Feature 2 is missing.", license.hasLicenseForAllFeatures("chevyFeature2"));
 		assertTrue("Feature 3 is missing.", license.hasLicenseForAllFeatures("hondaFeature3"));
+		assertTrue("Feature 4 is missing.", license.hasLicenseForAllFeatures("toyotaFeature4"));
+	}
+
+	@Test
+	public void testDeserialization02()
+	{
+		License license = License.deserialize(("[CN=John E. Smith, C=CA, ST=QE][CN=OurCompany, C=US, ST=KY][Cool Product, by Company][14429073214631][1443907325000][1443917325000][12][fordFeature1"+(char)0x1F+"-1, chevyFeature2"+(char)0x1F+Long.MAX_VALUE+", hondaFeature3"+(char)0x1F+"1234567890, toyotaFeature4"+(char)0x1F+"-1]").getBytes());
+
+		assertEquals("The holder is not correct.", "CN=John E. Smith, C=CA, ST=QE", license.getHolder().toString());
+		assertEquals("The issuer is not correct.", "CN=OurCompany, C=US, ST=KY", license.getIssuer().toString());
+		assertEquals("The company is not correct.", "Cool Product, by Company", license.getSubject());
+		assertEquals("The issue date is not correct.", 14429073214631L, license.getIssueDate());
+		assertEquals("The good after date is not correct.", 1443907325000L, license.getGoodAfterDate());
+		assertEquals("The good before date is not correct.", 1443917325000L, license.getGoodBeforeDate());
+		assertEquals("The number of licenses is not correct.", 12, license.getNumberOfLicenses());
+		assertEquals("The number of features is not correct.", 4, license.getFeatures().size());
+		assertTrue("Feature 1 is missing.", license.hasLicenseForAllFeatures("fordFeature1"));
+		assertTrue("Feature 2 is missing.", license.hasLicenseForAllFeatures("chevyFeature2"));
+		assertNotNull("Feature 3 is missing.", license.getFeatures().get(2));
+		assertEquals("Feature 3 is missing.", "hondaFeature3", license.getFeatures().get(2).getName());
+		assertFalse("Feature 3 should be expired.", license.hasLicenseForAllFeatures("hondaFeature3"));
 		assertTrue("Feature 4 is missing.", license.hasLicenseForAllFeatures("toyotaFeature4"));
 	}
 }

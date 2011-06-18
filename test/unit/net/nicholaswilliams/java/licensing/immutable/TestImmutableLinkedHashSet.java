@@ -18,26 +18,25 @@
 package net.nicholaswilliams.java.licensing.immutable;
 
 import org.junit.After;
-import org.junit.AfterClass;
 import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
 
 import java.lang.reflect.Field;
 import java.util.HashSet;
+import java.util.LinkedHashSet;
 
 import static org.junit.Assert.*;
 
 /**
  * Test class for ImmutableLinkedHashSet and ImmutableAbstractCollection.
  */
-public class TestImmutableHashSet
+public class TestImmutableLinkedHashSet
 {
 	private ImmutableLinkedHashSet<String> set;
 
-	public TestImmutableHashSet()
+	public TestImmutableLinkedHashSet()
 	{
-		HashSet<String> temp = new HashSet<String>();
+		LinkedHashSet<String> temp = new LinkedHashSet<String>();
 		temp.add("MyString1");
 		temp.add("YourString2");
 		temp.add("HisString3");
@@ -61,18 +60,6 @@ public class TestImmutableHashSet
 		}
 	}
 
-	@BeforeClass
-	public static void setUpClass() throws Exception
-	{
-
-	}
-
-	@AfterClass
-	public static void tearDownClass() throws Exception
-	{
-		
-	}
-
 	@Before
 	public void setUp()
 	{
@@ -83,6 +70,30 @@ public class TestImmutableHashSet
 	public void tearDown()
 	{
 		
+	}
+
+	@Test
+	public void testGetByIndex01()
+	{
+		assertEquals("The value is not correct.", "YourString2", this.set.get(1));
+	}
+
+	@Test
+	public void testGetByIndex02()
+	{
+		assertEquals("The value is not correct.", "HerString4", this.set.get(3));
+	}
+
+	@Test
+	public void testGetByValue01()
+	{
+		assertEquals("The value is not correct.", "MyString1", this.set.get("MyString1"));
+	}
+
+	@Test
+	public void testGetByValue02()
+	{
+		assertEquals("The value is not correct.", "HisString3", this.set.get("HisString3"));
 	}
 
 	@Test

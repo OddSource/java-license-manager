@@ -122,9 +122,21 @@ public class TestImmutableArrayList
 	}
 
 	@Test(expected=UnsupportedOperationException.class)
+	public void testRemoveByIntNotAllowed()
+	{
+		this.list.remove(1);
+	}
+
+	@Test(expected=UnsupportedOperationException.class)
 	public void testRemoveAllNotAllowed()
 	{
 		this.list.removeAll(Arrays.asList("MyString1", "HerString4"));
+	}
+
+	@Test(expected=UnsupportedOperationException.class)
+	public void testSetNotAllowed()
+	{
+		this.list.set(1, "MyString1");
 	}
 
 	@Test
@@ -219,6 +231,7 @@ public class TestImmutableArrayList
 	}
 
 	@Test
+	@SuppressWarnings("WhileLoopReplaceableByForEach")
 	public void testListIterator101()
 	{
 		int i = 0;

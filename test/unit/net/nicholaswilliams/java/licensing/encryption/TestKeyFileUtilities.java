@@ -25,6 +25,8 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 import java.io.File;
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
 import java.security.KeyPairGenerator;
 import java.security.PrivateKey;
 import java.security.PublicKey;
@@ -64,6 +66,27 @@ public class TestKeyFileUtilities
 	public void tearDown()
 	{
 
+	}
+
+	@Test
+	public void testConstructionForbidden()
+			throws IllegalAccessException, InstantiationException, NoSuchMethodException
+	{
+		Constructor<KeyFileUtilities> constructor = KeyFileUtilities.class.getDeclaredConstructor();
+		constructor.setAccessible(true);
+
+		try
+		{
+			constructor.newInstance();
+			fail("Expected exception java.lang.reflect.InvocationTargetException, but got no exception.");
+		}
+		catch(InvocationTargetException e)
+		{
+			Throwable cause = e.getCause();
+			assertNotNull("Expected cause for InvocationTargetException, but got no cause.", cause);
+			assertSame("Expected exception java.lang.RuntimeException, but got " + cause.getClass(), RuntimeException.class, cause.getClass());
+			assertEquals("The message was incorrect.", "This class cannot be instantiated.", cause.getMessage());
+		}
 	}
 
 	@Test

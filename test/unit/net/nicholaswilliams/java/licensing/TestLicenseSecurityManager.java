@@ -24,6 +24,8 @@ import org.junit.Test;
 
 import java.lang.reflect.Member;
 import java.lang.reflect.ReflectPermission;
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 import java.security.Permission;
 
 import static org.junit.Assert.*;
@@ -86,6 +88,39 @@ public class TestLicenseSecurityManager
 	{
 		final StateFlag checkMemberAccess1 = new StateFlag();
 		final StateFlag checkMemberAccess2 = new StateFlag();
+
+		assertFalse("The security manager should not be suitable.",
+					LicenseSecurityManager.securityManagerIsSuitableReplacement(new SecurityManager() {
+						@Override
+						public void checkMemberAccess(Class<?> reflectionClass, int memberAccessType)
+						{
+							assertSame("The class is not correct.", checkMemberAccess1.state ? LicenseManager.class : License.class, reflectionClass);
+							assertEquals("The access type is not correct.", Member.DECLARED, memberAccessType);
+
+							if(checkMemberAccess1.state)
+								checkMemberAccess2.state = true;
+							checkMemberAccess1.state = true;
+
+							if(reflectionClass == License.class)
+								throw new SecurityException();
+						}
+						@Override
+						public void checkPermission(Permission permission)
+						{
+							fail("checkPermission should not have been called.");
+						}
+					})
+		);
+
+		assertTrue("checkMemberAccess should have been called.", checkMemberAccess1.state);
+		assertTrue("checkMemberAccess should have been called twice.", checkMemberAccess2.state);
+	}
+
+	@Test
+	public void testSecurityManagerIsSuitableReplacement04()
+	{
+		final StateFlag checkMemberAccess1 = new StateFlag();
+		final StateFlag checkMemberAccess2 = new StateFlag();
 		final StateFlag checkPermission = new StateFlag();
 
 		assertFalse("The security manager should not be suitable.",
@@ -119,7 +154,7 @@ public class TestLicenseSecurityManager
 	}
 
 	@Test
-	public void testSecurityManagerIsSuitableReplacement04()
+	public void testSecurityManagerIsSuitableReplacement05()
 	{
 		final StateFlag checkMemberAccess1 = new StateFlag();
 		final StateFlag checkMemberAccess2 = new StateFlag();
@@ -382,5 +417,102 @@ public class TestLicenseSecurityManager
 	public void testReflectionOnSecurityManagerBlocked() throws NoSuchFieldException
 	{
 		java.lang.System.class.getDeclaredField("security");
+	}
+
+	@Test
+	public void testCheckPermission()
+	{
+		this.manager.checkPermission(new ReflectPermission("fakePermission"), new Object());
+	}
+
+	@Test
+	public void testCheckExec()
+	{
+		this.manager.checkExec("test");
+	}
+
+	@Test
+	public void testCheckLink()
+	{
+		this.manager.checkLink("test");
+	}
+
+	@Test
+	public void testCheckRead()
+	{
+		this.manager.checkRead("test", new Object());
+	}
+
+	@Test
+	public void testCheckDelete()
+	{
+		this.manager.checkDelete("test");
+	}
+
+	@Test
+	public void testCheckConnect()
+	{
+		this.manager.checkConnect("test", 1, new Object());
+	}
+
+	@Test
+	public void testCheckListen()
+	{
+		this.manager.checkListen(1);
+	}
+
+	@Test
+	public void testCheckAccept()
+	{
+		this.manager.checkAccept("test", 1);
+	}
+
+	@Test
+	public void testCheckMulticast() throws UnknownHostException
+	{
+		this.manager.checkMulticast(InetAddress.getLocalHost());
+	}
+
+	@SuppressWarnings("deprecation")
+	@Test
+	public void testCheckMulticastWithByte() throws UnknownHostException
+	{
+		this.manager.checkMulticast(InetAddress.getLocalHost(), (byte)0x00);
+	}
+
+	@Test
+	public void testCheckPropertiesAccess()
+	{
+		this.manager.checkPropertiesAccess();
+	}
+
+	@Test
+	public void testCheckPrintJobAccess()
+	{
+		this.manager.checkPrintJobAccess();
+	}
+
+	@Test
+	public void testCheckSystemClipBoardAccess()
+	{
+		this.manager.checkSystemClipboardAccess();
+	}
+
+	@Test
+	public void testCheckAwtEventQueueAccess()
+	{
+		this.manager.checkAwtEventQueueAccess();
+	}
+
+	@Test
+	public void testCheckPackageDefinition()
+	{
+		this.manager.checkPackageDefinition("test");
+	}
+
+	@Test
+	public void testCheckSetFactory()
+	{
+		this.manager.checkSetFactory();
 	}
 }

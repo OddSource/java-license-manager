@@ -30,10 +30,12 @@ class ConsoleUtilities
 {
 	/**
 	 * Sets up a shutdown hook to ensure that the text device always exits to a newline.
+	 *
+	 * @param interfaceDevice The interface device to configure
 	 */
 	public static void configureInterfaceDevice(TextInterfaceDevice interfaceDevice)
 	{
-		interfaceDevice.registerShutdownHook(new Thread(new Runnable(){
+		interfaceDevice.registerShutdownHook(new Thread(new Runnable() {
 			@Override
 			public void run()
 			{

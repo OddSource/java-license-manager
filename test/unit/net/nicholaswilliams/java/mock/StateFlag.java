@@ -23,4 +23,10 @@ package net.nicholaswilliams.java.mock;
 public class StateFlag
 {
 	public boolean state = false;
+
+	@Override
+	public String toString()
+	{
+		return Boolean.toString(this.state);
+	}
 }

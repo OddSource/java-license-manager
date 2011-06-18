@@ -80,4 +80,76 @@ public class TestByteArrayInterfaceDevice
 		assertNotNull("The output stream should not be null.", stream);
 		assertSame("The objects should be the same.", err, stream);
 	}
+
+	@Test(expected=UnsupportedOperationException.class)
+	public void testRegisterShutdownHook()
+	{
+		this.device.registerShutdownHook(new Thread());
+	}
+
+	@Test(expected=UnsupportedOperationException.class)
+	public void testUnregisterShutdownHook()
+	{
+		this.device.unregisterShutdownHook(new Thread());
+	}
+
+	@Test(expected=UnsupportedOperationException.class)
+	public void testExit()
+	{
+		this.device.exit(0);
+	}
+
+	@Test
+	public void testFormat()
+	{
+		assertNull("The value should have been null.", this.device.format("Test string."));
+	}
+
+	@Test
+	public void testPrintf()
+	{
+		assertNull("The value should have been null.", this.device.printf("Test string."));
+	}
+
+	@Test
+	public void testFlush()
+	{
+		this.device.flush();
+	}
+
+	@Test
+	public void testReadLine01()
+	{
+		assertNull("The value should have been null.", this.device.readLine());
+	}
+
+	@Test
+	public void testReadLine02()
+	{
+		assertNull("The value should have been null.", this.device.readLine("Test string."));
+	}
+
+	@Test
+	public void testReadPassword01()
+	{
+		assertArrayEquals("The value should have been null.", new char[0], this.device.readPassword());
+	}
+
+	@Test
+	public void testReadPassword02()
+	{
+		assertArrayEquals("The value should have been null.", new char[0], this.device.readPassword("Test string."));
+	}
+
+	@Test
+	public void testGetReader()
+	{
+		assertNull("The value should have been null.", this.device.getReader());
+	}
+
+	@Test
+	public void testGetWriter()
+	{
+		assertNull("The value should have been null.", this.device.getWriter());
+	}
 }

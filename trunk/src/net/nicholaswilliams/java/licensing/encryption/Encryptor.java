@@ -39,7 +39,7 @@ import java.security.spec.InvalidKeySpecException;
  * @since 1.0.0
  * @version 1.0.0
  */
-public class Encryptor
+public final class Encryptor
 {
 	private static final int minimumPaddedLength = 20;
 	

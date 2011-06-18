@@ -124,7 +124,7 @@ public class ByteArrayInterfaceDevice extends AbstractTextInterfaceDevice
 	@Override
 	public TextInterfaceDevice format(String format, Object... arguments) throws IllegalFormatException
 	{
-		return null;  //To change body of implemented methods use File | Settings | File Templates.
+		return null;
 	}
 
 	/**
@@ -143,7 +143,7 @@ public class ByteArrayInterfaceDevice extends AbstractTextInterfaceDevice
 	@Override
 	public TextInterfaceDevice printf(String format, Object... arguments) throws IllegalFormatException, IOError
 	{
-		return null;  //To change body of implemented methods use File | Settings | File Templates.
+		return null;
 	}
 
 	/**
@@ -167,7 +167,7 @@ public class ByteArrayInterfaceDevice extends AbstractTextInterfaceDevice
 	@Override
 	public String readLine() throws IOError
 	{
-		return null;  //To change body of implemented methods use File | Settings | File Templates.
+		return null;
 	}
 
 	/**
@@ -182,7 +182,7 @@ public class ByteArrayInterfaceDevice extends AbstractTextInterfaceDevice
 	@Override
 	public String readLine(String format, Object... arguments) throws IllegalFormatException, IOError
 	{
-		return null;  //To change body of implemented methods use File | Settings | File Templates.
+		return null;
 	}
 
 	/**
@@ -194,7 +194,7 @@ public class ByteArrayInterfaceDevice extends AbstractTextInterfaceDevice
 	@Override
 	public char[] readPassword() throws IOError
 	{
-		return new char[0];  //To change body of implemented methods use File | Settings | File Templates.
+		return new char[0];
 	}
 
 	/**
@@ -209,7 +209,7 @@ public class ByteArrayInterfaceDevice extends AbstractTextInterfaceDevice
 	@Override
 	public char[] readPassword(String format, Object... arguments) throws IllegalFormatException, IOError
 	{
-		return new char[0];  //To change body of implemented methods use File | Settings | File Templates.
+		return new char[0];
 	}
 
 	/**
@@ -221,7 +221,7 @@ public class ByteArrayInterfaceDevice extends AbstractTextInterfaceDevice
 	@Override
 	public Reader getReader()
 	{
-		return null;  //To change body of implemented methods use File | Settings | File Templates.
+		return null;
 	}
 
 	/**
@@ -232,7 +232,7 @@ public class ByteArrayInterfaceDevice extends AbstractTextInterfaceDevice
 	@Override
 	public PrintWriter getWriter()
 	{
-		return null;  //To change body of implemented methods use File | Settings | File Templates.
+		return null;
 	}
 
 	/**

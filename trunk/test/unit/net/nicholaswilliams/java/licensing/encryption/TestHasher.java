@@ -21,6 +21,9 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
+
 import static org.junit.Assert.*;
 
 /**
@@ -38,6 +41,27 @@ public class TestHasher
 	public void tearDown()
 	{
 
+	}
+
+	@Test
+	public void testConstructionForbidden()
+			throws IllegalAccessException, InstantiationException, NoSuchMethodException
+	{
+		Constructor<Hasher> constructor = Hasher.class.getDeclaredConstructor();
+		constructor.setAccessible(true);
+
+		try
+		{
+			constructor.newInstance();
+			fail("Expected exception java.lang.reflect.InvocationTargetException, but got no exception.");
+		}
+		catch(InvocationTargetException e)
+		{
+			Throwable cause = e.getCause();
+			assertNotNull("Expected cause for InvocationTargetException, but got no cause.", cause);
+			assertSame("Expected exception java.lang.RuntimeException, but got " + cause.getClass(), RuntimeException.class, cause.getClass());
+			assertEquals("The message was incorrect.", "This class cannot be instantiated.", cause.getMessage());
+		}
 	}
 
 	@Test

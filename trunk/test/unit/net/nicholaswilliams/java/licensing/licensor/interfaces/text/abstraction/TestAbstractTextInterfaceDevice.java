@@ -144,19 +144,22 @@ public class TestAbstractTextInterfaceDevice
 	@Test
 	public void testIn()
 	{
-		assertEquals("The input stream is not correct.", this.inputStream, this.device.in);
+		assertEquals("The input stream is not correct (1).", this.inputStream, this.device.in);
+		assertEquals("The input stream is not correct (2).", this.inputStream, this.device.in());
 	}
 
 	@Test
 	public void testOut()
 	{
-		assertEquals("The output stream is not correct.", this.outputStream1, this.device.out);
+		assertEquals("The output stream is not correct (1).", this.outputStream1, this.device.out);
+		assertEquals("The output stream is not correct (2).", this.outputStream1, this.device.out());
 	}
 
 	@Test
 	public void testErr()
 	{
-		assertEquals("The error output stream is not correct.", this.outputStream2, this.device.err);
+		assertEquals("The error output stream is not correct (1).", this.outputStream2, this.device.err);
+		assertEquals("The error output stream is not correct (2).", this.outputStream2, this.device.err());
 	}
 
 	@Test

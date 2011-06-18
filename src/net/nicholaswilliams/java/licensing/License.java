@@ -22,7 +22,6 @@ import net.nicholaswilliams.java.licensing.immutable.ImmutableLinkedHashSet;
 import javax.security.auth.x500.X500Principal;
 import java.io.Serializable;
 import java.util.Calendar;
-import java.util.Collection;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
@@ -378,13 +377,6 @@ public final class License implements Serializable, Cloneable
 		public Builder withFeature(License.Feature feature)
 		{
 			this.features.add(feature);
-			return this;
-		}
-
-		@SuppressWarnings("unused")
-		public Builder withFeatures(Collection<License.Feature> features)
-		{
-			this.features.addAll(features);
 			return this;
 		}
 	}

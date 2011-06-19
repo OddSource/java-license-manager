@@ -37,7 +37,7 @@ import java.util.Arrays;
  * This class manages the creation of licenses in the master application.
  *
  * @author Nick Williams
- * @version 1.0.0
+ * @version 1.0.5
  * @since 1.0.0
  */
 public final class LicenseCreator
@@ -46,24 +46,21 @@ public final class LicenseCreator
 
 	private final KeyPasswordProvider passwordProvider;
 
-	private final PrivateKeyDataProvider privateKeyLocationProvider;
+	private final PrivateKeyDataProvider privateKeyDataProvider;
 
 	private LicenseCreator(KeyPasswordProvider passwordProvider,
 						   PrivateKeyDataProvider privateKeyLocationProvider)
 	{
 		this.passwordProvider = passwordProvider;
-		this.privateKeyLocationProvider = privateKeyLocationProvider;
+		this.privateKeyDataProvider = privateKeyLocationProvider;
 	}
 
 	public static synchronized LicenseCreator createInstance(KeyPasswordProvider passwordProvider,
-																   PrivateKeyDataProvider privateKeyLocationProvider)
+															 PrivateKeyDataProvider privateKeyDataProvider)
 	{
 		if(LicenseCreator.instance == null)
 		{
-			LicenseCreator.instance = new LicenseCreator(
-					passwordProvider,
-					privateKeyLocationProvider
-			);
+			LicenseCreator.instance = new LicenseCreator(passwordProvider, privateKeyDataProvider);
 		}
 
 		return LicenseCreator.instance;
@@ -78,27 +75,21 @@ public final class LicenseCreator
 	}
 
 	public final SignedLicense signLicense(License license)
-			throws AlgorithmNotSupportedException, KeyNotFoundException,
-				   InappropriateKeySpecificationException,
+			throws AlgorithmNotSupportedException, KeyNotFoundException, InappropriateKeySpecificationException,
 				   InappropriateKeyException, ObjectSerializationException
 	{
 		PrivateKey key;
 		{
 			char[] password = this.passwordProvider.getKeyPassword();
-			byte[] keyData =
-					this.privateKeyLocationProvider.getEncryptedPrivateKeyData();
+			byte[] keyData = this.privateKeyDataProvider.getEncryptedPrivateKeyData();
 
-			key = KeyFileUtilities.readEncryptedPrivateKey(
-					keyData, password
-			);
+			key = KeyFileUtilities.readEncryptedPrivateKey(keyData, password);
 
 			Arrays.fill(password, '\u0000');
 			Arrays.fill(keyData, (byte)0);
 		}
 
-		byte[] encrypted = Encryptor.encryptRaw(
-				new ObjectSerializer().writeObject(license)
-		);
+		byte[] encrypted = Encryptor.encryptRaw(new ObjectSerializer().writeObject(license));
 
 		byte[] signature = new DataSignatureManager().signData(key, encrypted);
 

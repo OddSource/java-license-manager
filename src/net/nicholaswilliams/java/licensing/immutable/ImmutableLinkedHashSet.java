@@ -29,7 +29,7 @@ import java.util.Set;
  * is security and you truly need an unmodifiable set.
  *
  * @author Nick Williams
- * @version 1.0.0
+ * @version 1.5.0
  * @since 1.0.0
  */
 public final class ImmutableLinkedHashSet<E> extends ImmutableAbstractCollection<E>

@@ -320,9 +320,7 @@ public final class LicenseManager
 					char[] password = this.passwordProvider.getKeyPassword();
 					byte[] keyData = this.publicKeyDataProvider.getEncryptedPublicKeyData();
 
-					key = KeyFileUtilities.readEncryptedPublicKey(
-							keyData, password
-					);
+					key = KeyFileUtilities.readEncryptedPublicKey(keyData, password);
 
 					Arrays.fill(password, '\u0000');
 					Arrays.fill(keyData, (byte)0);
@@ -336,9 +334,7 @@ public final class LicenseManager
 						byte[] encrypted = signed.getLicenseContent();
 						signed.erase();
 
-						new DataSignatureManager().verifySignature(
-								key, encrypted, signature
-						);
+						new DataSignatureManager().verifySignature(key, encrypted, signature);
 
 						unencrypted = Encryptor.decryptRaw(encrypted);
 						

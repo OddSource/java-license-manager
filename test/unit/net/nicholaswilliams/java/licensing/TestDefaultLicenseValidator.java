@@ -31,7 +31,7 @@ import java.util.Date;
 import static org.junit.Assert.*;
 
 /**
- * Test class for DefaultLicenseValidator.
+ * Test class for DefaultLicenseValidator (restored).
  */
 public class TestDefaultLicenseValidator
 {

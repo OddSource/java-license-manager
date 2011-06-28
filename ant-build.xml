@@ -212,6 +212,7 @@
 					<include name="**/*.java" />
 					<exclude name="**/Mock*.java" />
 					<exclude name="net/nicholaswilliams/java/mock/**" />
+					<exclude name="net/nicholaswilliams/java/licensing/LicenseHelper.java" />
 				</fileset>
 			</batchtest>
 		</junit>

@@ -67,7 +67,7 @@ public final class DataSignatureManager
 		}
 	}
 
-	final void verifySignature(PublicKey key, byte[] data, byte[] signatureContent)
+	public final void verifySignature(PublicKey key, byte[] data, byte[] signatureContent)
 			throws AlgorithmNotSupportedException, InappropriateKeyException,
 				   CorruptSignatureException, InvalidSignatureException
 	{

@@ -66,7 +66,7 @@ public final class License implements Serializable, Cloneable
 		this.features = new ImmutableLinkedHashSet<License.Feature>(builder.features);
 	}
 
-	protected byte[] serialize()
+	public byte[] serialize()
 	{
 		return this.toString().getBytes();
 	}
@@ -77,8 +77,8 @@ public final class License implements Serializable, Cloneable
 		String[] parts = string.substring(1, string.length() - 1).split("\\]\\[");
 
 		License.Builder builder = new License.Builder().
-				withHolder(new X500Principal(parts[0])).
-				withIssuer(new X500Principal(parts[1])).
+				withHolder(parts[0].trim().length() == 0 ? null : new X500Principal(parts[0])).
+				withIssuer(parts[1].trim().length() == 0 ? null : new X500Principal(parts[1])).
 				withSubject(parts[2]).
 				withIssueDate(Long.parseLong(parts[3])).
 				withGoodAfterDate(Long.parseLong(parts[4])).
@@ -215,8 +215,8 @@ public final class License implements Serializable, Cloneable
 	public final String toString()
 	{
 		return new StringBuilder().append('[').
-				append(this.holder).append("][").
-				append(this.issuer).append("][").
+				append(this.holder == null ? "" : this.holder).append("][").
+				append(this.issuer == null ? "" : this.issuer).append("][").
 				append(this.subject).append("][").
 				append(this.issueDate).append("][").
 				append(this.goodAfterDate).append("][").
@@ -244,7 +244,7 @@ public final class License implements Serializable, Cloneable
 		return new License(builder);
 	}
 
-	public static final class Feature
+	public static final class Feature implements Serializable
 	{
 		private final String name;
 

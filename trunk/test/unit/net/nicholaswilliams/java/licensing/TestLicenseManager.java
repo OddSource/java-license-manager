@@ -36,7 +36,6 @@ import java.security.KeyPair;
 import java.security.KeyPairGenerator;
 import java.security.PrivateKey;
 import java.security.spec.X509EncodedKeySpec;
-import java.util.Arrays;
 
 import static org.junit.Assert.*;
 
@@ -135,12 +134,9 @@ public class TestLicenseManager
 		byte[] data = Encryptor.encryptRaw(license.serialize());
 		byte[] signature = new DataSignatureManager().signData(TestLicenseManager.privateKey, data);
 
-		char[] newPassword = Arrays.copyOf(TestLicenseManager.keyPassword, TestLicenseManager.keyPassword.length);
-		byte[] newKey = Arrays.copyOf(TestLicenseManager.encryptedPublicKey, TestLicenseManager.encryptedPublicKey.length);
-
 		EasyMock.expect(TestLicenseManager.licenseProvider.getLicense("LICENSE-2")).andReturn(new SignedLicense(data, signature));
-		EasyMock.expect(TestLicenseManager.keyPasswordProvider.getKeyPassword()).andReturn(newPassword);
-		EasyMock.expect(TestLicenseManager.keyDataProvider.getEncryptedPublicKeyData()).andReturn(newKey);
+		EasyMock.expect(TestLicenseManager.keyPasswordProvider.getKeyPassword()).andReturn(keyPassword.clone());
+		EasyMock.expect(TestLicenseManager.keyDataProvider.getEncryptedPublicKeyData()).andReturn(encryptedPublicKey.clone());
 		TestLicenseManager.control.replay();
 
 		License returned = this.manager.getLicense("LICENSE-2");
@@ -166,12 +162,9 @@ public class TestLicenseManager
 		byte[] data = Encryptor.encryptRaw(license.serialize());
 		byte[] signature = new DataSignatureManager().signData(TestLicenseManager.privateKey, data);
 
-		char[] newPassword = Arrays.copyOf(TestLicenseManager.keyPassword, TestLicenseManager.keyPassword.length);
-		byte[] newKey = Arrays.copyOf(TestLicenseManager.encryptedPublicKey, TestLicenseManager.encryptedPublicKey.length);
-
 		EasyMock.expect(TestLicenseManager.licenseProvider.getLicense(context)).andReturn(new SignedLicense(data, signature));
-		EasyMock.expect(TestLicenseManager.keyPasswordProvider.getKeyPassword()).andReturn(newPassword);
-		EasyMock.expect(TestLicenseManager.keyDataProvider.getEncryptedPublicKeyData()).andReturn(newKey);
+		EasyMock.expect(TestLicenseManager.keyPasswordProvider.getKeyPassword()).andReturn(keyPassword.clone());
+		EasyMock.expect(TestLicenseManager.keyDataProvider.getEncryptedPublicKeyData()).andReturn(encryptedPublicKey.clone());
 
 		return license;
 	}

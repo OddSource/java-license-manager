@@ -17,6 +17,10 @@
 
 package net.nicholaswilliams.java.licensing.licensor;
 
+import net.nicholaswilliams.java.licensing.DataSignatureManager;
+import net.nicholaswilliams.java.licensing.License;
+import net.nicholaswilliams.java.licensing.LicenseHelper;
+import net.nicholaswilliams.java.licensing.SignedLicense;
 import net.nicholaswilliams.java.licensing.encryption.Encryptor;
 import net.nicholaswilliams.java.licensing.encryption.KeyFileUtilities;
 import net.nicholaswilliams.java.licensing.encryption.KeyPasswordProvider;
@@ -31,6 +35,7 @@ import org.junit.Test;
 import java.io.ByteArrayOutputStream;
 import java.security.KeyPair;
 import java.security.KeyPairGenerator;
+import java.security.PublicKey;
 import java.security.spec.PKCS8EncodedKeySpec;
 
 import static org.junit.Assert.*;
@@ -40,7 +45,7 @@ import static org.junit.Assert.*;
  */
 public class TestLicenseCreator
 {
-	private static final char[] keyPassword = "testLicenseManagerPassword".toCharArray();
+	private static final char[] keyPassword = "testLicenseCreatorPassword".toCharArray();
 
 	private static KeyPasswordProvider keyPasswordProvider;
 
@@ -49,6 +54,8 @@ public class TestLicenseCreator
 	private static IMocksControl control;
 
 	private static byte[] encryptedPrivateKey;
+
+	private static PublicKey publicKey;
 
 	private LicenseCreator creator;
 
@@ -65,12 +72,11 @@ public class TestLicenseCreator
 		TestLicenseCreator.keyPasswordProvider = TestLicenseCreator.control.createMock(KeyPasswordProvider.class);
 		TestLicenseCreator.keyDataProvider = TestLicenseCreator.control.createMock(PrivateKeyDataProvider.class);
 
-		LicenseCreator.createInstance(
-				TestLicenseCreator.keyPasswordProvider,
-				TestLicenseCreator.keyDataProvider
-		);
+		LicenseCreator.createInstance(TestLicenseCreator.keyPasswordProvider, TestLicenseCreator.keyDataProvider);
 
 		KeyPair keyPair = KeyPairGenerator.getInstance(KeyFileUtilities.keyAlgorithm).generateKeyPair();
+
+		TestLicenseCreator.publicKey = keyPair.getPublic();
 
 		ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
 		PKCS8EncodedKeySpec pkcs8EncodedKeySpec = new PKCS8EncodedKeySpec(keyPair.getPrivate().getEncoded());
@@ -93,9 +99,35 @@ public class TestLicenseCreator
 	@Test
 	public void firstTest()
 	{
+		EasyMock.expect(TestLicenseCreator.keyPasswordProvider.getKeyPassword()).
+				andReturn(TestLicenseCreator.keyPassword.clone());
+		EasyMock.expect(TestLicenseCreator.keyDataProvider.getEncryptedPrivateKeyData()).
+				andReturn(TestLicenseCreator.encryptedPrivateKey.clone());
+
 		TestLicenseCreator.control.replay();
 
-		assertNull(null);
-		assertTrue(true);
+		License license = new License(
+				new License.Builder().withSubject("myLicense").withNumberOfLicenses(22).withFeature("newFeature")
+		);
+
+		SignedLicense signedLicense = this.creator.signLicense(license);
+
+		assertNotNull("The signed license should not be null.", signedLicense);
+		assertNotNull("The license signature should not be null.", signedLicense.getSignatureContent());
+		assertNotNull("The license content should not be null.", signedLicense.getLicenseContent());
+
+		new DataSignatureManager().verifySignature(
+				TestLicenseCreator.publicKey, signedLicense.getLicenseContent(), signedLicense.getSignatureContent()
+		);
+
+		byte[] unencrypted = Encryptor.decryptRaw(signedLicense.getLicenseContent());
+
+		assertNotNull("The unencrypted license data should not be null.", unencrypted);
+
+		License returned = LicenseHelper.deserialize(unencrypted);
+
+		assertNotNull("The returned license should not be null.", returned);
+
+		assertEquals("The license should be equal.", license, returned);
 	}
 }

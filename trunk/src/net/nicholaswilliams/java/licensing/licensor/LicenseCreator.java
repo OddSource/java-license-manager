@@ -19,7 +19,6 @@ package net.nicholaswilliams.java.licensing.licensor;
 
 import net.nicholaswilliams.java.licensing.DataSignatureManager;
 import net.nicholaswilliams.java.licensing.License;
-import net.nicholaswilliams.java.licensing.ObjectSerializer;
 import net.nicholaswilliams.java.licensing.SignedLicense;
 import net.nicholaswilliams.java.licensing.encryption.Encryptor;
 import net.nicholaswilliams.java.licensing.encryption.KeyFileUtilities;
@@ -89,7 +88,7 @@ public final class LicenseCreator
 			Arrays.fill(keyData, (byte)0);
 		}
 
-		byte[] encrypted = Encryptor.encryptRaw(new ObjectSerializer().writeObject(license));
+		byte[] encrypted = Encryptor.encryptRaw(license.serialize());
 
 		byte[] signature = new DataSignatureManager().signData(key, encrypted);
 

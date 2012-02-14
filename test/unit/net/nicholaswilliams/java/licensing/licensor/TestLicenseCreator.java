@@ -1,7 +1,7 @@
 /*
- * TestLicenseCreator.java from LicenseManager modified Tuesday, June 28, 2011 11:34:10 CDT (-0500).
+ * TestLicenseCreator.java from LicenseManager modified Monday, February 13, 2012 23:22:52 CST (-0600).
  *
- * Copyright 2010-2011 the original author or authors.
+ * Copyright 2010-2012 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -98,7 +98,7 @@ public class TestLicenseCreator
 	}
 
 	@Test
-	public void firstTest()
+	public void testLicenseSigning01()
 	{
 		EasyMock.expect(TestLicenseCreator.keyPasswordProvider.getKeyPassword()).
 				andReturn(TestLicenseCreator.keyPassword.clone());
@@ -107,9 +107,11 @@ public class TestLicenseCreator
 
 		TestLicenseCreator.control.replay();
 
-		License license = new License(
-				new License.Builder().withSubject("myLicense").withNumberOfLicenses(22).withFeature("newFeature")
-		);
+		License license = new License.Builder().
+									withSubject("myLicense").
+									withNumberOfLicenses(22).
+									withFeature("newFeature").
+									build();
 
 		SignedLicense signedLicense = this.creator.signLicense(license);
 

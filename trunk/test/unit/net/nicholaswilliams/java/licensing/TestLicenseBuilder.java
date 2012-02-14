@@ -1,7 +1,7 @@
 /*
- * TestLicenseBuilder.java from LicenseManager modified Tuesday, June 28, 2011 11:34:11 CDT (-0500).
+ * TestLicenseBuilder.java from LicenseManager modified Monday, February 13, 2012 23:04:40 CST (-0600).
  *
- * Copyright 2010-2011 the original author or authors.
+ * Copyright 2010-2012 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,8 +23,6 @@ import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
-
-import javax.security.auth.x500.X500Principal;
 
 import static org.junit.Assert.*;
 
@@ -65,26 +63,24 @@ public class TestLicenseBuilder
 	@Test
 	public void testBuild01()
 	{
-		License license = new License(new License.Builder().
-						withIssuer(new X500Principal("CN=Nick Williams, C=US, ST=TN")).
-						withHolder(new X500Principal("CN=Tim Williams, C=US, ST=AL")).
-						withIssueDate(1234567890000L).
-						withGoodAfterDate(1199145600000L).
-						withGoodBeforeDate(1924991999000L).
-						withNumberOfLicenses(15).
-						withFeature("FEATURE1").
-						withFeature("FEATURE3")
-		);
+		License license = new License.Builder().
+									withProductKey("5565-1039-AF89-GGX7-TN31-14AL").
+									withIssuer("CN=Nick Williams, C=US, ST=TN").
+									withHolder("CN=Tim Williams, C=US, ST=AL").
+									withIssueDate(1234567890000L).
+									withGoodAfterDate(1199145600000L).
+									withGoodBeforeDate(1924991999000L).
+									withNumberOfLicenses(15).
+									withFeature("FEATURE1").
+									withFeature("FEATURE3").
+									build();
 
-		assertEquals("The issuer is not correct.",
-				new X500Principal("CN=Nick Williams, C=US, ST=TN"),
-				license.getIssuer());
-		assertEquals("The holder is not correct.",
-				new X500Principal("CN=Tim Williams, C=US, ST=AL"),
-				license.getHolder());
+		assertEquals("The product key is not correct.", "5565-1039-AF89-GGX7-TN31-14AL", license.getProductKey());
+		assertEquals("The issuer is not correct.", "CN=Nick Williams, C=US, ST=TN", license.getIssuer());
+		assertEquals("The holder is not correct.", "CN=Tim Williams, C=US, ST=AL", license.getHolder());
 		assertEquals("The issue date is not correct.", 1234567890000L, license.getIssueDate());
-		assertEquals("The after date is not correct.", 1199145600000L, license.getGoodAfterDate());
-		assertEquals("The before date is not correct.", 1924991999000L, license.getGoodBeforeDate());
+		assertEquals("The good after date is not correct.", 1199145600000L, license.getGoodAfterDate());
+		assertEquals("The good before date is not correct.", 1924991999000L, license.getGoodBeforeDate());
 		assertEquals("The number of licenses is not correct.", 15, license.getNumberOfLicenses());
 		assertTrue("Feature mismatch #1.", license.hasLicenseForAllFeatures("FEATURE1"));
 		assertTrue("Feature mismatch #2.", license.hasLicenseForAllFeatures("FEATURE3"));
@@ -94,25 +90,26 @@ public class TestLicenseBuilder
 	@Test
 	public void testBuild02()
 	{
-		License license = new License(new License.Builder().
-						withIssuer(new X500Principal("CN=UUID-5581CAD6-A0C5-1A88-C32B6117B700B53F, C=US, ST=TN")).
-						withHolder(new X500Principal("CN=UUID-5581CAE6-0232-5353-1DC9AF6A79FE7106, C=US, ST=AL")).
-						withIssueDate(1285629859000L).
-						withGoodAfterDate(1136073600000L).
-						withGoodBeforeDate(1230767999000L).
-						withNumberOfLicenses(5).
-						withFeature("FEATURE2")
-		);
+		License license = new License.Builder().
+									withProductKey("5655-9301-98AF-X7GE-RTV5-1092").
+									withIssuer("CN=UUID-5581CAD6-A0C5-1A88-C32B6117B700B53F, C=US, ST=TN").
+									withHolder("CN=UUID-5581CAE6-0232-5353-1DC9AF6A79FE7106, C=US, ST=AL").
+									withIssueDate(1285629859000L).
+									withGoodAfterDate(1136073600000L).
+									withGoodBeforeDate(1230767999000L).
+									withNumberOfLicenses(5).
+									withFeature("FEATURE2").
+									build();
 
+		assertEquals("The product key is not correct.", "5655-9301-98AF-X7GE-RTV5-1092", license.getProductKey());
 		assertEquals("The issuer is not correct.",
-				new X500Principal("CN=UUID-5581CAD6-A0C5-1A88-C32B6117B700B53F, C=US, ST=TN"),
-				license.getIssuer());
+				"CN=UUID-5581CAD6-A0C5-1A88-C32B6117B700B53F, C=US, ST=TN", license.getIssuer());
 		assertEquals("The holder is not correct.",
-				new X500Principal("CN=UUID-5581CAE6-0232-5353-1DC9AF6A79FE7106, C=US, ST=AL"),
+				"CN=UUID-5581CAE6-0232-5353-1DC9AF6A79FE7106, C=US, ST=AL",
 				license.getHolder());
 		assertEquals("The issue date is not correct.", 1285629859000L, license.getIssueDate());
-		assertEquals("The after date is not correct.", 1136073600000L, license.getGoodAfterDate());
-		assertEquals("The before date is not correct.", 1230767999000L, license.getGoodBeforeDate());
+		assertEquals("The good after date is not correct.", 1136073600000L, license.getGoodAfterDate());
+		assertEquals("The good before date is not correct.", 1230767999000L, license.getGoodBeforeDate());
 		assertEquals("The number of licenses is not correct.", 5, license.getNumberOfLicenses());
 		assertTrue("Feature mismatch #1.", license.hasLicenseForAllFeatures("FEATURE2"));
 		assertFalse("Feature mismatch #2.", license.hasLicenseForAllFeatures("FEATURE1"));

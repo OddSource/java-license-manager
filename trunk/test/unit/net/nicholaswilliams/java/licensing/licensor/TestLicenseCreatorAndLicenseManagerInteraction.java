@@ -1,7 +1,7 @@
 /*
- * TestLicenseCreatorAndLicenseManagerInteraction.java from LicenseManager modified Tuesday, June 28, 2011 11:34:11 CDT (-0500).
+ * TestLicenseCreatorAndLicenseManagerInteraction.java from LicenseManager modified Monday, February 13, 2012 23:21:18 CST (-0600).
  *
- * Copyright 2010-2011 the original author or authors.
+ * Copyright 2010-2012 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -43,7 +43,7 @@ import java.security.spec.X509EncodedKeySpec;
 import static org.junit.Assert.*;
 
 /**
- * Test class for .
+ * Test class for LicenseCreator and LicenseManager interaction.
  */
 public class TestLicenseCreatorAndLicenseManagerInteraction
 {
@@ -119,9 +119,11 @@ public class TestLicenseCreatorAndLicenseManagerInteraction
 
 		TestLicenseCreatorAndLicenseManagerInteraction.control.replay();
 
-		License license = new License(
-				new License.Builder().withSubject("myLicense").withNumberOfLicenses(22).withFeature("newFeature")
-		);
+		License license = new License.Builder().
+									withSubject("myLicense").
+									withNumberOfLicenses(22).
+									withFeature("newFeature").
+									build();
 
 		SignedLicense signedLicense = this.creator.signLicense(license);
 

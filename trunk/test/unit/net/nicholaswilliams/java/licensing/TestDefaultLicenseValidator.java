@@ -1,7 +1,7 @@
 /*
- * TestDefaultLicenseValidator.java from LicenseManager modified Tuesday, June 28, 2011 11:34:10 CDT (-0500).
+ * TestDefaultLicenseValidator.java from LicenseManager modified Monday, February 13, 2012 23:14:07 CST (-0600).
  *
- * Copyright 2010-2011 the original author or authors.
+ * Copyright 2010-2012 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,7 +24,6 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import javax.security.auth.x500.X500Principal;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -53,20 +52,21 @@ public class TestDefaultLicenseValidator
 	@Test
 	public void testGetLicenseDescription()
 	{
-		License license = new License(
-				new License.Builder().
-						withIssuer(new X500Principal("CN=Nick Williams, C=US, ST=TN")).
-						withHolder(new X500Principal("CN=Tim Williams, C=US, ST=AL")).
-						withSubject("Simple Product Name(TM)").
-						withIssueDate(2348907324983L).
-						withGoodAfterDate(2348907325000L).
-						withGoodBeforeDate(2348917325000L).
-						withNumberOfLicenses(57).
-						withFeature("nickFeature1").withFeature("allisonFeature2")
-		);
+		License license = new License.Builder().
+									withProductKey("5565-1039-AF89-GGX7-TN31-14AL").
+									withIssuer("CN=Nick Williams, C=US, ST=TN").
+									withHolder("CN=Tim Williams, C=US, ST=AL").
+									withSubject("Simple Product Name(TM)").
+									withIssueDate(2348907324983L).
+									withGoodAfterDate(2348907325000L).
+									withGoodBeforeDate(2348917325000L).
+									withNumberOfLicenses(57).
+									withFeature("nickFeature1").
+									withFeature("allisonFeature2").
+									build();
 
 		assertEquals("The description is not correct.",
-					 "Simple Product Name(TM) license for " + license.getHolder().toString(),
+					 "Simple Product Name(TM) license for " + license.getHolder(),
 					 this.validator.getLicenseDescription(license));
 	}
 
@@ -88,17 +88,18 @@ public class TestDefaultLicenseValidator
 		long goodAfter = calendar.getTimeInMillis() + 1000;
 		long goodBefore = calendar.getTimeInMillis() + 87400;
 
-		License license = new License(
-				new License.Builder().
-						withIssuer(new X500Principal("CN=Nick Williams, C=US, ST=TN")).
-						withHolder(new X500Principal("CN=Tim Williams, C=US, ST=AL")).
-						withSubject("Simple Product Name(TM)").
-						withIssueDate(2348907324983L).
-						withGoodAfterDate(goodAfter).
-						withGoodBeforeDate(goodBefore).
-						withNumberOfLicenses(57).
-						withFeature("nickFeature1").withFeature("allisonFeature2")
-		);
+		License license = new License.Builder().
+									withProductKey("5565-1039-AF89-GGX7-TN31-14AL").
+									withIssuer("CN=Nick Williams, C=US, ST=TN").
+									withHolder("CN=Tim Williams, C=US, ST=AL").
+									withSubject("Simple Product Name(TM)").
+									withIssueDate(2348907324983L).
+									withGoodAfterDate(goodAfter).
+									withGoodBeforeDate(goodBefore).
+									withNumberOfLicenses(57).
+									withFeature("nickFeature1").
+									withFeature("allisonFeature2").
+									build();
 
 		this.validator.validateLicense(license);
 	}
@@ -111,17 +112,18 @@ public class TestDefaultLicenseValidator
 		long goodAfter = calendar.getTimeInMillis() + 1000;
 		long goodBefore = calendar.getTimeInMillis() - 1000;
 
-		License license = new License(
-				new License.Builder().
-						withIssuer(new X500Principal("CN=Nick Williams, C=US, ST=TN")).
-						withHolder(new X500Principal("CN=Tim Williams, C=US, ST=AL")).
-						withSubject("Simple Product Name(TM)").
-						withIssueDate(2348907324983L).
-						withGoodAfterDate(goodAfter).
-						withGoodBeforeDate(goodBefore).
-						withNumberOfLicenses(57).
-						withFeature("nickFeature1").withFeature("allisonFeature2")
-		);
+		License license = new License.Builder().
+									withProductKey("5565-1039-AF89-GGX7-TN31-14AL").
+									withIssuer("CN=Nick Williams, C=US, ST=TN").
+									withHolder("CN=Tim Williams, C=US, ST=AL").
+									withSubject("Simple Product Name(TM)").
+									withIssueDate(2348907324983L).
+									withGoodAfterDate(goodAfter).
+									withGoodBeforeDate(goodBefore).
+									withNumberOfLicenses(57).
+									withFeature("nickFeature1").
+									withFeature("allisonFeature2").
+									build();
 
 		this.validator.validateLicense(license);
 	}
@@ -134,17 +136,18 @@ public class TestDefaultLicenseValidator
 		long goodAfter = calendar.getTimeInMillis() - 2000;
 		long goodBefore = calendar.getTimeInMillis() - 1000;
 
-		License license = new License(
-				new License.Builder().
-						withIssuer(new X500Principal("CN=Nick Williams, C=US, ST=TN")).
-						withHolder(new X500Principal("CN=Tim Williams, C=US, ST=AL")).
-						withSubject("Simple Product Name(TM)").
-						withIssueDate(2348907324983L).
-						withGoodAfterDate(goodAfter).
-						withGoodBeforeDate(goodBefore).
-						withNumberOfLicenses(57).
-						withFeature("nickFeature1").withFeature("allisonFeature2")
-		);
+		License license = new License.Builder().
+									withProductKey("5565-1039-AF89-GGX7-TN31-14AL").
+									withIssuer("CN=Nick Williams, C=US, ST=TN").
+									withHolder("CN=Tim Williams, C=US, ST=AL").
+									withSubject("Simple Product Name(TM)").
+									withIssueDate(2348907324983L).
+									withGoodAfterDate(goodAfter).
+									withGoodBeforeDate(goodBefore).
+									withNumberOfLicenses(57).
+									withFeature("nickFeature1").
+									withFeature("allisonFeature2").
+									build();
 
 		this.validator.validateLicense(license);
 	}
@@ -157,17 +160,18 @@ public class TestDefaultLicenseValidator
 		long goodAfter = calendar.getTimeInMillis() - 1000;
 		long goodBefore = calendar.getTimeInMillis() + 85400;
 
-		License license = new License(
-				new License.Builder().
-						withIssuer(new X500Principal("CN=Nick Williams, C=US, ST=TN")).
-						withHolder(new X500Principal("CN=Tim Williams, C=US, ST=AL")).
-						withSubject("Simple Product Name(TM)").
-						withIssueDate(2348907324983L).
-						withGoodAfterDate(goodAfter).
-						withGoodBeforeDate(goodBefore).
-						withNumberOfLicenses(57).
-						withFeature("nickFeature1").withFeature("allisonFeature2")
-		);
+		License license =  new License.Builder().
+									withProductKey("5565-1039-AF89-GGX7-TN31-14AL").
+									withIssuer("CN=Nick Williams, C=US, ST=TN").
+									withHolder("CN=Tim Williams, C=US, ST=AL").
+									withSubject("Simple Product Name(TM)").
+									withIssueDate(2348907324983L).
+									withGoodAfterDate(goodAfter).
+									withGoodBeforeDate(goodBefore).
+									withNumberOfLicenses(57).
+									withFeature("nickFeature1").
+									withFeature("allisonFeature2").
+									build();
 
 		this.validator.validateLicense(license);
 	}

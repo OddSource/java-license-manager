@@ -1,7 +1,7 @@
 /*
- * TestLicenseManager.java from LicenseManager modified Tuesday, June 28, 2011 11:34:11 CDT (-0500).
+ * TestLicenseManager.java from LicenseManager modified Monday, February 13, 2012 23:09:02 CST (-0600).
  *
- * Copyright 2010-2011 the original author or authors.
+ * Copyright 2010-2012 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -31,7 +31,6 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import javax.security.auth.x500.X500Principal;
 import java.io.ByteArrayOutputStream;
 import java.security.KeyPair;
 import java.security.KeyPairGenerator;
@@ -120,17 +119,18 @@ public class TestLicenseManager
 	@Test
 	public void testGetLicense02() throws Exception
 	{
-		License license = new License(
-				new License.Builder().
-						withIssuer(new X500Principal("CN=Nick Williams, C=US, ST=TN")).
-						withHolder(new X500Principal("CN=Tim Williams, C=US, ST=AL")).
-						withSubject("Simple Product Name(TM)").
-						withIssueDate(2348907324983L).
-						withGoodAfterDate(2348907325000L).
-						withGoodBeforeDate(2348917325000L).
-						withNumberOfLicenses(57).
-						withFeature("nickFeature1").withFeature("allisonFeature2")
-		);
+		License license = new License.Builder().
+									withProductKey("5565-1039-AF89-GGX7-TN31-14AL").
+									withIssuer("CN=Nick Williams, C=US, ST=TN").
+									withHolder("CN=Tim Williams, C=US, ST=AL").
+									withSubject("Simple Product Name(TM)").
+									withIssueDate(2348907324983L).
+									withGoodAfterDate(2348907325000L).
+									withGoodBeforeDate(2348917325000L).
+									withNumberOfLicenses(57).
+									withFeature("nickFeature1").
+									withFeature("allisonFeature2").
+									build();
 
 		byte[] data = Encryptor.encryptRaw(license.serialize());
 		byte[] signature = new DataSignatureManager().signData(TestLicenseManager.privateKey, data);
@@ -148,17 +148,19 @@ public class TestLicenseManager
 
 	public License setupLicenseMocking(String context)
 	{
-		License license = new License(
-				new License.Builder().
-						withIssuer(new X500Principal("CN=NWTS, C=US, ST=TN")).
-						withHolder(new X500Principal("CN=Joe Customer, C=CA, ST=QE")).
-						withSubject("NWTS Database Browser").
-						withIssueDate(23481149385711L).
-						withGoodAfterDate(2348114987000L).
-						withGoodBeforeDate(2348914987000L).
-						withNumberOfLicenses(5).
-						withFeature("feature#1").withFeature("feature#2").withFeature("feature#5")
-		);
+		License license = new License.Builder().
+									withProductKey("5565-1039-AF89-GGX7-TN31-14AL").
+									withIssuer("CN=NWTS, C=US, ST=TN").
+									withHolder("CN=Joe Customer, C=CA, ST=QE").
+									withSubject("NWTS Database Browser/v.9.5").
+									withIssueDate(23481149385711L).
+									withGoodAfterDate(2348114987000L).
+									withGoodBeforeDate(2348914987000L).
+									withNumberOfLicenses(5).
+									withFeature("feature#1").
+									withFeature("feature#2").
+									withFeature("feature#5").
+									build();
 
 		byte[] data = Encryptor.encryptRaw(license.serialize());
 		byte[] signature = new DataSignatureManager().signData(TestLicenseManager.privateKey, data);
@@ -231,7 +233,7 @@ public class TestLicenseManager
 	@Test
 	public void testValidateLicense01()
 	{
-		License license = new License(new License.Builder());
+		License license = new License.Builder().build();
 
 		TestLicenseManager.licenseValidator.validateLicense(license);
 		EasyMock.expectLastCall();
@@ -243,7 +245,7 @@ public class TestLicenseManager
 	@Test(expected=ExpiredLicenseException.class)
 	public void testValidateLicense02()
 	{
-		License license = new License(new License.Builder());
+		License license = new License.Builder().build();
 
 		TestLicenseManager.licenseValidator.validateLicense(license);
 		EasyMock.expectLastCall().andThrow(new ExpiredLicenseException());

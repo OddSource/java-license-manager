@@ -1,7 +1,7 @@
 /*
- * LicenseCreator.java from LicenseManager modified Tuesday, June 28, 2011 11:34:10 CDT (-0500).
+ * LicenseCreator.java from LicenseManager modified Tuesday, February 14, 2012 10:06:35 CST (-0600).
  *
- * Copyright 2010-2011 the original author or authors.
+ * Copyright 2010-2012 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -28,7 +28,6 @@ import net.nicholaswilliams.java.licensing.exception.AlgorithmNotSupportedExcept
 import net.nicholaswilliams.java.licensing.exception.InappropriateKeyException;
 import net.nicholaswilliams.java.licensing.exception.InappropriateKeySpecificationException;
 import net.nicholaswilliams.java.licensing.exception.KeyNotFoundException;
-import net.nicholaswilliams.java.licensing.exception.ObjectSerializationException;
 
 import java.security.PrivateKey;
 import java.util.Arrays;
@@ -37,7 +36,7 @@ import java.util.Arrays;
  * This class manages the creation of licenses in the master application.
  *
  * @author Nick Williams
- * @version 1.0.5
+ * @version 1.0.6
  * @since 1.0.0
  */
 public final class LicenseCreator
@@ -55,6 +54,16 @@ public final class LicenseCreator
 		this.privateKeyDataProvider = privateKeyLocationProvider;
 	}
 
+	/**
+	 * The first time this is called, it creates and returns a license creator with the given providers. All subsequent
+	 * calls are equivalent to calling {@link #getInstance()} (i.e., the parameters are ignored
+	 * and the previously-created instance is returned).
+	 *
+	 * @param passwordProvider The provider of the password for decrypting the license key
+	 * @param privateKeyDataProvider The provider of the data for the private key used to sign the license object.
+	 * @return the created instance of the license creator.
+	 * @throws IllegalArgumentException if {@code passwordProvider} or {@code privateKeyDataProvider} are null
+	 */
 	public static synchronized LicenseCreator createInstance(KeyPasswordProvider passwordProvider,
 															 PrivateKeyDataProvider privateKeyDataProvider)
 	{
@@ -66,6 +75,14 @@ public final class LicenseCreator
 		return LicenseCreator.instance;
 	}
 
+	/**
+	 * Returns the license creator instance previously created by
+	 * {@link #createInstance(KeyPasswordProvider, PrivateKeyDataProvider)}. If this method is
+	 * called before {@code createInstance()}, a {@link RuntimeException} is thrown.
+	 *
+	 * @return the license creator instance.
+	 * @throws RuntimeException if no instance has yet be created by {@code createInstance()}.
+	 */
 	public static synchronized LicenseCreator getInstance()
 	{
 		if(LicenseCreator.instance == null)
@@ -74,9 +91,19 @@ public final class LicenseCreator
 		return LicenseCreator.instance;
 	}
 
+	/**
+	 * Takes a license object and creates a secure version of it for serialization and delivery to the customer.
+	 *
+	 * @param license The license object to be signed
+	 * @return the signed license object.
+	 * @throws AlgorithmNotSupportedException if the encryption algorithm is not supported.
+	 * @throws KeyNotFoundException if the public key data could not be found.
+	 * @throws InappropriateKeySpecificationException if an inappropriate key specification is provided.
+	 * @throws InappropriateKeyException if the key type and cipher type do not match.
+	 */
 	public final SignedLicense signLicense(License license)
 			throws AlgorithmNotSupportedException, KeyNotFoundException, InappropriateKeySpecificationException,
-				   InappropriateKeyException, ObjectSerializationException
+				   InappropriateKeyException
 	{
 		PrivateKey key;
 		{

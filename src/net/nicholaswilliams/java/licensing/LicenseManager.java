@@ -1,5 +1,5 @@
 /*
- * LicenseManager.java from LicenseManager modified Monday, February 13, 2012 23:39:59 CST (-0600).
+ * LicenseManager.java from LicenseManager modified Tuesday, February 14, 2012 10:07:38 CST (-0600).
  *
  * Copyright 2010-2012 the original author or authors.
  *
@@ -28,9 +28,9 @@ import net.nicholaswilliams.java.licensing.exception.FailedToDecryptException;
 import net.nicholaswilliams.java.licensing.exception.InappropriateKeyException;
 import net.nicholaswilliams.java.licensing.exception.InappropriateKeySpecificationException;
 import net.nicholaswilliams.java.licensing.exception.InsecureEnvironmentException;
+import net.nicholaswilliams.java.licensing.exception.InvalidLicenseException;
 import net.nicholaswilliams.java.licensing.exception.InvalidSignatureException;
 import net.nicholaswilliams.java.licensing.exception.KeyNotFoundException;
-import net.nicholaswilliams.java.licensing.exception.ObjectDeserializationException;
 import net.nicholaswilliams.java.licensing.exception.ObjectTypeNotExpectedException;
 
 import java.lang.reflect.AnnotatedElement;
@@ -58,7 +58,7 @@ import java.util.Hashtable;
  * {@link LicenseSecurityManager}.
  * 
  * @author Nick Williams
- * @version 1.0.0
+ * @version 1.0.2
  * @since 1.0.0
  * @see LicenseSecurityManager
  * @see InsecureEnvironmentException
@@ -165,24 +165,27 @@ public final class LicenseManager
 	 * was provided.
 	 *
 	 * @param license The license to validate
-	 * @throws net.nicholaswilliams.java.licensing.exception.InvalidLicenseException when the license is invalid for any reason
+	 * @throws InvalidLicenseException when the license is invalid for any reason.
+	 * @throws net.nicholaswilliams.java.licensing.exception.ExpiredLicenseException when the license is expired.
 	 */
-	public final void validateLicense(License license)
+	public final void validateLicense(License license) throws InvalidLicenseException
 	{
 		if(this.licenseValidator != null)
 			this.licenseValidator.validateLicense(license);
 	}
 
 	/**
-	 * Checks whether the license assigned to the specified context is licensed to use all of the features specified.<br />
+	 * Checks whether the license assigned to the specified context is licensed to use the feature specified.<br />
 	 * <br />
 	 * Throws the same exceptions as {@link #getLicense(Object)} and for the same reasons.
 	 *
 	 * @param context The context (account, client, etc.) for which to check the feature(s) against its license
 	 * @param feature The feature (or features) to check against the license
 	 * @return {@code true} if the license exists and has this feature enabled, {@code false} otherwise.
+	 * @throws InvalidLicenseException when the license is invalid for any reason.
+	 * @throws net.nicholaswilliams.java.licensing.exception.ExpiredLicenseException when the license is expired.
 	 */
-	public final boolean hasLicenseForAllFeatures(Object context, String... feature)
+	public final boolean hasLicenseForFeature(Object context, String feature) throws InvalidLicenseException
 	{
 		License license = this.getLicense(context);
 		if(license == null)
@@ -190,7 +193,7 @@ public final class LicenseManager
 
 		this.validateLicense(license);
 
-		return license.hasLicenseForAllFeatures(feature);
+		return license.hasLicenseForFeature(feature);
 	}
 
 	/**
@@ -201,8 +204,10 @@ public final class LicenseManager
 	 * @param context The context (account, client, etc.) for which to check the feature(s) against its license
 	 * @param feature The feature (or features) to check against the license
 	 * @return {@code true} if the license exists and has this feature enabled, {@code false} otherwise.
+	 * @throws InvalidLicenseException when the license is invalid for any reason.
+	 * @throws net.nicholaswilliams.java.licensing.exception.ExpiredLicenseException when the license is expired.
 	 */
-	public final boolean hasLicenseForAnyFeature(Object context, String... feature)
+	public final boolean hasLicenseForAnyFeature(Object context, String... feature) throws InvalidLicenseException
 	{
 		License license = this.getLicense(context);
 		if(license == null)
@@ -214,6 +219,28 @@ public final class LicenseManager
 	}
 
 	/**
+	 * Checks whether the license assigned to the specified context is licensed to use all of the features specified.<br />
+	 * <br />
+	 * Throws the same exceptions as {@link #getLicense(Object)} and for the same reasons.
+	 *
+	 * @param context The context (account, client, etc.) for which to check the feature(s) against its license
+	 * @param feature The feature (or features) to check against the license
+	 * @return {@code true} if the license exists and has this feature enabled, {@code false} otherwise.
+	 * @throws InvalidLicenseException when the license is invalid for any reason.
+	 * @throws net.nicholaswilliams.java.licensing.exception.ExpiredLicenseException when the license is expired.
+	 */
+	public final boolean hasLicenseForAllFeatures(Object context, String... feature) throws InvalidLicenseException
+	{
+		License license = this.getLicense(context);
+		if(license == null)
+			return false;
+
+		this.validateLicense(license);
+
+		return license.hasLicenseForAllFeatures(feature);
+	}
+
+	/**
 	 * Checks whether the license assigned to the specified context is licensed to use the feature(s) in the annotation value.<br />
 	 * <br />
 	 * Throws the same exceptions as {@link #getLicense(Object)} and for the same reasons.
@@ -221,8 +248,11 @@ public final class LicenseManager
 	 * @param context The context (account, client, etc.) for which to check the feature(s) against its license
 	 * @param annotation The annotation object whose value(s) is(are) the feature(s) to check against the license
 	 * @return {@code true} if the license exists and has this feature(s) enabled, {@code false} otherwise.
+	 * @throws InvalidLicenseException when the license is invalid for any reason.
+	 * @throws net.nicholaswilliams.java.licensing.exception.ExpiredLicenseException when the license is expired.
 	 */
 	public final boolean hasLicenseForFeatures(Object context, FeatureRestriction annotation)
+			throws InvalidLicenseException
 	{
 		License license = this.getLicense(context);
 		if(license == null)
@@ -244,8 +274,10 @@ public final class LicenseManager
 	 * @param context The context (account, client, etc.) for which to check the feature(s) against its license
 	 * @param target The target (a package reflection object, class reflection object or method reflection object) to check for the {@link FeatureRestriction} annotation and check its value against the license
 	 * @return {@code false} if the license does not exist, {@code true} if the target is not annotated with {@link FeatureRestriction} and, if it is annotated, {@code true} if the feature(s) is(are) licensed or {@code false} if the feature(s) is(are) not licensed
+	 * @throws InvalidLicenseException when the license is invalid for any reason.
+	 * @throws net.nicholaswilliams.java.licensing.exception.ExpiredLicenseException when the license is expired.
 	 */
-	public final boolean hasLicenseForFeatures(Object context, AnnotatedElement target)
+	public final boolean hasLicenseForFeatures(Object context, AnnotatedElement target) throws InvalidLicenseException
 	{
 		License license = this.getLicense(context);
 		if(license == null)
@@ -286,13 +318,11 @@ public final class LicenseManager
 	 * @throws InvalidSignatureException if the signature is invalid (most likely tampered with).
 	 * @throws FailedToDecryptException if the license or signature could not be decrypted.
 	 * @throws ObjectTypeNotExpectedException if the license data was tampered with.
-	 * @throws ObjectDeserializationException if the license data was tampered with.
 	 */
 	public final License getLicense(Object context) throws KeyNotFoundException, AlgorithmNotSupportedException,
 														   InappropriateKeySpecificationException,
 														   InappropriateKeyException, CorruptSignatureException,
-														   InvalidSignatureException, FailedToDecryptException,
-														   ObjectDeserializationException
+														   InvalidSignatureException, FailedToDecryptException
 	{
 		long time = System.currentTimeMillis();
 

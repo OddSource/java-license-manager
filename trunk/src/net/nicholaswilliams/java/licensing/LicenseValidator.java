@@ -1,7 +1,7 @@
 /*
- * LicenseValidator.java from LicenseManager modified Tuesday, June 28, 2011 11:34:11 CDT (-0500).
+ * LicenseValidator.java from LicenseManager modified Tuesday, February 14, 2012 09:57:48 CST (-0600).
  *
- * Copyright 2010-2011 the original author or authors.
+ * Copyright 2010-2012 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -29,7 +29,7 @@ import net.nicholaswilliams.java.licensing.exception.InvalidLicenseException;
  * license's good-after and good-before dates (the license has taken effect and hasn't expired).
  *
  * @author Nick Williams
- * @version 1.0.0
+ * @version 1.0.1
  * @since 1.0.0
  */
 public interface LicenseValidator
@@ -39,9 +39,8 @@ public interface LicenseValidator
 	 * (expired, not who it belongs to, etc.).
 	 *
 	 * @param license The license to validate
-	 * @throws InvalidLicenseException when the license is invalid for any reason; the implementer is required to provide adequate description in this exception to indicate why the license is invalid; extending the exception is encouraged
-	 * @see InvalidLicenseException
-	 * @see net.nicholaswilliams.java.licensing.exception.ExpiredLicenseException
+	 * @throws InvalidLicenseException when the license is invalid for any reason; the implementer is required to provide adequate description in this exception to indicate why the license is invalid; extending the exception is encouraged.
+	 * @throws net.nicholaswilliams.java.licensing.exception.ExpiredLicenseException when the license is expired.
 	 */
 	public void validateLicense(License license) throws InvalidLicenseException;
 }

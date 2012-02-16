@@ -1,7 +1,7 @@
 /*
- * LicenseProvider.java from LicenseManager modified Tuesday, June 28, 2011 11:34:10 CDT (-0500).
+ * LicenseProvider.java from LicenseManager modified Tuesday, February 14, 2012 10:12:17 CST (-0600).
  *
- * Copyright 2010-2011 the original author or authors.
+ * Copyright 2010-2012 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,8 +19,8 @@
 package net.nicholaswilliams.java.licensing;
 
 /**
- * This specifies an interface for providing and persisting the stored,
- * still-encrypted license content and signature object.
+ * This specifies an interface for providing and persisting the stored, still-encrypted license content and signature
+ * object.
  *
  * @author Nick Williams
  * @version 1.0.0
@@ -29,8 +29,7 @@ package net.nicholaswilliams.java.licensing;
 public interface LicenseProvider
 {
 	/**
-	 * Gets the stored, still-encrypted license content and signature from the
-	 * persistence store.
+	 * Gets the stored, still-encrypted license content and signature from the persistence store.
 	 *
 	 * @param context The context for which to get the license
 	 * @return the signed license object.

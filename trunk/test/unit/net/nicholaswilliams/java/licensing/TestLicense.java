@@ -1,5 +1,5 @@
 /*
- * TestLicense.java from LicenseManager modified Monday, February 13, 2012 23:37:18 CST (-0600).
+ * TestLicense.java from LicenseManager modified Wednesday, February 15, 2012 23:12:24 CST (-0600).
  *
  * Copyright 2010-2012 the original author or authors.
  *
@@ -121,6 +121,10 @@ public class TestLicense
 	{
 		assertTrue("Feature 1 is missing.", this.license.hasLicenseForAllFeatures("nickFeature1"));
 		assertTrue("Feature 2 is missing.", this.license.hasLicenseForAllFeatures("allisonFeature2"));
+
+		assertTrue("Feature 1 is missing now.", this.license.hasLicenseForFeature("nickFeature1"));
+		assertTrue("Feature 2 is missing now.", this.license.hasLicenseForFeature("allisonFeature2"));
+		assertFalse("There's a phantom feature.", this.license.hasLicenseForFeature("fakeFeature3"));
 	}
 
 	@Test
@@ -145,6 +149,35 @@ public class TestLicense
 		assertFalse("Result 6 is incorrect.", this.license.hasLicenseForAnyFeature("dogFeature1"));
 		assertTrue("Result 7 is incorrect.", this.license.hasLicenseForAnyFeature("nickFeature1"));
 		assertTrue("Result 8 is incorrect.", this.license.hasLicenseForAnyFeature("allisonFeature2"));
+	}
+
+	@Test
+	public void testFeatures05()
+	{
+		this.license = new License.Builder().
+								withProductKey("5565-1039-AF89-GGX7-TN31-14AL").
+								withIssuer("CN=Nick Williams, C=US, ST=TN").
+								withHolder("CN=Tim Williams, C=US, ST=AL").
+								withSubject("Simple Product Name(TM)").
+								withIssueDate(2348907324983L).
+								withGoodAfterDate(2348907325000L).
+								withGoodBeforeDate(2348917325000L).
+								withNumberOfLicenses(57).
+								withFeature("goodFeature1").
+								withFeature("goodFeature2", 2348917325000L).
+								withFeature("expiredFeature3", 1L).
+								build();
+
+		assertTrue("Feature 1 is missing now.", this.license.hasLicenseForFeature("goodFeature1"));
+		assertTrue("Feature 2 is missing now.", this.license.hasLicenseForFeature("goodFeature2"));
+		assertFalse("There's a phantom feature.", this.license.hasLicenseForFeature("expiredFeature3"));
+
+		assertTrue("Error 1", this.license.hasLicenseForAnyFeature("goodFeature1", "expiredFeature3"));
+		assertFalse("Error 2", this.license.hasLicenseForAnyFeature("expiredFeature3"));
+
+		assertTrue("Error 3", this.license.hasLicenseForAllFeatures("goodFeature1", "goodFeature2"));
+		assertFalse("Error 4", this.license.hasLicenseForAllFeatures("goodFeature1", "expiredFeature3"));
+		assertFalse("Error 5", this.license.hasLicenseForAllFeatures("expiredFeature3"));
 	}
 
 	@Test

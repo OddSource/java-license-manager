@@ -1,5 +1,5 @@
 /*
- * LicenseCreator.java from LicenseManager modified Tuesday, February 14, 2012 10:06:35 CST (-0600).
+ * LicenseCreator.java from LicenseManager modified Thursday, February 16, 2012 21:02:44 CST (-0600).
  *
  * Copyright 2010-2012 the original author or authors.
  *
@@ -20,6 +20,7 @@ package net.nicholaswilliams.java.licensing.licensor;
 
 import net.nicholaswilliams.java.licensing.DataSignatureManager;
 import net.nicholaswilliams.java.licensing.License;
+import net.nicholaswilliams.java.licensing.ObjectSerializer;
 import net.nicholaswilliams.java.licensing.SignedLicense;
 import net.nicholaswilliams.java.licensing.encryption.Encryptor;
 import net.nicholaswilliams.java.licensing.encryption.KeyFileUtilities;
@@ -28,12 +29,21 @@ import net.nicholaswilliams.java.licensing.exception.AlgorithmNotSupportedExcept
 import net.nicholaswilliams.java.licensing.exception.InappropriateKeyException;
 import net.nicholaswilliams.java.licensing.exception.InappropriateKeySpecificationException;
 import net.nicholaswilliams.java.licensing.exception.KeyNotFoundException;
+import net.nicholaswilliams.java.licensing.exception.ObjectSerializationException;
 
 import java.security.PrivateKey;
 import java.util.Arrays;
 
 /**
- * This class manages the creation of licenses in the master application.
+ * This class manages the creation of licenses in the master application. Use this class within your license generation
+ * software to sign and serialize license for distribution to the client. This class is not needed for the client
+ * application, and in fact you should <b>not</b> use this class in your client application. For this reason, it is
+ * in the package of classes (net.nicholaswilliams.java.licensing.licensor) that is packaged separately from the
+ * distributable client binary.<br />
+ * <br />
+ * The license creator is first initialized by calling
+ * {@link #createInstance(KeyPasswordProvider, PrivateKeyDataProvider)}, which also returns the singleton instance
+ * created. Then all future references to the license manager are obtained by calling {@link #getInstance()}.
  *
  * @author Nick Williams
  * @version 1.0.6
@@ -126,5 +136,23 @@ public final class LicenseCreator
 		Arrays.fill(signature, (byte)0);
 
 		return signed;
+	}
+
+	/**
+	 * Takes a license object and creates a secure and serialized version of it for delivery to the customer.
+	 *
+	 * @param license The license object to be signed and serialized
+	 * @return the signed and serialized license object.
+	 * @throws AlgorithmNotSupportedException if the encryption algorithm is not supported.
+	 * @throws KeyNotFoundException if the public key data could not be found.
+	 * @throws InappropriateKeySpecificationException if an inappropriate key specification is provided.
+	 * @throws InappropriateKeyException if the key type and cipher type do not match.
+	 * @throws ObjectSerializationException if an error is encountered while serializing the key.
+	 */
+	public final byte[] signAndSerializeLicense(License license)
+			throws AlgorithmNotSupportedException, KeyNotFoundException, InappropriateKeySpecificationException,
+				   InappropriateKeyException, ObjectSerializationException
+	{
+		return new ObjectSerializer().writeObject(this.signLicense(license));
 	}
 }

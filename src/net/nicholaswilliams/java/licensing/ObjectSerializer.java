@@ -1,7 +1,7 @@
 /*
- * ObjectSerializer.java from LicenseManager modified Tuesday, June 28, 2011 11:34:10 CDT (-0500).
+ * ObjectSerializer.java from LicenseManager modified Thursday, February 16, 2012 21:54:18 CST (-0600).
  *
- * Copyright 2010-2011 the original author or authors.
+ * Copyright 2010-2012 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,7 +23,11 @@ import net.nicholaswilliams.java.licensing.exception.ObjectSerializationExceptio
 import net.nicholaswilliams.java.licensing.exception.ObjectTypeNotExpectedException;
 import org.apache.commons.io.output.ByteArrayOutputStream;
 
-import java.io.*;
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.Serializable;
 
 /**
  * This is a helper class for writing any object and reading simple objects (no
@@ -44,7 +48,7 @@ public final class ObjectSerializer
 	 * @throws ObjectTypeNotExpectedException If the object found in the stream does not match the type {@code expectedType} or if a {@link ClassNotFoundException} or {@link NoClassDefFoundError} occurs
 	 * @throws ObjectDeserializationException If an I/O exception occurs while deserializing the object from the stream
 	 */
-	final <T extends Serializable> T readObject(Class<T> expectedType, byte[] byteStream)
+	public final <T extends Serializable> T readObject(Class<T> expectedType, byte[] byteStream)
 			throws ObjectDeserializationException
 	{
 		ByteArrayInputStream bytes = new ByteArrayInputStream(byteStream);

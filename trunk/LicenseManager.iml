@@ -11,7 +11,7 @@
     <orderEntry type="module-library" scope="TEST">
       <library>
         <CLASSES>
-          <root url="jar://$MODULE_DIR$/test/lib/org.easymock-3.0.jar!/" />
+          <root url="jar://$MODULE_DIR$/test/lib/org.objenesis-1.2.0.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
@@ -20,7 +20,7 @@
     <orderEntry type="module-library" scope="TEST">
       <library>
         <CLASSES>
-          <root url="jar://$MODULE_DIR$/test/lib/net.sf.antcontrib-1.0b3.jar!/" />
+          <root url="jar://$MODULE_DIR$/test/lib/org.junit-4.10.0.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
@@ -29,7 +29,7 @@
     <orderEntry type="module-library" scope="TEST">
       <library>
         <CLASSES>
-          <root url="jar://$MODULE_DIR$/test/lib/org.springframework.test-3.0.5.jar!/" />
+          <root url="jar://$MODULE_DIR$/test/lib/org.objectweb.asm-4.0.0.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
@@ -38,34 +38,7 @@
     <orderEntry type="module-library" scope="TEST">
       <library>
         <CLASSES>
-          <root url="jar://$MODULE_DIR$/test/lib/org.junit-4.8.2.jar!/" />
-        </CLASSES>
-        <JAVADOC />
-        <SOURCES />
-      </library>
-    </orderEntry>
-    <orderEntry type="module-library">
-      <library>
-        <CLASSES>
-          <root url="jar://$MODULE_DIR$/lib/org.apache.commons.io-2.0.1.jar!/" />
-        </CLASSES>
-        <JAVADOC />
-        <SOURCES />
-      </library>
-    </orderEntry>
-    <orderEntry type="module-library">
-      <library>
-        <CLASSES>
-          <root url="jar://$MODULE_DIR$/lib/org.apache.commons.cli-1.2.0.jar!/" />
-        </CLASSES>
-        <JAVADOC />
-        <SOURCES />
-      </library>
-    </orderEntry>
-    <orderEntry type="module-library">
-      <library>
-        <CLASSES>
-          <root url="jar://$MODULE_DIR$/lib/org.apache.commons.codec-1.4.0.jar!/" />
+          <root url="jar://$MODULE_DIR$/test/lib/org.easymock-3.1.0.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
@@ -80,19 +53,28 @@
         <SOURCES />
       </library>
     </orderEntry>
-    <orderEntry type="module-library" scope="TEST">
+    <orderEntry type="module-library">
       <library>
         <CLASSES>
-          <root url="jar://$MODULE_DIR$/test/lib/org.objectweb.asm-3.1.0.jar!/" />
+          <root url="jar://$MODULE_DIR$/lib/org.apache.commons.codec-1.6.0.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
       </library>
     </orderEntry>
-    <orderEntry type="module-library" scope="TEST">
+    <orderEntry type="module-library">
       <library>
         <CLASSES>
-          <root url="jar://$MODULE_DIR$/test/lib/org.objenesis-1.2.0.jar!/" />
+          <root url="jar://$MODULE_DIR$/lib/org.apache.commons.io-2.1.0.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar://$MODULE_DIR$/lib/org.apache.commons.cli-1.2.0.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />

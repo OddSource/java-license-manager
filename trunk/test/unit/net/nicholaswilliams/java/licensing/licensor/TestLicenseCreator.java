@@ -1,5 +1,5 @@
 /*
- * TestLicenseCreator.java from LicenseManager modified Monday, February 13, 2012 23:22:52 CST (-0600).
+ * TestLicenseCreator.java from LicenseManager modified Thursday, February 16, 2012 21:07:44 CST (-0600).
  *
  * Copyright 2010-2012 the original author or authors.
  *
@@ -21,6 +21,7 @@ package net.nicholaswilliams.java.licensing.licensor;
 import net.nicholaswilliams.java.licensing.DataSignatureManager;
 import net.nicholaswilliams.java.licensing.License;
 import net.nicholaswilliams.java.licensing.LicenseHelper;
+import net.nicholaswilliams.java.licensing.ObjectSerializer;
 import net.nicholaswilliams.java.licensing.SignedLicense;
 import net.nicholaswilliams.java.licensing.encryption.Encryptor;
 import net.nicholaswilliams.java.licensing.encryption.KeyFileUtilities;
@@ -114,6 +115,48 @@ public class TestLicenseCreator
 									build();
 
 		SignedLicense signedLicense = this.creator.signLicense(license);
+
+		assertNotNull("The signed license should not be null.", signedLicense);
+		assertNotNull("The license signature should not be null.", signedLicense.getSignatureContent());
+		assertNotNull("The license content should not be null.", signedLicense.getLicenseContent());
+
+		new DataSignatureManager().verifySignature(
+				TestLicenseCreator.publicKey, signedLicense.getLicenseContent(), signedLicense.getSignatureContent()
+		);
+
+		byte[] unencrypted = Encryptor.decryptRaw(signedLicense.getLicenseContent());
+
+		assertNotNull("The unencrypted license data should not be null.", unencrypted);
+
+		License returned = LicenseHelper.deserialize(unencrypted);
+
+		assertNotNull("The returned license should not be null.", returned);
+
+		assertEquals("The license should be equal.", license, returned);
+	}
+
+	@Test
+	public void testLicenseSigningAndSerializing01()
+	{
+		EasyMock.expect(TestLicenseCreator.keyPasswordProvider.getKeyPassword()).
+				andReturn(TestLicenseCreator.keyPassword.clone());
+		EasyMock.expect(TestLicenseCreator.keyDataProvider.getEncryptedPrivateKeyData()).
+				andReturn(TestLicenseCreator.encryptedPrivateKey.clone());
+
+		TestLicenseCreator.control.replay();
+
+		License license = new License.Builder().
+									withSubject("myLicense").
+									withNumberOfLicenses(22).
+									withFeature("newFeature").
+									build();
+
+		byte[] signedLicenseData = this.creator.signAndSerializeLicense(license);
+
+		assertNotNull("The signed license data should not be null.", signedLicenseData);
+		assertTrue("The signed license data should not be blank.", signedLicenseData.length > 0);
+
+		SignedLicense signedLicense = new ObjectSerializer().readObject(SignedLicense.class, signedLicenseData);
 
 		assertNotNull("The signed license should not be null.", signedLicense);
 		assertNotNull("The license signature should not be null.", signedLicense.getSignatureContent());

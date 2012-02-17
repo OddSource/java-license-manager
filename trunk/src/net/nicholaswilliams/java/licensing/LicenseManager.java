@@ -1,5 +1,5 @@
 /*
- * LicenseManager.java from LicenseManager modified Tuesday, February 14, 2012 10:07:38 CST (-0600).
+ * LicenseManager.java from LicenseManager modified Thursday, February 16, 2012 21:02:44 CST (-0600).
  *
  * Copyright 2010-2012 the original author or authors.
  *
@@ -42,7 +42,7 @@ import java.util.Hashtable;
  * This class manages licenses in the client application. All interaction with the license manager done from the client
  * application should go through here. The license manager is first initialized by calling
  * {@link #createInstance(LicenseProvider, KeyPasswordProvider, PublicKeyDataProvider, LicenseValidator, int)}, which
- * also returns the singleton instance created. Then all future instances of the license manager are obtained by
+ * also returns the singleton instance created. Then all future references to the license manager are obtained by
  * calling {@link #getInstance()}.<br />
  * <br />
  * The license manager maintains a cache of license objects, which cannot be disabled entirely. When initializing the

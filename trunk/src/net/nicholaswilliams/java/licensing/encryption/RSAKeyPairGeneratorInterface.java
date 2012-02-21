@@ -1,5 +1,5 @@
 /*
- * RSAKeyPairGeneratorInterface.java from LicenseManager modified Monday, February 20, 2012 22:10:18 CST (-0600).
+ * RSAKeyPairGeneratorInterface.java from LicenseManager modified Monday, February 20, 2012 23:01:52 CST (-0600).
  *
  * Copyright 2010-2012 the original author or authors.
  *
@@ -85,11 +85,9 @@ public interface RSAKeyPairGeneratorInterface
 	 * @throws InappropriateKeyException If the public or private keys are invalid
 	 * @throws InappropriateKeySpecificationException If the public or private keys are invalid
 	 */
-	public void saveKeyPairToProviders(KeyPair keyPair,
-									   GeneratedClassDescriptor privateKeyProvider,
+	public void saveKeyPairToProviders(KeyPair keyPair, GeneratedClassDescriptor privateKeyProvider,
 									   GeneratedClassDescriptor publicKeyProvider,
-									   GeneratedClassDescriptor keyPasswordProvider,
-									   char[] password)
+									   GeneratedClassDescriptor keyPasswordProvider, char[] password)
 			throws AlgorithmNotSupportedException, InappropriateKeyException, InappropriateKeySpecificationException;
 
 	public static class GeneratedClassDescriptor

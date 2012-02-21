@@ -1,5 +1,5 @@
 /*
- * LicenseManager.java from LicenseManager modified Thursday, February 16, 2012 21:02:44 CST (-0600).
+ * LicenseManager.java from LicenseManager modified Monday, February 20, 2012 23:41:58 CST (-0600).
  *
  * Copyright 2010-2012 the original author or authors.
  *
@@ -40,10 +40,11 @@ import java.util.Hashtable;
 
 /**
  * This class manages licenses in the client application. All interaction with the license manager done from the client
- * application should go through here. The license manager is first initialized by calling
- * {@link #createInstance(LicenseProvider, KeyPasswordProvider, PublicKeyDataProvider, LicenseValidator, int)}, which
- * also returns the singleton instance created. Then all future references to the license manager are obtained by
- * calling {@link #getInstance()}.<br />
+ * application should go through here. Before getting the manager instance for the first time, relevant properties
+ * should be set in {@link Properties}. The values in this class will be used to instantiate the license manager.
+ * After setting all the necessary properties there, one can retrieve an instance using {@link #getInstance()}. Be sure
+ * to set all the properties first; once {@link #getInstance()} is called for the first time, any changes to
+ * {@link Properties} will be ignored.<br />
  * <br />
  * The license manager maintains a cache of license objects, which cannot be disabled entirely. When initializing the
  * license manager, a maximum cache object age is specified in minutes. If any value less than 1 minute is specified,
@@ -65,7 +66,7 @@ import java.util.Hashtable;
  */
 public final class LicenseManager
 {
-	private static LicenseManager instance = null;
+	private static final LicenseManager instance = new LicenseManager();
 
 	private final KeyPasswordProvider passwordProvider;
 
@@ -79,17 +80,15 @@ public final class LicenseManager
 
 	private final Hashtable<Object, LicenseCacheEntry> licenseCache = new Hashtable<Object, LicenseCacheEntry>();
 
-	private LicenseManager(LicenseProvider licenseProvider, KeyPasswordProvider passwordProvider,
-						   PublicKeyDataProvider publicKeyDataProvider, LicenseValidator licenseValidator,
-						   int cacheTimeInMinutes)
+	private LicenseManager()
 	{
-		if(licenseProvider == null)
+		if(Properties.getLicenseProvider() == null)
 			throw new IllegalArgumentException("Parameter licenseProvider must not be null.");
 
-		if(passwordProvider == null)
+		if(Properties.getPasswordProvider() == null)
 			throw new IllegalArgumentException("Parameter passwordProvider must not be null.");
 
-		if(publicKeyDataProvider == null)
+		if(Properties.getPublicKeyDataProvider() == null)
 			throw new IllegalArgumentException("Parameter publicKeyDataProvider must not be null.");
 
 		// install the security manager
@@ -102,61 +101,26 @@ public final class LicenseManager
 			throw new InsecureEnvironmentException("The class net.nicholaswilliams.java.licensing.LicenseSecurityManager could not be initialized.", e);
 		}
 
-		this.licenseProvider = licenseProvider;
-		this.passwordProvider = passwordProvider;
-		this.publicKeyDataProvider = publicKeyDataProvider;
-		this.licenseValidator = licenseValidator;
+		int cacheTimeInMinutes = Properties.getCacheTimeInMinutes();
+
+		this.licenseProvider = Properties.getLicenseProvider();
+		this.passwordProvider = Properties.getPasswordProvider();
+		this.publicKeyDataProvider = Properties.getPublicKeyDataProvider();
+		this.licenseValidator = Properties.getLicenseValidator();
 		this.cacheTimeInMilliseconds = cacheTimeInMinutes < 1 ? ( 10 * 1000 ) : ( cacheTimeInMinutes * 60 * 1000 );
 	}
-
+	
 	/**
-	 * The first time this is called, it creates and returns a license manager with the given providers and cache
-	 * time. All subsequent calls are equivalent to calling {@link #getInstance()} (i.e., the parameters are ignored
-	 * and the previously-created instance is returned).
+	 * Returns the license manager instance. Before this method can be called the first time, all of the parameters must
+	 * bet set in {@link Properties}. See the documentation for that class for more details.
 	 *
-	 * @param licenseProvider The provider of the persisted license(s)
-	 * @param passwordProvider The provider of the password for decrypting the license key
-	 * @param publicKeyDataProvider The provider of the data for the public key companion to the private key used to sign the license object
-	 * @param licenseValidator The validator implementation that validates all licenses; if null, licenses are assumed to always be valid
-	 * @param cacheTimeInMinutes The length of time in minutes to cache license information (for performance reasons, anything less than 1 minute results in a 10-second cache life; the cache cannot be disabled completely)
-	 * @return the created instance of the license manager.
-	 * @throws IllegalArgumentException if {@code licenseProvider}, {@code passwordProvider} or {@code publicKeyDataProvider} are null
+	 * @return the license manager instance.
+	 * @throws IllegalArgumentException if {@link Properties#setLicenseProvider(LicenseProvider) licenseProvider}, {@link Properties#setPasswordProvider(KeyPasswordProvider) passwordProvider} or {@link Properties#setPublicKeyDataProvider(PublicKeyDataProvider) publicKeyDataProvider} are null.
 	 * @throws InsecureEnvironmentException if the {@link LicenseSecurityManager} cannot be instantiated
 	 * @see LicenseSecurityManager for more information on the security features that protect the license manager
 	 */
-	public static synchronized LicenseManager createInstance(LicenseProvider licenseProvider,
-															 KeyPasswordProvider passwordProvider,
-															 PublicKeyDataProvider publicKeyDataProvider,
-															 LicenseValidator licenseValidator,
-															 int cacheTimeInMinutes)
+	public static LicenseManager getInstance()
 	{
-		if(LicenseManager.instance == null)
-		{
-			LicenseManager.instance = new LicenseManager(
-					licenseProvider,
-					passwordProvider,
-					publicKeyDataProvider,
-					licenseValidator,
-					cacheTimeInMinutes
-			);
-		}
-
-		return LicenseManager.instance;
-	}
-
-	/**
-	 * Returns the license manager instance previously created by
-	 * {@link #createInstance(LicenseProvider, KeyPasswordProvider, PublicKeyDataProvider, LicenseValidator, int)}. If this method is
-	 * called before {@code createInstance()}, a {@link RuntimeException} is thrown.
-	 *
-	 * @return the license manager instance.
-	 * @throws RuntimeException if no instance has yet be created by {@code createInstance()}.
-	 */
-	public static synchronized LicenseManager getInstance()
-	{
-		if(LicenseManager.instance == null)
-			throw new RuntimeException("The LicenseManager instance has not been created yet. Please create it with createInstance().");
-
 		return LicenseManager.instance;
 	}
 

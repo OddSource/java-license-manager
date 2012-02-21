@@ -1,5 +1,5 @@
 /*
- * RSAKeyPairGenerator.java from LicenseManager modified Monday, February 20, 2012 23:02:21 CST (-0600).
+ * RSAKeyPairGenerator.java from LicenseManager modified Tuesday, February 21, 2012 10:56:34 CST (-0600).
  *
  * Copyright 2010-2012 the original author or authors.
  *
@@ -250,7 +250,7 @@ public final class RSAKeyPairGenerator implements RSAKeyPairGeneratorInterface
 
 	/**
 	 * Takes an array of integer-representable primitives ({@code byte}, {@code char}, {@code short}, {@code int})
-	 * and returns a Java code integer-literal instantiation of the array, which values in hexadecimal literal format.
+	 * and returns a Java code array-literal instantiation of the array, with values in hexadecimal literal format.
 	 * It is the user's responsibility to ensure that the values contained in the array can fit within the smaller
 	 * precision of the array type, if applicable.
 	 *

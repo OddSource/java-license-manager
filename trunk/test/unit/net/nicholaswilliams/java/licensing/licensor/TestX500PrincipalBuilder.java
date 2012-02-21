@@ -1,7 +1,7 @@
 /*
- * TestX500PrincipalBuilder.java from LicenseManager modified Tuesday, June 28, 2011 11:34:10 CDT (-0500).
+ * TestX500PrincipalBuilder.java from LicenseManager modified Tuesday, February 21, 2012 10:58:55 CST (-0600).
  *
- * Copyright 2010-2011 the original author or authors.
+ * Copyright 2010-2012 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,11 +18,15 @@
 
 package net.nicholaswilliams.java.licensing.licensor;
 
-import javax.security.auth.x500.X500Principal;
-import static org.junit.Assert.*;
+import org.junit.After;
+import org.junit.AfterClass;
+import org.junit.Before;
+import org.junit.BeforeClass;
+import org.junit.Test;
 
-import net.nicholaswilliams.java.licensing.licensor.X500PrincipalBuilder;
-import org.junit.*;
+import javax.security.auth.x500.X500Principal;
+
+import static org.junit.Assert.*;
 
 /**
  * Test class for X500PrincipalBuilder.

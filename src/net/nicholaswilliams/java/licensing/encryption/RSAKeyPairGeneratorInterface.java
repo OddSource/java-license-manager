@@ -1,7 +1,7 @@
 /*
- * RSAKeyPairGeneratorInterface.java from LicenseManager modified Tuesday, June 28, 2011 11:34:10 CDT (-0500).
+ * RSAKeyPairGeneratorInterface.java from LicenseManager modified Monday, February 20, 2012 22:10:18 CST (-0600).
  *
- * Copyright 2010-2011 the original author or authors.
+ * Copyright 2010-2012 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -68,7 +68,66 @@ public interface RSAKeyPairGeneratorInterface
 								   String privateOutputFileName,
 								   String publicOutputFileName,
 								   char[] password)
-			throws IOException, AlgorithmNotSupportedException,
-				   InappropriateKeyException,
+			throws IOException, AlgorithmNotSupportedException, InappropriateKeyException,
 				   InappropriateKeySpecificationException;
+
+	/**
+	 * Saves the public and private keys and password specified to the respective
+	 * {@link RSAKeyPairGeneratorInterface.GeneratedClassDescriptor#getJavaFileContents() javaFileContents} fields in
+	 * the provided {@link GeneratedClassDescriptor}s.
+	 *
+	 * @param keyPair The key pair to save
+	 * @param privateKeyProvider An object describing the {@link net.nicholaswilliams.java.licensing.licensor.PrivateKeyDataProvider} class to generate, and into which the generated code will be saved
+	 * @param publicKeyProvider An object describing the {@link PublicKeyDataProvider} class to generate, and into which the generated code will be saved
+	 * @param keyPasswordProvider An object describing the {@link KeyPasswordProvider} class to generate, and into which the generated code will be saved
+	 * @param password The password to encrypt the keys with, and to save into the generated {@link KeyPasswordProvider}
+	 * @throws AlgorithmNotSupportedException If the encryption algorithm is not supported
+	 * @throws InappropriateKeyException If the public or private keys are invalid
+	 * @throws InappropriateKeySpecificationException If the public or private keys are invalid
+	 */
+	public void saveKeyPairToProviders(KeyPair keyPair,
+									   GeneratedClassDescriptor privateKeyProvider,
+									   GeneratedClassDescriptor publicKeyProvider,
+									   GeneratedClassDescriptor keyPasswordProvider,
+									   char[] password)
+			throws AlgorithmNotSupportedException, InappropriateKeyException, InappropriateKeySpecificationException;
+
+	public static class GeneratedClassDescriptor
+	{
+		private String packageName;
+
+		private String className;
+
+		private String javaFileContents;
+
+		public String getPackageName()
+		{
+			return this.packageName;
+		}
+
+		public void setPackageName(String packageName)
+		{
+			this.packageName = packageName;
+		}
+
+		public String getClassName()
+		{
+			return this.className;
+		}
+
+		public void setClassName(String className)
+		{
+			this.className = className;
+		}
+
+		public String getJavaFileContents()
+		{
+			return javaFileContents;
+		}
+
+		public void setJavaFileContents(String javaFileContents)
+		{
+			this.javaFileContents = javaFileContents;
+		}
+	}
 }

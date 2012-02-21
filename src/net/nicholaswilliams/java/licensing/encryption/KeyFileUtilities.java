@@ -1,7 +1,7 @@
 /*
- * KeyFileUtilities.java from LicenseManager modified Tuesday, June 28, 2011 11:34:11 CDT (-0500).
+ * KeyFileUtilities.java from LicenseManager modified Friday, February 17, 2012 09:46:00 CST (-0600).
  *
- * Copyright 2010-2011 the original author or authors.
+ * Copyright 2010-2012 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -44,61 +44,48 @@ public class KeyFileUtilities
 {
 	public static final String keyAlgorithm = "RSA";
 
-	protected static void writeEncryptedPrivateKey(PrivateKey privateKey,
-												   File file, char[] passphrase)
+	protected static void writeEncryptedPrivateKey(PrivateKey privateKey, File file, char[] passphrase)
 			throws IOException
 	{
-		PKCS8EncodedKeySpec pkcs8EncodedKeySpec = new PKCS8EncodedKeySpec(
-				privateKey.getEncoded()
-		);
-		FileUtils.writeByteArrayToFile(file, Encryptor.encryptRaw(
-				pkcs8EncodedKeySpec.getEncoded(), passphrase
-		));
+
+		FileUtils.writeByteArrayToFile(file, KeyFileUtilities.writeEncryptedPrivateKey(privateKey, passphrase));
 	}
 
-	protected static void writeEncryptedPublicKey(PublicKey publicKey,
-												  File file, char[] passphrase)
+	protected static void writeEncryptedPublicKey(PublicKey publicKey, File file, char[] passphrase)
 			throws IOException
 	{
-		X509EncodedKeySpec x509EncodedKeySpec = new X509EncodedKeySpec(
-				publicKey.getEncoded()
-		);
-		FileUtils.writeByteArrayToFile(file, Encryptor.encryptRaw(
-				x509EncodedKeySpec.getEncoded(), passphrase
-		));
+		FileUtils.writeByteArrayToFile(file, KeyFileUtilities.writeEncryptedPublicKey(publicKey, passphrase));
 	}
 
-	protected static PrivateKey readEncryptedPrivateKey(File file,
-														char[] passphrase)
-			throws IOException
+	protected static PrivateKey readEncryptedPrivateKey(File file, char[] passphrase) throws IOException
 	{
-		return KeyFileUtilities.readEncryptedPrivateKey(
-				FileUtils.readFileToByteArray(file),
-				passphrase
-		);
+		return KeyFileUtilities.readEncryptedPrivateKey(FileUtils.readFileToByteArray(file), passphrase);
 	}
 
-	protected static PublicKey readEncryptedPublicKey(File file,
-													  char[] passphrase)
-			throws IOException
+	protected static PublicKey readEncryptedPublicKey(File file, char[] passphrase) throws IOException
 	{
-		return KeyFileUtilities.readEncryptedPublicKey(
-				FileUtils.readFileToByteArray(file),
-				passphrase
-		);
+		return KeyFileUtilities.readEncryptedPublicKey(FileUtils.readFileToByteArray(file), passphrase);
 	}
 
-	public static PrivateKey readEncryptedPrivateKey(byte[] fileContents,
-														char[] passphrase)
+	protected static byte[] writeEncryptedPrivateKey(PrivateKey privateKey, char[] passphrase)
 	{
-		PKCS8EncodedKeySpec privateKeySpec = new PKCS8EncodedKeySpec(
-				Encryptor.decryptRaw(fileContents, passphrase)
-		);
+		PKCS8EncodedKeySpec pkcs8EncodedKeySpec = new PKCS8EncodedKeySpec(privateKey.getEncoded());
+		return Encryptor.encryptRaw(pkcs8EncodedKeySpec.getEncoded(), passphrase);
+	}
+
+	protected static byte[] writeEncryptedPublicKey(PublicKey publicKey, char[] passphrase)
+	{
+		X509EncodedKeySpec x509EncodedKeySpec = new X509EncodedKeySpec(publicKey.getEncoded());
+		return Encryptor.encryptRaw(x509EncodedKeySpec.getEncoded(), passphrase);
+	}
+
+	public static PrivateKey readEncryptedPrivateKey(byte[] fileContents, char[] passphrase)
+	{
+		PKCS8EncodedKeySpec privateKeySpec = new PKCS8EncodedKeySpec(Encryptor.decryptRaw(fileContents, passphrase));
 
 		try
 		{
-			return KeyFactory.getInstance(KeyFileUtilities.keyAlgorithm).
-					generatePrivate(privateKeySpec);
+			return KeyFactory.getInstance(KeyFileUtilities.keyAlgorithm).generatePrivate(privateKeySpec);
 		}
 		catch(NoSuchAlgorithmException e)
 		{
@@ -110,17 +97,13 @@ public class KeyFileUtilities
 		}
 	}
 
-	public static PublicKey readEncryptedPublicKey(byte[] fileContents,
-													  char[] passphrase)
+	public static PublicKey readEncryptedPublicKey(byte[] fileContents, char[] passphrase)
 	{
-		X509EncodedKeySpec publicKeySpec = new X509EncodedKeySpec(
-				Encryptor.decryptRaw(fileContents, passphrase)
-		);
+		X509EncodedKeySpec publicKeySpec = new X509EncodedKeySpec(Encryptor.decryptRaw(fileContents, passphrase));
 
 		try
 		{
-			return KeyFactory.getInstance(KeyFileUtilities.keyAlgorithm).
-					generatePublic(publicKeySpec);
+			return KeyFactory.getInstance(KeyFileUtilities.keyAlgorithm).generatePublic(publicKeySpec);
 		}
 		catch(NoSuchAlgorithmException e)
 		{

@@ -1,5 +1,5 @@
 /*
- * RSAKeyPairGenerator.java from LicenseManager modified Monday, February 20, 2012 22:43:24 CST (-0600).
+ * RSAKeyPairGenerator.java from LicenseManager modified Monday, February 20, 2012 23:02:21 CST (-0600).
  *
  * Copyright 2010-2012 the original author or authors.
  *
@@ -134,9 +134,9 @@ public final class RSAKeyPairGenerator implements RSAKeyPairGeneratorInterface
 	 *
 	 * @param keyPair The key pair to save
 	 * @param privateKeyProvider An object describing the {@link net.nicholaswilliams.java.licensing.licensor.PrivateKeyDataProvider} class to generate, and into which the generated code will be saved
-	 * @param publicKeyProvider An object describing the {@link net.nicholaswilliams.java.licensing.encryption.PublicKeyDataProvider} class to generate, and into which the generated code will be saved
-	 * @param keyPasswordProvider An object describing the {@link net.nicholaswilliams.java.licensing.encryption.KeyPasswordProvider} class to generate, and into which the generated code will be saved
-	 * @param password The password to encrypt the keys with, and to save into the generated {@link net.nicholaswilliams.java.licensing.encryption.KeyPasswordProvider}
+	 * @param publicKeyProvider An object describing the {@link PublicKeyDataProvider} class to generate, and into which the generated code will be saved
+	 * @param keyPasswordProvider An object describing the {@link KeyPasswordProvider} class to generate, and into which the generated code will be saved
+	 * @param password The password to encrypt the keys with, and to save into the generated {@link KeyPasswordProvider}
 	 * @throws AlgorithmNotSupportedException If the encryption algorithm is not supported
 	 * @throws InappropriateKeyException If the public or private keys are invalid
 	 * @throws InappropriateKeySpecificationException If the public or private keys are invalid

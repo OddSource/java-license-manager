@@ -1,5 +1,5 @@
 /*
- * TestFileLicenseProvider.java from LicenseManager modified Wednesday, February 15, 2012 23:04:48 CST (-0600).
+ * TestFileLicenseProvider.java from LicenseManager modified Tuesday, February 21, 2012 10:56:34 CST (-0600).
  *
  * Copyright 2010-2012 the original author or authors.
  *

@@ -1,7 +1,7 @@
 /*
- * DataSignatureManager.java from LicenseManager modified Tuesday, June 28, 2011 11:34:11 CDT (-0500).
+ * DataSignatureManager.java from LicenseManager modified Tuesday, February 21, 2012 10:58:55 CST (-0600).
  *
- * Copyright 2010-2011 the original author or authors.
+ * Copyright 2010-2012 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,7 +24,12 @@ import net.nicholaswilliams.java.licensing.exception.CorruptSignatureException;
 import net.nicholaswilliams.java.licensing.exception.InappropriateKeyException;
 import net.nicholaswilliams.java.licensing.exception.InvalidSignatureException;
 
-import java.security.*;
+import java.security.InvalidKeyException;
+import java.security.NoSuchAlgorithmException;
+import java.security.PrivateKey;
+import java.security.PublicKey;
+import java.security.Signature;
+import java.security.SignatureException;
 
 /**
  * This class manages the signatures for objects.

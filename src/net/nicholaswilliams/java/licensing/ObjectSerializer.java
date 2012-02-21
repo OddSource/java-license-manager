@@ -1,5 +1,5 @@
 /*
- * ObjectSerializer.java from LicenseManager modified Thursday, February 16, 2012 21:54:18 CST (-0600).
+ * ObjectSerializer.java from LicenseManager modified Tuesday, February 21, 2012 10:56:33 CST (-0600).
  *
  * Copyright 2010-2012 the original author or authors.
  *

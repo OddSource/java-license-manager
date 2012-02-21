@@ -1,5 +1,5 @@
 /*
- * Properties.java from LicenseManager modified Monday, February 20, 2012 23:40:20 CST (-0600).
+ * Properties.java from LicenseManager modified Tuesday, February 21, 2012 10:56:34 CST (-0600).
  *
  * Copyright 2010-2012 the original author or authors.
  *

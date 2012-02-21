@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
-  ~ ant-build.xml from LicenseManager modified Tuesday, February 21, 2012 00:34:19 CST (-0600).
+  ~ ant-build.xml from LicenseManager modified Tuesday, February 21, 2012 03:57:19 CST (-0600).
   ~
   ~ Copyright 2010-2012 the original author or authors.
   ~
@@ -63,20 +63,28 @@
 	<property name="licensemanager.dir.artifactOutput" value="${module.licensemanager.basedir}/out/artifacts" />
 	<property name="licensemanager.dir.javaDoc" value="${module.licensemanager.basedir}/out/javadoc" />
 
+	<property name="jar.name.embeddable" value="net.nicholaswilliams.java.licensing-embeddable-${licensemanager.version}.jar" />
+	<property name="jar.name.licensor" value="net.nicholaswilliams.java.licensing-licensor-${licensemanager.version}.jar" />
+	<property name="jar.name.samples" value="net.nicholaswilliams.java.licensing-samples-${licensemanager.version}.jar" />
+	<property name="jar.name.sources" value="net.nicholaswilliams.java.licensing-sources-${licensemanager.version}.jar" />
+	<property name="jar.name.javadoc" value="net.nicholaswilliams.java.licensing-javadoc-${licensemanager.version}.jar" />
+
+	<property name="zip.name.all" value="net.nicholaswilliams.java.licensing-${licensemanager.version}.zip" />
+
 	<path id="licensemanager.module.bootClasspath">
 		<!-- Paths to be included in compilation boot classpath -->
 	</path>
 
 	<property name="licensemanager.dependencies.runtime" value="dependencies.runtime" />
 	<path id="dependencies.runtime">
-		<fileset dir="${basedir}/lib">
+		<fileset dir="${module.licensemanager.basedir}/lib">
 			<include name="*.jar" />
 		</fileset>
 	</path>
 
 	<property name="licensemanager.dependencies.test" value="dependencies.test" />
 	<path id="dependencies.test">
-		<fileset dir="${basedir}/test/lib">
+		<fileset dir="${module.licensemanager.basedir}/test/lib">
 			<include name="*.jar" />
 		</fileset>
 	</path>
@@ -192,7 +200,7 @@
 		</javadoc>
 
 		<copy todir="${licensemanager.dir.javaDoc}" overwrite="true">
-			<fileset dir="${basedir}/jar/javadoc-css" />
+			<fileset dir="${module.licensemanager.basedir}/jar/javadoc-css" />
 		</copy>
 	</target>
 
@@ -233,7 +241,7 @@
 		<!-- Determine the manifest class-path property -->
 		<pathconvert property="manifest.classpath.embeddable" pathsep=" ">
 			<path>
-				<fileset dir="${basedir}/lib">
+				<fileset dir="${module.licensemanager.basedir}/lib">
 					<include name="*.jar" />
 					<exclude name="org.apache.commons.cli*.jar" />
 				</fileset>
@@ -243,7 +251,7 @@
 		<echo message="Manifest class-path is ${manifest.classpath.embeddable}" />
 
 		<!-- Package the JAR file -->
-		<jar destfile="${licensemanager.dir.artifactOutput}/net.nicholaswilliams.java.licensing-embeddable-${licensemanager.version}.jar"
+		<jar destfile="${licensemanager.dir.artifactOutput}/${jar.name.embeddable}"
 			 duplicate="preserve" filesetmanifest="skip" index="true">
 			<manifest>
 				<attribute name="Manifest-Version" value="1.0" />
@@ -257,8 +265,8 @@
 				<attribute name="Sealed" value="true" />
 				<attribute name="Class-Path" value="${manifest.classpath.embeddable}" />
 			</manifest>
-			<zipfileset file="${basedir}/jar/META-INF/LICENSE.txt" prefix="META-INF" />
-			<zipfileset file="${basedir}/jar/META-INF/NOTICE.txt" prefix="META-INF" />
+			<zipfileset file="${module.licensemanager.basedir}/jar/META-INF/LICENSE.txt" prefix="META-INF" />
+			<zipfileset file="${module.licensemanager.basedir}/jar/META-INF/NOTICE.txt" prefix="META-INF" />
 			<zipfileset dir="${licensemanager.dir.output}">
 				<exclude name="net/nicholaswilliams/java/licensing/licensor/**" />
 				<exclude name="net/nicholaswilliams/java/licensing/samples/**" />
@@ -284,7 +292,7 @@
 		<echo message="Manifest class-path is ${manifest.classpath.licensor}" />
 
 		<!-- Package the JAR file -->
-		<jar destfile="${licensemanager.dir.artifactOutput}/net.nicholaswilliams.java.licensing-licensor-${licensemanager.version}.jar"
+		<jar destfile="${licensemanager.dir.artifactOutput}/${jar.name.licensor}"
 			 duplicate="preserve" filesetmanifest="skip" index="true">
 			<manifest>
 				<attribute name="Manifest-Version" value="1.0" />
@@ -296,10 +304,10 @@
 				<attribute name="Specification-Version" value="${licensemanager.version}" />
 				<attribute name="Implementation-Version" value="${licensemanager.version}" />
 				<attribute name="Sealed" value="true" />
-				<attribute name="Class-Path" value="${manifest.classpath.licensor} net.nicholaswilliams.java.licensing-embeddable-${licensemanager.version}.jar" />
+				<attribute name="Class-Path" value="${manifest.classpath.licensor} ${jar.name.embeddable}" />
 			</manifest>
-			<zipfileset file="${basedir}/jar/META-INF/LICENSE.txt" prefix="META-INF" />
-			<zipfileset file="${basedir}/jar/META-INF/NOTICE.txt" prefix="META-INF" />
+			<zipfileset file="${module.licensemanager.basedir}/jar/META-INF/LICENSE.txt" prefix="META-INF" />
+			<zipfileset file="${module.licensemanager.basedir}/jar/META-INF/NOTICE.txt" prefix="META-INF" />
 			<zipfileset dir="${licensemanager.dir.output}">
 				<include name="net/nicholaswilliams/java/licensing/licensor/**" />
 			</zipfileset>
@@ -322,7 +330,7 @@
 		<echo message="Manifest class-path is ${manifest.classpath.samples}" />
 
 		<!-- Package the JAR file -->
-		<jar destfile="${licensemanager.dir.artifactOutput}/net.nicholaswilliams.java.licensing-samples-${licensemanager.version}.jar"
+		<jar destfile="${licensemanager.dir.artifactOutput}/${jar.name.samples}"
 			 duplicate="preserve" filesetmanifest="skip" index="true">
 			<manifest>
 				<attribute name="Manifest-Version" value="1.0" />
@@ -334,10 +342,10 @@
 				<attribute name="Specification-Version" value="${licensemanager.version}" />
 				<attribute name="Implementation-Version" value="${licensemanager.version}" />
 				<attribute name="Sealed" value="true" />
-				<attribute name="Class-Path" value="${manifest.classpath.samples} net.nicholaswilliams.java.licensing-embeddable-${licensemanager.version}.jar net.nicholaswilliams.java.licensing-licensor-${licensemanager.version}.jar" />
+				<attribute name="Class-Path" value="${manifest.classpath.samples} ${jar.name.embeddable} ${jar.name.licensor}" />
 			</manifest>
-			<zipfileset file="${basedir}/jar/META-INF/LICENSE.txt" prefix="META-INF" />
-			<zipfileset file="${basedir}/jar/META-INF/NOTICE.txt" prefix="META-INF" />
+			<zipfileset file="${module.licensemanager.basedir}/jar/META-INF/LICENSE.txt" prefix="META-INF" />
+			<zipfileset file="${module.licensemanager.basedir}/jar/META-INF/NOTICE.txt" prefix="META-INF" />
 			<zipfileset dir="${licensemanager.dir.output}">
 				<include name="net/nicholaswilliams/java/licensing/samples/**" />
 			</zipfileset>
@@ -360,7 +368,7 @@
 		<echo message="Manifest class-path is ${manifest.classpath.sources}" />
 
 		<!-- Package the JAR file -->
-		<jar destfile="${licensemanager.dir.artifactOutput}/net.nicholaswilliams.java.licensing-sources-${licensemanager.version}.jar"
+		<jar destfile="${licensemanager.dir.artifactOutput}/${jar.name.sources}"
 			 duplicate="preserve" filesetmanifest="skip" index="false">
 			<manifest>
 				<attribute name="Manifest-Version" value="1.0" />
@@ -373,8 +381,8 @@
 				<attribute name="Implementation-Version" value="${licensemanager.version}" />
 				<attribute name="Class-Path" value="${manifest.classpath.sources}" />
 			</manifest>
-			<zipfileset file="${basedir}/jar/META-INF/LICENSE.txt" prefix="META-INF" />
-			<zipfileset file="${basedir}/jar/META-INF/NOTICE.txt" prefix="META-INF" />
+			<zipfileset file="${module.licensemanager.basedir}/jar/META-INF/LICENSE.txt" prefix="META-INF" />
+			<zipfileset file="${module.licensemanager.basedir}/jar/META-INF/NOTICE.txt" prefix="META-INF" />
 			<zipfileset dir="${module.licensemanager.basedir}/src" />
 		</jar>
 	</target>
@@ -383,7 +391,7 @@
 		<mkdir dir="${licensemanager.dir.artifactOutput}" />
 
 		<!-- Package the JAR file -->
-		<zip destfile="${licensemanager.dir.artifactOutput}/net.nicholaswilliams.java.licensing-javadoc-${licensemanager.version}.jar"
+		<zip destfile="${licensemanager.dir.artifactOutput}/${jar.name.javadoc}"
 			 duplicate="preserve">
 			<zipfileset dir="${licensemanager.dir.javaDoc}" />
 		</zip>
@@ -395,6 +403,25 @@
 				<include name="*.jar" />
 			</fileset>
 		</copy>
+		<zip destfile="${directory.distribute}/${zip.name.all}" duplicate="override">
+			<zipfileset dir="${module.licensemanager.basedir}/jar/META-INF/">
+				<include name="LICENSE.txt" />
+				<include name="NOTICE.txt" />
+			</zipfileset>
+			<zipfileset dir="${module.licensemanager.basedir}/jar" prefix="jar" />
+			<zipfileset dir="${module.licensemanager.basedir}/lib" prefix="lib">
+				<include name="*.jar" />
+			</zipfileset>
+			<zipfileset dir="${module.licensemanager.basedir}/src" prefix="src" />
+			<zipfileset dir="${module.licensemanager.basedir}/test/lib" prefix="test/lib">
+				<include name="*.jar" />
+			</zipfileset>
+			<zipfileset dir="${module.licensemanager.basedir}/test/unit" prefix="test/unit" />
+			<fileset dir="${module.licensemanager.basedir}">
+				<include name="ant-build.properties" />
+				<include name="ant-build.xml" />
+			</fileset>
+		</zip>
 	</target>
 
 	<target name="all" depends="compile.module.all, test.module.all, package.artifact.all" description="Build and package all" />

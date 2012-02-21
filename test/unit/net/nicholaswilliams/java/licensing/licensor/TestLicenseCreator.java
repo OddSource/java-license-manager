@@ -1,5 +1,5 @@
 /*
- * TestLicenseCreator.java from LicenseManager modified Thursday, February 16, 2012 21:07:44 CST (-0600).
+ * TestLicenseCreator.java from LicenseManager modified Monday, February 20, 2012 23:54:44 CST (-0600).
  *
  * Copyright 2010-2012 the original author or authors.
  *
@@ -59,13 +59,6 @@ public class TestLicenseCreator
 
 	private static PublicKey publicKey;
 
-	private LicenseCreator creator;
-
-	public TestLicenseCreator()
-	{
-		this.creator = LicenseCreator.getInstance();
-	}
-
 	@BeforeClass
 	public static void setUpClass() throws Exception
 	{
@@ -74,7 +67,10 @@ public class TestLicenseCreator
 		TestLicenseCreator.keyPasswordProvider = TestLicenseCreator.control.createMock(KeyPasswordProvider.class);
 		TestLicenseCreator.keyDataProvider = TestLicenseCreator.control.createMock(PrivateKeyDataProvider.class);
 
-		LicenseCreator.createInstance(TestLicenseCreator.keyPasswordProvider, TestLicenseCreator.keyDataProvider);
+		Properties.setPasswordProvider(TestLicenseCreator.keyPasswordProvider);
+		Properties.setPrivateKeyDataProvider(TestLicenseCreator.keyDataProvider);
+
+		LicenseCreator.getInstance();
 
 		KeyPair keyPair = KeyPairGenerator.getInstance(KeyFileUtilities.keyAlgorithm).generateKeyPair();
 
@@ -84,6 +80,13 @@ public class TestLicenseCreator
 		PKCS8EncodedKeySpec pkcs8EncodedKeySpec = new PKCS8EncodedKeySpec(keyPair.getPrivate().getEncoded());
 		IOUtils.write(Encryptor.encryptRaw(pkcs8EncodedKeySpec.getEncoded(), keyPassword), outputStream);
 		TestLicenseCreator.encryptedPrivateKey = outputStream.toByteArray();
+	}
+
+	private LicenseCreator creator;
+
+	public TestLicenseCreator()
+	{
+		this.creator = LicenseCreator.getInstance();
 	}
 
 	@Before

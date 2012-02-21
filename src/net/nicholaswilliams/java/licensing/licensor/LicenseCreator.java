@@ -1,5 +1,5 @@
 /*
- * LicenseCreator.java from LicenseManager modified Thursday, February 16, 2012 21:02:44 CST (-0600).
+ * LicenseCreator.java from LicenseManager modified Monday, February 20, 2012 23:47:14 CST (-0600).
  *
  * Copyright 2010-2012 the original author or authors.
  *
@@ -41,9 +41,11 @@ import java.util.Arrays;
  * in the package of classes (net.nicholaswilliams.java.licensing.licensor) that is packaged separately from the
  * distributable client binary.<br />
  * <br />
- * The license creator is first initialized by calling
- * {@link #createInstance(KeyPasswordProvider, PrivateKeyDataProvider)}, which also returns the singleton instance
- * created. Then all future references to the license manager are obtained by calling {@link #getInstance()}.
+ * Before getting the creator instance for the first time, relevant properties should be set in {@link Properties}.
+ * The values in this class will be used to instantiate the license creator. After setting all the necessary
+ * properties there, one can retrieve an instance using {@link #getInstance()}. Be sure to set all the properties
+ * first; once {@link #getInstance()} is called for the first time, any changes to {@link Properties} will be
+ * ignored.<br />
  *
  * @author Nick Williams
  * @version 1.0.6
@@ -51,53 +53,33 @@ import java.util.Arrays;
  */
 public final class LicenseCreator
 {
-	private static LicenseCreator instance = null;
+	private static final LicenseCreator instance = new LicenseCreator();
 
 	private final KeyPasswordProvider passwordProvider;
 
 	private final PrivateKeyDataProvider privateKeyDataProvider;
 
-	private LicenseCreator(KeyPasswordProvider passwordProvider,
-						   PrivateKeyDataProvider privateKeyLocationProvider)
+	private LicenseCreator()
 	{
-		this.passwordProvider = passwordProvider;
-		this.privateKeyDataProvider = privateKeyLocationProvider;
+		if(Properties.getPrivateKeyDataProvider() == null)
+			throw new IllegalArgumentException("Parameter privateKeyDataProvider must not be null.");
+
+		if(Properties.getPasswordProvider() == null)
+			throw new IllegalArgumentException("Parameter privateKeyDataProvider must not be null.");
+
+		this.passwordProvider = Properties.getPasswordProvider();
+		this.privateKeyDataProvider = Properties.getPrivateKeyDataProvider();
 	}
 
 	/**
-	 * The first time this is called, it creates and returns a license creator with the given providers. All subsequent
-	 * calls are equivalent to calling {@link #getInstance()} (i.e., the parameters are ignored
-	 * and the previously-created instance is returned).
-	 *
-	 * @param passwordProvider The provider of the password for decrypting the license key
-	 * @param privateKeyDataProvider The provider of the data for the private key used to sign the license object.
-	 * @return the created instance of the license creator.
-	 * @throws IllegalArgumentException if {@code passwordProvider} or {@code privateKeyDataProvider} are null
-	 */
-	public static synchronized LicenseCreator createInstance(KeyPasswordProvider passwordProvider,
-															 PrivateKeyDataProvider privateKeyDataProvider)
-	{
-		if(LicenseCreator.instance == null)
-		{
-			LicenseCreator.instance = new LicenseCreator(passwordProvider, privateKeyDataProvider);
-		}
-
-		return LicenseCreator.instance;
-	}
-
-	/**
-	 * Returns the license creator instance previously created by
-	 * {@link #createInstance(KeyPasswordProvider, PrivateKeyDataProvider)}. If this method is
-	 * called before {@code createInstance()}, a {@link RuntimeException} is thrown.
+	 * Returns the license creator instance. Before this method can be called the first time, all of the parameters must
+	 * bet set in {@link Properties}. See the documentation for that class for more details.
 	 *
 	 * @return the license creator instance.
-	 * @throws RuntimeException if no instance has yet be created by {@code createInstance()}.
+	 * @throws IllegalArgumentException if {@link Properties#setPrivateKeyDataProvider(PrivateKeyDataProvider) privateKeyDataProvider} or {@link Properties#setPasswordProvider(KeyPasswordProvider) passwordProvider} are null
 	 */
-	public static synchronized LicenseCreator getInstance()
+	public static LicenseCreator getInstance()
 	{
-		if(LicenseCreator.instance == null)
-			throw new RuntimeException("The LicenseCreator instance has not been created yet. Please create it with createInstance().");
-
 		return LicenseCreator.instance;
 	}
 

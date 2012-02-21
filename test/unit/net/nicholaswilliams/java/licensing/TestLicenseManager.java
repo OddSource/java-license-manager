@@ -1,5 +1,5 @@
 /*
- * TestLicenseManager.java from LicenseManager modified Wednesday, February 15, 2012 23:20:03 CST (-0600).
+ * TestLicenseManager.java from LicenseManager modified Monday, February 20, 2012 23:54:53 CST (-0600).
  *
  * Copyright 2010-2012 the original author or authors.
  *
@@ -60,13 +60,6 @@ public class TestLicenseManager
 
 	private static byte[] encryptedPublicKey;
 
-	private LicenseManager manager;
-
-	public TestLicenseManager()
-	{
-		this.manager = LicenseManager.getInstance();
-	}
-
 	@BeforeClass
 	public static void setUpClass() throws Exception
 	{
@@ -77,13 +70,13 @@ public class TestLicenseManager
 		TestLicenseManager.keyDataProvider = TestLicenseManager.control.createMock(PublicKeyDataProvider.class);
 		TestLicenseManager.licenseValidator = TestLicenseManager.control.createMock(LicenseValidator.class);
 
-		LicenseManager.createInstance(
-				TestLicenseManager.licenseProvider,
-				TestLicenseManager.keyPasswordProvider,
-				TestLicenseManager.keyDataProvider,
-				TestLicenseManager.licenseValidator,
-				0
-		);
+		Properties.setLicenseProvider(TestLicenseManager.licenseProvider);
+		Properties.setPasswordProvider(TestLicenseManager.keyPasswordProvider);
+		Properties.setPublicKeyDataProvider(TestLicenseManager.keyDataProvider);
+		Properties.setLicenseValidator(TestLicenseManager.licenseValidator);
+		Properties.setCacheTimeInMinutes(0);
+
+		LicenseManager.getInstance();
 
 		KeyPair keyPair = KeyPairGenerator.getInstance(KeyFileUtilities.keyAlgorithm).generateKeyPair();
 
@@ -93,6 +86,13 @@ public class TestLicenseManager
 		X509EncodedKeySpec x509EncodedKeySpec = new X509EncodedKeySpec(keyPair.getPublic().getEncoded());
 		IOUtils.write(Encryptor.encryptRaw(x509EncodedKeySpec.getEncoded(), keyPassword), outputStream);
 		TestLicenseManager.encryptedPublicKey = outputStream.toByteArray();
+	}
+
+	private LicenseManager manager;
+
+	public TestLicenseManager()
+	{
+		this.manager = LicenseManager.getInstance();
 	}
 
 	@Before

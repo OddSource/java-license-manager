@@ -1,5 +1,5 @@
 /*
- * Encryptor.java from LicenseManager modified Tuesday, February 21, 2012 10:58:55 CST (-0600).
+ * Encryptor.java from LicenseManager modified Thursday, February 23, 2012 15:30:25 CST (-0600).
  *
  * Copyright 2010-2012 the original author or authors.
  *
@@ -412,7 +412,8 @@ public final class Encryptor
 
 	private static final int iterationCount = 1024;
 
-	private static final int aesKeyLength = 256; // must be 128, 192, 256 or 512
+	// must be 128, 192, 256; 128 is maximum without "unlimited strength" JCE policy files
+	private static final int aesKeyLength = 128;
 
 	private static SecretKey getSecretKey(char[] passphrase)
 	{
@@ -425,7 +426,7 @@ public final class Encryptor
 					Encryptor.aesKeyLength
 			);
 
-			byte[] shortKey = SecretKeyFactory.getInstance("PBEWithMD5AndTripleDES").
+			byte[] shortKey = SecretKeyFactory.getInstance("PBEWithMD5AndDES").
 					generateSecret(keySpec).getEncoded();
 
 			byte[] intermediaryKey = new byte[Encryptor.aesKeyLength / 8];
@@ -440,7 +441,7 @@ public final class Encryptor
 		}
 		catch(NoSuchAlgorithmException e)
 		{
-			throw new AlgorithmNotSupportedException("TripleDES with an MD5 Digest", e);
+			throw new AlgorithmNotSupportedException("DES with an MD5 Digest", e);
 		}
 		catch(InvalidKeySpecException e)
 		{

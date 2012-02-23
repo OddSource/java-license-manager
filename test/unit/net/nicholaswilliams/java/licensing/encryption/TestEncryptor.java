@@ -1,5 +1,5 @@
 /*
- * TestEncryptor.java from LicenseManager modified Tuesday, February 21, 2012 10:56:33 CST (-0600).
+ * TestEncryptor.java from LicenseManager modified Thursday, February 23, 2012 15:33:21 CST (-0600).
  *
  * Copyright 2010-2012 the original author or authors.
  *
@@ -333,7 +333,7 @@ public class TestEncryptor
 	@Test
 	public void testEncrypt3()
 	{
-		String expected = "Hhf_UQ1IGaKpp8MOzCr3EoAlKmu-q4YJ29TiXyFhA-_OEuibBC8JeP86eEiyKy7t_PX6DMFurwzM_oMZUajzTImE60iqGlfPTjJk2n1Fo_8";
+		String expected = "NSARPhey360gZ2xTOaswGn6lWCd01poo1AW8o0Oobudbf2MNe38lX21EpHEFGl-MKgZnPZKsSHrDFXjL1CvtWqQ2JN6RuMKW0iht1TacVKE";
 
 		String toEncrypt = "testAPasswordThatIsLongerThanThePaddingLengthToPreventRandomness";
 
@@ -346,7 +346,7 @@ public class TestEncryptor
 	@Test
 	public void testPasswordBasedEncrypt3()
 	{
-		String expected = "I-YmCfQaN1LagtYxxhj0QXnxeQqnJZ-SCaVZgkyfynr9nlpdQIrbUoQbQACZmpQOUWLDZVJcPg9IExESabViQN1eG1rafj1kd6Ib9WPirjw";
+		String expected = "YPEXhIzBx1VzkbqMwaS2QpMPQJCY9kALXLYY0HFWRCSpRobyCrAGLtwNPnEKDW_TKMSRzf7BAUHFueySb_dh2tISTe8zx-uZ_WG-c06x2Ns";
 
 		String toEncrypt = "testAPasswordThatIsLongerThanThePaddingLengthToPreventRandomness";
 

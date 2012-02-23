@@ -1,5 +1,5 @@
 /*
- * Encryptor.java from LicenseManager modified Thursday, February 23, 2012 15:30:25 CST (-0600).
+ * Encryptor.java from LicenseManager modified Thursday, February 23, 2012 15:59:12 CST (-0600).
  *
  * Copyright 2010-2012 the original author or authors.
  *
@@ -39,11 +39,18 @@ import java.security.SecureRandom;
 import java.security.spec.InvalidKeySpecException;
 
 /**
- * A class for easy, strong, two-way encryption/decryption of strings.
+ * A class for easy, strong, two-way encryption/decryption of strings. Versions prior to 0.9.1-beta used 256-bit AES
+ * encryption, which is not exportable, and will only work by default on Mac OS X and Linux. The Windows JVM will throw
+ * an exception without the JCE Unlimited Strength policy file. Versions 0.9.1-beta and higher use 128-bit AES
+ * encryption that is both exportable and platform-independent.<br />
+ * <br />
+ * This encryptor still uses a combination of MD5+DES and SHA-1+AES encryption.<br />
+ * <br />
+ * Data encrypted with this class prior to version 0.9.1-beta cannot be decrypted anymore.
  * 
  * @author Nick Williams
  * @since 1.0.0
- * @version 1.0.0
+ * @version 1.5.0
  */
 public final class Encryptor
 {

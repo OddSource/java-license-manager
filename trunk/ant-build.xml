@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
-  ~ ant-build.xml from LicenseManager modified Thursday, February 23, 2012 01:54:36 CST (-0600).
+  ~ ant-build.xml from LicenseManager modified Thursday, February 23, 2012 16:26:04 CST (-0600).
   ~
   ~ Copyright 2010-2012 the original author or authors.
   ~
@@ -398,12 +398,7 @@
 	</target>
 
 	<target name="distribute.artifact.all" depends="package.artifact.all" description="Distributes JAR files">
-		<copy todir="${directory.distribute}" failonerror="true">
-			<fileset dir="${licensemanager.dir.artifactOutput}">
-				<include name="*.jar" />
-			</fileset>
-		</copy>
-		<zip destfile="${directory.distribute}/${zip.name.all}">
+		<zip destfile="${licensemanager.dir.artifactOutput}/${zip.name.all}">
 			<zipfileset dir="${licensemanager.dir.artifactOutput}" prefix="dist">
 				<include name="*.jar" />
 			</zipfileset>
@@ -425,6 +420,12 @@
 				<include name="ant-build.xml" />
 			</fileset>
 		</zip>
+		<copy todir="${directory.distribute}" failonerror="true">
+			<fileset dir="${licensemanager.dir.artifactOutput}">
+				<include name="*.jar" />
+				<include name="*.zip" />
+			</fileset>
+		</copy>
 	</target>
 
 	<target name="all" depends="compile.module.all, test.module.all, package.artifact.all" description="Build and package all" />

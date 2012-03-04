@@ -1,5 +1,5 @@
 /*
- * RSAKeyPairGeneratorInterface.java from LicenseManager modified Tuesday, February 21, 2012 10:56:34 CST (-0600).
+ * RSAKeyPairGeneratorInterface.java from LicenseManager modified Sunday, March 4, 2012 10:02:52 CST (-0600).
  *
  * Copyright 2010-2012 the original author or authors.
  *
@@ -53,42 +53,85 @@ public interface RSAKeyPairGeneratorInterface
 	public KeyPair generateKeyPair() throws RSA2048NotSupportedException;
 
 	/**
-	 * Saves the key pair specified to output files specified.
+	 * Saves the key pair specified to output files specified, encrypting both with the specified password.
 	 *
 	 * @param keyPair The key pair to save to the files specified
 	 * @param privateOutputFileName The name of the file to save the encrypted private key to
 	 * @param publicOutputFileName The name of the file to save the encrypted public key to
-	 * @param password The password to encrypt the keys with
+	 * @param password The password to encrypt both keys with
 	 * @throws IOException if an error occurs while writing to the files.
 	 * @throws AlgorithmNotSupportedException If the encryption algorithm is not supported
 	 * @throws InappropriateKeyException If the public or private keys are invalid
 	 * @throws InappropriateKeySpecificationException If the public or private keys are invalid
 	 */
-	public void saveKeyPairToFiles(KeyPair keyPair,
-								   String privateOutputFileName,
-								   String publicOutputFileName,
+	public void saveKeyPairToFiles(KeyPair keyPair, String privateOutputFileName, String publicOutputFileName,
 								   char[] password)
 			throws IOException, AlgorithmNotSupportedException, InappropriateKeyException,
 				   InappropriateKeySpecificationException;
 
 	/**
-	 * Saves the public and private keys and password specified to the respective
+	 * Saves the key pair specified to output files specified, encrypting each with their specified passwords.
+	 *
+	 * @param keyPair The key pair to save to the files specified
+	 * @param privateOutputFileName The name of the file to save the encrypted private key to
+	 * @param publicOutputFileName The name of the file to save the encrypted public key to
+	 * @param privatePassword The password to encrypt the private key with
+	 * @param publicPassword The password to encrypt the public key with
+	 * @throws IOException if an error occurs while writing to the files.
+	 * @throws AlgorithmNotSupportedException If the encryption algorithm is not supported
+	 * @throws InappropriateKeyException If the public or private keys are invalid
+	 * @throws InappropriateKeySpecificationException If the public or private keys are invalid
+	 */
+	public void saveKeyPairToFiles(KeyPair keyPair, String privateOutputFileName, String publicOutputFileName,
+								   char[] privatePassword, char[] publicPassword)
+			throws IOException, AlgorithmNotSupportedException, InappropriateKeyException,
+				   InappropriateKeySpecificationException;
+
+	/**
+	 * Saves the public and private keys specified to the respective
 	 * {@link RSAKeyPairGeneratorInterface.GeneratedClassDescriptor#getJavaFileContents() javaFileContents} fields in
-	 * the provided {@link GeneratedClassDescriptor}s.
+	 * the provided {@link GeneratedClassDescriptor}s, encrypting both with the specified password.
 	 *
 	 * @param keyPair The key pair to save
 	 * @param privateKeyProvider An object describing the {@link net.nicholaswilliams.java.licensing.licensor.PrivateKeyDataProvider} class to generate, and into which the generated code will be saved
 	 * @param publicKeyProvider An object describing the {@link PublicKeyDataProvider} class to generate, and into which the generated code will be saved
-	 * @param keyPasswordProvider An object describing the {@link KeyPasswordProvider} class to generate, and into which the generated code will be saved
-	 * @param password The password to encrypt the keys with, and to save into the generated {@link KeyPasswordProvider}
+	 * @param password The password to encrypt the keys with
 	 * @throws AlgorithmNotSupportedException If the encryption algorithm is not supported
 	 * @throws InappropriateKeyException If the public or private keys are invalid
 	 * @throws InappropriateKeySpecificationException If the public or private keys are invalid
 	 */
 	public void saveKeyPairToProviders(KeyPair keyPair, GeneratedClassDescriptor privateKeyProvider,
-									   GeneratedClassDescriptor publicKeyProvider,
-									   GeneratedClassDescriptor keyPasswordProvider, char[] password)
+									   GeneratedClassDescriptor publicKeyProvider, char[] password)
 			throws AlgorithmNotSupportedException, InappropriateKeyException, InappropriateKeySpecificationException;
+
+	/**
+	 * Saves the public and private keys specified to the respective
+	 * {@link RSAKeyPairGeneratorInterface.GeneratedClassDescriptor#getJavaFileContents() javaFileContents} fields in
+	 * the provided {@link GeneratedClassDescriptor}s, encrypting each with their respective passwords.
+	 *
+	 * @param keyPair The key pair to save
+	 * @param privateKeyProvider An object describing the {@link net.nicholaswilliams.java.licensing.licensor.PrivateKeyDataProvider} class to generate, and into which the generated code will be saved
+	 * @param publicKeyProvider An object describing the {@link PublicKeyDataProvider} class to generate, and into which the generated code will be saved
+	 * @param privatePassword The password to encrypt the private key with
+	 * @param publicPassword The password to encrypt the public key with
+	 * @throws AlgorithmNotSupportedException If the encryption algorithm is not supported
+	 * @throws InappropriateKeyException If the public or private keys are invalid
+	 * @throws InappropriateKeySpecificationException If the public or private keys are invalid
+	 */
+	public void saveKeyPairToProviders(KeyPair keyPair, GeneratedClassDescriptor privateKeyProvider,
+									   GeneratedClassDescriptor publicKeyProvider, char[] privatePassword,
+									   char[] publicPassword)
+			throws AlgorithmNotSupportedException, InappropriateKeyException, InappropriateKeySpecificationException;
+
+	/**
+	 * Saves the password specified to the
+	 * {@link RSAKeyPairGeneratorInterface.GeneratedClassDescriptor#getJavaFileContents() javaFileContents} field in
+	 * the provided {@link GeneratedClassDescriptor}.
+	 *
+	 * @param password The password to save to the specified Java class
+	 * @param passwordProvider An object describing the {@link KeyPasswordProvider} class to generate, and into which the generated code will be saved
+	 */
+	public void savePasswordToProvider(char[] password, GeneratedClassDescriptor passwordProvider);
 
 	public static class GeneratedClassDescriptor
 	{
@@ -103,9 +146,10 @@ public interface RSAKeyPairGeneratorInterface
 			return this.packageName;
 		}
 
-		public void setPackageName(String packageName)
+		public GeneratedClassDescriptor setPackageName(String packageName)
 		{
 			this.packageName = packageName;
+			return this;
 		}
 
 		public String getClassName()
@@ -113,9 +157,10 @@ public interface RSAKeyPairGeneratorInterface
 			return this.className;
 		}
 
-		public void setClassName(String className)
+		public GeneratedClassDescriptor setClassName(String className)
 		{
 			this.className = className;
+			return this;
 		}
 
 		public String getJavaFileContents()
@@ -123,9 +168,10 @@ public interface RSAKeyPairGeneratorInterface
 			return javaFileContents;
 		}
 
-		public void setJavaFileContents(String javaFileContents)
+		public GeneratedClassDescriptor setJavaFileContents(String javaFileContents)
 		{
 			this.javaFileContents = javaFileContents;
+			return this;
 		}
 	}
 }

@@ -1,5 +1,5 @@
 /*
- * TextInterfaceDevice.java from LicenseManager modified Tuesday, February 21, 2012 10:56:34 CST (-0600).
+ * TextInterfaceDevice.java from LicenseManager modified Saturday, March 3, 2012 19:12:40 CST (-0600).
  *
  * Copyright 2010-2012 the original author or authors.
  *
@@ -140,6 +140,116 @@ public interface TextInterfaceDevice extends Flushable
 	 * @throws IOError if an I/O error occurs.
 	 */
 	public char[] readPassword(String format, Object... arguments) throws IllegalFormatException, IOError;
+
+	/**
+	 * Prints a {@code char} to standard-out.
+	 *
+	 * @param c The {@code char} to be printed
+	 * @throws IOError if an I/O error occurs.
+	 */
+	public void printOut(char c) throws IOError;
+
+	/**
+	 * Prints a {@code String} to standard-out.
+	 *
+	 * @param s The {@code String} to be printed
+	 * @throws IOError if an I/O error occurs.
+	 */
+	public void printOut(String s) throws IOError;
+
+	/**
+	 * Prints an {@code Object} to standard-out.
+	 *
+	 * @param o The {@code Object} to be printed
+	 * @throws IOError if an I/O error occurs.
+	 */
+	public void printOut(Object o) throws IOError;
+
+	/**
+	 * Prints a {@code char} to standard-err.
+	 *
+	 * @param c The {@code char} to be printed
+	 * @throws IOError if an I/O error occurs.
+	 */
+	public void printErr(char c) throws IOError;
+
+	/**
+	 * Prints a {@code String} to standard-err.
+	 *
+	 * @param s The {@code String} to be printed
+	 * @throws IOError if an I/O error occurs.
+	 */
+	public void printErr(String s) throws IOError;
+
+	/**
+	 * Prints an {@code Object} to standard-out.
+	 *
+	 * @param o The {@code Object} to be printed
+	 * @throws IOError if an I/O error occurs.
+	 */
+	public void printErr(Object o) throws IOError;
+
+	/**
+	 * Terminates the current standard-out line by writing the line separator string.
+	 *
+	 * @throws IOError if an I/O error occurs.
+	 */
+	public void printOutLn() throws IOError;
+
+	/**
+	 * Prints a {@code char} to standard-out, then terminates the current line by writing the line separator string.
+	 *
+	 * @param c The {@code char} to be printed
+	 * @throws IOError if an I/O error occurs.
+	 */
+	public void printOutLn(char c) throws IOError;
+
+	/**
+	 * Prints a {@code String} to standard-out, then terminates the current line by writing the line separator string.
+	 *
+	 * @param s The {@code String} to be printed
+	 * @throws IOError if an I/O error occurs.
+	 */
+	public void printOutLn(String s) throws IOError;
+
+	/**
+	 * Prints an {@code Object} to standard-out, then terminates the current line by writing the line separator string.
+	 *
+	 * @param o The {@code Object} to be printed
+	 * @throws IOError if an I/O error occurs.
+	 */
+	public void printOutLn(Object o) throws IOError;
+
+	/**
+	 * Terminates the current standard-err line by writing the line separator string.
+	 *
+	 * @throws IOError if an I/O error occurs.
+	 */
+	public void printErrLn() throws IOError;
+
+	/**
+	 * Prints a {@code char} to standard-err, then terminates the current line by writing the line separator string.
+	 *
+	 * @param c The {@code char} to be printed
+	 * @throws IOError if an I/O error occurs.
+	 */
+	public void printErrLn(char c) throws IOError;
+
+	/**
+	 * Prints a {@code String} to standard-err, then terminates the current line by writing the line separator string.
+	 *
+	 * @param s The {@code String} to be printed
+	 * @throws IOError if an I/O error occurs.
+	 */
+	public void printErrLn(String s) throws IOError;
+
+	/**
+	 * Prints an {@code Object} to standard-err, then terminates the current line by writing the line separator string.
+	 *
+	 * @param o The {@code Object} to be printed
+	 * @throws IOError if an I/O error occurs.
+	 */
+	public void printErrLn(Object o) throws IOError;
 
 	/**
 	 * Retrieves the unique Reader object associated with this interface device. For more information regarding the

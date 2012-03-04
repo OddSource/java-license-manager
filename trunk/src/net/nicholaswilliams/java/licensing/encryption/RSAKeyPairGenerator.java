@@ -1,5 +1,5 @@
 /*
- * RSAKeyPairGenerator.java from LicenseManager modified Tuesday, February 21, 2012 10:56:34 CST (-0600).
+ * RSAKeyPairGenerator.java from LicenseManager modified Sunday, March 4, 2012 10:53:06 CST (-0600).
  *
  * Copyright 2010-2012 the original author or authors.
  *
@@ -103,12 +103,12 @@ public final class RSAKeyPairGenerator implements RSAKeyPairGeneratorInterface
 	}
 
 	/**
-	 * Saves the key pair specified to output files specified.
+	 * Saves the key pair specified to output files specified, encrypting both with the specified password.
 	 *
 	 * @param keyPair The key pair to save to the files specified
 	 * @param privateOutputFileName The name of the file to save the encrypted private key to
 	 * @param publicOutputFileName The name of the file to save the encrypted public key to
-	 * @param password The password to encrypt the keys with
+	 * @param password The password to encrypt both keys with
 	 * @throws IOException if an error occurs while writing to the files.
 	 * @throws AlgorithmNotSupportedException If the encryption algorithm is not supported
 	 * @throws InappropriateKeyException If the public or private keys are invalid
@@ -120,31 +120,76 @@ public final class RSAKeyPairGenerator implements RSAKeyPairGeneratorInterface
 			throws IOException, AlgorithmNotSupportedException, InappropriateKeyException,
 				   InappropriateKeySpecificationException
 	{
-		PrivateKey privateKey = keyPair.getPrivate();
-		PublicKey publicKey = keyPair.getPublic();
-
-		KeyFileUtilities.writeEncryptedPrivateKey(privateKey, new File(privateOutputFileName), password);
-		KeyFileUtilities.writeEncryptedPublicKey(publicKey, new File(publicOutputFileName), password);
+		this.saveKeyPairToFiles(keyPair, privateOutputFileName, publicOutputFileName, password, password);
 	}
 
 	/**
-	 * Saves the public and private keys and password specified to the respective
-	 * {@link net.nicholaswilliams.java.licensing.encryption.RSAKeyPairGeneratorInterface.GeneratedClassDescriptor#getJavaFileContents() javaFileContents} fields in
-	 * the provided {@link net.nicholaswilliams.java.licensing.encryption.RSAKeyPairGeneratorInterface.GeneratedClassDescriptor}s.
+	 * Saves the key pair specified to output files specified, encrypting each with their specified passwords.
+	 *
+	 * @param keyPair The key pair to save to the files specified
+	 * @param privateOutputFileName The name of the file to save the encrypted private key to
+	 * @param publicOutputFileName The name of the file to save the encrypted public key to
+	 * @param privatePassword The password to encrypt the private key with
+	 * @param publicPassword The password to encrypt the public key with
+	 * @throws IOException if an error occurs while writing to the files.
+	 * @throws AlgorithmNotSupportedException If the encryption algorithm is not supported
+	 * @throws InappropriateKeyException If the public or private keys are invalid
+	 * @throws InappropriateKeySpecificationException If the public or private keys are invalid
+	 */
+	@Override
+	public void saveKeyPairToFiles(KeyPair keyPair, String privateOutputFileName, String publicOutputFileName,
+								   char[] privatePassword, char[] publicPassword)
+			throws IOException, AlgorithmNotSupportedException, InappropriateKeyException,
+				   InappropriateKeySpecificationException
+	{
+		PrivateKey privateKey = keyPair.getPrivate();
+		PublicKey publicKey = keyPair.getPublic();
+
+		KeyFileUtilities.writeEncryptedPrivateKey(privateKey, new File(privateOutputFileName), privatePassword);
+		KeyFileUtilities.writeEncryptedPublicKey(publicKey, new File(publicOutputFileName), publicPassword);
+	}
+
+	/**
+	 * Saves the public and private keys specified to the respective
+	 * {@link RSAKeyPairGeneratorInterface.GeneratedClassDescriptor#getJavaFileContents() javaFileContents} fields in
+	 * the provided {@link RSAKeyPairGeneratorInterface.GeneratedClassDescriptor}s, encrypting both with the specified
+	 * password.
 	 *
 	 * @param keyPair The key pair to save
 	 * @param privateKeyProvider An object describing the {@link net.nicholaswilliams.java.licensing.licensor.PrivateKeyDataProvider} class to generate, and into which the generated code will be saved
 	 * @param publicKeyProvider An object describing the {@link PublicKeyDataProvider} class to generate, and into which the generated code will be saved
-	 * @param keyPasswordProvider An object describing the {@link KeyPasswordProvider} class to generate, and into which the generated code will be saved
-	 * @param password The password to encrypt the keys with, and to save into the generated {@link KeyPasswordProvider}
+	 * @param password The password to encrypt the keys with
 	 * @throws AlgorithmNotSupportedException If the encryption algorithm is not supported
 	 * @throws InappropriateKeyException If the public or private keys are invalid
 	 * @throws InappropriateKeySpecificationException If the public or private keys are invalid
 	 */
 	@Override
 	public void saveKeyPairToProviders(KeyPair keyPair, GeneratedClassDescriptor privateKeyProvider,
-									   GeneratedClassDescriptor publicKeyProvider,
-									   GeneratedClassDescriptor keyPasswordProvider, char[] password)
+									   GeneratedClassDescriptor publicKeyProvider, char[] password)
+			throws AlgorithmNotSupportedException, InappropriateKeyException, InappropriateKeySpecificationException
+	{
+		this.saveKeyPairToProviders(keyPair, privateKeyProvider, publicKeyProvider, password, password);
+	}
+
+	/**
+	 * Saves the public and private keys specified to the respective
+	 * {@link RSAKeyPairGeneratorInterface.GeneratedClassDescriptor#getJavaFileContents() javaFileContents} fields in
+	 * the provided {@link RSAKeyPairGeneratorInterface.GeneratedClassDescriptor}s, encrypting each with their
+	 * respective passwords.
+	 *
+	 * @param keyPair The key pair to save
+	 * @param privateKeyProvider An object describing the {@link net.nicholaswilliams.java.licensing.licensor.PrivateKeyDataProvider} class to generate, and into which the generated code will be saved
+	 * @param publicKeyProvider An object describing the {@link PublicKeyDataProvider} class to generate, and into which the generated code will be saved
+	 * @param privatePassword The password to encrypt the private key with
+	 * @param publicPassword The password to encrypt the public key with
+	 * @throws AlgorithmNotSupportedException If the encryption algorithm is not supported
+	 * @throws InappropriateKeyException If the public or private keys are invalid
+	 * @throws InappropriateKeySpecificationException If the public or private keys are invalid
+	 */
+	@Override
+	public void saveKeyPairToProviders(KeyPair keyPair, GeneratedClassDescriptor privateKeyProvider,
+									   GeneratedClassDescriptor publicKeyProvider, char[] privatePassword,
+									   char[] publicPassword)
 			throws AlgorithmNotSupportedException, InappropriateKeyException, InappropriateKeySpecificationException
 	{
 		if(keyPair == null)
@@ -156,15 +201,11 @@ public final class RSAKeyPairGenerator implements RSAKeyPairGeneratorInterface
 		if(publicKeyProvider == null)
 			throw new IllegalArgumentException("Parameter publicKeyProvider cannot be null.");
 
-		if(keyPasswordProvider == null)
-			throw new IllegalArgumentException("Parameter keyPasswordProvider cannot be null.");
-
-		byte[] privateKey = KeyFileUtilities.writeEncryptedPrivateKey(keyPair.getPrivate(), password);
-		byte[] publicKey = KeyFileUtilities.writeEncryptedPublicKey(keyPair.getPublic(), password);
+		byte[] privateKey = KeyFileUtilities.writeEncryptedPrivateKey(keyPair.getPrivate(), privatePassword);
+		byte[] publicKey = KeyFileUtilities.writeEncryptedPublicKey(keyPair.getPublic(), publicPassword);
 
 		String privateKeyCode = this.arrayToCodeString(this.byteArrayToIntArray(privateKey), "byte");
 		String publicKeyCode = this.arrayToCodeString(this.byteArrayToIntArray(publicKey), "byte");
-		String passwordCode = this.arrayToCodeString(this.charArrayToIntArray(password), "char");
 
 		privateKeyProvider.setJavaFileContents(this.generateJavaCode(
 				privateKeyProvider.getPackageName(),
@@ -189,15 +230,32 @@ public final class RSAKeyPairGenerator implements RSAKeyPairGeneratorInterface
 				"public byte[] getEncryptedPublicKeyData() throws KeyNotFoundException",
 				publicKeyCode
 		));
+	}
 
-		keyPasswordProvider.setJavaFileContents(this.generateJavaCode(
-				keyPasswordProvider.getPackageName(),
-				keyPasswordProvider.getClassName(),
+	/**
+	 * Saves the password specified to the
+	 * {@link RSAKeyPairGeneratorInterface.GeneratedClassDescriptor#getJavaFileContents() javaFileContents} field in
+	 * the provided {@link RSAKeyPairGeneratorInterface.GeneratedClassDescriptor}.
+	 *
+	 * @param password The password to save to the specified Java class
+	 * @param passwordProvider An object describing the {@link KeyPasswordProvider} class to generate, and into which the generated code will be saved
+	 */
+	@Override
+	public void savePasswordToProvider(char[] password, GeneratedClassDescriptor passwordProvider)
+	{
+		if(passwordProvider == null)
+			throw new IllegalArgumentException("Parameter passwordProvider cannot be null.");
+		
+		String passwordCode = this.arrayToCodeString(this.charArrayToIntArray(password), "char");
+
+		passwordProvider.setJavaFileContents(this.generateJavaCode(
+				passwordProvider.getPackageName(),
+				passwordProvider.getClassName(),
 				"KeyPasswordProvider",
 				new String[] { "net.nicholaswilliams.java.licensing.encryption.KeyPasswordProvider" },
 				"public char[] getKeyPassword()",
 				passwordCode
-																	 ));
+		));
 	}
 
 	/**
@@ -218,13 +276,13 @@ public final class RSAKeyPairGenerator implements RSAKeyPairGeneratorInterface
 		StringBuilder stringBuilder = new StringBuilder();
 
 		if(packageName != null && packageName.trim().length() > 0)
-			stringBuilder.append("package ").append(packageName.trim()).append(";\n\n");
+			stringBuilder.append("package ").append(packageName.trim()).append(";\r\n\r\n");
 
 		if(imports != null && imports.length > 0)
 		{
 			for(String importClass : imports)
-				stringBuilder.append("import ").append(importClass.trim()).append(";\n");
-			stringBuilder.append('\n');
+				stringBuilder.append("import ").append(importClass.trim()).append(";\r\n");
+			stringBuilder.append("\r\n");
 		}
 
 		boolean hasInterface = interfaceName != null && interfaceName.trim().length() > 0;
@@ -232,18 +290,18 @@ public final class RSAKeyPairGenerator implements RSAKeyPairGeneratorInterface
 		stringBuilder.append("public final class ").append(className.trim());
 		if(hasInterface)
 			stringBuilder.append(" implements ").append(interfaceName.trim());
-		stringBuilder.append("\n");
-		stringBuilder.append("{\n");
+		stringBuilder.append("\r\n");
+		stringBuilder.append("{\r\n");
 		if(hasInterface)
-			stringBuilder.append("\t@Override\n");
-		stringBuilder.append("\t").append(methodSignature.trim()).append("\n");
-		stringBuilder.append("\t{\n");
+			stringBuilder.append("\t@Override\r\n");
+		stringBuilder.append("\t").append(methodSignature.trim()).append("\r\n");
+		stringBuilder.append("\t{\r\n");
 
-		stringBuilder.append("\t\treturn ").append(returnValue).append(";\n");
+		stringBuilder.append("\t\treturn ").append(returnValue).append(";\r\n");
 
-		stringBuilder.append("\t}\n");
+		stringBuilder.append("\t}\r\n");
 
-		stringBuilder.append("}\n");
+		stringBuilder.append("}");
 
 		return stringBuilder.toString();
 	}
@@ -260,7 +318,7 @@ public final class RSAKeyPairGenerator implements RSAKeyPairGeneratorInterface
 	 */
 	protected String arrayToCodeString(int[] values, String type)
 	{
-		StringBuilder stringBuilder = new StringBuilder("new ").append(type).append("[] {\n\t\t\t\t");
+		StringBuilder stringBuilder = new StringBuilder("new ").append(type).append("[] {\r\n\t\t\t\t");
 		int i = 0, j = 1;
 		for(int value : values)
 		{
@@ -269,12 +327,12 @@ public final class RSAKeyPairGenerator implements RSAKeyPairGeneratorInterface
 			if(j++ > 8)
 			{
 				j = 2;
-				stringBuilder.append("\n\t\t\t\t");
+				stringBuilder.append("\r\n\t\t\t\t");
 			}
 			stringBuilder.append("0x");
 			stringBuilder.append(String.format("%08x", value).toUpperCase());
 		}
-		stringBuilder.append("\n\t\t}");
+		stringBuilder.append("\r\n\t\t}");
 		return stringBuilder.toString();
 	}
 

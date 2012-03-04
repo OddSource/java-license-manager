@@ -1,5 +1,5 @@
 /*
- * AbstractTextInterfaceDevice.java from LicenseManager modified Tuesday, February 21, 2012 10:56:34 CST (-0600).
+ * AbstractTextInterfaceDevice.java from LicenseManager modified Saturday, March 3, 2012 19:15:45 CST (-0600).
  *
  * Copyright 2010-2012 the original author or authors.
  *
@@ -18,6 +18,7 @@
 
 package net.nicholaswilliams.java.licensing.licensor.interfaces.text.abstraction;
 
+import java.io.IOError;
 import java.io.InputStream;
 import java.io.PrintStream;
 
@@ -52,6 +53,172 @@ public abstract class AbstractTextInterfaceDevice implements TextInterfaceDevice
 	public void exit()
 	{
 		this.exit(0);
+	}
+
+	/**
+	 * Prints a {@code char} to standard-out.
+	 *
+	 * @param c The {@code char} to be printed
+	 * @throws java.io.IOError if an I/O error occurs.
+	 */
+	@Override
+	public void printOut(char c) throws IOError
+	{
+		this.out.print(c);
+	}
+
+	/**
+	 * Prints a {@code String} to standard-out.
+	 *
+	 * @param s The {@code String} to be printed
+	 * @throws java.io.IOError if an I/O error occurs.
+	 */
+	@Override
+	public void printOut(String s) throws IOError
+	{
+		this.out.print(s);
+	}
+
+	/**
+	 * Prints an {@code Object} to standard-out.
+	 *
+	 * @param o The {@code Object} to be printed
+	 * @throws java.io.IOError if an I/O error occurs.
+	 */
+	@Override
+	public void printOut(Object o) throws IOError
+	{
+		this.out.print(o);
+	}
+
+	/**
+	 * Prints a {@code char} to standard-err.
+	 *
+	 * @param c The {@code char} to be printed
+	 * @throws java.io.IOError if an I/O error occurs.
+	 */
+	@Override
+	public void printErr(char c) throws IOError
+	{
+		this.err.print(c);
+	}
+
+	/**
+	 * Prints a {@code String} to standard-err.
+	 *
+	 * @param s The {@code String} to be printed
+	 * @throws java.io.IOError if an I/O error occurs.
+	 */
+	@Override
+	public void printErr(String s) throws IOError
+	{
+		this.err.print(s);
+	}
+
+	/**
+	 * Prints an {@code Object} to standard-out.
+	 *
+	 * @param o The {@code Object} to be printed
+	 * @throws java.io.IOError if an I/O error occurs.
+	 */
+	@Override
+	public void printErr(Object o) throws IOError
+	{
+		this.err.print(o);
+	}
+
+	/**
+	 * Terminates the current standard-out line by writing the line separator string.
+	 *
+	 * @throws java.io.IOError if an I/O error occurs.
+	 */
+	@Override
+	public void printOutLn() throws IOError
+	{
+		this.out.println();
+	}
+
+	/**
+	 * Prints a {@code char} to standard-out, then terminates the current line by writing the line separator string.
+	 *
+	 * @param c The {@code char} to be printed
+	 * @throws java.io.IOError if an I/O error occurs.
+	 */
+	@Override
+	public void printOutLn(char c) throws IOError
+	{
+		this.out.println(c);
+	}
+
+	/**
+	 * Prints a {@code String} to standard-out, then terminates the current line by writing the line separator string.
+	 *
+	 * @param s The {@code String} to be printed
+	 * @throws java.io.IOError if an I/O error occurs.
+	 */
+	@Override
+	public void printOutLn(String s) throws IOError
+	{
+		this.out.println(s);
+	}
+
+	/**
+	 * Prints an {@code Object} to standard-out, then terminates the current line by writing the line separator string.
+	 *
+	 * @param o The {@code Object} to be printed
+	 * @throws java.io.IOError if an I/O error occurs.
+	 */
+	@Override
+	public void printOutLn(Object o) throws IOError
+	{
+		this.out.println(o);
+	}
+
+	/**
+	 * Terminates the current standard-err line by writing the line separator string.
+	 *
+	 * @throws java.io.IOError if an I/O error occurs.
+	 */
+	@Override
+	public void printErrLn() throws IOError
+	{
+		this.err.println();
+	}
+
+	/**
+	 * Prints a {@code char} to standard-err, then terminates the current line by writing the line separator string.
+	 *
+	 * @param c The {@code char} to be printed
+	 * @throws java.io.IOError if an I/O error occurs.
+	 */
+	@Override
+	public void printErrLn(char c) throws IOError
+	{
+		this.err.println(c);
+	}
+
+	/**
+	 * Prints a {@code String} to standard-err, then terminates the current line by writing the line separator string.
+	 *
+	 * @param s The {@code String} to be printed
+	 * @throws java.io.IOError if an I/O error occurs.
+	 */
+	@Override
+	public void printErrLn(String s) throws IOError
+	{
+		this.err.println(s);
+	}
+
+	/**
+	 * Prints an {@code Object} to standard-err, then terminates the current line by writing the line separator string.
+	 *
+	 * @param o The {@code Object} to be printed
+	 * @throws java.io.IOError if an I/O error occurs.
+	 */
+	@Override
+	public void printErrLn(Object o) throws IOError
+	{
+		this.err.println(o);
 	}
 
 	/**

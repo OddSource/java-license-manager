@@ -1,5 +1,5 @@
 /*
- * TestConsoleUtilities.java from LicenseManager modified Tuesday, February 21, 2012 10:56:33 CST (-0600).
+ * TestConsoleUtilities.java from LicenseManager modified Sunday, March 4, 2012 12:41:41 CST (-0600).
  *
  * Copyright 2010-2012 the original author or authors.
  *
@@ -19,18 +19,11 @@
 package net.nicholaswilliams.java.licensing.licensor.interfaces.text;
 
 import net.nicholaswilliams.java.licensing.licensor.interfaces.text.abstraction.TextInterfaceDevice;
-import net.nicholaswilliams.java.mock.StateFlag;
+import org.easymock.Capture;
+import org.easymock.EasyMock;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-
-import java.io.IOError;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.PrintStream;
-import java.io.PrintWriter;
-import java.io.Reader;
-import java.util.IllegalFormatException;
 
 import static org.junit.Assert.*;
 
@@ -58,112 +51,36 @@ public class TestConsoleUtilities
 	}
 
 	@Test
-	public void testConfigureInterfaceDevice()
+	public void testConfigureInterfaceDevice() throws InterruptedException
 	{
-		final StateFlag registerShutdownHookCalled = new StateFlag();
+		TextInterfaceDevice textInterfaceDevice = EasyMock.createStrictMock(TextInterfaceDevice.class);
 
-		ConsoleUtilities.configureInterfaceDevice(new TextInterfaceDevice()
-			{
-				@Override
-				public void registerShutdownHook(Thread hook)
-						throws IllegalArgumentException, IllegalStateException, SecurityException
-				{
-					assertNotNull("The thread should not be null.", hook);
-					hook.run();
-					registerShutdownHookCalled.state = true;
-				}
+		Capture<Thread> threadCapture = new Capture<Thread>();
 
-				@Override
-				public boolean unregisterShutdownHook(Thread hook) throws IllegalStateException, SecurityException
-				{
-					throw new UnsupportedOperationException("For testing purposes only.");
-				}
+		textInterfaceDevice.registerShutdownHook(EasyMock.capture(threadCapture));
+		EasyMock.expectLastCall();
+		textInterfaceDevice.printOutLn();
+		EasyMock.expectLastCall();
 
-				@Override
-				public void exit()
-				{
-					throw new UnsupportedOperationException("For testing purposes only.");
-				}
+		EasyMock.replay(textInterfaceDevice);
 
-				@Override
-				public void exit(int exitCode)
-				{
-					throw new UnsupportedOperationException("For testing purposes only.");
-				}
+		ConsoleUtilities.configureInterfaceDevice(textInterfaceDevice);
 
-				@Override
-				public TextInterfaceDevice format(String format, Object... arguments) throws IllegalFormatException
-				{
-					throw new UnsupportedOperationException("For testing purposes only.");
-				}
+		Thread captured = threadCapture.getValue();
 
-				@Override
-				public TextInterfaceDevice printf(String format, Object... arguments) throws IllegalFormatException, IOError
-				{
-					throw new UnsupportedOperationException("For testing purposes only.");
-				}
+		assertNotNull("The thread should not be null.", captured);
 
-				@Override
-				public String readLine() throws IOError
-				{
-					throw new UnsupportedOperationException("For testing purposes only.");
-				}
+		captured.start();
 
-				@Override
-				public String readLine(String format, Object... arguments) throws IllegalFormatException, IOError
-				{
-					throw new UnsupportedOperationException("For testing purposes only.");
-				}
+		int i = 0;
+		while(captured.getState() != Thread.State.TERMINATED && i < 10)
+		{
+			Thread.sleep(100);
+			i++;
+		}
 
-				@Override
-				public char[] readPassword() throws IOError
-				{
-					throw new UnsupportedOperationException("For testing purposes only.");
-				}
+		assertTrue("The thread took too long to complete.", i < 10);
 
-				@Override
-				public char[] readPassword(String format, Object... arguments) throws IllegalFormatException, IOError
-				{
-					throw new UnsupportedOperationException("For testing purposes only.");
-				}
-
-				@Override
-				public Reader getReader()
-				{
-					throw new UnsupportedOperationException("For testing purposes only.");
-				}
-
-				@Override
-				public PrintWriter getWriter()
-				{
-					throw new UnsupportedOperationException("For testing purposes only.");
-				}
-
-				@Override
-				public InputStream in()
-				{
-					throw new UnsupportedOperationException("For testing purposes only.");
-				}
-
-				@Override
-				public PrintStream out()
-				{
-					throw new UnsupportedOperationException("For testing purposes only.");
-				}
-
-				@Override
-				public PrintStream err()
-				{
-					throw new UnsupportedOperationException("For testing purposes only.");
-				}
-
-				@Override
-				public void flush() throws IOException
-				{
-					throw new UnsupportedOperationException("For testing purposes only.");
-				}
-		});
-
-		assertTrue("registerShutdownHook should have been called.", registerShutdownHookCalled.state);
+		EasyMock.verify(textInterfaceDevice);
 	}
 }

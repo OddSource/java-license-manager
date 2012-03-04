@@ -1,5 +1,5 @@
 /*
- * TestRSAKeyPairGenerator.java from LicenseManager modified Tuesday, February 21, 2012 10:56:34 CST (-0600).
+ * TestRSAKeyPairGenerator.java from LicenseManager modified Sunday, March 4, 2012 10:29:32 CST (-0600).
  *
  * Copyright 2010-2012 the original author or authors.
  *
@@ -43,8 +43,6 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.net.URI;
 import java.security.KeyPair;
-import java.security.PrivateKey;
-import java.security.PublicKey;
 import java.security.SecureClassLoader;
 import java.util.ArrayList;
 import java.util.List;
@@ -224,7 +222,7 @@ public class TestRSAKeyPairGenerator
 		assertNotNull("The code should not be null.", code);
 		assertTrue("The code should have length.", code.length() > 0);
 		assertEquals("The code is not correct.",
-					 "new byte[] {\n\t\t\t\t0x00000001, 0x00000006, 0x0000003F, 0x0000007A, 0xFFFFFF80, 0x00000041\n\t\t}", code);
+					 "new byte[] {\r\n\t\t\t\t0x00000001, 0x00000006, 0x0000003F, 0x0000007A, 0xFFFFFF80, 0x00000041\r\n\t\t}", code);
 	}
 
 	@Test
@@ -235,7 +233,7 @@ public class TestRSAKeyPairGenerator
 		assertNotNull("The code should not be null.", code);
 		assertTrue("The code should have length.", code.length() > 0);
 		assertEquals("The code is not correct.",
-					 "new char[] {\n\t\t\t\t0x0000007A, 0x00000041, 0x00000002, 0x00000004, 0x00000006\n\t\t}", code);
+					 "new char[] {\r\n\t\t\t\t0x0000007A, 0x00000041, 0x00000002, 0x00000004, 0x00000006\r\n\t\t}", code);
 	}
 
 	@Test
@@ -249,11 +247,11 @@ public class TestRSAKeyPairGenerator
 		assertNotNull("The code should not be null.", code);
 		assertTrue("The code should have length.", code.length() > 0);
 		assertEquals("The code is not correct.",
-					 "new short[] {\n\t\t\t\t" +
+					 "new short[] {\r\n\t\t\t\t" +
 					 	 "0x0000007A, 0x00000041, 0x00000002, 0x00000004, 0x00000006, 0x00000001, 0x00000006, " +
-						 "0x0000003F, \n\t\t\t\t0x0000007A, 0x00000015, 0x00000041, 0x00000041, 0x00000015, " +
-						 "0x0000007A, 0x00000006, 0x0000003F, \n\t\t\t\t0x00000004, 0x00000041, 0x0000007A, " +
-						 "0x00000006\n\t\t}",
+						 "0x0000003F, \r\n\t\t\t\t0x0000007A, 0x00000015, 0x00000041, 0x00000041, 0x00000015, " +
+						 "0x0000007A, 0x00000006, 0x0000003F, \r\n\t\t\t\t0x00000004, 0x00000041, 0x0000007A, " +
+						 "0x00000006\r\n\t\t}",
 					 code);
 	}
 
@@ -274,7 +272,7 @@ public class TestRSAKeyPairGenerator
 		);
 
 		if(!task.call())
-			fail("Compiling of generated class did not succeed. Java code:\n" + code + "\nCompiler output:\n" + compilerOutput.toString());
+			fail("Compiling of generated class did not succeed. Java code:\r\n" + code + "\r\nCompiler output:\r\n" + compilerOutput.toString());
 
 		return fileManager;
 	}
@@ -296,13 +294,13 @@ public class TestRSAKeyPairGenerator
 		assertNotNull("The code should not be null.", code);
 		assertTrue("The code should have length.", code.length() > 0);
 		assertEquals("The code is not correct.",
-					 "public final class TestGenerateJavaCode01\n" +
-					 "{\n" +
-					 "\tpublic final String testMethod01(String concatenate)\n" +
-					 "\t{\n" +
-					 "\t\treturn concatenate + \" some other cool text.\";\n" +
-					 "\t}\n" +
-					 "}\n",
+					 "public final class TestGenerateJavaCode01\r\n" +
+					 "{\r\n" +
+					 "\tpublic final String testMethod01(String concatenate)\r\n" +
+					 "\t{\r\n" +
+					 "\t\treturn concatenate + \" some other cool text.\";\r\n" +
+					 "\t}\r\n" +
+					 "}",
 					 code);
 
 		JavaFileManager compiled = this.compileClass("TestGenerateJavaCode01", code);
@@ -336,18 +334,18 @@ public class TestRSAKeyPairGenerator
 		assertNotNull("The code should not be null.", code);
 		assertTrue("The code should have length.", code.length() > 0);
 		assertEquals("The code is not correct.",
-					 "package com.nicholaswilliams.java.mock;\n" +
-					 "\n" +
-					 "import net.nicholaswilliams.java.licensing.encryption.TestRSAKeyPairGenerator;\n" +
-					 "\n" +
-					 "public final class TestGenerateJavaCode02 implements TestRSAKeyPairGenerator.TestDynamicCompileInterface\n" +
-					 "{\n" +
-					 "\t@Override\n" +
-					 "\tpublic long getSystemTimeInSeconds()\n" +
-					 "\t{\n" +
-					 "\t\treturn System.currentTimeMillis() / 1000L;\n" +
-					 "\t}\n" +
-					 "}\n",
+					 "package com.nicholaswilliams.java.mock;\r\n" +
+					 "\r\n" +
+					 "import net.nicholaswilliams.java.licensing.encryption.TestRSAKeyPairGenerator;\r\n" +
+					 "\r\n" +
+					 "public final class TestGenerateJavaCode02 implements TestRSAKeyPairGenerator.TestDynamicCompileInterface\r\n" +
+					 "{\r\n" +
+					 "\t@Override\r\n" +
+					 "\tpublic long getSystemTimeInSeconds()\r\n" +
+					 "\t{\r\n" +
+					 "\t\treturn System.currentTimeMillis() / 1000L;\r\n" +
+					 "\t}\r\n" +
+					 "}",
 					 code);
 
 		JavaFileManager compiled = this.compileClass("com.nicholaswilliams.java.mock.TestGenerateJavaCode02", code);
@@ -369,7 +367,7 @@ public class TestRSAKeyPairGenerator
 	}
 
 	@Test
-	public void testSaveToProviders01() throws ClassNotFoundException, IllegalAccessException, InstantiationException
+	public void testSaveKeysToProviders01() throws ClassNotFoundException, IllegalAccessException, InstantiationException
 	{
 		String pn = "com.nicholaswilliams.mock";
 
@@ -383,15 +381,10 @@ public class TestRSAKeyPairGenerator
 		publicKPDescriptor.setPackageName(pn);
 		publicKPDescriptor.setClassName("TestPublicKeyProvider01");
 
-		RSAKeyPairGeneratorInterface.GeneratedClassDescriptor passwordPDescriptor =
-				new RSAKeyPairGeneratorInterface.GeneratedClassDescriptor();
-		passwordPDescriptor.setPackageName(pn);
-		passwordPDescriptor.setClassName("TestKeyPasswordProvider01");
-
 		KeyPair keyPair = this.generator.generateKeyPair();
 
 		this.generator.saveKeyPairToProviders(
-				keyPair, privateKPDescriptor, publicKPDescriptor, passwordPDescriptor, "testPassword01".toCharArray()
+				keyPair, privateKPDescriptor, publicKPDescriptor, "testPassword01".toCharArray()
 		);
 
 		///////////////////////
@@ -423,36 +416,10 @@ public class TestRSAKeyPairGenerator
 		byte[] publicKeyData = publicKeyDataProvider.getEncryptedPublicKeyData();
 		assertNotNull("The public key data should not be null.", publicKeyData);
 		assertTrue("The public key data should have length.", publicKeyData.length > 0);
-
-		///////////////////////
-		assertNotNull("The key password code should not be null.", passwordPDescriptor.getJavaFileContents());
-		assertTrue("The key password code should have length.", passwordPDescriptor.getJavaFileContents().length() > 0);
-
-		Class<?> passwordPClass = this.compileClass(
-				pn + ".TestKeyPasswordProvider01", passwordPDescriptor.getJavaFileContents()
-		).getClassLoader(null).loadClass(pn + ".TestKeyPasswordProvider01");
-
-		KeyPasswordProvider keyPasswordProvider = (KeyPasswordProvider)passwordPClass.newInstance();
-		assertNotNull("The key password provider should not be null.", keyPasswordProvider);
-
-		char[] password = keyPasswordProvider.getKeyPassword();
-		assertNotNull("The key password should not be null.", password);
-		assertTrue("The key password should have length.", password.length > 0);
-
-		///////////////////////
-		assertEquals("The password is not correct.", "testPassword01", new String(password));
-
-		PrivateKey privateKey = KeyFileUtilities.readEncryptedPrivateKey(privateKeyData, password);
-		assertNotNull("The private key should not be null.", privateKey);
-		assertEquals("The private keys do not match.", keyPair.getPrivate(), privateKey);
-
-		PublicKey publicKey = KeyFileUtilities.readEncryptedPublicKey(publicKeyData, password);
-		assertNotNull("The public key should not be null.", publicKey);
-		assertEquals("The public keys do not match.", keyPair.getPublic(), publicKey);
 	}
 
 	@Test
-	public void testSaveToProviders02() throws ClassNotFoundException, IllegalAccessException, InstantiationException
+	public void testSaveKeysToProviders02() throws ClassNotFoundException, IllegalAccessException, InstantiationException
 	{
 		String pn = "com.nicholaswilliams.another";
 
@@ -466,15 +433,10 @@ public class TestRSAKeyPairGenerator
 		publicKPDescriptor.setPackageName(pn);
 		publicKPDescriptor.setClassName("TestPublicKeyProvider02");
 
-		RSAKeyPairGeneratorInterface.GeneratedClassDescriptor passwordPDescriptor =
-				new RSAKeyPairGeneratorInterface.GeneratedClassDescriptor();
-		passwordPDescriptor.setPackageName(pn);
-		passwordPDescriptor.setClassName("TestKeyPasswordProvider02");
-
 		KeyPair keyPair = this.generator.generateKeyPair();
 
 		this.generator.saveKeyPairToProviders(
-				keyPair, privateKPDescriptor, publicKPDescriptor, passwordPDescriptor, "anotherPassword02".toCharArray()
+				keyPair, privateKPDescriptor, publicKPDescriptor, "anotherPassword02".toCharArray()
 		);
 
 		///////////////////////
@@ -506,8 +468,49 @@ public class TestRSAKeyPairGenerator
 		byte[] publicKeyData = publicKeyDataProvider.getEncryptedPublicKeyData();
 		assertNotNull("The public key data should not be null.", publicKeyData);
 		assertTrue("The public key data should have length.", publicKeyData.length > 0);
+	}
 
-		///////////////////////
+	@Test
+	public void testSavePasswordToProviders01() throws ClassNotFoundException, IllegalAccessException, InstantiationException
+	{
+		String pn = "com.nicholaswilliams.mock";
+
+		RSAKeyPairGeneratorInterface.GeneratedClassDescriptor passwordPDescriptor =
+				new RSAKeyPairGeneratorInterface.GeneratedClassDescriptor();
+		passwordPDescriptor.setPackageName(pn);
+		passwordPDescriptor.setClassName("TestKeyPasswordProvider01");
+
+		this.generator.savePasswordToProvider("testPassword01".toCharArray(), passwordPDescriptor);
+
+		assertNotNull("The key password code should not be null.", passwordPDescriptor.getJavaFileContents());
+		assertTrue("The key password code should have length.", passwordPDescriptor.getJavaFileContents().length() > 0);
+
+		Class<?> passwordPClass = this.compileClass(
+				pn + ".TestKeyPasswordProvider01", passwordPDescriptor.getJavaFileContents()
+		).getClassLoader(null).loadClass(pn + ".TestKeyPasswordProvider01");
+
+		KeyPasswordProvider keyPasswordProvider = (KeyPasswordProvider)passwordPClass.newInstance();
+		assertNotNull("The key password provider should not be null.", keyPasswordProvider);
+
+		char[] password = keyPasswordProvider.getKeyPassword();
+		assertNotNull("The key password should not be null.", password);
+		assertTrue("The key password should have length.", password.length > 0);
+
+		assertEquals("The password is not correct.", "testPassword01", new String(password));
+	}
+
+	@Test
+	public void testSavePasswordToProviders02() throws ClassNotFoundException, IllegalAccessException, InstantiationException
+	{
+		String pn = "com.nicholaswilliams.another";
+
+		RSAKeyPairGeneratorInterface.GeneratedClassDescriptor passwordPDescriptor =
+				new RSAKeyPairGeneratorInterface.GeneratedClassDescriptor();
+		passwordPDescriptor.setPackageName(pn);
+		passwordPDescriptor.setClassName("TestKeyPasswordProvider02");
+
+		this.generator.savePasswordToProvider("anotherPassword02".toCharArray(), passwordPDescriptor);
+
 		assertNotNull("The key password code should not be null.", passwordPDescriptor.getJavaFileContents());
 		assertTrue("The key password code should have length.", passwordPDescriptor.getJavaFileContents().length() > 0);
 
@@ -522,16 +525,7 @@ public class TestRSAKeyPairGenerator
 		assertNotNull("The key password should not be null.", password);
 		assertTrue("The key password should have length.", password.length > 0);
 
-		///////////////////////
 		assertEquals("The password is not correct.", "anotherPassword02", new String(password));
-
-		PrivateKey privateKey = KeyFileUtilities.readEncryptedPrivateKey(privateKeyData, password);
-		assertNotNull("The private key should not be null.", privateKey);
-		assertEquals("The private keys do not match.", keyPair.getPrivate(), privateKey);
-
-		PublicKey publicKey = KeyFileUtilities.readEncryptedPublicKey(publicKeyData, password);
-		assertNotNull("The public key should not be null.", publicKey);
-		assertEquals("The public keys do not match.", keyPair.getPublic(), publicKey);
 	}
 }
 

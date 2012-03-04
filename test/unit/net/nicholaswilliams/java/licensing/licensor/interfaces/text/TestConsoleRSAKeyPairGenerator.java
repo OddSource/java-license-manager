@@ -1,5 +1,5 @@
 /*
- * TestConsoleRSAKeyPairGenerator.java from LicenseManager modified Sunday, March 4, 2012 13:09:09 CST (-0600).
+ * TestConsoleRSAKeyPairGenerator.java from LicenseManager modified Sunday, March 4, 2012 13:41:27 CST (-0600).
  *
  * Copyright 2010-2012 the original author or authors.
  *
@@ -21,10 +21,14 @@ package net.nicholaswilliams.java.licensing.licensor.interfaces.text;
 import net.nicholaswilliams.java.licensing.encryption.RSAKeyPairGeneratorInterface;
 import net.nicholaswilliams.java.licensing.licensor.interfaces.text.abstraction.TextInterfaceDevice;
 import org.apache.commons.cli.CommandLineParser;
+import org.apache.commons.io.FileUtils;
 import org.easymock.EasyMock;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+
+import java.io.File;
+import java.io.IOException;
 
 import static org.junit.Assert.*;
 
@@ -331,5 +335,173 @@ public class TestConsoleRSAKeyPairGenerator
 		assertNotSame("The arrays should be different objects (2).", password2, password);
 		assertFalse("The arrays should not equal each other (1).", new String(password1).equals(new String(password)));
 		assertFalse("The arrays should not equal each other (2).", new String(password2).equals(new String(password)));
+	}
+
+	@Test
+	public void testPromptForString01()
+	{
+		EasyMock.expect(this.device.readLine("Test message 01")).andReturn(null);
+		this.device.printOutLn();
+		EasyMock.expectLastCall();
+
+		EasyMock.replay(this.generator, this.device, this.parser);
+
+		assertNull("The returned value should be null.", this.console.promptForString("Test message 01"));
+	}
+
+	@Test
+	public void testPromptForString02()
+	{
+		EasyMock.expect(this.device.readLine("Another message 02")).andReturn("");
+		this.device.printOutLn();
+		EasyMock.expectLastCall();
+
+		EasyMock.replay(this.generator, this.device, this.parser);
+
+		assertNull("The returned value should be null.", this.console.promptForString("Another message 02"));
+	}
+
+	@Test
+	public void testPromptForString03()
+	{
+		EasyMock.expect(this.device.readLine("Another message 03")).andReturn("     ");
+		this.device.printOutLn();
+		EasyMock.expectLastCall();
+
+		EasyMock.replay(this.generator, this.device, this.parser);
+
+		assertNull("The returned value should be null.", this.console.promptForString("Another message 03"));
+	}
+
+	@Test
+	public void testPromptForString04()
+	{
+		EasyMock.expect(this.device.readLine("Final message 04")).andReturn("Returned console value");
+		this.device.printOutLn();
+		EasyMock.expectLastCall();
+
+		EasyMock.replay(this.generator, this.device, this.parser);
+
+		assertEquals("The returned value should be null.", "Returned console value",
+					 this.console.promptForString("Final message 04"));
+	}
+
+	@Test
+	public void testCheckAndPromptToOverwriteFile01()
+	{
+		EasyMock.replay(this.generator, this.device, this.parser);
+
+		assertTrue("The value returned should be true.",
+				   this.console.checkAndPromptToOverwriteFile("testCheckAndPromptToOverwriteFile01"));
+	}
+
+	@Test
+	public void testCheckAndPromptToOverwriteFile02() throws IOException
+	{
+		File file = new File("testCheckAndPromptToOverwriteFile02");
+		FileUtils.writeStringToFile(file, "test string");
+
+		try
+		{
+			EasyMock.expect(this.device.readLine("The file \"%s\" already exists. Overwrite it (YES/no)? ",
+												 file.getCanonicalPath())).andReturn("y");
+
+			EasyMock.replay(this.generator, this.device, this.parser);
+
+			assertTrue("The value returned should be true.",
+					   this.console.checkAndPromptToOverwriteFile("testCheckAndPromptToOverwriteFile02"));
+		}
+		finally
+		{
+			FileUtils.forceDelete(file);
+		}
+	}
+
+	@Test
+	public void testCheckAndPromptToOverwriteFile03() throws IOException
+	{
+		File file = new File("testCheckAndPromptToOverwriteFile03");
+		FileUtils.writeStringToFile(file, "test string");
+
+		try
+		{
+			EasyMock.expect(this.device.readLine("The file \"%s\" already exists. Overwrite it (YES/no)? ",
+												 file.getCanonicalPath())).andReturn("Y");
+
+			EasyMock.replay(this.generator, this.device, this.parser);
+
+			assertTrue("The value returned should be true.",
+					   this.console.checkAndPromptToOverwriteFile("testCheckAndPromptToOverwriteFile03"));
+		}
+		finally
+		{
+			FileUtils.forceDelete(file);
+		}
+	}
+
+	@Test
+	public void testCheckAndPromptToOverwriteFile04() throws IOException
+	{
+		File file = new File("testCheckAndPromptToOverwriteFile04");
+		FileUtils.writeStringToFile(file, "test string");
+
+		try
+		{
+			EasyMock.expect(this.device.readLine("The file \"%s\" already exists. Overwrite it (YES/no)? ",
+												 file.getCanonicalPath())).andReturn("yes");
+
+			EasyMock.replay(this.generator, this.device, this.parser);
+
+			assertTrue("The value returned should be true.",
+					   this.console.checkAndPromptToOverwriteFile("testCheckAndPromptToOverwriteFile04"));
+		}
+		finally
+		{
+			FileUtils.forceDelete(file);
+		}
+	}
+
+	@Test
+	public void testCheckAndPromptToOverwriteFile05() throws IOException
+	{
+		File file = new File("testCheckAndPromptToOverwriteFile05");
+		FileUtils.writeStringToFile(file, "test string");
+
+		try
+		{
+			EasyMock.expect(this.device.readLine("The file \"%s\" already exists. Overwrite it (YES/no)? ",
+												 file.getCanonicalPath())).andReturn("");
+
+			EasyMock.replay(this.generator, this.device, this.parser);
+
+			assertTrue("The value returned should be true.",
+					   this.console.checkAndPromptToOverwriteFile("testCheckAndPromptToOverwriteFile05"));
+		}
+		finally
+		{
+			FileUtils.forceDelete(file);
+		}
+	}
+
+	@Test
+	public void testCheckAndPromptToOverwriteFile06() throws IOException
+	{
+		File file = new File("testCheckAndPromptToOverwriteFile06");
+		FileUtils.writeStringToFile(file, "test string");
+
+		try
+		{
+			EasyMock.expect(this.device.readLine("The file \"%s\" already exists. Overwrite it (YES/no)? ",
+												 file.getCanonicalPath())).andReturn("no");
+
+			EasyMock.replay(this.generator, this.device, this.parser);
+
+			assertFalse("The value returned should be true.",
+						this.console.checkAndPromptToOverwriteFile("testCheckAndPromptToOverwriteFile06"));
+		}
+		finally
+		{
+			FileUtils.forceDelete(file);
+		}
 	}
 }

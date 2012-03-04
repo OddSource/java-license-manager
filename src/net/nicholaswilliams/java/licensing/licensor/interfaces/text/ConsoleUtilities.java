@@ -1,5 +1,5 @@
 /*
- * ConsoleUtilities.java from LicenseManager modified Tuesday, February 21, 2012 10:56:33 CST (-0600).
+ * ConsoleUtilities.java from LicenseManager modified Sunday, March 4, 2012 12:37:29 CST (-0600).
  *
  * Copyright 2010-2012 the original author or authors.
  *
@@ -34,13 +34,13 @@ class ConsoleUtilities
 	 *
 	 * @param interfaceDevice The interface device to configure
 	 */
-	public static void configureInterfaceDevice(TextInterfaceDevice interfaceDevice)
+	public static void configureInterfaceDevice(final TextInterfaceDevice interfaceDevice)
 	{
 		interfaceDevice.registerShutdownHook(new Thread(new Runnable() {
 			@Override
 			public void run()
 			{
-				System.out.println();
+				interfaceDevice.printOutLn();
 			}
 		}));
 	}

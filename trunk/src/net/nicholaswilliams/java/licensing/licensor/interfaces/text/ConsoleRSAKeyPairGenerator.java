@@ -1,5 +1,5 @@
 /*
- * ConsoleRSAKeyPairGenerator.java from LicenseManager modified Sunday, March 4, 2012 13:19:30 CST (-0600).
+ * ConsoleRSAKeyPairGenerator.java from LicenseManager modified Sunday, March 4, 2012 13:40:09 CST (-0600).
  *
  * Copyright 2010-2012 the original author or authors.
  *
@@ -307,7 +307,7 @@ public class ConsoleRSAKeyPairGenerator
 			}
 			else
 			{
-				String answer = this.device.readLine("The file %s already exists. Overwrite it (YES/no)? ", filePath).
+				String answer = this.device.readLine("The file \"%s\" already exists. Overwrite it (YES/no)? ", filePath).
 						trim();
 				return answer.length() == 0 || answer.equalsIgnoreCase("y") || answer.equalsIgnoreCase("yes");
 			}

@@ -1,5 +1,5 @@
 /*
- * TestLicenseManager.java from LicenseManager modified Monday, March 5, 2012 13:21:22 CST (-0600).
+ * TestLicenseManager.java from LicenseManager modified Monday, March 5, 2012 14:09:47 CST (-0600).
  *
  * Copyright 2010-2012 the original author or authors.
  *
@@ -46,9 +46,13 @@ public class TestLicenseManager
 {
 	private static final char[] keyPassword = "testLicenseManagerPassword".toCharArray();
 
+	private static final char[] licensePassword = "testLicensePassword".toCharArray();
+
 	private static LicenseProvider licenseProvider;
 
-	private static PasswordProvider passwordProvider;
+	private static PasswordProvider publicKeyPasswordProvider;
+
+	private static PasswordProvider licensePasswordProvider;
 
 	private static PublicKeyDataProvider keyDataProvider;
 
@@ -66,13 +70,15 @@ public class TestLicenseManager
 		TestLicenseManager.control = EasyMock.createStrictControl();
 
 		TestLicenseManager.licenseProvider = TestLicenseManager.control.createMock(LicenseProvider.class);
-		TestLicenseManager.passwordProvider = TestLicenseManager.control.createMock(PasswordProvider.class);
+		TestLicenseManager.publicKeyPasswordProvider = TestLicenseManager.control.createMock(PasswordProvider.class);
+		TestLicenseManager.licensePasswordProvider = TestLicenseManager.control.createMock(PasswordProvider.class);
 		TestLicenseManager.keyDataProvider = TestLicenseManager.control.createMock(PublicKeyDataProvider.class);
 		TestLicenseManager.licenseValidator = TestLicenseManager.control.createMock(LicenseValidator.class);
 
-		LicenseManagerProperties.setLicenseProvider(TestLicenseManager.licenseProvider);
-		LicenseManagerProperties.setPasswordProvider(TestLicenseManager.passwordProvider);
 		LicenseManagerProperties.setPublicKeyDataProvider(TestLicenseManager.keyDataProvider);
+		LicenseManagerProperties.setPublicKeyPasswordProvider(TestLicenseManager.publicKeyPasswordProvider);
+		LicenseManagerProperties.setLicenseProvider(TestLicenseManager.licenseProvider);
+		LicenseManagerProperties.setLicensePasswordProvider(TestLicenseManager.licensePasswordProvider);
 		LicenseManagerProperties.setLicenseValidator(TestLicenseManager.licenseValidator);
 		LicenseManagerProperties.setCacheTimeInMinutes(0);
 
@@ -84,7 +90,7 @@ public class TestLicenseManager
 
 		ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
 		X509EncodedKeySpec x509EncodedKeySpec = new X509EncodedKeySpec(keyPair.getPublic().getEncoded());
-		IOUtils.write(Encryptor.encryptRaw(x509EncodedKeySpec.getEncoded(), keyPassword), outputStream);
+		IOUtils.write(Encryptor.encryptRaw(x509EncodedKeySpec.getEncoded(), TestLicenseManager.keyPassword), outputStream);
 		TestLicenseManager.encryptedPublicKey = outputStream.toByteArray();
 	}
 
@@ -132,12 +138,13 @@ public class TestLicenseManager
 									withFeature("allisonFeature2").
 									build();
 
-		byte[] data = Encryptor.encryptRaw(license.serialize());
+		byte[] data = Encryptor.encryptRaw(license.serialize(), TestLicenseManager.licensePassword);
 		byte[] signature = new DataSignatureManager().signData(TestLicenseManager.privateKey, data);
 
 		EasyMock.expect(TestLicenseManager.licenseProvider.getLicense("LICENSE-2")).andReturn(new SignedLicense(data, signature));
-		EasyMock.expect(TestLicenseManager.passwordProvider.getPassword()).andReturn(keyPassword.clone());
+		EasyMock.expect(TestLicenseManager.publicKeyPasswordProvider.getPassword()).andReturn(keyPassword.clone());
 		EasyMock.expect(TestLicenseManager.keyDataProvider.getEncryptedPublicKeyData()).andReturn(encryptedPublicKey.clone());
+		EasyMock.expect(TestLicenseManager.licensePasswordProvider.getPassword()).andReturn(licensePassword.clone());
 		TestLicenseManager.control.replay();
 
 		License returned = this.manager.getLicense("LICENSE-2");
@@ -162,12 +169,13 @@ public class TestLicenseManager
 									withFeature("feature#5").
 									build();
 
-		byte[] data = Encryptor.encryptRaw(license.serialize());
+		byte[] data = Encryptor.encryptRaw(license.serialize(), TestLicenseManager.licensePassword);
 		byte[] signature = new DataSignatureManager().signData(TestLicenseManager.privateKey, data);
 
 		EasyMock.expect(TestLicenseManager.licenseProvider.getLicense(context)).andReturn(new SignedLicense(data, signature));
-		EasyMock.expect(TestLicenseManager.passwordProvider.getPassword()).andReturn(keyPassword.clone());
+		EasyMock.expect(TestLicenseManager.publicKeyPasswordProvider.getPassword()).andReturn(keyPassword.clone());
 		EasyMock.expect(TestLicenseManager.keyDataProvider.getEncryptedPublicKeyData()).andReturn(encryptedPublicKey.clone());
+		EasyMock.expect(TestLicenseManager.licensePasswordProvider.getPassword()).andReturn(licensePassword.clone());
 
 		return license;
 	}

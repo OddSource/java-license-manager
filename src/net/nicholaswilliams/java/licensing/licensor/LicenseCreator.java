@@ -1,5 +1,5 @@
 /*
- * LicenseCreator.java from LicenseManager modified Monday, March 5, 2012 13:21:22 CST (-0600).
+ * LicenseCreator.java from LicenseManager modified Monday, March 5, 2012 14:17:02 CST (-0600).
  *
  * Copyright 2010-2012 the original author or authors.
  *
@@ -41,11 +41,11 @@ import java.util.Arrays;
  * in the package of classes (net.nicholaswilliams.java.licensing.licensor) that is packaged separately from the
  * distributable client binary.<br />
  * <br />
- * Before getting the creator instance for the first time, relevant properties should be set in {@link LicenseCreatorProperties}.
- * The values in this class will be used to instantiate the license creator. After setting all the necessary
- * properties there, one can retrieve an instance using {@link #getInstance()}. Be sure to set all the properties
- * first; once {@link #getInstance()} is called for the first time, any changes to {@link LicenseCreatorProperties} will be
- * ignored.<br />
+ * Before getting the creator instance for the first time, relevant properties should be set in
+ * {@link LicenseCreatorProperties}. The values in this class will be used to instantiate the license creator.
+ * After setting all the necessary properties there, one can retrieve an instance using {@link #getInstance()}. Be
+ * sure to set all the properties first; once {@link #getInstance()} is called for the first time, any changes to
+ * {@link LicenseCreatorProperties} will be ignored.<br />
  *
  * @author Nick Williams
  * @version 1.0.6
@@ -55,19 +55,19 @@ public final class LicenseCreator
 {
 	private static final LicenseCreator instance = new LicenseCreator();
 
-	private final PasswordProvider passwordProvider;
-
 	private final PrivateKeyDataProvider privateKeyDataProvider;
+
+	private final PasswordProvider privateKeyPasswordProvider;
 
 	private LicenseCreator()
 	{
 		if(LicenseCreatorProperties.getPrivateKeyDataProvider() == null)
 			throw new IllegalArgumentException("Parameter privateKeyDataProvider must not be null.");
 
-		if(LicenseCreatorProperties.getPasswordProvider() == null)
+		if(LicenseCreatorProperties.getPrivateKeyPasswordProvider() == null)
 			throw new IllegalArgumentException("Parameter privateKeyDataProvider must not be null.");
 
-		this.passwordProvider = LicenseCreatorProperties.getPasswordProvider();
+		this.privateKeyPasswordProvider = LicenseCreatorProperties.getPrivateKeyPasswordProvider();
 		this.privateKeyDataProvider = LicenseCreatorProperties.getPrivateKeyDataProvider();
 	}
 
@@ -76,11 +76,49 @@ public final class LicenseCreator
 	 * bet set in {@link LicenseCreatorProperties}. See the documentation for that class for more details.
 	 *
 	 * @return the license creator instance.
-	 * @throws IllegalArgumentException if {@link LicenseCreatorProperties#setPrivateKeyDataProvider(PrivateKeyDataProvider) privateKeyDataProvider} or {@link LicenseCreatorProperties#setPasswordProvider(net.nicholaswilliams.java.licensing.encryption.PasswordProvider) passwordProvider} are null
+	 * @throws IllegalArgumentException if {@link LicenseCreatorProperties#setPrivateKeyDataProvider(PrivateKeyDataProvider) privateKeyDataProvider} or {@link LicenseCreatorProperties#setPrivateKeyPasswordProvider(PasswordProvider) privateKeyPasswordProvider} are null
 	 */
 	public static LicenseCreator getInstance()
 	{
 		return LicenseCreator.instance;
+	}
+
+	/**
+	 * Takes a license object and creates a secure version of it for serialization and delivery to the customer.
+	 *
+	 * @param license The license object to be signed
+	 * @param licensePassword The password to encrypt the license with
+	 * @return the signed license object.
+	 * @throws AlgorithmNotSupportedException if the encryption algorithm is not supported.
+	 * @throws KeyNotFoundException if the public key data could not be found.
+	 * @throws InappropriateKeySpecificationException if an inappropriate key specification is provided.
+	 * @throws InappropriateKeyException if the key type and cipher type do not match.
+	 */
+	public final SignedLicense signLicense(License license, char[] licensePassword)
+			throws AlgorithmNotSupportedException, KeyNotFoundException, InappropriateKeySpecificationException,
+				   InappropriateKeyException
+	{
+		PrivateKey key;
+		{
+			char[] password = this.privateKeyPasswordProvider.getPassword();
+			byte[] keyData = this.privateKeyDataProvider.getEncryptedPrivateKeyData();
+
+			key = KeyFileUtilities.readEncryptedPrivateKey(keyData, password);
+
+			Arrays.fill(password, '\u0000');
+			Arrays.fill(keyData, (byte)0);
+		}
+
+		byte[] encrypted = Encryptor.encryptRaw(license.serialize(), licensePassword);
+
+		byte[] signature = new DataSignatureManager().signData(key, encrypted);
+
+		SignedLicense signed = new SignedLicense(encrypted, signature);
+
+		Arrays.fill(encrypted, (byte)0);
+		Arrays.fill(signature, (byte)0);
+
+		return signed;
 	}
 
 	/**
@@ -97,27 +135,26 @@ public final class LicenseCreator
 			throws AlgorithmNotSupportedException, KeyNotFoundException, InappropriateKeySpecificationException,
 				   InappropriateKeyException
 	{
-		PrivateKey key;
-		{
-			char[] password = this.passwordProvider.getPassword();
-			byte[] keyData = this.privateKeyDataProvider.getEncryptedPrivateKeyData();
+		return this.signLicense(license, this.privateKeyPasswordProvider.getPassword());
+	}
 
-			key = KeyFileUtilities.readEncryptedPrivateKey(keyData, password);
-
-			Arrays.fill(password, '\u0000');
-			Arrays.fill(keyData, (byte)0);
-		}
-
-		byte[] encrypted = Encryptor.encryptRaw(license.serialize());
-
-		byte[] signature = new DataSignatureManager().signData(key, encrypted);
-
-		SignedLicense signed = new SignedLicense(encrypted, signature);
-
-		Arrays.fill(encrypted, (byte)0);
-		Arrays.fill(signature, (byte)0);
-
-		return signed;
+	/**
+	 * Takes a license object and creates a secure and serialized version of it for delivery to the customer.
+	 *
+	 * @param license The license object to be signed and serialized
+	 * @return the signed and serialized license object.
+	 * @param licensePassword The password to encrypt the license with
+	 * @throws AlgorithmNotSupportedException if the encryption algorithm is not supported.
+	 * @throws KeyNotFoundException if the public key data could not be found.
+	 * @throws InappropriateKeySpecificationException if an inappropriate key specification is provided.
+	 * @throws InappropriateKeyException if the key type and cipher type do not match.
+	 * @throws ObjectSerializationException if an error is encountered while serializing the key.
+	 */
+	public final byte[] signAndSerializeLicense(License license, char[] licensePassword)
+			throws AlgorithmNotSupportedException, KeyNotFoundException, InappropriateKeySpecificationException,
+				   InappropriateKeyException, ObjectSerializationException
+	{
+		return new ObjectSerializer().writeObject(this.signLicense(license, licensePassword));
 	}
 
 	/**

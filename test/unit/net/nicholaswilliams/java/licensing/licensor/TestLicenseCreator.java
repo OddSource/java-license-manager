@@ -1,5 +1,5 @@
 /*
- * TestLicenseCreator.java from LicenseManager modified Monday, March 5, 2012 13:21:22 CST (-0600).
+ * TestLicenseCreator.java from LicenseManager modified Monday, March 5, 2012 13:57:30 CST (-0600).
  *
  * Copyright 2010-2012 the original author or authors.
  *
@@ -49,6 +49,8 @@ public class TestLicenseCreator
 {
 	private static final char[] keyPassword = "testLicenseCreatorPassword".toCharArray();
 
+	private static final char[] licensePassword = "testLicensePassword".toCharArray();
+
 	private static PasswordProvider passwordProvider;
 
 	private static PrivateKeyDataProvider keyDataProvider;
@@ -67,7 +69,7 @@ public class TestLicenseCreator
 		TestLicenseCreator.passwordProvider = TestLicenseCreator.control.createMock(PasswordProvider.class);
 		TestLicenseCreator.keyDataProvider = TestLicenseCreator.control.createMock(PrivateKeyDataProvider.class);
 
-		LicenseCreatorProperties.setPasswordProvider(TestLicenseCreator.passwordProvider);
+		LicenseCreatorProperties.setPrivateKeyPasswordProvider(TestLicenseCreator.passwordProvider);
 		LicenseCreatorProperties.setPrivateKeyDataProvider(TestLicenseCreator.keyDataProvider);
 
 		LicenseCreator.getInstance();
@@ -106,6 +108,8 @@ public class TestLicenseCreator
 	{
 		EasyMock.expect(TestLicenseCreator.passwordProvider.getPassword()).
 				andReturn(TestLicenseCreator.keyPassword.clone());
+		EasyMock.expect(TestLicenseCreator.passwordProvider.getPassword()).
+				andReturn(TestLicenseCreator.keyPassword.clone());
 		EasyMock.expect(TestLicenseCreator.keyDataProvider.getEncryptedPrivateKeyData()).
 				andReturn(TestLicenseCreator.encryptedPrivateKey.clone());
 
@@ -127,7 +131,44 @@ public class TestLicenseCreator
 				TestLicenseCreator.publicKey, signedLicense.getLicenseContent(), signedLicense.getSignatureContent()
 		);
 
-		byte[] unencrypted = Encryptor.decryptRaw(signedLicense.getLicenseContent());
+		byte[] unencrypted = Encryptor.decryptRaw(signedLicense.getLicenseContent(), TestLicenseCreator.keyPassword);
+
+		assertNotNull("The unencrypted license data should not be null.", unencrypted);
+
+		License returned = LicenseHelper.deserialize(unencrypted);
+
+		assertNotNull("The returned license should not be null.", returned);
+
+		assertEquals("The license should be equal.", license, returned);
+	}
+
+	@Test
+	public void testLicenseSigning02()
+	{
+		EasyMock.expect(TestLicenseCreator.passwordProvider.getPassword()).
+				andReturn(TestLicenseCreator.keyPassword.clone());
+		EasyMock.expect(TestLicenseCreator.keyDataProvider.getEncryptedPrivateKeyData()).
+				andReturn(TestLicenseCreator.encryptedPrivateKey.clone());
+
+		TestLicenseCreator.control.replay();
+
+		License license = new License.Builder().
+									withSubject("myLicense").
+									withNumberOfLicenses(22).
+									withFeature("newFeature").
+									build();
+
+		SignedLicense signedLicense = this.creator.signLicense(license, TestLicenseCreator.licensePassword);
+
+		assertNotNull("The signed license should not be null.", signedLicense);
+		assertNotNull("The license signature should not be null.", signedLicense.getSignatureContent());
+		assertNotNull("The license content should not be null.", signedLicense.getLicenseContent());
+
+		new DataSignatureManager().verifySignature(
+				TestLicenseCreator.publicKey, signedLicense.getLicenseContent(), signedLicense.getSignatureContent()
+		);
+
+		byte[] unencrypted = Encryptor.decryptRaw(signedLicense.getLicenseContent(), TestLicenseCreator.licensePassword);
 
 		assertNotNull("The unencrypted license data should not be null.", unencrypted);
 
@@ -141,6 +182,8 @@ public class TestLicenseCreator
 	@Test
 	public void testLicenseSigningAndSerializing01()
 	{
+		EasyMock.expect(TestLicenseCreator.passwordProvider.getPassword()).
+				andReturn(TestLicenseCreator.keyPassword.clone());
 		EasyMock.expect(TestLicenseCreator.passwordProvider.getPassword()).
 				andReturn(TestLicenseCreator.keyPassword.clone());
 		EasyMock.expect(TestLicenseCreator.keyDataProvider.getEncryptedPrivateKeyData()).
@@ -169,7 +212,49 @@ public class TestLicenseCreator
 				TestLicenseCreator.publicKey, signedLicense.getLicenseContent(), signedLicense.getSignatureContent()
 		);
 
-		byte[] unencrypted = Encryptor.decryptRaw(signedLicense.getLicenseContent());
+		byte[] unencrypted = Encryptor.decryptRaw(signedLicense.getLicenseContent(), TestLicenseCreator.keyPassword);
+
+		assertNotNull("The unencrypted license data should not be null.", unencrypted);
+
+		License returned = LicenseHelper.deserialize(unencrypted);
+
+		assertNotNull("The returned license should not be null.", returned);
+
+		assertEquals("The license should be equal.", license, returned);
+	}
+
+	@Test
+	public void testLicenseSigningAndSerializing02()
+	{
+		EasyMock.expect(TestLicenseCreator.passwordProvider.getPassword()).
+				andReturn(TestLicenseCreator.keyPassword.clone());
+		EasyMock.expect(TestLicenseCreator.keyDataProvider.getEncryptedPrivateKeyData()).
+				andReturn(TestLicenseCreator.encryptedPrivateKey.clone());
+
+		TestLicenseCreator.control.replay();
+
+		License license = new License.Builder().
+									withSubject("myLicense").
+									withNumberOfLicenses(22).
+									withFeature("newFeature").
+									build();
+
+		byte[] signedLicenseData = this.creator.signAndSerializeLicense(license, TestLicenseCreator.licensePassword);
+
+		assertNotNull("The signed license data should not be null.", signedLicenseData);
+		assertTrue("The signed license data should not be blank.", signedLicenseData.length > 0);
+
+		SignedLicense signedLicense = new ObjectSerializer().readObject(SignedLicense.class, signedLicenseData);
+
+		assertNotNull("The signed license should not be null.", signedLicense);
+		assertNotNull("The license signature should not be null.", signedLicense.getSignatureContent());
+		assertNotNull("The license content should not be null.", signedLicense.getLicenseContent());
+
+		new DataSignatureManager().verifySignature(
+				TestLicenseCreator.publicKey, signedLicense.getLicenseContent(), signedLicense.getSignatureContent()
+		);
+
+		byte[] unencrypted = Encryptor.decryptRaw(signedLicense.getLicenseContent(), TestLicenseCreator.licensePassword);
 
 		assertNotNull("The unencrypted license data should not be null.", unencrypted);
 

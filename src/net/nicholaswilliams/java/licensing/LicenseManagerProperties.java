@@ -1,5 +1,5 @@
 /*
- * LicenseManagerProperties.java from LicenseManager modified Monday, March 5, 2012 13:10:33 CST (-0600).
+ * LicenseManagerProperties.java from LicenseManager modified Monday, March 5, 2012 13:31:38 CST (-0600).
  *
  * Copyright 2010-2012 the original author or authors.
  *
@@ -31,15 +31,52 @@ import net.nicholaswilliams.java.licensing.encryption.PublicKeyDataProvider;
  */
 public final class LicenseManagerProperties
 {
-	private static PasswordProvider passwordProvider;
-
 	private static PublicKeyDataProvider publicKeyDataProvider;
 
+	private static PasswordProvider publicKeyPasswordProvider;
+
 	private static LicenseProvider licenseProvider;
+
+	private static PasswordProvider licensePasswordProvider;
 
 	private static LicenseValidator licenseValidator;
 
 	private static int cacheTimeInMinutes;
+
+	/**
+	 * Sets the provider of the data for the public key companion to the private key used to sign the license
+	 * object.<br />
+	 * <br />
+	 * This field is <b>required</b>.
+	 *
+	 * @param publicKeyDataProvider The provider of the data for the public key companion to the private key used to sign the license object
+	 */
+	public static void setPublicKeyDataProvider(PublicKeyDataProvider publicKeyDataProvider)
+	{
+		LicenseManagerProperties.publicKeyDataProvider = publicKeyDataProvider;
+	}
+
+	static PublicKeyDataProvider getPublicKeyDataProvider()
+	{
+		return LicenseManagerProperties.publicKeyDataProvider;
+	}
+
+	/**
+	 * Sets the provider of the password for decrypting the public key.<br />
+	 * <br />
+	 * This field is <b>required</b>.
+	 *
+	 * @param publicKeyPasswordProvider The provider of the password for decrypting the public key
+	 */
+	public static void setPublicKeyPasswordProvider(PasswordProvider publicKeyPasswordProvider)
+	{
+		LicenseManagerProperties.publicKeyPasswordProvider = publicKeyPasswordProvider;
+	}
+
+	static PasswordProvider getPublicKeyPasswordProvider()
+	{
+		return LicenseManagerProperties.publicKeyPasswordProvider;
+	}
 
 	/**
 	 * Sets the provider of the persisted license data.<br />
@@ -59,38 +96,22 @@ public final class LicenseManagerProperties
 	}
 
 	/**
-	 * Sets the provider of the password for decrypting the license key.<br />
+	 * Sets the provider of the password for the persisted license data.<br />
 	 * <br />
-	 * This field is <b>required</b>.
+	 * This field is <b>optional</b>. If not provided, the
+	 * {@link #setPublicKeyPasswordProvider(PasswordProvider) publicKeyPasswordProvider} will be used to decrypt
+	 * licenses.
 	 *
-	 * @param passwordProvider The provider of the password for decrypting the license key
+	 * @param licensePasswordProvider The provider of the password for decrypting license data
 	 */
-	public static void setPasswordProvider(PasswordProvider passwordProvider)
+	public static void setLicensePasswordProvider(PasswordProvider licensePasswordProvider)
 	{
-		LicenseManagerProperties.passwordProvider = passwordProvider;
+		LicenseManagerProperties.licensePasswordProvider = licensePasswordProvider;
 	}
 
-	static PasswordProvider getPasswordProvider()
+	public static PasswordProvider getLicensePasswordProvider()
 	{
-		return LicenseManagerProperties.passwordProvider;
-	}
-
-	/**
-	 * Sets the provider of the data for the public key companion to the private key used to sign the license
-	 * object.<br />
-	 * <br />
-	 * This field is <b>required</b>.
-	 *
-	 * @param publicKeyDataProvider The provider of the data for the public key companion to the private key used to sign the license object
-	 */
-	public static void setPublicKeyDataProvider(PublicKeyDataProvider publicKeyDataProvider)
-	{
-		LicenseManagerProperties.publicKeyDataProvider = publicKeyDataProvider;
-	}
-
-	static PublicKeyDataProvider getPublicKeyDataProvider()
-	{
-		return LicenseManagerProperties.publicKeyDataProvider;
+		return LicenseManagerProperties.licensePasswordProvider;
 	}
 
 	/**

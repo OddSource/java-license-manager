@@ -1,5 +1,5 @@
 /*
- * LicenseCreatorProperties.java from LicenseManager modified Monday, March 5, 2012 13:10:33 CST (-0600).
+ * LicenseCreatorProperties.java from LicenseManager modified Monday, March 5, 2012 13:45:51 CST (-0600).
  *
  * Copyright 2010-2012 the original author or authors.
  *
@@ -30,9 +30,9 @@ import net.nicholaswilliams.java.licensing.encryption.PasswordProvider;
  */
 public final class LicenseCreatorProperties
 {
-	private static PasswordProvider passwordProvider;
-
 	private static PrivateKeyDataProvider privateKeyDataProvider;
+
+	private static PasswordProvider privateKeyPasswordProvider;
 
 	/**
 	 * Sets the provider of the data for the private key used to sign the license object.<br />
@@ -52,20 +52,20 @@ public final class LicenseCreatorProperties
 	}
 
 	/**
-	 * Sets the provider of the password for decrypting the license key.<br />
+	 * Sets the provider of the password for decrypting the private key.<br />
 	 * <br />
 	 * This field is <b>required</b>.
 	 *
-	 * @param passwordProvider The provider of the password for decrypting the license key
+	 * @param privateKeyPasswordProvider The provider of the password for decrypting the private key
 	 */
-	public static void setPasswordProvider(PasswordProvider passwordProvider)
+	public static void setPrivateKeyPasswordProvider(PasswordProvider privateKeyPasswordProvider)
 	{
-		LicenseCreatorProperties.passwordProvider = passwordProvider;
+		LicenseCreatorProperties.privateKeyPasswordProvider = privateKeyPasswordProvider;
 	}
 
-	static PasswordProvider getPasswordProvider()
+	static PasswordProvider getPrivateKeyPasswordProvider()
 	{
-		return LicenseCreatorProperties.passwordProvider;
+		return LicenseCreatorProperties.privateKeyPasswordProvider;
 	}
 
 	/**

@@ -1,5 +1,5 @@
 /*
- * Properties.java from LicenseManager modified Tuesday, February 21, 2012 10:56:34 CST (-0600).
+ * LicenseManagerProperties.java from LicenseManager modified Monday, March 5, 2012 13:04:18 CST (-0600).
  *
  * Copyright 2010-2012 the original author or authors.
  *
@@ -29,7 +29,7 @@ import net.nicholaswilliams.java.licensing.encryption.PublicKeyDataProvider;
  * @version 1.0.0
  * @since 1.0.0
  */
-public final class Properties
+public final class LicenseManagerProperties
 {
 	private static KeyPasswordProvider passwordProvider;
 
@@ -50,12 +50,12 @@ public final class Properties
 	 */
 	public static void setLicenseProvider(LicenseProvider licenseProvider)
 	{
-		Properties.licenseProvider = licenseProvider;
+		LicenseManagerProperties.licenseProvider = licenseProvider;
 	}
 
 	static LicenseProvider getLicenseProvider()
 	{
-		return Properties.licenseProvider;
+		return LicenseManagerProperties.licenseProvider;
 	}
 
 	/**
@@ -67,12 +67,12 @@ public final class Properties
 	 */
 	public static void setPasswordProvider(KeyPasswordProvider passwordProvider)
 	{
-		Properties.passwordProvider = passwordProvider;
+		LicenseManagerProperties.passwordProvider = passwordProvider;
 	}
 
 	static KeyPasswordProvider getPasswordProvider()
 	{
-		return Properties.passwordProvider;
+		return LicenseManagerProperties.passwordProvider;
 	}
 
 	/**
@@ -85,12 +85,12 @@ public final class Properties
 	 */
 	public static void setPublicKeyDataProvider(PublicKeyDataProvider publicKeyDataProvider)
 	{
-		Properties.publicKeyDataProvider = publicKeyDataProvider;
+		LicenseManagerProperties.publicKeyDataProvider = publicKeyDataProvider;
 	}
 
 	static PublicKeyDataProvider getPublicKeyDataProvider()
 	{
-		return Properties.publicKeyDataProvider;
+		return LicenseManagerProperties.publicKeyDataProvider;
 	}
 
 	/**
@@ -104,12 +104,12 @@ public final class Properties
 	 */
 	public static void setLicenseValidator(LicenseValidator licenseValidator)
 	{
-		Properties.licenseValidator = licenseValidator;
+		LicenseManagerProperties.licenseValidator = licenseValidator;
 	}
 
 	static LicenseValidator getLicenseValidator()
 	{
-		return Properties.licenseValidator;
+		return LicenseManagerProperties.licenseValidator;
 	}
 
 	/**
@@ -122,7 +122,7 @@ public final class Properties
 	 */
 	public static void setCacheTimeInMinutes(int cacheTimeInMinutes)
 	{
-		Properties.cacheTimeInMinutes = cacheTimeInMinutes;
+		LicenseManagerProperties.cacheTimeInMinutes = cacheTimeInMinutes;
 	}
 
 	static int getCacheTimeInMinutes()
@@ -133,7 +133,7 @@ public final class Properties
 	/**
 	 * This class cannot be instantiated.
 	 */
-	private Properties()
+	private LicenseManagerProperties()
 	{
 		throw new RuntimeException("This class cannot be instantiated.");
 	}

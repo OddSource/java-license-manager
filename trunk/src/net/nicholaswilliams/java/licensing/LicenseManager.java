@@ -1,5 +1,5 @@
 /*
- * LicenseManager.java from LicenseManager modified Tuesday, February 21, 2012 10:56:34 CST (-0600).
+ * LicenseManager.java from LicenseManager modified Monday, March 5, 2012 13:04:17 CST (-0600).
  *
  * Copyright 2010-2012 the original author or authors.
  *
@@ -41,10 +41,10 @@ import java.util.Hashtable;
 /**
  * This class manages licenses in the client application. All interaction with the license manager done from the client
  * application should go through here. Before getting the manager instance for the first time, relevant properties
- * should be set in {@link Properties}. The values in this class will be used to instantiate the license manager.
+ * should be set in {@link LicenseManagerProperties}. The values in this class will be used to instantiate the license manager.
  * After setting all the necessary properties there, one can retrieve an instance using {@link #getInstance()}. Be sure
  * to set all the properties first; once {@link #getInstance()} is called for the first time, any changes to
- * {@link Properties} will be ignored.<br />
+ * {@link LicenseManagerProperties} will be ignored.<br />
  * <br />
  * The license manager maintains a cache of license objects, which cannot be disabled entirely. When initializing the
  * license manager, a maximum cache object age is specified in minutes. If any value less than 1 minute is specified,
@@ -82,13 +82,13 @@ public final class LicenseManager
 
 	private LicenseManager()
 	{
-		if(Properties.getLicenseProvider() == null)
+		if(LicenseManagerProperties.getLicenseProvider() == null)
 			throw new IllegalArgumentException("Parameter licenseProvider must not be null.");
 
-		if(Properties.getPasswordProvider() == null)
+		if(LicenseManagerProperties.getPasswordProvider() == null)
 			throw new IllegalArgumentException("Parameter passwordProvider must not be null.");
 
-		if(Properties.getPublicKeyDataProvider() == null)
+		if(LicenseManagerProperties.getPublicKeyDataProvider() == null)
 			throw new IllegalArgumentException("Parameter publicKeyDataProvider must not be null.");
 
 		// install the security manager
@@ -101,21 +101,21 @@ public final class LicenseManager
 			throw new InsecureEnvironmentException("The class net.nicholaswilliams.java.licensing.LicenseSecurityManager could not be initialized.", e);
 		}
 
-		int cacheTimeInMinutes = Properties.getCacheTimeInMinutes();
+		int cacheTimeInMinutes = LicenseManagerProperties.getCacheTimeInMinutes();
 
-		this.licenseProvider = Properties.getLicenseProvider();
-		this.passwordProvider = Properties.getPasswordProvider();
-		this.publicKeyDataProvider = Properties.getPublicKeyDataProvider();
-		this.licenseValidator = Properties.getLicenseValidator();
+		this.licenseProvider = LicenseManagerProperties.getLicenseProvider();
+		this.passwordProvider = LicenseManagerProperties.getPasswordProvider();
+		this.publicKeyDataProvider = LicenseManagerProperties.getPublicKeyDataProvider();
+		this.licenseValidator = LicenseManagerProperties.getLicenseValidator();
 		this.cacheTimeInMilliseconds = cacheTimeInMinutes < 1 ? ( 10 * 1000 ) : ( cacheTimeInMinutes * 60 * 1000 );
 	}
 	
 	/**
 	 * Returns the license manager instance. Before this method can be called the first time, all of the parameters must
-	 * bet set in {@link Properties}. See the documentation for that class for more details.
+	 * bet set in {@link LicenseManagerProperties}. See the documentation for that class for more details.
 	 *
 	 * @return the license manager instance.
-	 * @throws IllegalArgumentException if {@link Properties#setLicenseProvider(LicenseProvider) licenseProvider}, {@link Properties#setPasswordProvider(KeyPasswordProvider) passwordProvider} or {@link Properties#setPublicKeyDataProvider(PublicKeyDataProvider) publicKeyDataProvider} are null.
+	 * @throws IllegalArgumentException if {@link LicenseManagerProperties#setLicenseProvider(LicenseProvider) licenseProvider}, {@link LicenseManagerProperties#setPasswordProvider(KeyPasswordProvider) passwordProvider} or {@link LicenseManagerProperties#setPublicKeyDataProvider(PublicKeyDataProvider) publicKeyDataProvider} are null.
 	 * @throws InsecureEnvironmentException if the {@link LicenseSecurityManager} cannot be instantiated
 	 * @see LicenseSecurityManager for more information on the security features that protect the license manager
 	 */

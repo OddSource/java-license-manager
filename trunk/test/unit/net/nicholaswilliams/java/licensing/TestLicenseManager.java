@@ -1,5 +1,5 @@
 /*
- * TestLicenseManager.java from LicenseManager modified Tuesday, February 21, 2012 10:56:33 CST (-0600).
+ * TestLicenseManager.java from LicenseManager modified Monday, March 5, 2012 13:04:17 CST (-0600).
  *
  * Copyright 2010-2012 the original author or authors.
  *
@@ -70,11 +70,11 @@ public class TestLicenseManager
 		TestLicenseManager.keyDataProvider = TestLicenseManager.control.createMock(PublicKeyDataProvider.class);
 		TestLicenseManager.licenseValidator = TestLicenseManager.control.createMock(LicenseValidator.class);
 
-		Properties.setLicenseProvider(TestLicenseManager.licenseProvider);
-		Properties.setPasswordProvider(TestLicenseManager.keyPasswordProvider);
-		Properties.setPublicKeyDataProvider(TestLicenseManager.keyDataProvider);
-		Properties.setLicenseValidator(TestLicenseManager.licenseValidator);
-		Properties.setCacheTimeInMinutes(0);
+		LicenseManagerProperties.setLicenseProvider(TestLicenseManager.licenseProvider);
+		LicenseManagerProperties.setPasswordProvider(TestLicenseManager.keyPasswordProvider);
+		LicenseManagerProperties.setPublicKeyDataProvider(TestLicenseManager.keyDataProvider);
+		LicenseManagerProperties.setLicenseValidator(TestLicenseManager.licenseValidator);
+		LicenseManagerProperties.setCacheTimeInMinutes(0);
 
 		LicenseManager.getInstance();
 

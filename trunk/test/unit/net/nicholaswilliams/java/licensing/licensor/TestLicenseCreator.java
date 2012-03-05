@@ -1,5 +1,5 @@
 /*
- * TestLicenseCreator.java from LicenseManager modified Tuesday, February 21, 2012 10:56:33 CST (-0600).
+ * TestLicenseCreator.java from LicenseManager modified Monday, March 5, 2012 13:04:48 CST (-0600).
  *
  * Copyright 2010-2012 the original author or authors.
  *
@@ -67,8 +67,8 @@ public class TestLicenseCreator
 		TestLicenseCreator.keyPasswordProvider = TestLicenseCreator.control.createMock(KeyPasswordProvider.class);
 		TestLicenseCreator.keyDataProvider = TestLicenseCreator.control.createMock(PrivateKeyDataProvider.class);
 
-		Properties.setPasswordProvider(TestLicenseCreator.keyPasswordProvider);
-		Properties.setPrivateKeyDataProvider(TestLicenseCreator.keyDataProvider);
+		LicenseCreatorProperties.setPasswordProvider(TestLicenseCreator.keyPasswordProvider);
+		LicenseCreatorProperties.setPrivateKeyDataProvider(TestLicenseCreator.keyDataProvider);
 
 		LicenseCreator.getInstance();
 

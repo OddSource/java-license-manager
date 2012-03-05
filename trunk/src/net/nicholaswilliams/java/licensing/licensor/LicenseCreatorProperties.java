@@ -1,5 +1,5 @@
 /*
- * Properties.java from LicenseManager modified Tuesday, February 21, 2012 10:56:33 CST (-0600).
+ * LicenseCreatorProperties.java from LicenseManager modified Monday, March 5, 2012 13:04:48 CST (-0600).
  *
  * Copyright 2010-2012 the original author or authors.
  *
@@ -28,7 +28,7 @@ import net.nicholaswilliams.java.licensing.encryption.KeyPasswordProvider;
  * @version 1.0.0
  * @since 1.0.0
  */
-public final class Properties
+public final class LicenseCreatorProperties
 {
 	private static KeyPasswordProvider passwordProvider;
 
@@ -43,12 +43,12 @@ public final class Properties
 	 */
 	public static void setPrivateKeyDataProvider(PrivateKeyDataProvider privateKeyDataProvider)
 	{
-		Properties.privateKeyDataProvider = privateKeyDataProvider;
+		LicenseCreatorProperties.privateKeyDataProvider = privateKeyDataProvider;
 	}
 
 	static PrivateKeyDataProvider getPrivateKeyDataProvider()
 	{
-		return Properties.privateKeyDataProvider;
+		return LicenseCreatorProperties.privateKeyDataProvider;
 	}
 
 	/**
@@ -60,18 +60,18 @@ public final class Properties
 	 */
 	public static void setPasswordProvider(KeyPasswordProvider passwordProvider)
 	{
-		Properties.passwordProvider = passwordProvider;
+		LicenseCreatorProperties.passwordProvider = passwordProvider;
 	}
 
 	static KeyPasswordProvider getPasswordProvider()
 	{
-		return Properties.passwordProvider;
+		return LicenseCreatorProperties.passwordProvider;
 	}
 
 	/**
 	 * This class cannot be instantiated.
 	 */
-	private Properties()
+	private LicenseCreatorProperties()
 	{
 		throw new RuntimeException("This class cannot be instantiated.");
 	}

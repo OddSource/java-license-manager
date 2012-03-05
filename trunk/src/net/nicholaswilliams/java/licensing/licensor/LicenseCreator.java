@@ -1,5 +1,5 @@
 /*
- * LicenseCreator.java from LicenseManager modified Tuesday, February 21, 2012 10:56:34 CST (-0600).
+ * LicenseCreator.java from LicenseManager modified Monday, March 5, 2012 13:04:48 CST (-0600).
  *
  * Copyright 2010-2012 the original author or authors.
  *
@@ -41,10 +41,10 @@ import java.util.Arrays;
  * in the package of classes (net.nicholaswilliams.java.licensing.licensor) that is packaged separately from the
  * distributable client binary.<br />
  * <br />
- * Before getting the creator instance for the first time, relevant properties should be set in {@link Properties}.
+ * Before getting the creator instance for the first time, relevant properties should be set in {@link LicenseCreatorProperties}.
  * The values in this class will be used to instantiate the license creator. After setting all the necessary
  * properties there, one can retrieve an instance using {@link #getInstance()}. Be sure to set all the properties
- * first; once {@link #getInstance()} is called for the first time, any changes to {@link Properties} will be
+ * first; once {@link #getInstance()} is called for the first time, any changes to {@link LicenseCreatorProperties} will be
  * ignored.<br />
  *
  * @author Nick Williams
@@ -61,22 +61,22 @@ public final class LicenseCreator
 
 	private LicenseCreator()
 	{
-		if(Properties.getPrivateKeyDataProvider() == null)
+		if(LicenseCreatorProperties.getPrivateKeyDataProvider() == null)
 			throw new IllegalArgumentException("Parameter privateKeyDataProvider must not be null.");
 
-		if(Properties.getPasswordProvider() == null)
+		if(LicenseCreatorProperties.getPasswordProvider() == null)
 			throw new IllegalArgumentException("Parameter privateKeyDataProvider must not be null.");
 
-		this.passwordProvider = Properties.getPasswordProvider();
-		this.privateKeyDataProvider = Properties.getPrivateKeyDataProvider();
+		this.passwordProvider = LicenseCreatorProperties.getPasswordProvider();
+		this.privateKeyDataProvider = LicenseCreatorProperties.getPrivateKeyDataProvider();
 	}
 
 	/**
 	 * Returns the license creator instance. Before this method can be called the first time, all of the parameters must
-	 * bet set in {@link Properties}. See the documentation for that class for more details.
+	 * bet set in {@link LicenseCreatorProperties}. See the documentation for that class for more details.
 	 *
 	 * @return the license creator instance.
-	 * @throws IllegalArgumentException if {@link Properties#setPrivateKeyDataProvider(PrivateKeyDataProvider) privateKeyDataProvider} or {@link Properties#setPasswordProvider(KeyPasswordProvider) passwordProvider} are null
+	 * @throws IllegalArgumentException if {@link LicenseCreatorProperties#setPrivateKeyDataProvider(PrivateKeyDataProvider) privateKeyDataProvider} or {@link LicenseCreatorProperties#setPasswordProvider(KeyPasswordProvider) passwordProvider} are null
 	 */
 	public static LicenseCreator getInstance()
 	{

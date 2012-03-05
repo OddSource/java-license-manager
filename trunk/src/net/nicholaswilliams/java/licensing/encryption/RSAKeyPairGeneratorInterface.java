@@ -1,5 +1,5 @@
 /*
- * RSAKeyPairGeneratorInterface.java from LicenseManager modified Sunday, March 4, 2012 10:02:52 CST (-0600).
+ * RSAKeyPairGeneratorInterface.java from LicenseManager modified Monday, March 5, 2012 13:10:33 CST (-0600).
  *
  * Copyright 2010-2012 the original author or authors.
  *
@@ -129,7 +129,7 @@ public interface RSAKeyPairGeneratorInterface
 	 * the provided {@link GeneratedClassDescriptor}.
 	 *
 	 * @param password The password to save to the specified Java class
-	 * @param passwordProvider An object describing the {@link KeyPasswordProvider} class to generate, and into which the generated code will be saved
+	 * @param passwordProvider An object describing the {@link PasswordProvider} class to generate, and into which the generated code will be saved
 	 */
 	public void savePasswordToProvider(char[] password, GeneratedClassDescriptor passwordProvider);
 

@@ -1,5 +1,5 @@
 /*
- * TestLicenseManager.java from LicenseManager modified Monday, March 5, 2012 13:10:33 CST (-0600).
+ * TestLicenseManager.java from LicenseManager modified Monday, March 5, 2012 13:21:22 CST (-0600).
  *
  * Copyright 2010-2012 the original author or authors.
  *
@@ -136,7 +136,7 @@ public class TestLicenseManager
 		byte[] signature = new DataSignatureManager().signData(TestLicenseManager.privateKey, data);
 
 		EasyMock.expect(TestLicenseManager.licenseProvider.getLicense("LICENSE-2")).andReturn(new SignedLicense(data, signature));
-		EasyMock.expect(TestLicenseManager.passwordProvider.getKeyPassword()).andReturn(keyPassword.clone());
+		EasyMock.expect(TestLicenseManager.passwordProvider.getPassword()).andReturn(keyPassword.clone());
 		EasyMock.expect(TestLicenseManager.keyDataProvider.getEncryptedPublicKeyData()).andReturn(encryptedPublicKey.clone());
 		TestLicenseManager.control.replay();
 
@@ -166,7 +166,7 @@ public class TestLicenseManager
 		byte[] signature = new DataSignatureManager().signData(TestLicenseManager.privateKey, data);
 
 		EasyMock.expect(TestLicenseManager.licenseProvider.getLicense(context)).andReturn(new SignedLicense(data, signature));
-		EasyMock.expect(TestLicenseManager.passwordProvider.getKeyPassword()).andReturn(keyPassword.clone());
+		EasyMock.expect(TestLicenseManager.passwordProvider.getPassword()).andReturn(keyPassword.clone());
 		EasyMock.expect(TestLicenseManager.keyDataProvider.getEncryptedPublicKeyData()).andReturn(encryptedPublicKey.clone());
 
 		return license;

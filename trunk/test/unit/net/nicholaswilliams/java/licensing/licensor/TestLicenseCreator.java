@@ -1,5 +1,5 @@
 /*
- * TestLicenseCreator.java from LicenseManager modified Monday, March 5, 2012 13:10:33 CST (-0600).
+ * TestLicenseCreator.java from LicenseManager modified Monday, March 5, 2012 13:21:22 CST (-0600).
  *
  * Copyright 2010-2012 the original author or authors.
  *
@@ -104,7 +104,7 @@ public class TestLicenseCreator
 	@Test
 	public void testLicenseSigning01()
 	{
-		EasyMock.expect(TestLicenseCreator.passwordProvider.getKeyPassword()).
+		EasyMock.expect(TestLicenseCreator.passwordProvider.getPassword()).
 				andReturn(TestLicenseCreator.keyPassword.clone());
 		EasyMock.expect(TestLicenseCreator.keyDataProvider.getEncryptedPrivateKeyData()).
 				andReturn(TestLicenseCreator.encryptedPrivateKey.clone());
@@ -141,7 +141,7 @@ public class TestLicenseCreator
 	@Test
 	public void testLicenseSigningAndSerializing01()
 	{
-		EasyMock.expect(TestLicenseCreator.passwordProvider.getKeyPassword()).
+		EasyMock.expect(TestLicenseCreator.passwordProvider.getPassword()).
 				andReturn(TestLicenseCreator.keyPassword.clone());
 		EasyMock.expect(TestLicenseCreator.keyDataProvider.getEncryptedPrivateKeyData()).
 				andReturn(TestLicenseCreator.encryptedPrivateKey.clone());

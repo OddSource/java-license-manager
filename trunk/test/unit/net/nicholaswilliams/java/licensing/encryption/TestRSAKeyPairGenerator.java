@@ -1,5 +1,5 @@
 /*
- * TestRSAKeyPairGenerator.java from LicenseManager modified Monday, March 5, 2012 13:10:33 CST (-0600).
+ * TestRSAKeyPairGenerator.java from LicenseManager modified Monday, March 5, 2012 13:21:22 CST (-0600).
  *
  * Copyright 2010-2012 the original author or authors.
  *
@@ -621,7 +621,7 @@ public class TestRSAKeyPairGenerator
 		PasswordProvider passwordProvider = (PasswordProvider)passwordPClass.newInstance();
 		assertNotNull("The key password provider should not be null.", passwordProvider);
 
-		char[] password = passwordProvider.getKeyPassword();
+		char[] password = passwordProvider.getPassword();
 		assertNotNull("The key password should not be null.", password);
 		assertTrue("The key password should have length.", password.length > 0);
 
@@ -650,7 +650,7 @@ public class TestRSAKeyPairGenerator
 		PasswordProvider passwordProvider = (PasswordProvider)passwordPClass.newInstance();
 		assertNotNull("The key password provider should not be null.", passwordProvider);
 
-		char[] password = passwordProvider.getKeyPassword();
+		char[] password = passwordProvider.getPassword();
 		assertNotNull("The key password should not be null.", password);
 		assertTrue("The key password should have length.", password.length > 0);
 

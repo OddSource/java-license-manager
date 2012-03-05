@@ -1,5 +1,5 @@
 /*
- * LicenseManager.java from LicenseManager modified Monday, March 5, 2012 13:10:33 CST (-0600).
+ * LicenseManager.java from LicenseManager modified Monday, March 5, 2012 13:21:22 CST (-0600).
  *
  * Copyright 2010-2012 the original author or authors.
  *
@@ -311,7 +311,7 @@ public final class LicenseManager
 
 				PublicKey key;
 				{
-					char[] password = this.passwordProvider.getKeyPassword();
+					char[] password = this.passwordProvider.getPassword();
 					byte[] keyData = this.publicKeyDataProvider.getEncryptedPublicKeyData();
 
 					key = KeyFileUtilities.readEncryptedPublicKey(keyData, password);

@@ -1,5 +1,5 @@
 /*
- * LicenseManager.java from LicenseManager modified Monday, March 5, 2012 13:21:22 CST (-0600).
+ * LicenseManager.java from LicenseManager modified Monday, March 5, 2012 13:38:27 CST (-0600).
  *
  * Copyright 2010-2012 the original author or authors.
  *
@@ -41,10 +41,10 @@ import java.util.Hashtable;
 /**
  * This class manages licenses in the client application. All interaction with the license manager done from the client
  * application should go through here. Before getting the manager instance for the first time, relevant properties
- * should be set in {@link LicenseManagerProperties}. The values in this class will be used to instantiate the license manager.
- * After setting all the necessary properties there, one can retrieve an instance using {@link #getInstance()}. Be sure
- * to set all the properties first; once {@link #getInstance()} is called for the first time, any changes to
- * {@link LicenseManagerProperties} will be ignored.<br />
+ * should be set in {@link LicenseManagerProperties}. The values in this class will be used to instantiate the license
+ * manager. After setting all the necessary properties there, one can retrieve an instance using
+ * {@link #getInstance()}. Be sure to set all the properties first; once {@link #getInstance()} is called for the first
+ * time, any changes to {@link LicenseManagerProperties} will be ignored.<br />
  * <br />
  * The license manager maintains a cache of license objects, which cannot be disabled entirely. When initializing the
  * license manager, a maximum cache object age is specified in minutes. If any value less than 1 minute is specified,
@@ -68,11 +68,13 @@ public final class LicenseManager
 {
 	private static final LicenseManager instance = new LicenseManager();
 
-	private final PasswordProvider passwordProvider;
-
 	private final PublicKeyDataProvider publicKeyDataProvider;
 
+	private final PasswordProvider publicKeyPasswordProvider;
+
 	private final LicenseProvider licenseProvider;
+
+	private final PasswordProvider licensePasswordProvider;
 
 	private final LicenseValidator licenseValidator;
 
@@ -85,8 +87,8 @@ public final class LicenseManager
 		if(LicenseManagerProperties.getLicenseProvider() == null)
 			throw new IllegalArgumentException("Parameter licenseProvider must not be null.");
 
-		if(LicenseManagerProperties.getPasswordProvider() == null)
-			throw new IllegalArgumentException("Parameter passwordProvider must not be null.");
+		if(LicenseManagerProperties.getPublicKeyPasswordProvider() == null)
+			throw new IllegalArgumentException("Parameter publicKeyPasswordProvider must not be null.");
 
 		if(LicenseManagerProperties.getPublicKeyDataProvider() == null)
 			throw new IllegalArgumentException("Parameter publicKeyDataProvider must not be null.");
@@ -103,9 +105,12 @@ public final class LicenseManager
 
 		int cacheTimeInMinutes = LicenseManagerProperties.getCacheTimeInMinutes();
 
-		this.licenseProvider = LicenseManagerProperties.getLicenseProvider();
-		this.passwordProvider = LicenseManagerProperties.getPasswordProvider();
 		this.publicKeyDataProvider = LicenseManagerProperties.getPublicKeyDataProvider();
+		this.publicKeyPasswordProvider = LicenseManagerProperties.getPublicKeyPasswordProvider();
+		this.licenseProvider = LicenseManagerProperties.getLicenseProvider();
+		this.licensePasswordProvider = LicenseManagerProperties.getLicensePasswordProvider() == null ?
+											LicenseManagerProperties.getPublicKeyPasswordProvider() :
+											LicenseManagerProperties.getLicensePasswordProvider();
 		this.licenseValidator = LicenseManagerProperties.getLicenseValidator();
 		this.cacheTimeInMilliseconds = cacheTimeInMinutes < 1 ? ( 10 * 1000 ) : ( cacheTimeInMinutes * 60 * 1000 );
 	}
@@ -115,7 +120,7 @@ public final class LicenseManager
 	 * bet set in {@link LicenseManagerProperties}. See the documentation for that class for more details.
 	 *
 	 * @return the license manager instance.
-	 * @throws IllegalArgumentException if {@link LicenseManagerProperties#setLicenseProvider(LicenseProvider) licenseProvider}, {@link LicenseManagerProperties#setPasswordProvider(net.nicholaswilliams.java.licensing.encryption.PasswordProvider) passwordProvider} or {@link LicenseManagerProperties#setPublicKeyDataProvider(PublicKeyDataProvider) publicKeyDataProvider} are null.
+	 * @throws IllegalArgumentException if {@link LicenseManagerProperties#setLicenseProvider(LicenseProvider) licenseProvider}, {@link LicenseManagerProperties#setPublicKeyPasswordProvider(PasswordProvider) publicKeyPasswordProvider} or {@link LicenseManagerProperties#setPublicKeyDataProvider(PublicKeyDataProvider) publicKeyDataProvider} are null.
 	 * @throws InsecureEnvironmentException if the {@link LicenseSecurityManager} cannot be instantiated
 	 * @see LicenseSecurityManager for more information on the security features that protect the license manager
 	 */
@@ -311,7 +316,7 @@ public final class LicenseManager
 
 				PublicKey key;
 				{
-					char[] password = this.passwordProvider.getPassword();
+					char[] password = this.publicKeyPasswordProvider.getPassword();
 					byte[] keyData = this.publicKeyDataProvider.getEncryptedPublicKeyData();
 
 					key = KeyFileUtilities.readEncryptedPublicKey(keyData, password);
@@ -324,14 +329,16 @@ public final class LicenseManager
 				{
 					byte[] unencrypted;
 					{
+						char[] password = this.licensePasswordProvider.getPassword();
 						byte[] signature = signed.getSignatureContent();
 						byte[] encrypted = signed.getLicenseContent();
 						signed.erase();
 
 						new DataSignatureManager().verifySignature(key, encrypted, signature);
 
-						unencrypted = Encryptor.decryptRaw(encrypted);
-						
+						unencrypted = Encryptor.decryptRaw(encrypted, password);
+
+						Arrays.fill(password, '\u0000');
 						Arrays.fill(signature, (byte)0);
 						Arrays.fill(encrypted, (byte)0);
 					}

@@ -1,5 +1,5 @@
 /*
- * LicenseManagerProperties.java from LicenseManager modified Monday, March 5, 2012 13:04:18 CST (-0600).
+ * LicenseManagerProperties.java from LicenseManager modified Monday, March 5, 2012 13:10:33 CST (-0600).
  *
  * Copyright 2010-2012 the original author or authors.
  *
@@ -18,7 +18,7 @@
 
 package net.nicholaswilliams.java.licensing;
 
-import net.nicholaswilliams.java.licensing.encryption.KeyPasswordProvider;
+import net.nicholaswilliams.java.licensing.encryption.PasswordProvider;
 import net.nicholaswilliams.java.licensing.encryption.PublicKeyDataProvider;
 
 /**
@@ -31,7 +31,7 @@ import net.nicholaswilliams.java.licensing.encryption.PublicKeyDataProvider;
  */
 public final class LicenseManagerProperties
 {
-	private static KeyPasswordProvider passwordProvider;
+	private static PasswordProvider passwordProvider;
 
 	private static PublicKeyDataProvider publicKeyDataProvider;
 
@@ -65,12 +65,12 @@ public final class LicenseManagerProperties
 	 *
 	 * @param passwordProvider The provider of the password for decrypting the license key
 	 */
-	public static void setPasswordProvider(KeyPasswordProvider passwordProvider)
+	public static void setPasswordProvider(PasswordProvider passwordProvider)
 	{
 		LicenseManagerProperties.passwordProvider = passwordProvider;
 	}
 
-	static KeyPasswordProvider getPasswordProvider()
+	static PasswordProvider getPasswordProvider()
 	{
 		return LicenseManagerProperties.passwordProvider;
 	}

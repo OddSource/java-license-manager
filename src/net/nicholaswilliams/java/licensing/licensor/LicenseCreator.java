@@ -1,5 +1,5 @@
 /*
- * LicenseCreator.java from LicenseManager modified Monday, March 5, 2012 13:04:48 CST (-0600).
+ * LicenseCreator.java from LicenseManager modified Monday, March 5, 2012 13:10:33 CST (-0600).
  *
  * Copyright 2010-2012 the original author or authors.
  *
@@ -24,7 +24,7 @@ import net.nicholaswilliams.java.licensing.ObjectSerializer;
 import net.nicholaswilliams.java.licensing.SignedLicense;
 import net.nicholaswilliams.java.licensing.encryption.Encryptor;
 import net.nicholaswilliams.java.licensing.encryption.KeyFileUtilities;
-import net.nicholaswilliams.java.licensing.encryption.KeyPasswordProvider;
+import net.nicholaswilliams.java.licensing.encryption.PasswordProvider;
 import net.nicholaswilliams.java.licensing.exception.AlgorithmNotSupportedException;
 import net.nicholaswilliams.java.licensing.exception.InappropriateKeyException;
 import net.nicholaswilliams.java.licensing.exception.InappropriateKeySpecificationException;
@@ -55,7 +55,7 @@ public final class LicenseCreator
 {
 	private static final LicenseCreator instance = new LicenseCreator();
 
-	private final KeyPasswordProvider passwordProvider;
+	private final PasswordProvider passwordProvider;
 
 	private final PrivateKeyDataProvider privateKeyDataProvider;
 
@@ -76,7 +76,7 @@ public final class LicenseCreator
 	 * bet set in {@link LicenseCreatorProperties}. See the documentation for that class for more details.
 	 *
 	 * @return the license creator instance.
-	 * @throws IllegalArgumentException if {@link LicenseCreatorProperties#setPrivateKeyDataProvider(PrivateKeyDataProvider) privateKeyDataProvider} or {@link LicenseCreatorProperties#setPasswordProvider(KeyPasswordProvider) passwordProvider} are null
+	 * @throws IllegalArgumentException if {@link LicenseCreatorProperties#setPrivateKeyDataProvider(PrivateKeyDataProvider) privateKeyDataProvider} or {@link LicenseCreatorProperties#setPasswordProvider(net.nicholaswilliams.java.licensing.encryption.PasswordProvider) passwordProvider} are null
 	 */
 	public static LicenseCreator getInstance()
 	{

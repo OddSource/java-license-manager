@@ -1,5 +1,5 @@
 /*
- * TestRSAKeyPairGenerator.java from LicenseManager modified Monday, March 5, 2012 08:32:05 CST (-0600).
+ * TestRSAKeyPairGenerator.java from LicenseManager modified Monday, March 5, 2012 13:10:33 CST (-0600).
  *
  * Copyright 2010-2012 the original author or authors.
  *
@@ -618,10 +618,10 @@ public class TestRSAKeyPairGenerator
 				pn + ".TestKeyPasswordProvider01", passwordPDescriptor.getJavaFileContents()
 		).getClassLoader(null).loadClass(pn + ".TestKeyPasswordProvider01");
 
-		KeyPasswordProvider keyPasswordProvider = (KeyPasswordProvider)passwordPClass.newInstance();
-		assertNotNull("The key password provider should not be null.", keyPasswordProvider);
+		PasswordProvider passwordProvider = (PasswordProvider)passwordPClass.newInstance();
+		assertNotNull("The key password provider should not be null.", passwordProvider);
 
-		char[] password = keyPasswordProvider.getKeyPassword();
+		char[] password = passwordProvider.getKeyPassword();
 		assertNotNull("The key password should not be null.", password);
 		assertTrue("The key password should have length.", password.length > 0);
 
@@ -647,10 +647,10 @@ public class TestRSAKeyPairGenerator
 				pn + ".TestKeyPasswordProvider02", passwordPDescriptor.getJavaFileContents()
 		).getClassLoader(null).loadClass(pn + ".TestKeyPasswordProvider02");
 
-		KeyPasswordProvider keyPasswordProvider = (KeyPasswordProvider)passwordPClass.newInstance();
-		assertNotNull("The key password provider should not be null.", keyPasswordProvider);
+		PasswordProvider passwordProvider = (PasswordProvider)passwordPClass.newInstance();
+		assertNotNull("The key password provider should not be null.", passwordProvider);
 
-		char[] password = keyPasswordProvider.getKeyPassword();
+		char[] password = passwordProvider.getKeyPassword();
 		assertNotNull("The key password should not be null.", password);
 		assertTrue("The key password should have length.", password.length > 0);
 

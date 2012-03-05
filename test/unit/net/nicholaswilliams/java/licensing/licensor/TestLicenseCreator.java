@@ -1,5 +1,5 @@
 /*
- * TestLicenseCreator.java from LicenseManager modified Monday, March 5, 2012 13:04:48 CST (-0600).
+ * TestLicenseCreator.java from LicenseManager modified Monday, March 5, 2012 13:10:33 CST (-0600).
  *
  * Copyright 2010-2012 the original author or authors.
  *
@@ -25,7 +25,7 @@ import net.nicholaswilliams.java.licensing.ObjectSerializer;
 import net.nicholaswilliams.java.licensing.SignedLicense;
 import net.nicholaswilliams.java.licensing.encryption.Encryptor;
 import net.nicholaswilliams.java.licensing.encryption.KeyFileUtilities;
-import net.nicholaswilliams.java.licensing.encryption.KeyPasswordProvider;
+import net.nicholaswilliams.java.licensing.encryption.PasswordProvider;
 import org.apache.commons.io.IOUtils;
 import org.easymock.EasyMock;
 import org.easymock.IMocksControl;
@@ -49,7 +49,7 @@ public class TestLicenseCreator
 {
 	private static final char[] keyPassword = "testLicenseCreatorPassword".toCharArray();
 
-	private static KeyPasswordProvider keyPasswordProvider;
+	private static PasswordProvider passwordProvider;
 
 	private static PrivateKeyDataProvider keyDataProvider;
 
@@ -64,10 +64,10 @@ public class TestLicenseCreator
 	{
 		TestLicenseCreator.control = EasyMock.createStrictControl();
 
-		TestLicenseCreator.keyPasswordProvider = TestLicenseCreator.control.createMock(KeyPasswordProvider.class);
+		TestLicenseCreator.passwordProvider = TestLicenseCreator.control.createMock(PasswordProvider.class);
 		TestLicenseCreator.keyDataProvider = TestLicenseCreator.control.createMock(PrivateKeyDataProvider.class);
 
-		LicenseCreatorProperties.setPasswordProvider(TestLicenseCreator.keyPasswordProvider);
+		LicenseCreatorProperties.setPasswordProvider(TestLicenseCreator.passwordProvider);
 		LicenseCreatorProperties.setPrivateKeyDataProvider(TestLicenseCreator.keyDataProvider);
 
 		LicenseCreator.getInstance();
@@ -104,7 +104,7 @@ public class TestLicenseCreator
 	@Test
 	public void testLicenseSigning01()
 	{
-		EasyMock.expect(TestLicenseCreator.keyPasswordProvider.getKeyPassword()).
+		EasyMock.expect(TestLicenseCreator.passwordProvider.getKeyPassword()).
 				andReturn(TestLicenseCreator.keyPassword.clone());
 		EasyMock.expect(TestLicenseCreator.keyDataProvider.getEncryptedPrivateKeyData()).
 				andReturn(TestLicenseCreator.encryptedPrivateKey.clone());
@@ -141,7 +141,7 @@ public class TestLicenseCreator
 	@Test
 	public void testLicenseSigningAndSerializing01()
 	{
-		EasyMock.expect(TestLicenseCreator.keyPasswordProvider.getKeyPassword()).
+		EasyMock.expect(TestLicenseCreator.passwordProvider.getKeyPassword()).
 				andReturn(TestLicenseCreator.keyPassword.clone());
 		EasyMock.expect(TestLicenseCreator.keyDataProvider.getEncryptedPrivateKeyData()).
 				andReturn(TestLicenseCreator.encryptedPrivateKey.clone());

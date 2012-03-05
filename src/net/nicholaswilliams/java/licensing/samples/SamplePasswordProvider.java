@@ -1,5 +1,5 @@
 /*
- * SampleKeyPasswordProvider.java from LicenseManager modified Tuesday, February 21, 2012 10:56:33 CST (-0600).
+ * SamplePasswordProvider.java from LicenseManager modified Monday, March 5, 2012 13:10:33 CST (-0600).
  *
  * Copyright 2010-2012 the original author or authors.
  *
@@ -18,18 +18,18 @@
 
 package net.nicholaswilliams.java.licensing.samples;
 
-import net.nicholaswilliams.java.licensing.encryption.KeyPasswordProvider;
+import net.nicholaswilliams.java.licensing.encryption.PasswordProvider;
 
 /**
- * A sample implementation of the {@link KeyPasswordProvider} interface.
+ * A sample implementation of the {@link net.nicholaswilliams.java.licensing.encryption.PasswordProvider} interface.
  *
  * @author Nick Williams
  * @since 1.0.0
  * @version 1.0.0
- * @see KeyPasswordProvider
+ * @see net.nicholaswilliams.java.licensing.encryption.PasswordProvider
  */
 @SuppressWarnings("unused")
-public class SampleKeyPasswordProvider implements KeyPasswordProvider
+public class SamplePasswordProvider implements PasswordProvider
 {
 	public char[] getKeyPassword()
 	{

@@ -1,5 +1,5 @@
 /*
- * LicenseManager.java from LicenseManager modified Monday, March 5, 2012 13:04:17 CST (-0600).
+ * LicenseManager.java from LicenseManager modified Monday, March 5, 2012 13:10:33 CST (-0600).
  *
  * Copyright 2010-2012 the original author or authors.
  *
@@ -20,7 +20,7 @@ package net.nicholaswilliams.java.licensing;
 
 import net.nicholaswilliams.java.licensing.encryption.Encryptor;
 import net.nicholaswilliams.java.licensing.encryption.KeyFileUtilities;
-import net.nicholaswilliams.java.licensing.encryption.KeyPasswordProvider;
+import net.nicholaswilliams.java.licensing.encryption.PasswordProvider;
 import net.nicholaswilliams.java.licensing.encryption.PublicKeyDataProvider;
 import net.nicholaswilliams.java.licensing.exception.AlgorithmNotSupportedException;
 import net.nicholaswilliams.java.licensing.exception.CorruptSignatureException;
@@ -68,7 +68,7 @@ public final class LicenseManager
 {
 	private static final LicenseManager instance = new LicenseManager();
 
-	private final KeyPasswordProvider passwordProvider;
+	private final PasswordProvider passwordProvider;
 
 	private final PublicKeyDataProvider publicKeyDataProvider;
 
@@ -115,7 +115,7 @@ public final class LicenseManager
 	 * bet set in {@link LicenseManagerProperties}. See the documentation for that class for more details.
 	 *
 	 * @return the license manager instance.
-	 * @throws IllegalArgumentException if {@link LicenseManagerProperties#setLicenseProvider(LicenseProvider) licenseProvider}, {@link LicenseManagerProperties#setPasswordProvider(KeyPasswordProvider) passwordProvider} or {@link LicenseManagerProperties#setPublicKeyDataProvider(PublicKeyDataProvider) publicKeyDataProvider} are null.
+	 * @throws IllegalArgumentException if {@link LicenseManagerProperties#setLicenseProvider(LicenseProvider) licenseProvider}, {@link LicenseManagerProperties#setPasswordProvider(net.nicholaswilliams.java.licensing.encryption.PasswordProvider) passwordProvider} or {@link LicenseManagerProperties#setPublicKeyDataProvider(PublicKeyDataProvider) publicKeyDataProvider} are null.
 	 * @throws InsecureEnvironmentException if the {@link LicenseSecurityManager} cannot be instantiated
 	 * @see LicenseSecurityManager for more information on the security features that protect the license manager
 	 */

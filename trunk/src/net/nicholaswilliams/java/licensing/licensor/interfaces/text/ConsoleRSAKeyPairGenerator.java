@@ -1,5 +1,5 @@
 /*
- * ConsoleRSAKeyPairGenerator.java from LicenseManager modified Sunday, March 4, 2012 13:40:09 CST (-0600).
+ * ConsoleRSAKeyPairGenerator.java from LicenseManager modified Sunday, March 4, 2012 22:27:31 CST (-0600).
  *
  * Copyright 2010-2012 the original author or authors.
  *
@@ -144,9 +144,9 @@ public class ConsoleRSAKeyPairGenerator
 
 	private final CommandLineParser cliParser;
 
-	private CommandLine cli;
+	protected CommandLine cli = null;
 
-	private boolean interactive = false;
+	protected boolean interactive = false;
 
 	protected ConsoleRSAKeyPairGenerator(RSAKeyPairGeneratorInterface generator,
 										 TextInterfaceDevice textInterfaceDevice,
@@ -158,7 +158,7 @@ public class ConsoleRSAKeyPairGenerator
 	}
 
 	@Override
-	public void finalize() throws Throwable
+	protected void finalize() throws Throwable
 	{
 		super.finalize();
 		this.device.printOutLn();
@@ -600,7 +600,7 @@ public class ConsoleRSAKeyPairGenerator
 
 		this.device.exit(0);
 	}
-
+	
 	public static void main(String[] arguments)
 	{
 		TextInterfaceDevice device = TextInterfaceDevice.CONSOLE;

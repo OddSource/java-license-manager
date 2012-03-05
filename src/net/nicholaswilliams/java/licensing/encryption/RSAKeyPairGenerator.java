@@ -1,5 +1,5 @@
 /*
- * RSAKeyPairGenerator.java from LicenseManager modified Monday, March 5, 2012 13:10:33 CST (-0600).
+ * RSAKeyPairGenerator.java from LicenseManager modified Monday, March 5, 2012 13:21:22 CST (-0600).
  *
  * Copyright 2010-2012 the original author or authors.
  *
@@ -253,7 +253,7 @@ public final class RSAKeyPairGenerator implements RSAKeyPairGeneratorInterface
 				passwordProvider.getClassName(),
 				"PasswordProvider",
 				new String[] { "net.nicholaswilliams.java.licensing.encryption.PasswordProvider" },
-				"public char[] getKeyPassword()",
+				"public char[] getPassword()",
 				passwordCode
 		));
 	}

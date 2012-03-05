@@ -1,5 +1,5 @@
 /*
- * PasswordProvider.java from LicenseManager modified Monday, March 5, 2012 13:12:53 CST (-0600).
+ * PasswordProvider.java from LicenseManager modified Monday, March 5, 2012 13:21:22 CST (-0600).
  *
  * Copyright 2010-2012 the original author or authors.
  *
@@ -56,5 +56,5 @@ public interface PasswordProvider
 	 *
 	 * @return the password in character array form.
 	 */
-	public char[] getKeyPassword();
+	public char[] getPassword();
 }

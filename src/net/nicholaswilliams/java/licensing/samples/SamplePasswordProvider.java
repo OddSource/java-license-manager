@@ -1,5 +1,5 @@
 /*
- * SamplePasswordProvider.java from LicenseManager modified Monday, March 5, 2012 13:10:33 CST (-0600).
+ * SamplePasswordProvider.java from LicenseManager modified Monday, March 5, 2012 13:21:22 CST (-0600).
  *
  * Copyright 2010-2012 the original author or authors.
  *
@@ -31,7 +31,7 @@ import net.nicholaswilliams.java.licensing.encryption.PasswordProvider;
 @SuppressWarnings("unused")
 public class SamplePasswordProvider implements PasswordProvider
 {
-	public char[] getKeyPassword()
+	public char[] getPassword()
 	{
 		return new char[] {
 			's', 'a', 'm', 'p', 'l', 'e', 'K', 'e', 'y', '1', '9', '8', '4'

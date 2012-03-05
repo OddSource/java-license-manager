@@ -1,5 +1,5 @@
 /*
- * TestRSAKeyPairGenerator.java from LicenseManager modified Sunday, March 4, 2012 10:29:32 CST (-0600).
+ * TestRSAKeyPairGenerator.java from LicenseManager modified Monday, March 5, 2012 08:32:05 CST (-0600).
  *
  * Copyright 2010-2012 the original author or authors.
  *
@@ -43,6 +43,8 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.net.URI;
 import java.security.KeyPair;
+import java.security.PrivateKey;
+import java.security.PublicKey;
 import java.security.SecureClassLoader;
 import java.util.ArrayList;
 import java.util.List;
@@ -165,10 +167,60 @@ public class TestRSAKeyPairGenerator
 				"testSaveKeyPairToFiles01.private",
 				"testSaveKeyPairToFiles01.public",
 				"testMyPassword01".toCharArray()
-		);
+										 );
 
 		assertTrue("File 1 should exist.", file1.exists());
 		assertTrue("File 2 should exist.", file2.exists());
+
+		PrivateKey privateKey = KeyFileUtilities.readEncryptedPrivateKey(file1, "testMyPassword01".toCharArray());
+		PublicKey publicKey = KeyFileUtilities.readEncryptedPublicKey(file2, "testMyPassword01".toCharArray());
+
+		assertNotNull("The private key should not be null.", privateKey);
+		assertEquals("The private key is not correct.", keyPair.getPrivate(), privateKey);
+
+		assertNotNull("The public key should not be null.", publicKey);
+		assertEquals("The public key is not correct.", keyPair.getPublic(), publicKey);
+
+		FileUtils.forceDelete(file1);
+		FileUtils.forceDelete(file2);
+	}
+
+	@Test
+	public void testSaveKeyPairToFiles02() throws IOException
+	{
+		KeyPair keyPair = this.generator.generateKeyPair();
+
+		File file1 = new File("testSaveKeyPairToFiles02.private");
+		File file2 = new File("testSaveKeyPairToFiles02.public");
+
+		if(file1.exists())
+			FileUtils.forceDelete(file1);
+
+		if(file2.exists())
+			FileUtils.forceDelete(file2);
+
+		assertFalse("File 1 should not exist.", file1.exists());
+		assertFalse("File 2 should not exist.", file2.exists());
+
+		this.generator.saveKeyPairToFiles(
+				keyPair,
+				"testSaveKeyPairToFiles02.private",
+				"testSaveKeyPairToFiles02.public",
+				"testMyPassword02".toCharArray(),
+				"testYourPassword02".toCharArray()
+										 );
+
+		assertTrue("File 1 should exist.", file1.exists());
+		assertTrue("File 2 should exist.", file2.exists());
+
+		PrivateKey privateKey = KeyFileUtilities.readEncryptedPrivateKey(file1, "testMyPassword02".toCharArray());
+		PublicKey publicKey = KeyFileUtilities.readEncryptedPublicKey(file2, "testYourPassword02".toCharArray());
+
+		assertNotNull("The private key should not be null.", privateKey);
+		assertEquals("The private key is not correct.", keyPair.getPrivate(), privateKey);
+
+		assertNotNull("The public key should not be null.", publicKey);
+		assertEquals("The public key is not correct.", keyPair.getPublic(), publicKey);
 
 		FileUtils.forceDelete(file1);
 		FileUtils.forceDelete(file2);
@@ -402,6 +454,10 @@ public class TestRSAKeyPairGenerator
 		assertNotNull("The private key data should not be null.", privateKeyData);
 		assertTrue("The private key data should have length.", privateKeyData.length > 0);
 
+		PrivateKey privateKey = KeyFileUtilities.readEncryptedPrivateKey(privateKeyData, "testPassword01".toCharArray());
+		assertNotNull("The private key should not be null.", privateKey);
+		assertEquals("The private key is not correct.", keyPair.getPrivate(), privateKey);
+
 		///////////////////////
 		assertNotNull("The public key code should not be null.", publicKPDescriptor.getJavaFileContents());
 		assertTrue("The public key code should have length.", publicKPDescriptor.getJavaFileContents().length() > 0);
@@ -416,6 +472,10 @@ public class TestRSAKeyPairGenerator
 		byte[] publicKeyData = publicKeyDataProvider.getEncryptedPublicKeyData();
 		assertNotNull("The public key data should not be null.", publicKeyData);
 		assertTrue("The public key data should have length.", publicKeyData.length > 0);
+
+		PublicKey publicKey = KeyFileUtilities.readEncryptedPublicKey(publicKeyData, "testPassword01".toCharArray());
+		assertNotNull("The public key should not be null.", publicKey);
+		assertEquals("The public key is not correct.", keyPair.getPublic(), publicKey);
 	}
 
 	@Test
@@ -454,6 +514,10 @@ public class TestRSAKeyPairGenerator
 		assertNotNull("The private key data should not be null.", privateKeyData);
 		assertTrue("The private key data should have length.", privateKeyData.length > 0);
 
+		PrivateKey privateKey = KeyFileUtilities.readEncryptedPrivateKey(privateKeyData, "anotherPassword02".toCharArray());
+		assertNotNull("The private key should not be null.", privateKey);
+		assertEquals("The private key is not correct.", keyPair.getPrivate(), privateKey);
+
 		///////////////////////
 		assertNotNull("The public key code should not be null.", publicKPDescriptor.getJavaFileContents());
 		assertTrue("The public key code should have length.", publicKPDescriptor.getJavaFileContents().length() > 0);
@@ -468,6 +532,71 @@ public class TestRSAKeyPairGenerator
 		byte[] publicKeyData = publicKeyDataProvider.getEncryptedPublicKeyData();
 		assertNotNull("The public key data should not be null.", publicKeyData);
 		assertTrue("The public key data should have length.", publicKeyData.length > 0);
+
+		PublicKey publicKey = KeyFileUtilities.readEncryptedPublicKey(publicKeyData, "anotherPassword02".toCharArray());
+		assertNotNull("The public key should not be null.", publicKey);
+		assertEquals("The public key is not correct.", keyPair.getPublic(), publicKey);
+	}
+
+	@Test
+	public void testSaveKeysToProviders03() throws ClassNotFoundException, IllegalAccessException, InstantiationException
+	{
+		String pn = "com.nicholaswilliams.last";
+
+		RSAKeyPairGeneratorInterface.GeneratedClassDescriptor privateKPDescriptor =
+				new RSAKeyPairGeneratorInterface.GeneratedClassDescriptor();
+		privateKPDescriptor.setPackageName(pn);
+		privateKPDescriptor.setClassName("TestPrivateKeyProvider03");
+
+		RSAKeyPairGeneratorInterface.GeneratedClassDescriptor publicKPDescriptor =
+				new RSAKeyPairGeneratorInterface.GeneratedClassDescriptor();
+		publicKPDescriptor.setPackageName(pn);
+		publicKPDescriptor.setClassName("TestPublicKeyProvider03");
+
+		KeyPair keyPair = this.generator.generateKeyPair();
+
+		this.generator.saveKeyPairToProviders(
+				keyPair, privateKPDescriptor, publicKPDescriptor, "finalPasswordOne03".toCharArray(),
+				"finalPasswordTwo03".toCharArray()
+		);
+
+		///////////////////////
+		assertNotNull("The private key code should not be null.", privateKPDescriptor.getJavaFileContents());
+		assertTrue("The private key code should have length.", privateKPDescriptor.getJavaFileContents().length() > 0);
+
+		Class<?> privateKPClass = this.compileClass(
+				pn + ".TestPrivateKeyProvider03", privateKPDescriptor.getJavaFileContents()
+		).getClassLoader(null).loadClass(pn + ".TestPrivateKeyProvider03");
+
+		PrivateKeyDataProvider privateKeyDataProvider = (PrivateKeyDataProvider)privateKPClass.newInstance();
+		assertNotNull("The private key data provider should not be null.", privateKeyDataProvider);
+
+		byte[] privateKeyData = privateKeyDataProvider.getEncryptedPrivateKeyData();
+		assertNotNull("The private key data should not be null.", privateKeyData);
+		assertTrue("The private key data should have length.", privateKeyData.length > 0);
+
+		PrivateKey privateKey = KeyFileUtilities.readEncryptedPrivateKey(privateKeyData, "finalPasswordOne03".toCharArray());
+		assertNotNull("The private key should not be null.", privateKey);
+		assertEquals("The private key is not correct.", keyPair.getPrivate(), privateKey);
+
+		///////////////////////
+		assertNotNull("The public key code should not be null.", publicKPDescriptor.getJavaFileContents());
+		assertTrue("The public key code should have length.", publicKPDescriptor.getJavaFileContents().length() > 0);
+
+		Class<?> publicKPClass = this.compileClass(
+				pn + ".TestPublicKeyProvider03", publicKPDescriptor.getJavaFileContents()
+		).getClassLoader(null).loadClass(pn + ".TestPublicKeyProvider03");
+
+		PublicKeyDataProvider publicKeyDataProvider = (PublicKeyDataProvider)publicKPClass.newInstance();
+		assertNotNull("The public key data provider should not be null.", publicKeyDataProvider);
+
+		byte[] publicKeyData = publicKeyDataProvider.getEncryptedPublicKeyData();
+		assertNotNull("The public key data should not be null.", publicKeyData);
+		assertTrue("The public key data should have length.", publicKeyData.length > 0);
+
+		PublicKey publicKey = KeyFileUtilities.readEncryptedPublicKey(publicKeyData, "finalPasswordTwo03".toCharArray());
+		assertNotNull("The public key should not be null.", publicKey);
+		assertEquals("The public key is not correct.", keyPair.getPublic(), publicKey);
 	}
 
 	@Test

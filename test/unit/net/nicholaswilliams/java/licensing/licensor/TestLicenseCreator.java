@@ -1,5 +1,5 @@
 /*
- * TestLicenseCreator.java from LicenseManager modified Monday, March 5, 2012 13:57:30 CST (-0600).
+ * TestLicenseCreator.java from LicenseManager modified Monday, March 5, 2012 19:09:53 CST (-0600).
  *
  * Copyright 2010-2012 the original author or authors.
  *
@@ -20,7 +20,7 @@ package net.nicholaswilliams.java.licensing.licensor;
 
 import net.nicholaswilliams.java.licensing.DataSignatureManager;
 import net.nicholaswilliams.java.licensing.License;
-import net.nicholaswilliams.java.licensing.LicenseHelper;
+import net.nicholaswilliams.java.licensing.MockLicenseHelper;
 import net.nicholaswilliams.java.licensing.ObjectSerializer;
 import net.nicholaswilliams.java.licensing.SignedLicense;
 import net.nicholaswilliams.java.licensing.encryption.Encryptor;
@@ -135,7 +135,7 @@ public class TestLicenseCreator
 
 		assertNotNull("The unencrypted license data should not be null.", unencrypted);
 
-		License returned = LicenseHelper.deserialize(unencrypted);
+		License returned = MockLicenseHelper.deserialize(unencrypted);
 
 		assertNotNull("The returned license should not be null.", returned);
 
@@ -172,7 +172,7 @@ public class TestLicenseCreator
 
 		assertNotNull("The unencrypted license data should not be null.", unencrypted);
 
-		License returned = LicenseHelper.deserialize(unencrypted);
+		License returned = MockLicenseHelper.deserialize(unencrypted);
 
 		assertNotNull("The returned license should not be null.", returned);
 
@@ -216,7 +216,7 @@ public class TestLicenseCreator
 
 		assertNotNull("The unencrypted license data should not be null.", unencrypted);
 
-		License returned = LicenseHelper.deserialize(unencrypted);
+		License returned = MockLicenseHelper.deserialize(unencrypted);
 
 		assertNotNull("The returned license should not be null.", returned);
 
@@ -258,7 +258,7 @@ public class TestLicenseCreator
 
 		assertNotNull("The unencrypted license data should not be null.", unencrypted);
 
-		License returned = LicenseHelper.deserialize(unencrypted);
+		License returned = MockLicenseHelper.deserialize(unencrypted);
 
 		assertNotNull("The returned license should not be null.", returned);
 

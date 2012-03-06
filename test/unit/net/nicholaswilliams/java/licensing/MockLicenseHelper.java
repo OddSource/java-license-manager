@@ -1,5 +1,5 @@
 /*
- * LicenseHelper.java from LicenseManager modified Tuesday, February 21, 2012 10:56:34 CST (-0600).
+ * MockLicenseHelper.java from LicenseManager modified Monday, March 5, 2012 19:09:53 CST (-0600).
  *
  * Copyright 2010-2012 the original author or authors.
  *
@@ -25,7 +25,7 @@ package net.nicholaswilliams.java.licensing;
  * @version 1.0.0
  * @since 1.0.0
  */
-public class LicenseHelper
+public class MockLicenseHelper
 {
 	public static License deserialize(byte[] data)
 	{

@@ -1,5 +1,5 @@
 /*
- * TestImmutableArrayList.java from LicenseManager modified Tuesday, February 21, 2012 10:56:34 CST (-0600).
+ * TestImmutableArrayList.java from LicenseManager modified Monday, March 5, 2012 18:27:47 CST (-0600).
  *
  * Copyright 2010-2012 the original author or authors.
  *
@@ -19,9 +19,7 @@
 package net.nicholaswilliams.java.licensing.immutable;
 
 import org.junit.After;
-import org.junit.AfterClass;
 import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
 
 import java.lang.reflect.Field;
@@ -37,7 +35,8 @@ public class TestImmutableArrayList
 {
 	private ImmutableArrayList<String> list;
 
-	public TestImmutableArrayList()
+	@Before
+	public void setUp()
 	{
 		ArrayList<String> temp = new ArrayList<String>();
 		temp.add("MyString1");
@@ -46,6 +45,12 @@ public class TestImmutableArrayList
 		temp.add("HerString4");
 
 		this.list = new ImmutableArrayList<String>(temp);
+	}
+
+	@After
+	public void tearDown()
+	{
+		
 	}
 
 	@SuppressWarnings("unchecked")
@@ -63,32 +68,8 @@ public class TestImmutableArrayList
 		}
 	}
 
-	@BeforeClass
-	public static void setUpClass() throws Exception
-	{
-
-	}
-
-	@AfterClass
-	public static void tearDownClass() throws Exception
-	{
-		
-	}
-
-	@Before
-	public void setUp()
-	{
-		
-	}
-
-	@After
-	public void tearDown()
-	{
-		
-	}
-
 	@Test
-	public void testConstruct() throws Exception
+	public void testConstruct01() throws Exception
 	{
 		ArrayList<String> internalList = this.getInternal();
 

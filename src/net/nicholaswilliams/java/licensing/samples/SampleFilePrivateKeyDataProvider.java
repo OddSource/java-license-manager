@@ -1,5 +1,5 @@
 /*
- * SamplePrivateKeyDataProvider.java from LicenseManager modified Tuesday, February 21, 2012 10:58:55 CST (-0600).
+ * SampleFilePrivateKeyDataProvider.java from LicenseManager modified Monday, March 5, 2012 22:02:26 CST (-0600).
  *
  * Copyright 2010-2012 the original author or authors.
  *
@@ -33,7 +33,7 @@ import java.io.IOException;
  * @see net.nicholaswilliams.java.licensing.licensor.PrivateKeyDataProvider
  */
 @SuppressWarnings("unused")
-public class SamplePrivateKeyDataProvider implements PrivateKeyDataProvider
+public class SampleFilePrivateKeyDataProvider implements PrivateKeyDataProvider
 {
 	/**
 	 * This method returns the data from the file containing the encrypted

@@ -1,5 +1,5 @@
 /*
- * ConsoleRSAKeyPairGenerator.java from LicenseManager modified Monday, March 5, 2012 13:10:33 CST (-0600).
+ * ConsoleRSAKeyPairGenerator.java from LicenseManager modified Monday, March 5, 2012 21:56:09 CST (-0600).
  *
  * Copyright 2010-2012 the original author or authors.
  *
@@ -351,8 +351,9 @@ public class ConsoleRSAKeyPairGenerator
 				this.doGenerateFiles(keyPair, periods);
 			}
 
-			Arrays.fill(this.privatePassword, '\u0000');
 			Arrays.fill(this.password, '\u0000');
+			if(this.useDifferentPasswords)
+				Arrays.fill(this.privatePassword, '\u0000');
 		}
 
 		public void doGenerateClasses(KeyPair keyPair, Periods periods)

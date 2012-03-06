@@ -1,5 +1,5 @@
 /*
- * RSAKeyPairGenerator.java from LicenseManager modified Monday, March 5, 2012 13:21:22 CST (-0600).
+ * RSAKeyPairGenerator.java from LicenseManager modified Monday, March 5, 2012 18:18:52 CST (-0600).
  *
  * Copyright 2010-2012 the original author or authors.
  *
@@ -201,6 +201,12 @@ public final class RSAKeyPairGenerator implements RSAKeyPairGeneratorInterface
 		if(publicKeyProvider == null)
 			throw new IllegalArgumentException("Parameter publicKeyProvider cannot be null.");
 
+		if(privatePassword == null || privatePassword.length == 0)
+			throw new IllegalArgumentException("Parameter privatePassword cannot be null or zero-length.");
+
+		if(publicPassword == null || publicPassword.length == 0)
+			throw new IllegalArgumentException("Parameter publicPassword cannot be null or zero-length.");
+
 		byte[] privateKey = KeyFileUtilities.writeEncryptedPrivateKey(keyPair.getPrivate(), privatePassword);
 		byte[] publicKey = KeyFileUtilities.writeEncryptedPublicKey(keyPair.getPublic(), publicPassword);
 
@@ -243,6 +249,9 @@ public final class RSAKeyPairGenerator implements RSAKeyPairGeneratorInterface
 	@Override
 	public void savePasswordToProvider(char[] password, GeneratedClassDescriptor passwordProvider)
 	{
+		if(password == null || password.length == 0)
+			throw new IllegalArgumentException("Parameter password cannot be null or zero-length.");
+		
 		if(passwordProvider == null)
 			throw new IllegalArgumentException("Parameter passwordProvider cannot be null.");
 		

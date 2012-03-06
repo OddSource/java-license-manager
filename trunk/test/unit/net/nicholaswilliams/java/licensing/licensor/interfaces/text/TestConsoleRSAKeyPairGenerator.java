@@ -1,5 +1,5 @@
 /*
- * TestConsoleRSAKeyPairGenerator.java from LicenseManager modified Sunday, March 4, 2012 22:32:03 CST (-0600).
+ * TestConsoleRSAKeyPairGenerator.java from LicenseManager modified Monday, March 5, 2012 18:50:38 CST (-0600).
  *
  * Copyright 2010-2012 the original author or authors.
  *
@@ -962,7 +962,7 @@ public class TestConsoleRSAKeyPairGenerator
 	@Test(expected=ThisExceptionMeansTestSucceededException.class)
 	public void testMain01()
 	{
-		SecurityManager securityManager = new PermissiveSecurityManager() {
+		SecurityManager securityManager = new MockPermissiveSecurityManager() {
 			private boolean active = true;
 
 			@Override
@@ -989,7 +989,7 @@ public class TestConsoleRSAKeyPairGenerator
 	@Test(expected=ThisExceptionMeansTestSucceededException.class)
 	public void testMain02()
 	{
-		SecurityManager securityManager = new PermissiveSecurityManager() {
+		SecurityManager securityManager = new MockPermissiveSecurityManager() {
 			private boolean active = true;
 
 			@Override
@@ -1014,7 +1014,7 @@ public class TestConsoleRSAKeyPairGenerator
 	}
 }
 
-class PermissiveSecurityManager extends SecurityManager
+class MockPermissiveSecurityManager extends SecurityManager
 {
 	@Override
 	public void checkPermission(Permission permission)

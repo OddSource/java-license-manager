@@ -1,5 +1,5 @@
 /*
- * TestRSAKeyPairGenerator.java from LicenseManager modified Monday, March 5, 2012 13:21:22 CST (-0600).
+ * TestRSAKeyPairGenerator.java from LicenseManager modified Monday, March 5, 2012 18:58:00 CST (-0600).
  *
  * Copyright 2010-2012 the original author or authors.
  *
@@ -56,6 +56,8 @@ import static org.junit.Assert.*;
  */
 public class TestRSAKeyPairGenerator
 {
+	private static KeyPair reusableKeyPair;
+
 	private RSAKeyPairGenerator generator;
 
 	public TestRSAKeyPairGenerator()
@@ -66,7 +68,7 @@ public class TestRSAKeyPairGenerator
 	@BeforeClass
 	public static void setUpClass() throws Exception
 	{
-		
+		TestRSAKeyPairGenerator.reusableKeyPair = new RSAKeyPairGenerator().generateKeyPair();
 	}
 
 	@AfterClass
@@ -188,8 +190,6 @@ public class TestRSAKeyPairGenerator
 	@Test
 	public void testSaveKeyPairToFiles02() throws IOException
 	{
-		KeyPair keyPair = this.generator.generateKeyPair();
-
 		File file1 = new File("testSaveKeyPairToFiles02.private");
 		File file2 = new File("testSaveKeyPairToFiles02.public");
 
@@ -203,7 +203,7 @@ public class TestRSAKeyPairGenerator
 		assertFalse("File 2 should not exist.", file2.exists());
 
 		this.generator.saveKeyPairToFiles(
-				keyPair,
+				TestRSAKeyPairGenerator.reusableKeyPair,
 				"testSaveKeyPairToFiles02.private",
 				"testSaveKeyPairToFiles02.public",
 				"testMyPassword02".toCharArray(),
@@ -217,10 +217,10 @@ public class TestRSAKeyPairGenerator
 		PublicKey publicKey = KeyFileUtilities.readEncryptedPublicKey(file2, "testYourPassword02".toCharArray());
 
 		assertNotNull("The private key should not be null.", privateKey);
-		assertEquals("The private key is not correct.", keyPair.getPrivate(), privateKey);
+		assertEquals("The private key is not correct.", TestRSAKeyPairGenerator.reusableKeyPair.getPrivate(), privateKey);
 
 		assertNotNull("The public key should not be null.", publicKey);
-		assertEquals("The public key is not correct.", keyPair.getPublic(), publicKey);
+		assertEquals("The public key is not correct.", TestRSAKeyPairGenerator.reusableKeyPair.getPublic(), publicKey);
 
 		FileUtils.forceDelete(file1);
 		FileUtils.forceDelete(file2);
@@ -312,10 +312,10 @@ public class TestRSAKeyPairGenerator
 	{
 		JavaCompiler compiler = ToolProvider.getSystemJavaCompiler();
 		JavaFileManager fileManager =
-				new ClassFileManager<StandardJavaFileManager>(compiler.getStandardFileManager(null, null, null));
+				new MockClassFileManager<StandardJavaFileManager>(compiler.getStandardFileManager(null, null, null));
 
 		List<JavaFileObject> javaFiles = new ArrayList<JavaFileObject>();
-		javaFiles.add(new CharSequenceJavaFileObject(fqcn, code));
+		javaFiles.add(new MockCharSequenceJavaFileObject(fqcn, code));
 
 		ByteArrayOutputStream compilerOutput = new ByteArrayOutputStream();
 
@@ -418,6 +418,136 @@ public class TestRSAKeyPairGenerator
 		public long getSystemTimeInSeconds();
 	}
 
+	@Test(expected=IllegalArgumentException.class)
+	public void testSaveKeysToProvidersFailed01()
+	{
+		String pn = "com.nicholaswilliams.mock";
+
+		RSAKeyPairGeneratorInterface.GeneratedClassDescriptor privateKPDescriptor =
+				new RSAKeyPairGeneratorInterface.GeneratedClassDescriptor();
+		privateKPDescriptor.setPackageName(pn);
+		privateKPDescriptor.setClassName("TestPrivateKeyProvider01");
+
+		RSAKeyPairGeneratorInterface.GeneratedClassDescriptor publicKPDescriptor =
+				new RSAKeyPairGeneratorInterface.GeneratedClassDescriptor();
+		publicKPDescriptor.setPackageName(pn);
+		publicKPDescriptor.setClassName("TestPublicKeyProvider01");
+
+		this.generator.saveKeyPairToProviders(
+				null, privateKPDescriptor, publicKPDescriptor, "test1".toCharArray(), "test2".toCharArray()
+		);
+	}
+
+	@Test(expected=IllegalArgumentException.class)
+	public void testSaveKeysToProvidersFailed02()
+	{
+		String pn = "com.nicholaswilliams.mock";
+
+		RSAKeyPairGeneratorInterface.GeneratedClassDescriptor publicKPDescriptor =
+				new RSAKeyPairGeneratorInterface.GeneratedClassDescriptor();
+		publicKPDescriptor.setPackageName(pn);
+		publicKPDescriptor.setClassName("TestPublicKeyProvider01");
+
+		this.generator.saveKeyPairToProviders(
+				TestRSAKeyPairGenerator.reusableKeyPair, null, publicKPDescriptor, "test1".toCharArray(), "test2".toCharArray()
+		);
+	}
+
+	@Test(expected=IllegalArgumentException.class)
+	public void testSaveKeysToProvidersFailed03()
+	{
+		String pn = "com.nicholaswilliams.mock";
+
+		RSAKeyPairGeneratorInterface.GeneratedClassDescriptor privateKPDescriptor =
+				new RSAKeyPairGeneratorInterface.GeneratedClassDescriptor();
+		privateKPDescriptor.setPackageName(pn);
+		privateKPDescriptor.setClassName("TestPrivateKeyProvider01");
+
+		this.generator.saveKeyPairToProviders(
+				TestRSAKeyPairGenerator.reusableKeyPair, privateKPDescriptor, null, "test1".toCharArray(), "test2".toCharArray()
+		);
+	}
+
+	@Test(expected=IllegalArgumentException.class)
+	public void testSaveKeysToProvidersFailed04()
+	{
+		String pn = "com.nicholaswilliams.mock";
+
+		RSAKeyPairGeneratorInterface.GeneratedClassDescriptor privateKPDescriptor =
+				new RSAKeyPairGeneratorInterface.GeneratedClassDescriptor();
+		privateKPDescriptor.setPackageName(pn);
+		privateKPDescriptor.setClassName("TestPrivateKeyProvider01");
+
+		RSAKeyPairGeneratorInterface.GeneratedClassDescriptor publicKPDescriptor =
+				new RSAKeyPairGeneratorInterface.GeneratedClassDescriptor();
+		publicKPDescriptor.setPackageName(pn);
+		publicKPDescriptor.setClassName("TestPublicKeyProvider01");
+
+		this.generator.saveKeyPairToProviders(
+				TestRSAKeyPairGenerator.reusableKeyPair, privateKPDescriptor, publicKPDescriptor, null, "test2".toCharArray()
+		);
+	}
+
+	@Test(expected=IllegalArgumentException.class)
+	public void testSaveKeysToProvidersFailed05()
+	{
+		String pn = "com.nicholaswilliams.mock";
+
+		RSAKeyPairGeneratorInterface.GeneratedClassDescriptor privateKPDescriptor =
+				new RSAKeyPairGeneratorInterface.GeneratedClassDescriptor();
+		privateKPDescriptor.setPackageName(pn);
+		privateKPDescriptor.setClassName("TestPrivateKeyProvider01");
+
+		RSAKeyPairGeneratorInterface.GeneratedClassDescriptor publicKPDescriptor =
+				new RSAKeyPairGeneratorInterface.GeneratedClassDescriptor();
+		publicKPDescriptor.setPackageName(pn);
+		publicKPDescriptor.setClassName("TestPublicKeyProvider01");
+
+		this.generator.saveKeyPairToProviders(
+				TestRSAKeyPairGenerator.reusableKeyPair, privateKPDescriptor, publicKPDescriptor, "".toCharArray(), "test2".toCharArray()
+		);
+	}
+
+	@Test(expected=IllegalArgumentException.class)
+	public void testSaveKeysToProvidersFailed06()
+	{
+		String pn = "com.nicholaswilliams.mock";
+
+		RSAKeyPairGeneratorInterface.GeneratedClassDescriptor privateKPDescriptor =
+				new RSAKeyPairGeneratorInterface.GeneratedClassDescriptor();
+		privateKPDescriptor.setPackageName(pn);
+		privateKPDescriptor.setClassName("TestPrivateKeyProvider01");
+
+		RSAKeyPairGeneratorInterface.GeneratedClassDescriptor publicKPDescriptor =
+				new RSAKeyPairGeneratorInterface.GeneratedClassDescriptor();
+		publicKPDescriptor.setPackageName(pn);
+		publicKPDescriptor.setClassName("TestPublicKeyProvider01");
+
+		this.generator.saveKeyPairToProviders(
+				TestRSAKeyPairGenerator.reusableKeyPair, privateKPDescriptor, publicKPDescriptor, "test1".toCharArray(), null
+		);
+	}
+
+	@Test(expected=IllegalArgumentException.class)
+	public void testSaveKeysToProvidersFailed07()
+	{
+		String pn = "com.nicholaswilliams.mock";
+
+		RSAKeyPairGeneratorInterface.GeneratedClassDescriptor privateKPDescriptor =
+				new RSAKeyPairGeneratorInterface.GeneratedClassDescriptor();
+		privateKPDescriptor.setPackageName(pn);
+		privateKPDescriptor.setClassName("TestPrivateKeyProvider01");
+
+		RSAKeyPairGeneratorInterface.GeneratedClassDescriptor publicKPDescriptor =
+				new RSAKeyPairGeneratorInterface.GeneratedClassDescriptor();
+		publicKPDescriptor.setPackageName(pn);
+		publicKPDescriptor.setClassName("TestPublicKeyProvider01");
+
+		this.generator.saveKeyPairToProviders(
+				TestRSAKeyPairGenerator.reusableKeyPair, privateKPDescriptor, publicKPDescriptor, "test1".toCharArray(), "".toCharArray()
+		);
+	}
+
 	@Test
 	public void testSaveKeysToProviders01() throws ClassNotFoundException, IllegalAccessException, InstantiationException
 	{
@@ -493,10 +623,8 @@ public class TestRSAKeyPairGenerator
 		publicKPDescriptor.setPackageName(pn);
 		publicKPDescriptor.setClassName("TestPublicKeyProvider02");
 
-		KeyPair keyPair = this.generator.generateKeyPair();
-
 		this.generator.saveKeyPairToProviders(
-				keyPair, privateKPDescriptor, publicKPDescriptor, "anotherPassword02".toCharArray()
+				TestRSAKeyPairGenerator.reusableKeyPair, privateKPDescriptor, publicKPDescriptor, "anotherPassword02".toCharArray()
 		);
 
 		///////////////////////
@@ -516,7 +644,7 @@ public class TestRSAKeyPairGenerator
 
 		PrivateKey privateKey = KeyFileUtilities.readEncryptedPrivateKey(privateKeyData, "anotherPassword02".toCharArray());
 		assertNotNull("The private key should not be null.", privateKey);
-		assertEquals("The private key is not correct.", keyPair.getPrivate(), privateKey);
+		assertEquals("The private key is not correct.", TestRSAKeyPairGenerator.reusableKeyPair.getPrivate(), privateKey);
 
 		///////////////////////
 		assertNotNull("The public key code should not be null.", publicKPDescriptor.getJavaFileContents());
@@ -535,7 +663,7 @@ public class TestRSAKeyPairGenerator
 
 		PublicKey publicKey = KeyFileUtilities.readEncryptedPublicKey(publicKeyData, "anotherPassword02".toCharArray());
 		assertNotNull("The public key should not be null.", publicKey);
-		assertEquals("The public key is not correct.", keyPair.getPublic(), publicKey);
+		assertEquals("The public key is not correct.", TestRSAKeyPairGenerator.reusableKeyPair.getPublic(), publicKey);
 	}
 
 	@Test
@@ -599,8 +727,42 @@ public class TestRSAKeyPairGenerator
 		assertEquals("The public key is not correct.", keyPair.getPublic(), publicKey);
 	}
 
+	@Test(expected=IllegalArgumentException.class)
+	public void testSavePasswordToProviderFailed01()
+	{
+		String pn = "com.nicholaswilliams.mock";
+
+		RSAKeyPairGeneratorInterface.GeneratedClassDescriptor passwordPDescriptor =
+				new RSAKeyPairGeneratorInterface.GeneratedClassDescriptor();
+		passwordPDescriptor.setPackageName(pn);
+		passwordPDescriptor.setClassName("TestKeyPasswordProvider01");
+
+		this.generator.savePasswordToProvider(null, passwordPDescriptor);
+	}
+
+	@Test(expected=IllegalArgumentException.class)
+	public void testSavePasswordToProviderFailed02()
+	{
+		String pn = "com.nicholaswilliams.mock";
+
+		RSAKeyPairGeneratorInterface.GeneratedClassDescriptor passwordPDescriptor =
+				new RSAKeyPairGeneratorInterface.GeneratedClassDescriptor();
+		passwordPDescriptor.setPackageName(pn);
+		passwordPDescriptor.setClassName("TestKeyPasswordProvider01");
+
+		this.generator.savePasswordToProvider("".toCharArray(), passwordPDescriptor);
+	}
+
+	@Test(expected=IllegalArgumentException.class)
+	public void testSavePasswordToProviderFailed03()
+	{
+		String pn = "com.nicholaswilliams.mock";
+
+		this.generator.savePasswordToProvider("test1".toCharArray(), null);
+	}
+
 	@Test
-	public void testSavePasswordToProviders01() throws ClassNotFoundException, IllegalAccessException, InstantiationException
+	public void testSavePasswordToProvider01() throws ClassNotFoundException, IllegalAccessException, InstantiationException
 	{
 		String pn = "com.nicholaswilliams.mock";
 
@@ -629,7 +791,7 @@ public class TestRSAKeyPairGenerator
 	}
 
 	@Test
-	public void testSavePasswordToProviders02() throws ClassNotFoundException, IllegalAccessException, InstantiationException
+	public void testSavePasswordToProvider02() throws ClassNotFoundException, IllegalAccessException, InstantiationException
 	{
 		String pn = "com.nicholaswilliams.another";
 
@@ -658,11 +820,11 @@ public class TestRSAKeyPairGenerator
 	}
 }
 
-class ClassFileManager<M extends JavaFileManager> extends ForwardingJavaFileManager<M>
+class MockClassFileManager<M extends JavaFileManager> extends ForwardingJavaFileManager<M>
 {
-	private JavaClassObject javaClassObject;
+	private MockJavaClassObject javaClassObject;
 
-	public ClassFileManager(M standardManager)
+	public MockClassFileManager(M standardManager)
 	{
 		super(standardManager);
 	}
@@ -675,8 +837,8 @@ class ClassFileManager<M extends JavaFileManager> extends ForwardingJavaFileMana
 			@Override
 			protected Class<?> findClass(String name) throws ClassNotFoundException
 			{
-				byte[] b = ClassFileManager.this.javaClassObject.getBytes();
-				return super.defineClass(name, ClassFileManager.this.javaClassObject.getBytes(), 0, b.length);
+				byte[] b = MockClassFileManager.this.javaClassObject.getBytes();
+				return super.defineClass(name, MockClassFileManager.this.javaClassObject.getBytes(), 0, b.length);
 			}
 		};
 	}
@@ -686,16 +848,16 @@ class ClassFileManager<M extends JavaFileManager> extends ForwardingJavaFileMana
 											   FileObject sibling)
 			throws IOException
 	{
-		this.javaClassObject = new JavaClassObject(className, kind);
+		this.javaClassObject = new MockJavaClassObject(className, kind);
 		return this.javaClassObject;
 	}
 }
 
-class JavaClassObject extends SimpleJavaFileObject
+class MockJavaClassObject extends SimpleJavaFileObject
 {
 	protected final ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
 
-	public JavaClassObject(String name, Kind kind)
+	public MockJavaClassObject(String name, Kind kind)
 	{
 		super(URI.create("string:///" + name.replace('.', '/') + kind.extension), kind);
 	}
@@ -712,11 +874,11 @@ class JavaClassObject extends SimpleJavaFileObject
 	}
 }
 
-class CharSequenceJavaFileObject extends SimpleJavaFileObject
+class MockCharSequenceJavaFileObject extends SimpleJavaFileObject
 {
 	private CharSequence content;
 
-	public CharSequenceJavaFileObject(String className, CharSequence content)
+	public MockCharSequenceJavaFileObject(String className, CharSequence content)
 	{
 		super(URI.create("string:///" + className.replace('.', '/') + Kind.SOURCE.extension), Kind.SOURCE);
 		this.content = content;

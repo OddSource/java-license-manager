@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
-  ~ ant-build.xml from LicenseManager modified Tuesday, May 15, 2012 21:54:31 CDT (-0500).
+  ~ ant-build.xml from LicenseManager modified Tuesday, May 15, 2012 22:06:31 CDT (-0500).
   ~
   ~ Copyright 2010-2012 the original author or authors.
   ~
@@ -192,8 +192,8 @@
 			</bottom>
 			<link href="http://download.oracle.com/javase/6/docs/api/" />
 			<link href="http://commons.apache.org/cli/api-1.2/" />
-			<link href="http://commons.apache.org/codec/api-1.4/" />
-			<link href="http://commons.apache.org/io/api-2.0.1/" />
+			<link href="http://commons.apache.org/codec/api-release/" />
+			<link href="http://commons.apache.org/io/api-2.1/" />
 			<classpath>
 				<path refid="licensemanager.classpath.build" />
 			</classpath>

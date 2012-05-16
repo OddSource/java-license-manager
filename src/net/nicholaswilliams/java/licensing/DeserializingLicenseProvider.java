@@ -1,5 +1,5 @@
 /*
- * DeserializingLicenseProvider.java from LicenseManager modified Tuesday, February 21, 2012 10:56:33 CST (-0600).
+ * DeserializingLicenseProvider.java from LicenseManager modified Tuesday, May 15, 2012 21:23:17 CDT (-0500).
  *
  * Copyright 2010-2012 the original author or authors.
  *
@@ -40,7 +40,12 @@ public abstract class DeserializingLicenseProvider implements LicenseProvider
 	{
 		byte[] data = this.getLicenseData(context);
 
-		return data == null ? null : new ObjectSerializer().readObject(SignedLicense.class, data);
+		return data == null ? null : this.deserializeLicense(data);
+	}
+
+	protected final SignedLicense deserializeLicense(byte[] data)
+	{
+		return new ObjectSerializer().readObject(SignedLicense.class, data);
 	}
 
 	/**

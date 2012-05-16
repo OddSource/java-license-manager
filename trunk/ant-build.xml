@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
-  ~ ant-build.xml from LicenseManager modified Thursday, February 23, 2012 16:26:04 CST (-0600).
+  ~ ant-build.xml from LicenseManager modified Tuesday, May 15, 2012 21:54:31 CDT (-0500).
   ~
   ~ Copyright 2010-2012 the original author or authors.
   ~
@@ -213,7 +213,7 @@
 		<mkdir dir="${licensemanager.dir.junitOutput.unit}" />
 
 		<junit printsummary="yes" outputtoformatters="yes" tempdir="${licensemanager.dir.junitOutput.temp}"
-			   jvm="${module.jdk.bin.licensemanager}/java">
+			   jvm="${module.jdk.bin.licensemanager}/java" forkmode="perTest" errorproperty="test.module.unit.failed">
 			<classpath>
 				<path refid="licensemanager.classpath.test.unit.runtime" />
 			</classpath>
@@ -229,6 +229,8 @@
 				</fileset>
 			</batchtest>
 		</junit>
+
+		<fail if="test.module.unit.failed" />
 	</target>
 
 	<target name="package.artifact.all"

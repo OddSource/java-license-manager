@@ -1,5 +1,5 @@
 /*
- * LicenseManager.java from LicenseManager modified Monday, March 5, 2012 13:38:27 CST (-0600).
+ * LicenseManager.java from LicenseManager modified Tuesday, May 15, 2012 21:46:24 CDT (-0500).
  *
  * Copyright 2010-2012 the original author or authors.
  *
@@ -280,9 +280,9 @@ public final class LicenseManager
 	 * @param context The context (account, client, etc.) for which to retrieve the license object
 	 * @return the requested license object, or null if none exists.
 	 * @throws KeyNotFoundException if the public key data could not be found.
-	 * @throws AlgorithmNotSupportedException if the encryption algorithm is not supported.
+	 * @throws AlgorithmNotSupportedException if the signature algorithm is not supported on this system.
 	 * @throws InappropriateKeySpecificationException if an inappropriate key specification is provided.
-	 * @throws InappropriateKeyException if the key type and cipher type do not match.
+	 * @throws InappropriateKeyException if there is a problem initializing the verification mechanism with the public key.
 	 * @throws CorruptSignatureException if the signature data has been corrupted (most likely tampered with).
 	 * @throws InvalidSignatureException if the signature is invalid (most likely tampered with).
 	 * @throws FailedToDecryptException if the license or signature could not be decrypted.
@@ -310,36 +310,23 @@ public final class LicenseManager
 
 			if(entry == null || entry.license == null)
 			{
-				SignedLicense signed = this.licenseProvider.getLicense(context);
-				if(signed == null)
+				SignedLicense signedLicense = this.licenseProvider.getLicense(context);
+				if(signedLicense == null)
 					return null;
-
-				PublicKey key;
-				{
-					char[] password = this.publicKeyPasswordProvider.getPassword();
-					byte[] keyData = this.publicKeyDataProvider.getEncryptedPublicKeyData();
-
-					key = KeyFileUtilities.readEncryptedPublicKey(keyData, password);
-
-					Arrays.fill(password, '\u0000');
-					Arrays.fill(keyData, (byte)0);
-				}
 
 				License license;
 				{
 					byte[] unencrypted;
 					{
-						char[] password = this.licensePasswordProvider.getPassword();
-						byte[] signature = signed.getSignatureContent();
-						byte[] encrypted = signed.getLicenseContent();
-						signed.erase();
+						this.verifyLicenseSignature(signedLicense);
 
-						new DataSignatureManager().verifySignature(key, encrypted, signature);
+						char[] password = this.licensePasswordProvider.getPassword();
+						byte[] encrypted = signedLicense.getLicenseContent();
+						signedLicense.erase();
 
 						unencrypted = Encryptor.decryptRaw(encrypted, password);
 
 						Arrays.fill(password, '\u0000');
-						Arrays.fill(signature, (byte)0);
 						Arrays.fill(encrypted, (byte)0);
 					}
 
@@ -357,6 +344,39 @@ public final class LicenseManager
 
 			return entry.license;
 		}
+	}
+
+	/**
+	 * This method verifies the signed license object's signature. It throws an exception if the signature is invalid.
+	 * Normally you will not need to call this method; all of the other methods in this class call this method at some
+	 * point or another in one way or another (specifically by way of {@link #getLicense(Object)}). This is a
+	 * convenience method useful for verifying the signature of an individual license without going through all of the
+	 * retrieval mechanisms normally used when calling {@link #getLicense(Object)}.
+	 *
+	 * @param signedLicense The signed license object to verify
+	 * @throws AlgorithmNotSupportedException if the signature algorithm is not supported on this system.
+	 * @throws InappropriateKeyException if there is a problem initializing the verification mechanism with the public key.
+	 * @throws CorruptSignatureException if the signature data has been corrupted (most likely tampered with).
+	 * @throws InvalidSignatureException if the signature is invalid (most likely tampered with).
+	 */
+	public final void verifyLicenseSignature(SignedLicense signedLicense)
+			throws AlgorithmNotSupportedException, InappropriateKeyException, CorruptSignatureException,
+				   InvalidSignatureException
+	{
+		PublicKey key;
+		{
+			char[] password = this.publicKeyPasswordProvider.getPassword();
+			byte[] keyData = this.publicKeyDataProvider.getEncryptedPublicKeyData();
+
+			key = KeyFileUtilities.readEncryptedPublicKey(keyData, password);
+
+			Arrays.fill(password, '\u0000');
+			Arrays.fill(keyData, (byte)0);
+		}
+
+		new DataSignatureManager().verifySignature(
+				key, signedLicense.getLicenseContent(), signedLicense.getSignatureContent()
+		);
 	}
 
 	/**

@@ -1,5 +1,5 @@
 /*
- * ObjectSerializer.java from LicenseManager modified Tuesday, February 21, 2012 10:56:33 CST (-0600).
+ * ObjectSerializer.java from LicenseManager modified Thursday, May 17, 2012 20:09:41 CDT (-0500).
  *
  * Copyright 2010-2012 the original author or authors.
  *
@@ -44,7 +44,7 @@ public final class ObjectSerializer
 	 *
 	 * @param expectedType The type that is expected to be retrieved from {@code byteStream} (must implement {@link Serializable})
 	 * @param byteStream The byte stream to retrieve the object from (it must contain exactly one object, of the exact type passed to {@code expectedType})
-	 * @return The requested object, presumably in the stream.
+	 * @return the requested unserialized object, presumably in the stream.
 	 * @throws ObjectTypeNotExpectedException If the object found in the stream does not match the type {@code expectedType} or if a {@link ClassNotFoundException} or {@link NoClassDefFoundError} occurs
 	 * @throws ObjectDeserializationException If an I/O exception occurs while deserializing the object from the stream
 	 */
@@ -103,7 +103,7 @@ public final class ObjectSerializer
 	 * Serializes the {@link Serializable} object passed and returns it as a byte array.
 	 *
 	 * @param object The object to serialize
-	 * @return The byte stream with the object serialized in it
+	 * @return the byte stream with the object serialized in it.
 	 * @throws ObjectSerializationException if an I/O exception occurs while serializing the object.
 	 */
 	public final byte[] writeObject(Serializable object) throws ObjectSerializationException

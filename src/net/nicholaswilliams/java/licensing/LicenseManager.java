@@ -1,5 +1,5 @@
 /*
- * LicenseManager.java from LicenseManager modified Tuesday, May 15, 2012 21:46:24 CDT (-0500).
+ * LicenseManager.java from LicenseManager modified Thursday, May 17, 2012 20:09:17 CDT (-0500).
  *
  * Copyright 2010-2012 the original author or authors.
  *
@@ -314,26 +314,9 @@ public final class LicenseManager
 				if(signedLicense == null)
 					return null;
 
-				License license;
-				{
-					byte[] unencrypted;
-					{
-						this.verifyLicenseSignature(signedLicense);
+				License license = this.decryptAndVerifyLicense(signedLicense);
 
-						char[] password = this.licensePasswordProvider.getPassword();
-						byte[] encrypted = signedLicense.getLicenseContent();
-						signedLicense.erase();
-
-						unencrypted = Encryptor.decryptRaw(encrypted, password);
-
-						Arrays.fill(password, '\u0000');
-						Arrays.fill(encrypted, (byte)0);
-					}
-
-					license = License.deserialize(unencrypted);
-					
-					Arrays.fill(unencrypted, (byte)0);
-				}
+				signedLicense.erase();
 				
 				long expires = time + this.cacheTimeInMilliseconds;
 
@@ -351,7 +334,7 @@ public final class LicenseManager
 	 * Normally you will not need to call this method; all of the other methods in this class call this method at some
 	 * point or another in one way or another (specifically by way of {@link #getLicense(Object)}). This is a
 	 * convenience method useful for verifying the signature of an individual license without going through all of the
-	 * retrieval mechanisms normally used when calling {@link #getLicense(Object)}.
+	 * retrieval and caching mechanisms normally used when calling {@link #getLicense(Object)}.
 	 *
 	 * @param signedLicense The signed license object to verify
 	 * @throws AlgorithmNotSupportedException if the signature algorithm is not supported on this system.
@@ -377,6 +360,46 @@ public final class LicenseManager
 		new DataSignatureManager().verifySignature(
 				key, signedLicense.getLicenseContent(), signedLicense.getSignatureContent()
 		);
+	}
+
+	/**
+	 * This method verifies the signed license object's signature, then decrypts the signed license and returns the
+	 * decrypted license. It throws an exception if the signature is invalid. Normally you will not need to call this
+	 * method; all of the other methods in this class call this method at some point or another in one way or another
+	 * (specifically by way of {@link #getLicense(Object)}). This is a convenience method useful for verifying the
+	 * signature of and interpreting an individual license without going through all of the retrieval and caching
+	 * mechanisms normally used when calling {@link #getLicense(Object)}.
+	 *
+	 * @param signedLicense The signed license object to verify
+	 * @return the decrypted license object.
+	 * @throws AlgorithmNotSupportedException if the signature algorithm is not supported on this system.
+	 * @throws InappropriateKeyException if there is a problem initializing the verification mechanism with the public key.
+	 * @throws CorruptSignatureException if the signature data has been corrupted (most likely tampered with).
+	 * @throws InvalidSignatureException if the signature is invalid (most likely tampered with).
+	 * @throws FailedToDecryptException if the license could not be decrypted.
+	 */
+	public final License decryptAndVerifyLicense(SignedLicense signedLicense)
+	{
+		License license;
+		{
+			byte[] unencrypted;
+			{
+				this.verifyLicenseSignature(signedLicense);
+
+				char[] password = this.licensePasswordProvider.getPassword();
+				byte[] encrypted = signedLicense.getLicenseContent();
+
+				unencrypted = Encryptor.decryptRaw(encrypted, password);
+
+				Arrays.fill(password, '\u0000');
+				Arrays.fill(encrypted, (byte)0);
+			}
+
+			license = License.deserialize(unencrypted);
+
+			Arrays.fill(unencrypted, (byte)0);
+		}
+		return license;
 	}
 
 	/**

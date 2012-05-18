@@ -1,5 +1,5 @@
 /*
- * DeserializingLicenseProvider.java from LicenseManager modified Tuesday, May 15, 2012 21:23:17 CDT (-0500).
+ * DeserializingLicenseProvider.java from LicenseManager modified Thursday, May 17, 2012 20:10:35 CDT (-0500).
  *
  * Copyright 2010-2012 the original author or authors.
  *

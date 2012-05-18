@@ -1,5 +1,5 @@
 /*
- * TestConsoleRSAKeyPairGenerator.java from LicenseManager modified Monday, March 5, 2012 18:50:38 CST (-0600).
+ * TestConsoleRSAKeyPairGenerator.java from LicenseManager modified Wednesday, May 16, 2012 09:42:50 CDT (-0500).
  *
  * Copyright 2010-2012 the original author or authors.
  *
@@ -676,6 +676,10 @@ public class TestConsoleRSAKeyPairGenerator
 
 		String[] arguments = new String[] { "-interactive" };
 
+		this.device.printOutLn("Using interactive mode...");
+		EasyMock.expectLastCall();
+		this.device.printOutLn();
+		EasyMock.expectLastCall();
 		this.console.processCommandLineOptions(arguments);
 		EasyMock.expectLastCall();
 		this.console.doInteractive();

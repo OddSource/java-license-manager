@@ -1,5 +1,5 @@
 /*
- * LicenseManagerProperties.java from LicenseManager modified Monday, March 5, 2012 13:31:38 CST (-0600).
+ * LicenseManagerProperties.java from LicenseManager modified Thursday, May 17, 2012 19:38:57 CDT (-0500).
  *
  * Copyright 2010-2012 the original author or authors.
  *
@@ -109,7 +109,7 @@ public final class LicenseManagerProperties
 		LicenseManagerProperties.licensePasswordProvider = licensePasswordProvider;
 	}
 
-	public static PasswordProvider getLicensePasswordProvider()
+	static PasswordProvider getLicensePasswordProvider()
 	{
 		return LicenseManagerProperties.licensePasswordProvider;
 	}

@@ -1,5 +1,5 @@
 /*
- * LicenseSecurityManager.java from LicenseManager modified Tuesday, February 21, 2012 10:56:34 CST (-0600).
+ * LicenseSecurityManager.java from LicenseManager modified Thursday, May 17, 2012 19:37:54 CDT (-0500).
  *
  * Copyright 2010-2012 the original author or authors.
  *
@@ -141,6 +141,8 @@ final class LicenseSecurityManager extends SecurityManager
 
 	private LicenseSecurityManager(SecurityManager next)
 	{
+		super();
+
 		this.next = next;
 	}
 
@@ -444,6 +446,24 @@ final class LicenseSecurityManager extends SecurityManager
 	{
 		if(this.next != null)
 			this.next.checkSecurityAccess(s);
+	}
+
+	@Override
+	public boolean checkTopLevelWindow(Object window)
+	{
+		return this.next == null || this.next.checkTopLevelWindow(window);
+	}
+
+	@Override
+	public ThreadGroup getThreadGroup()
+	{
+		return this.next != null ? this.next.getThreadGroup() : super.getThreadGroup();
+	}
+
+	@Override
+	public Object getSecurityContext()
+	{
+		return this.next != null ? this.next.getSecurityContext() : super.getSecurityContext();
 	}
 
 	protected static LicenseSecurityManager getInstance()

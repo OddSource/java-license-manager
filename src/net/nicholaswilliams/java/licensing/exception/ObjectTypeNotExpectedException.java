@@ -1,5 +1,5 @@
 /*
- * ObjectTypeNotExpectedException.java from LicenseManager modified Tuesday, February 21, 2012 10:56:34 CST (-0600).
+ * ObjectTypeNotExpectedException.java from LicenseManager modified Thursday, May 17, 2012 20:12:41 CDT (-0500).
  *
  * Copyright 2010-2012 the original author or authors.
  *
@@ -19,8 +19,7 @@
 package net.nicholaswilliams.java.licensing.exception;
 
 /**
- * This class class is thrown when an object is deserialized that does not match
- * the type that was expected.
+ * This class class is thrown when an object is deserialized that does not match the type that was expected.
  *
  * @author Nick Williams
  * @version 1.0.0

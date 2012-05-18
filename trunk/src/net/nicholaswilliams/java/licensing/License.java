@@ -1,5 +1,5 @@
 /*
- * License.java from LicenseManager modified Tuesday, February 21, 2012 10:56:34 CST (-0600).
+ * License.java from LicenseManager modified Thursday, May 17, 2012 20:12:22 CDT (-0500).
  *
  * Copyright 2010-2012 the original author or authors.
  *
@@ -119,7 +119,7 @@ public final class License implements Serializable, Cloneable
 	 * Deserializes a serialized license into an actual License object.
 	 *
 	 * @param data The serialized data to create the license from
-	 * @return the deserialized license.
+	 * @return the unserialized license.
 	 */
 	protected static License deserialize(byte[] data)
 	{
@@ -490,7 +490,7 @@ public final class License implements Serializable, Cloneable
 		 * Deserializes a string representation of a feature into a feature.
 		 *
 		 * @param input The string representation of a feature, generated with {@link #toString()}.
-		 * @return the deserialized feature.
+		 * @return the unserialized feature.
 		 */
 		private static License.Feature fromString(String input)
 		{

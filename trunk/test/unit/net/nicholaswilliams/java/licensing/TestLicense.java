@@ -1,5 +1,5 @@
 /*
- * TestLicense.java from LicenseManager modified Tuesday, February 21, 2012 10:56:33 CST (-0600).
+ * TestLicense.java from LicenseManager modified Thursday, May 17, 2012 20:09:06 CDT (-0500).
  *
  * Copyright 2010-2012 the original author or authors.
  *
@@ -461,7 +461,10 @@ public class TestLicense
 	@Test
 	public void testDeserialization01()
 	{
-		License license = License.deserialize(("[5565-1039-AF89-GGX7-TN31-14AL][CN=John E. Smith, C=CA, ST=QE][CN=OurCompany, C=US, ST=KY][Cool Product, by Company][14429073214631][1443907325000][1443917325000][12][fordFeature1"+(char)0x1F+"-1, chevyFeature2"+(char)0x1F+Long.MAX_VALUE+", hondaFeature3"+(char)0x1F+Long.MAX_VALUE+", toyotaFeature4"+(char)0x1F+"-1]").getBytes());
+		License license = License.deserialize(
+				( "[5565-1039-AF89-GGX7-TN31-14AL][CN=John E. Smith, C=CA, ST=QE][CN=OurCompany, C=US, ST=KY][Cool Product, by Company][14429073214631][1443907325000][1443917325000][12][fordFeature1" +
+				  (char) 0x1F + "-1, chevyFeature2" + (char) 0x1F + Long.MAX_VALUE + ", hondaFeature3" + (char) 0x1F +
+				  Long.MAX_VALUE + ", toyotaFeature4" + (char) 0x1F + "-1]" ).getBytes());
 
 		assertEquals("The product key is not correct.", "5565-1039-AF89-GGX7-TN31-14AL", license.getProductKey());
 		assertEquals("The holder is not correct.", "CN=John E. Smith, C=CA, ST=QE", license.getHolder());
@@ -481,7 +484,10 @@ public class TestLicense
 	@Test
 	public void testDeserialization02()
 	{
-		License license = License.deserialize(("[6575-TH0T-SNL5-7XGG-1099-1040][CN=John E. Smith, C=CA, ST=QE][CN=OurCompany, C=US, ST=KY][Cool Product, by Company][14429073214631][1443907325000][1443917325000][12][fordFeature1"+(char)0x1F+"-1, chevyFeature2"+(char)0x1F+Long.MAX_VALUE+", hondaFeature3"+(char)0x1F+"1234567890, toyotaFeature4"+(char)0x1F+"-1]").getBytes());
+		License license = License.deserialize(
+				( "[6575-TH0T-SNL5-7XGG-1099-1040][CN=John E. Smith, C=CA, ST=QE][CN=OurCompany, C=US, ST=KY][Cool Product, by Company][14429073214631][1443907325000][1443917325000][12][fordFeature1" +
+				  (char) 0x1F + "-1, chevyFeature2" + (char) 0x1F + Long.MAX_VALUE + ", hondaFeature3" + (char) 0x1F +
+				  "1234567890, toyotaFeature4" + (char) 0x1F + "-1]" ).getBytes());
 
 		assertEquals("The product key is not correct.", "6575-TH0T-SNL5-7XGG-1099-1040", license.getProductKey());
 		assertEquals("The holder is not correct.", "CN=John E. Smith, C=CA, ST=QE", license.getHolder());

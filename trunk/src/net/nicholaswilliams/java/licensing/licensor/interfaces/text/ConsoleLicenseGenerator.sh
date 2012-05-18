@@ -1,5 +1,5 @@
 #
-# ConsoleRSAKeyPairGenerator.sh from LicenseManager modified Tuesday, June 28, 2011 11:35:44 CDT (-0500).
+# ConsoleLicenseGenerator.sh from LicenseManager modified Tuesday, June 28, 2011 11:35:44 CDT (-0500).
 #
 # Copyright 2010-2011 the original author or authors.
 #
@@ -20,5 +20,5 @@ GP="/Users/Nicholas/Documents/Nick Williams Technology Services/Java Projects/Li
 
 CP="$GP/lib/*:$GP/out/production/LicenseManager"
 
-java -cp "$CP" net.nicholaswilliams.java.licensing.licensor.interfaces.text.ConsoleRSAKeyPairGenerator $1 $2 $3 $4 $5 $6 $7 $8 $9 $10 $11 $12 $13 $14 $15 $16 $17 $18 $19 $20 $21 $22 $23 $24 $25 $26 $27 $28 $29 $30
+java -cp "$CP" net.nicholaswilliams.java.licensing.licensor.interfaces.text.ConsoleLicenseGenerator $1 $2 $3 $4 $5 $6 $7 $8 $9 $10 $11 $12 $13 $14 $15 $16 $17 $18 $19 $20 $21 $22 $23 $24 $25 $26 $27 $28 $29 $30
 

@@ -1,5 +1,5 @@
 /*
- * ConsoleRSAKeyPairGenerator.java from LicenseManager modified Monday, March 5, 2012 21:56:09 CST (-0600).
+ * ConsoleRSAKeyPairGenerator.java from LicenseManager modified Thursday, May 17, 2012 20:02:59 CDT (-0500).
  *
  * Copyright 2010-2012 the original author or authors.
  *
@@ -54,7 +54,6 @@ import static net.nicholaswilliams.java.licensing.encryption.RSAKeyPairGenerator
  * <code>java net.nicholaswilliams.java.licensing.text ConsoleRSAKeyPairGenerator -interactive</code><br />
  * <br />
  * To specify all options at the command line:<br />
- * <br />
  * <code>java net.nicholaswilliams.java.licensing.text ConsoleRSAKeyPairGenerator -password &lt;password&gt; -private &lt;file|class name&gt; -public &lt;file|class name&gt; [-privatePassword &lt;password&gt;] [-classes -passwordClass &lt;class name&gt; -privatePasswordClass &lt;class name&gt; [-privatePackage &lt;package&gt;] [-publicPackage &lt;package&gt;] [-passwordPackage &lt;package&gt;] [-privatePasswordPackage &lt;package&gt;]]</code><br />
  * <br />
  * Be sure to review the documentation for {@link net.nicholaswilliams.java.licensing.encryption.PasswordProvider},
@@ -163,7 +162,6 @@ public class ConsoleRSAKeyPairGenerator
 		this.device.printOutLn();
 	}
 
-	@SuppressWarnings({"static-access"})
 	protected void processCommandLineOptions(String[] arguments)
 	{
 		Options firstParseOptions = new Options();
@@ -539,6 +537,8 @@ public class ConsoleRSAKeyPairGenerator
 		{
 			if(this.interactive)
 			{
+				this.device.printOutLn("Using interactive mode...");
+				this.device.printOutLn();
 				this.doInteractive();
 			}
 			else

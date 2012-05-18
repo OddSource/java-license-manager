@@ -1,5 +1,5 @@
 /*
- * TestLicense.java from LicenseManager modified Thursday, May 17, 2012 20:09:06 CDT (-0500).
+ * TestLicense.java from LicenseManager modified Friday, May 18, 2012 07:54:00 CDT (-0500).
  *
  * Copyright 2010-2012 the original author or authors.
  *
@@ -22,6 +22,10 @@ import net.nicholaswilliams.java.licensing.immutable.ImmutableLinkedHashSet;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 
 import static org.junit.Assert.*;
 
@@ -53,6 +57,82 @@ public class TestLicense
 	public void tearDown()
 	{
 
+	}
+
+	@Test
+	public void testConstructorParts01() throws NoSuchMethodException, InstantiationException, IllegalAccessException
+	{
+		Constructor<License> constructor = License.class.getDeclaredConstructor(String[].class);
+		constructor.setAccessible(true);
+
+		try
+		{
+			String[] argument = null;
+			constructor.newInstance(new Object[] { argument });
+			fail("Expected exception IllegalArgumentException.");
+		}
+		catch(InvocationTargetException e)
+		{
+			assertNotNull("The cause should not be null.", e.getCause());
+			assertSame("The cause is not correct.", IllegalArgumentException.class, e.getCause().getClass());
+		}
+	}
+
+	@Test
+	public void testConstructorParts02() throws NoSuchMethodException, InstantiationException, IllegalAccessException
+	{
+		Constructor<License> constructor = License.class.getDeclaredConstructor(String[].class);
+		constructor.setAccessible(true);
+
+		try
+		{
+			String[] argument = new String[] {};
+			constructor.newInstance(new Object[] { argument });
+			fail("Expected exception IllegalArgumentException.");
+		}
+		catch(InvocationTargetException e)
+		{
+			assertNotNull("The cause should not be null.", e.getCause());
+			assertSame("The cause is not correct.", IllegalArgumentException.class, e.getCause().getClass());
+		}
+	}
+
+	@Test
+	public void testConstructorParts03() throws NoSuchMethodException, InstantiationException, IllegalAccessException
+	{
+		Constructor<License> constructor = License.class.getDeclaredConstructor(String[].class);
+		constructor.setAccessible(true);
+
+		try
+		{
+			String[] argument = new String[] {"one", "two", "three", "four", "five", "six", "seven", "eight"};
+			constructor.newInstance(new Object[] { argument });
+			fail("Expected exception IllegalArgumentException.");
+		}
+		catch(InvocationTargetException e)
+		{
+			assertNotNull("The cause should not be null.", e.getCause());
+			assertSame("The cause is not correct.", IllegalArgumentException.class, e.getCause().getClass());
+		}
+	}
+
+	@Test
+	public void testConstructorParts04() throws NoSuchMethodException, InstantiationException, IllegalAccessException
+	{
+		Constructor<License> constructor = License.class.getDeclaredConstructor(String[].class);
+		constructor.setAccessible(true);
+
+		try
+		{
+			String[] argument = new String[] {"one", "two", "three", "four", "five", "six", "seven", "eight", "nine", "ten"};
+			constructor.newInstance(new Object[] { argument });
+			fail("Expected exception IllegalArgumentException.");
+		}
+		catch(InvocationTargetException e)
+		{
+			assertNotNull("The cause should not be null.", e.getCause());
+			assertSame("The cause is not correct.", IllegalArgumentException.class, e.getCause().getClass());
+		}
 	}
 
 	@Test
@@ -178,6 +258,20 @@ public class TestLicense
 		assertTrue("Error 3", this.license.hasLicenseForAllFeatures("goodFeature1", "goodFeature2"));
 		assertFalse("Error 4", this.license.hasLicenseForAllFeatures("goodFeature1", "expiredFeature3"));
 		assertFalse("Error 5", this.license.hasLicenseForAllFeatures("expiredFeature3"));
+	}
+
+	@Test
+	@SuppressWarnings("ObjectEqualsNull")
+	public void testEqualsWithNullObject01()
+	{
+		assertFalse("The objects should not be equal.", this.license.equals(null));
+	}
+
+	@Test
+	@SuppressWarnings("EqualsBetweenInconvertibleTypes")
+	public void testEqualsWithNonLicense01()
+	{
+		assertFalse("The objects should not be equal.", this.license.equals("Hello"));
 	}
 
 	@Test
@@ -443,6 +537,16 @@ public class TestLicense
 	}
 
 	@Test
+	public void testEqualsWithSimpleBlankLicense01()
+	{
+		License simple = new License.Builder().build();
+
+		assertNotSame("The objects should not be the same.", this.license, simple);
+		assertFalse("The objects should not be equal.", this.license.equals(simple));
+		assertFalse("The hash codes should not match.", this.license.hashCode() == simple.hashCode());
+	}
+
+	@Test
 	public void testToString()
 	{
 		assertEquals("The string was not correct.",
@@ -504,5 +608,111 @@ public class TestLicense
 		assertEquals("Feature 3 is missing.", "hondaFeature3", license.getFeatures().get(2).getName());
 		assertFalse("Feature 3 should be expired.", license.hasLicenseForAllFeatures("hondaFeature3"));
 		assertTrue("Feature 4 is missing.", license.hasLicenseForAllFeatures("toyotaFeature4"));
+	}
+
+	@Test
+	public void testLicenseFeatureFromString01() throws NoSuchMethodException, InstantiationException, IllegalAccessException
+	{
+		Method fromString = License.Feature.class.getDeclaredMethod("fromString", String.class);
+		fromString.setAccessible(true);
+
+		try
+		{
+			fromString.invoke(null, new Object[] { null });
+			fail("Expected exception IllegalArgumentException.");
+		}
+		catch(InvocationTargetException e)
+		{
+			assertNotNull("The cause should not be null.", e.getCause());
+			assertSame("The cause is not correct.", IllegalArgumentException.class, e.getCause().getClass());
+		}
+	}
+
+	@Test
+	public void testLicenseFeatureFromString02() throws NoSuchMethodException, InstantiationException, IllegalAccessException
+	{
+		Method fromString = License.Feature.class.getDeclaredMethod("fromString", String.class);
+		fromString.setAccessible(true);
+
+		try
+		{
+			fromString.invoke(null, "one");
+			fail("Expected exception IllegalArgumentException.");
+		}
+		catch(InvocationTargetException e)
+		{
+			assertNotNull("The cause should not be null.", e.getCause());
+			assertSame("The cause is not correct.", IllegalArgumentException.class, e.getCause().getClass());
+		}
+	}
+
+	@Test
+	public void testLicenseFeatureConstructor03() throws NoSuchMethodException, InstantiationException, IllegalAccessException
+	{
+		Method fromString = License.Feature.class.getDeclaredMethod("fromString", String.class);
+		fromString.setAccessible(true);
+
+		try
+		{
+			fromString.invoke(null, "one" + (char) 0x1F + "2" + (char) 0x1F + "three");
+			fail("Expected exception IllegalArgumentException.");
+		}
+		catch(InvocationTargetException e)
+		{
+			assertNotNull("The cause should not be null.", e.getCause());
+			assertSame("The cause is not correct.", IllegalArgumentException.class, e.getCause().getClass());
+		}
+	}
+
+	@Test
+	@SuppressWarnings("ObjectEqualsNull")
+	public void testLicenseFeatureEquals01() throws NoSuchMethodException, InstantiationException, IllegalAccessException, InvocationTargetException
+	{
+		Method fromString = License.Feature.class.getDeclaredMethod("fromString", String.class);
+		fromString.setAccessible(true);
+
+		License.Feature feature1 = (License.Feature)fromString.invoke(null, "one" + (char)0x1F + "2");
+
+		assertFalse("Equals should return false.", feature1.equals(null));
+	}
+
+	@Test
+	@SuppressWarnings("EqualsBetweenInconvertibleTypes")
+	public void testLicenseFeatureEquals02() throws NoSuchMethodException, InstantiationException, IllegalAccessException, InvocationTargetException
+	{
+		Method fromString = License.Feature.class.getDeclaredMethod("fromString", String.class);
+		fromString.setAccessible(true);
+
+		License.Feature feature1 = (License.Feature)fromString.invoke(null, "one" + (char)0x1F + "2");
+
+		assertFalse("Equals should return false.", feature1.equals("one" + (char)0x1F + "2"));
+	}
+
+	@Test
+	public void testLicenseFeatureEquals03() throws NoSuchMethodException, InstantiationException, IllegalAccessException, InvocationTargetException
+	{
+		Method fromString = License.Feature.class.getDeclaredMethod("fromString", String.class);
+		fromString.setAccessible(true);
+
+		License.Feature feature1 = (License.Feature)fromString.invoke(null, "one" + (char)0x1F + "2");
+		License.Feature feature2 = (License.Feature)fromString.invoke(null, "one" + (char)0x1F + "5");
+
+		assertNotSame("The objects should not be the same.", feature1, feature2);
+		assertEquals("The objects should be equal.", feature1, feature2);
+		assertEquals("The hash codes should be equal.", feature1.hashCode(), feature2.hashCode());
+	}
+
+	@Test
+	public void testLicenseFeatureEquals04() throws NoSuchMethodException, InstantiationException, IllegalAccessException, InvocationTargetException
+	{
+		Method fromString = License.Feature.class.getDeclaredMethod("fromString", String.class);
+		fromString.setAccessible(true);
+
+		License.Feature feature1 = (License.Feature)fromString.invoke(null, "one" + (char)0x1F + "2");
+		License.Feature feature2 = (License.Feature)fromString.invoke(null, "three" + (char)0x1F + "5");
+
+		assertNotSame("The objects should not be the same.", feature1, feature2);
+		assertFalse("The objects should not be equal.", feature1.equals(feature2));
+		assertFalse("The hash codes should not be equal.", feature1.hashCode() == feature2.hashCode());
 	}
 }

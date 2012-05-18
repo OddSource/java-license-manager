@@ -1,5 +1,5 @@
 /*
- * License.java from LicenseManager modified Thursday, May 17, 2012 20:12:22 CDT (-0500).
+ * License.java from LicenseManager modified Friday, May 18, 2012 07:35:28 CDT (-0500).
  *
  * Copyright 2010-2012 the original author or authors.
  *
@@ -84,7 +84,7 @@ public final class License implements Serializable, Cloneable
 	 */
 	private License(String[] parts)
 	{
-		if(parts == null || parts.length < 9)
+		if(parts == null || parts.length != 9)
 			throw new IllegalArgumentException("There should be exactly nine parts to the serialized license.");
 
 		this.productKey = parts[0] == null ? "" : parts[0];
@@ -494,6 +494,9 @@ public final class License implements Serializable, Cloneable
 		 */
 		private static License.Feature fromString(String input)
 		{
+			if(input == null)
+				throw new IllegalArgumentException("The input argument did not contain exactly two parts.");
+
 			String[] parts = input.split("" + (char)0x1F);
 			if(parts == null || parts.length != 2)
 				throw new IllegalArgumentException("The input argument did not contain exactly two parts.");

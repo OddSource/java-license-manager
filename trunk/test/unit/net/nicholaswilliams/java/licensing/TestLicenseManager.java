@@ -1,5 +1,5 @@
 /*
- * TestLicenseManager.java from LicenseManager modified Monday, March 5, 2012 14:09:47 CST (-0600).
+ * TestLicenseManager.java from LicenseManager modified Friday, May 18, 2012 08:14:59 CDT (-0500).
  *
  * Copyright 2010-2012 the original author or authors.
  *
@@ -180,6 +180,11 @@ public class TestLicenseManager
 		return license;
 	}
 
+	public void setupNullLicenseMocking(String context)
+	{
+		EasyMock.expect(TestLicenseManager.licenseProvider.getLicense(context)).andReturn(null);
+	}
+
 	@Test
 	public void testGetLicense03() throws Exception
 	{
@@ -296,6 +301,16 @@ public class TestLicenseManager
 	}
 
 	@Test
+	public void testHasLicenseForFeature04()
+	{
+		this.setupNullLicenseMocking("NULL-LICENSE-ONE-2");
+		TestLicenseManager.control.replay();
+
+		assertFalse("The returned value is not correct.", this.manager.hasLicenseForFeature("NULL-LICENSE-ONE-2",
+																							"feature#2"));
+	}
+
+	@Test
 	public void testHasLicenseForAllFeatures01()
 	{
 		License license = this.setupLicenseMocking("LICENSE-ALL-1");
@@ -354,6 +369,18 @@ public class TestLicenseManager
 	}
 
 	@Test
+	public void testHasLicenseForAllFeatures06()
+	{
+		this.setupNullLicenseMocking("NULL-LICENSE-ALL-3");
+		TestLicenseManager.control.replay();
+
+		assertFalse("The returned value is not correct.", this.manager.hasLicenseForAllFeatures("NULL-LICENSE-ALL-3",
+																								"feature#2",
+																								"feature#5",
+																								"feature#1"));
+	}
+
+	@Test
 	public void testHasLicenseForAnyFeatures01()
 	{
 		License license = this.setupLicenseMocking("LICENSE-ANY--1");
@@ -409,6 +436,18 @@ public class TestLicenseManager
 
 		assertTrue("The returned value is not correct.", this.manager.hasLicenseForAnyFeature("LICENSE-ANY--5", "feature#5",
 																							  "feature#3"));
+	}
+
+	@Test
+	public void testHasLicenseForAnyFeatures06()
+	{
+		this.setupNullLicenseMocking("NULL-LICENSE-ANY--3");
+		TestLicenseManager.control.replay();
+
+		assertFalse("The returned value is not correct.", this.manager.hasLicenseForAnyFeature("NULL-LICENSE-ANY--3",
+																							   "feature#2",
+																							   "feature#5",
+																							   "feature#1"));
 	}
 
 	@Test
@@ -538,6 +577,26 @@ public class TestLicenseManager
 	}
 
 	@Test
+	public void testHasLicenseForFeaturesByAnnotation07() throws NoSuchMethodException
+	{
+		this.setupNullLicenseMocking("NULL-LICENSE-ANNOTATION-4");
+		TestLicenseManager.control.replay();
+
+		Object object = new Object() {
+			@FeatureRestriction(value={"feature#1", "feature#5"}, operand=FeatureRestrictionOperand.OR)
+			public void method()
+			{
+
+			}
+		};
+
+		FeatureRestriction annotation = object.getClass().getMethod("method").getAnnotation(FeatureRestriction.class);
+
+		assertFalse("The returned value is not correct.", this.manager.hasLicenseForFeatures(
+				"NULL-LICENSE-ANNOTATION-4", annotation));
+	}
+
+	@Test
 	public void testHasLicenseForFeaturesByTarget01() throws NoSuchMethodException
 	{
 		License license = this.setupLicenseMocking("LICENSE-TARGET-1");
@@ -649,5 +708,25 @@ public class TestLicenseManager
 		};
 
 		assertFalse("The returned value is not correct.", this.manager.hasLicenseForFeatures("LICENSE-TARGET-6", object.getClass().getMethod("method")));
+	}
+
+	@Test
+	public void testHasLicenseForFeaturesByTarget08() throws NoSuchMethodException
+	{
+		this.setupNullLicenseMocking("NULL-LICENSE-TARGET-4");
+		TestLicenseManager.control.replay();
+
+		Object object = new Object() {
+			@FeatureRestriction(value={"feature#1", "feature#5"}, operand=FeatureRestrictionOperand.OR)
+			public void method()
+			{
+
+			}
+		};
+
+		assertFalse("The returned value is not correct.", this.manager.hasLicenseForFeatures("NULL-LICENSE-TARGET-4",
+																							 object.getClass()
+																								   .getMethod(
+																										   "method")));
 	}
 }

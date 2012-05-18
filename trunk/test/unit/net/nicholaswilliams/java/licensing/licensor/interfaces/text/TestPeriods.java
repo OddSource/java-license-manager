@@ -1,5 +1,5 @@
 /*
- * TestPeriods.java from LicenseManager modified Tuesday, February 21, 2012 10:58:55 CST (-0600).
+ * TestPeriods.java from LicenseManager modified Friday, May 18, 2012 10:03:56 CDT (-0500).
  *
  * Copyright 2010-2012 the original author or authors.
  *
@@ -60,6 +60,8 @@ public class TestPeriods
 
 		Thread.sleep(100);
 
+		this.periods.stop();
+
 		byte[] bytes = this.outputStream.toByteArray();
 		assertTrue("The length is not correct.", bytes.length >= 3);
 		assertArrayEquals("The arrays are not correct.", Arrays.copyOf(bytes, 3), new byte[] {'.', '.', '.'});
@@ -68,9 +70,29 @@ public class TestPeriods
 	@Test
 	public void testRun02() throws InterruptedException
 	{
-		new Thread(this.periods).start();
+		Thread thread = new Thread(this.periods);
+		thread.start();
 
 		Thread.sleep(200);
+
+		thread.interrupt();
+
+		byte[] bytes = this.outputStream.toByteArray();
+		assertTrue("The length is not correct.", bytes.length >= 6);
+		assertArrayEquals("The arrays are not correct.", Arrays.copyOf(bytes, 6), new byte[] {'.', '.', '.', '.', '.', '.'});
+	}
+
+	@Test
+	public void testRun03() throws InterruptedException
+	{
+		PrintStream printStream = new PrintStream(outputStream);
+		this.periods = new Periods(50, printStream);
+
+		new Thread(this.periods).start();
+
+		Thread.sleep(400);
+
+		this.periods.stop();
 
 		byte[] bytes = this.outputStream.toByteArray();
 		assertTrue("The length is not correct.", bytes.length >= 6);

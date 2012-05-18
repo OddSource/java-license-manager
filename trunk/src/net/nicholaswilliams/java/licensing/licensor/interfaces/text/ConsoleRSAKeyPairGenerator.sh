@@ -1,7 +1,7 @@
 #
-# ConsoleRSAKeyPairGenerator.sh from LicenseManager modified Tuesday, June 28, 2011 11:35:44 CDT (-0500).
+# ConsoleRSAKeyPairGenerator.sh from LicenseManager modified Thursday, May 17, 2012 21:36:21 CDT (-0500).
 #
-# Copyright 2010-2011 the original author or authors.
+# Copyright 2010-2012 the original author or authors.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.

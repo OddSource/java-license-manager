@@ -1,5 +1,5 @@
 /*
- * ConsoleLicenseGenerator.java from LicenseManager modified Thursday, May 17, 2012 20:41:41 CDT (-0500).
+ * ConsoleLicenseGenerator.java from LicenseManager modified Saturday, May 19, 2012 10:08:47 CDT (-0500).
  *
  * Copyright 2010-2012 the original author or authors.
  *
@@ -20,6 +20,11 @@ package net.nicholaswilliams.java.licensing.licensor.interfaces.text;
 
 import net.nicholaswilliams.java.licensing.License;
 import net.nicholaswilliams.java.licensing.encryption.PasswordProvider;
+import net.nicholaswilliams.java.licensing.exception.AlgorithmNotSupportedException;
+import net.nicholaswilliams.java.licensing.exception.InappropriateKeyException;
+import net.nicholaswilliams.java.licensing.exception.InappropriateKeySpecificationException;
+import net.nicholaswilliams.java.licensing.exception.KeyNotFoundException;
+import net.nicholaswilliams.java.licensing.exception.ObjectSerializationException;
 import net.nicholaswilliams.java.licensing.licensor.FilePrivateKeyDataProvider;
 import net.nicholaswilliams.java.licensing.licensor.LicenseCreator;
 import net.nicholaswilliams.java.licensing.licensor.LicenseCreatorProperties;
@@ -749,6 +754,36 @@ public class ConsoleLicenseGenerator
 			this.initializeLicenseCreator();
 
 			this.generateLicense();
+		}
+		catch(KeyNotFoundException e)
+		{
+			this.device.printErrLn(e.getLocalizedMessage() + " Correct the error and try again.");
+			this.device.exit(51);
+			return;
+		}
+		catch(ObjectSerializationException e)
+		{
+			this.device.printErrLn(e.getLocalizedMessage() + " Correct the error and try again.");
+			this.device.exit(52);
+			return;
+		}
+		catch(AlgorithmNotSupportedException e)
+		{
+			this.device.printErrLn(e.getLocalizedMessage() + " Contact your system administrator for assistance.");
+			this.device.exit(41);
+			return;
+		}
+		catch(InappropriateKeyException e)
+		{
+			this.device.printErrLn(e.getLocalizedMessage() + " Contact your system administrator for assistance.");
+			this.device.exit(42);
+			return;
+		}
+		catch(InappropriateKeySpecificationException e)
+		{
+			this.device.printErrLn(e.getLocalizedMessage() + " Contact your system administrator for assistance.");
+			this.device.exit(43);
+			return;
 		}
 		catch(InterruptedException e)
 		{

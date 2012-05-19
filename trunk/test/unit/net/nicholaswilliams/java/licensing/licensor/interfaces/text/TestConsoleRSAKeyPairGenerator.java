@@ -1,5 +1,5 @@
 /*
- * TestConsoleRSAKeyPairGenerator.java from LicenseManager modified Wednesday, May 16, 2012 09:42:50 CDT (-0500).
+ * TestConsoleRSAKeyPairGenerator.java from LicenseManager modified Saturday, May 19, 2012 09:36:46 CDT (-0500).
  *
  * Copyright 2010-2012 the original author or authors.
  *
@@ -24,6 +24,7 @@ import net.nicholaswilliams.java.licensing.exception.InappropriateKeyException;
 import net.nicholaswilliams.java.licensing.exception.InappropriateKeySpecificationException;
 import net.nicholaswilliams.java.licensing.exception.RSA2048NotSupportedException;
 import net.nicholaswilliams.java.licensing.licensor.interfaces.text.abstraction.TextInterfaceDevice;
+import net.nicholaswilliams.java.mock.MockPermissiveSecurityManager;
 import org.apache.commons.cli.CommandLineParser;
 import org.apache.commons.cli.GnuParser;
 import org.apache.commons.cli.ParseException;
@@ -35,12 +36,9 @@ import org.junit.Test;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
-import java.io.FileDescriptor;
 import java.io.IOException;
 import java.io.PrintStream;
-import java.net.InetAddress;
 import java.security.NoSuchAlgorithmException;
-import java.security.Permission;
 
 import static org.junit.Assert.*;
 
@@ -1018,156 +1016,3 @@ public class TestConsoleRSAKeyPairGenerator
 	}
 }
 
-class MockPermissiveSecurityManager extends SecurityManager
-{
-	@Override
-	public void checkPermission(Permission permission)
-	{
-	}
-
-	@Override
-	public void checkPermission(Permission permission, Object o)
-	{
-	}
-
-	@Override
-	public void checkCreateClassLoader()
-	{
-	}
-
-	@Override
-	public void checkAccess(Thread thread)
-	{
-	}
-
-	@Override
-	public void checkAccess(ThreadGroup threadGroup)
-	{
-	}
-
-	@Override
-	public void checkExit(int i)
-	{
-	}
-
-	@Override
-	public void checkExec(String s)
-	{
-	}
-
-	@Override
-	public void checkLink(String s)
-	{
-	}
-
-	@Override
-	public void checkRead(FileDescriptor fileDescriptor)
-	{
-	}
-
-	@Override
-	public void checkRead(String s)
-	{
-	}
-
-	@Override
-	public void checkRead(String s, Object o)
-	{
-	}
-
-	@Override
-	public void checkWrite(FileDescriptor fileDescriptor)
-	{
-	}
-
-	@Override
-	public void checkWrite(String s)
-	{
-	}
-
-	@Override
-	public void checkDelete(String s)
-	{
-	}
-
-	@Override
-	public void checkConnect(String s, int i)
-	{
-	}
-
-	@Override
-	public void checkConnect(String s, int i, Object o)
-	{
-	}
-
-	@Override
-	public void checkListen(int i)
-	{
-	}
-
-	@Override
-	public void checkAccept(String s, int i)
-	{
-	}
-
-	@Override
-	public void checkMulticast(InetAddress inetAddress)
-	{
-	}
-
-	@Override
-	public void checkPropertiesAccess()
-	{
-	}
-
-	@Override
-	public void checkPropertyAccess(String s)
-	{
-	}
-
-	@Override
-	public boolean checkTopLevelWindow(Object o)
-	{
-		return true;
-	}
-
-	@Override
-	public void checkPrintJobAccess()
-	{
-	}
-
-	@Override
-	public void checkSystemClipboardAccess()
-	{
-	}
-
-	@Override
-	public void checkAwtEventQueueAccess()
-	{
-	}
-
-	@Override
-	public void checkPackageAccess(String s)
-	{
-	}
-
-	@Override
-	public void checkPackageDefinition(String s)
-	{
-	}
-
-	@Override
-	public void checkSetFactory()
-	{
-	}
-
-	@Override
-	public void checkMemberAccess(Class<?> aClass, int i)
-	{
-	}
-
-	@Override
-	public void checkSecurityAccess(String s)
-	{
-	}
-}

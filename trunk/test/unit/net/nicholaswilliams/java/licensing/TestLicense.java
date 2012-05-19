@@ -1,5 +1,5 @@
 /*
- * TestLicense.java from LicenseManager modified Friday, May 18, 2012 07:54:00 CDT (-0500).
+ * TestLicense.java from LicenseManager modified Saturday, May 19, 2012 08:40:07 CDT (-0500).
  *
  * Copyright 2010-2012 the original author or authors.
  *
@@ -19,6 +19,7 @@
 package net.nicholaswilliams.java.licensing;
 
 import net.nicholaswilliams.java.licensing.immutable.ImmutableLinkedHashSet;
+import net.nicholaswilliams.java.mock.MockFeatureObject;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -258,6 +259,111 @@ public class TestLicense
 		assertTrue("Error 3", this.license.hasLicenseForAllFeatures("goodFeature1", "goodFeature2"));
 		assertFalse("Error 4", this.license.hasLicenseForAllFeatures("goodFeature1", "expiredFeature3"));
 		assertFalse("Error 5", this.license.hasLicenseForAllFeatures("expiredFeature3"));
+	}
+
+	@Test
+	public void testFeatures06()
+	{
+		assertTrue("Feature 1 is missing.",
+				   this.license.hasLicenseForAllFeatures(new MockFeatureObject("nickFeature1")));
+		assertTrue("Feature 2 is missing.",
+				   this.license.hasLicenseForAllFeatures(new MockFeatureObject("allisonFeature2")));
+
+		assertTrue("Feature 1 is missing now.",
+				   this.license.hasLicenseForFeature(new MockFeatureObject("nickFeature1")));
+		assertTrue("Feature 2 is missing now.",
+				   this.license.hasLicenseForFeature(new MockFeatureObject("allisonFeature2")));
+		assertFalse("There's a phantom feature.",
+					this.license.hasLicenseForFeature(new MockFeatureObject("fakeFeature3")));
+	}
+
+	@Test
+	public void testFeatures07()
+	{
+		assertTrue("Result 1 is incorrect.", this.license.hasLicenseForAllFeatures(
+				new MockFeatureObject("nickFeature1"), new MockFeatureObject("allisonFeature2")
+		));
+		assertFalse("Result 2 is incorrect.", this.license.hasLicenseForAllFeatures(
+				new MockFeatureObject("timFeature1"), new MockFeatureObject("allisonFeature2")
+		));
+		assertFalse("Result 3 is incorrect.", this.license.hasLicenseForAllFeatures(
+				new MockFeatureObject("nickFeature1"), new MockFeatureObject("timFeature2")
+		));
+		assertFalse("Result 4 is incorrect.", this.license.hasLicenseForAllFeatures(
+				new MockFeatureObject("nickFeature1"), new MockFeatureObject("allisonFeature2"),
+				new MockFeatureObject("timFeature3")
+		));
+		assertFalse("Result 5 is incorrect.", this.license.hasLicenseForAllFeatures(
+				new MockFeatureObject("jeffFeature1"), new MockFeatureObject("timFeature2")
+		));
+		assertFalse("Result 6 is incorrect.",
+					this.license.hasLicenseForAllFeatures(new MockFeatureObject("dogFeature1")));
+	}
+
+	@Test
+	public void testFeatures08()
+	{
+		assertTrue("Result 1 is incorrect.", this.license.hasLicenseForAnyFeature(
+				new MockFeatureObject("nickFeature1"), new MockFeatureObject("allisonFeature2")
+		));
+		assertTrue("Result 2 is incorrect.", this.license.hasLicenseForAnyFeature(
+				new MockFeatureObject("timFeature1"), new MockFeatureObject("allisonFeature2")
+		));
+		assertTrue("Result 3 is incorrect.", this.license.hasLicenseForAnyFeature(
+				new MockFeatureObject("nickFeature1"), new MockFeatureObject("timFeature2")
+		));
+		assertTrue("Result 4 is incorrect.", this.license.hasLicenseForAnyFeature(
+				new MockFeatureObject("nickFeature1"), new MockFeatureObject("allisonFeature2"),
+				new MockFeatureObject("timFeature3")
+		));
+		assertFalse("Result 5 is incorrect.", this.license.hasLicenseForAnyFeature(
+				new MockFeatureObject("jeffFeature1"), new MockFeatureObject("timFeature2")
+		));
+		assertFalse("Result 6 is incorrect.",
+					this.license.hasLicenseForAnyFeature(new MockFeatureObject("dogFeature1")));
+		assertTrue("Result 7 is incorrect.",
+				   this.license.hasLicenseForAnyFeature(new MockFeatureObject("nickFeature1")));
+		assertTrue("Result 8 is incorrect.",
+				   this.license.hasLicenseForAnyFeature(new MockFeatureObject("allisonFeature2")));
+	}
+
+	@Test
+	public void testFeatures09()
+	{
+		this.license = new License.Builder().
+								withProductKey("5565-1039-AF89-GGX7-TN31-14AL").
+								withIssuer("CN=Nick Williams, C=US, ST=TN").
+								withHolder("CN=Tim Williams, C=US, ST=AL").
+								withSubject("Simple Product Name(TM)").
+								withIssueDate(2348907324983L).
+								withGoodAfterDate(2348907325000L).
+								withGoodBeforeDate(2348917325000L).
+								withNumberOfLicenses(57).
+								withFeature("goodFeature1").
+								withFeature("goodFeature2", 2348917325000L).
+								withFeature("expiredFeature3", 1L).
+								build();
+
+		assertTrue("Feature 1 is missing now.",
+				   this.license.hasLicenseForFeature(new MockFeatureObject("goodFeature1")));
+		assertTrue("Feature 2 is missing now.",
+				   this.license.hasLicenseForFeature(new MockFeatureObject("goodFeature2")));
+		assertFalse("There's a phantom feature.",
+					this.license.hasLicenseForFeature(new MockFeatureObject("expiredFeature3")));
+
+		assertTrue("Error 1", this.license.hasLicenseForAnyFeature(new MockFeatureObject(
+				"goodFeature1"), new MockFeatureObject("expiredFeature3")
+		));
+		assertFalse("Error 2", this.license.hasLicenseForAnyFeature(new MockFeatureObject("expiredFeature3")));
+
+		assertTrue("Error 3", this.license.hasLicenseForAllFeatures(
+				new MockFeatureObject("goodFeature1"), new MockFeatureObject("goodFeature2")
+		));
+		assertFalse("Error 4", this.license.hasLicenseForAllFeatures(
+				new MockFeatureObject("goodFeature1"), new MockFeatureObject("expiredFeature3")
+		));
+		assertFalse("Error 5",
+					this.license.hasLicenseForAllFeatures(new MockFeatureObject("expiredFeature3")));
 	}
 
 	@Test

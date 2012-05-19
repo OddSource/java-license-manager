@@ -1,5 +1,5 @@
 /*
- * TestLicenseManager.java from LicenseManager modified Friday, May 18, 2012 08:14:59 CDT (-0500).
+ * TestLicenseManager.java from LicenseManager modified Saturday, May 19, 2012 09:09:08 CDT (-0500).
  *
  * Copyright 2010-2012 the original author or authors.
  *
@@ -23,6 +23,7 @@ import net.nicholaswilliams.java.licensing.encryption.KeyFileUtilities;
 import net.nicholaswilliams.java.licensing.encryption.PasswordProvider;
 import net.nicholaswilliams.java.licensing.encryption.PublicKeyDataProvider;
 import net.nicholaswilliams.java.licensing.exception.ExpiredLicenseException;
+import net.nicholaswilliams.java.mock.MockFeatureObject;
 import org.apache.commons.io.IOUtils;
 import org.easymock.EasyMock;
 import org.easymock.IMocksControl;
@@ -275,7 +276,9 @@ public class TestLicenseManager
 		EasyMock.expectLastCall();
 		TestLicenseManager.control.replay();
 
-		assertTrue("The returned value is not correct.", this.manager.hasLicenseForFeature("LICENSE-ONE-1", "feature#1"));
+		assertTrue("The returned value is not correct.",
+				   this.manager.hasLicenseForFeature("LICENSE-ONE-1", "feature#1")
+		);
 	}
 
 	@Test
@@ -286,7 +289,9 @@ public class TestLicenseManager
 		EasyMock.expectLastCall();
 		TestLicenseManager.control.replay();
 
-		assertTrue("The returned value is not correct.", this.manager.hasLicenseForFeature("LICENSE-ONE-2", "feature#2"));
+		assertTrue("The returned value is not correct.",
+				   this.manager.hasLicenseForFeature("LICENSE-ONE-2", "feature#2")
+		);
 	}
 
 	@Test
@@ -297,17 +302,70 @@ public class TestLicenseManager
 		EasyMock.expectLastCall();
 		TestLicenseManager.control.replay();
 
-		assertFalse("The returned value is not correct.", this.manager.hasLicenseForFeature("LICENSE-ONE-3", "feature#3"));
+		assertFalse("The returned value is not correct.",
+					this.manager.hasLicenseForFeature("LICENSE-ONE-3", "feature#3")
+		);
 	}
 
 	@Test
 	public void testHasLicenseForFeature04()
 	{
-		this.setupNullLicenseMocking("NULL-LICENSE-ONE-2");
+		this.setupNullLicenseMocking("NULL-LICENSE-ONE-4");
 		TestLicenseManager.control.replay();
 
-		assertFalse("The returned value is not correct.", this.manager.hasLicenseForFeature("NULL-LICENSE-ONE-2",
-																							"feature#2"));
+		assertFalse("The returned value is not correct.",
+					this.manager.hasLicenseForFeature("NULL-LICENSE-ONE-4", "feature#2")
+		);
+	}
+
+	@Test
+	public void testHasLicenseForFeature05()
+	{
+		License license = this.setupLicenseMocking("LICENSE-ONE-5");
+		TestLicenseManager.licenseValidator.validateLicense(license);
+		EasyMock.expectLastCall();
+		TestLicenseManager.control.replay();
+
+		assertTrue("The returned value is not correct.",
+				   this.manager.hasLicenseForFeature("LICENSE-ONE-5", new MockFeatureObject("feature#1"))
+		);
+	}
+
+	@Test
+	public void testHasLicenseForFeature06()
+	{
+		License license = this.setupLicenseMocking("LICENSE-ONE-6");
+		TestLicenseManager.licenseValidator.validateLicense(license);
+		EasyMock.expectLastCall();
+		TestLicenseManager.control.replay();
+
+		assertTrue("The returned value is not correct.",
+				   this.manager.hasLicenseForFeature("LICENSE-ONE-6", new MockFeatureObject("feature#2"))
+		);
+	}
+
+	@Test
+	public void testHasLicenseForFeature07()
+	{
+		License license = this.setupLicenseMocking("LICENSE-ONE-7");
+		TestLicenseManager.licenseValidator.validateLicense(license);
+		EasyMock.expectLastCall();
+		TestLicenseManager.control.replay();
+
+		assertFalse("The returned value is not correct.",
+					this.manager.hasLicenseForFeature("LICENSE-ONE-7", new MockFeatureObject("feature#3"))
+		);
+	}
+
+	@Test
+	public void testHasLicenseForFeature08()
+	{
+		this.setupNullLicenseMocking("NULL-LICENSE-ONE-8");
+		TestLicenseManager.control.replay();
+
+		assertFalse("The returned value is not correct.",
+					this.manager.hasLicenseForFeature("NULL-LICENSE-ONE-8", new MockFeatureObject("feature#2"))
+		);
 	}
 
 	@Test
@@ -318,7 +376,9 @@ public class TestLicenseManager
 		EasyMock.expectLastCall();
 		TestLicenseManager.control.replay();
 
-		assertTrue("The returned value is not correct.", this.manager.hasLicenseForAllFeatures("LICENSE-ALL-1", "feature#1"));
+		assertTrue("The returned value is not correct.",
+				   this.manager.hasLicenseForAllFeatures("LICENSE-ALL-1", "feature#1")
+		);
 	}
 
 	@Test
@@ -329,7 +389,9 @@ public class TestLicenseManager
 		EasyMock.expectLastCall();
 		TestLicenseManager.control.replay();
 
-		assertTrue("The returned value is not correct.", this.manager.hasLicenseForAllFeatures("LICENSE-ALL-2", "feature#1", "feature#2"));
+		assertTrue("The returned value is not correct.",
+				   this.manager.hasLicenseForAllFeatures("LICENSE-ALL-2", "feature#1", "feature#2")
+		);
 	}
 
 	@Test
@@ -340,7 +402,9 @@ public class TestLicenseManager
 		EasyMock.expectLastCall();
 		TestLicenseManager.control.replay();
 
-		assertTrue("The returned value is not correct.", this.manager.hasLicenseForAllFeatures("LICENSE-ALL-3", "feature#2", "feature#5", "feature#1"));
+		assertTrue("The returned value is not correct.",
+				   this.manager.hasLicenseForAllFeatures("LICENSE-ALL-3", "feature#2", "feature#5", "feature#1")
+		);
 	}
 
 	@Test
@@ -351,7 +415,9 @@ public class TestLicenseManager
 		EasyMock.expectLastCall();
 		TestLicenseManager.control.replay();
 
-		assertFalse("The returned value is not correct.", this.manager.hasLicenseForAllFeatures("LICENSE-ALL-4", "feature#6"));
+		assertFalse("The returned value is not correct.",
+					this.manager.hasLicenseForAllFeatures("LICENSE-ALL-4", "feature#6")
+		);
 	}
 
 	@Test
@@ -362,92 +428,252 @@ public class TestLicenseManager
 		EasyMock.expectLastCall();
 		TestLicenseManager.control.replay();
 
-		assertFalse("The returned value is not correct.", this.manager.hasLicenseForAllFeatures("LICENSE-ALL-5", "feature#2",
-																								"feature#5",
-																								"feature#1",
-																								"feature#3"));
+		assertFalse("The returned value is not correct.", this.manager.hasLicenseForAllFeatures(
+				"LICENSE-ALL-5", "feature#2", "feature#5", "feature#1", "feature#3"
+		));
 	}
 
 	@Test
 	public void testHasLicenseForAllFeatures06()
 	{
-		this.setupNullLicenseMocking("NULL-LICENSE-ALL-3");
+		this.setupNullLicenseMocking("NULL-LICENSE-ALL-6");
 		TestLicenseManager.control.replay();
 
-		assertFalse("The returned value is not correct.", this.manager.hasLicenseForAllFeatures("NULL-LICENSE-ALL-3",
-																								"feature#2",
-																								"feature#5",
-																								"feature#1"));
+		assertFalse("The returned value is not correct.",
+					this.manager.hasLicenseForAllFeatures("NULL-LICENSE-ALL-6", "feature#2", "feature#5", "feature#1")
+		);
+	}
+
+	@Test
+	public void testHasLicenseForAllFeatures07()
+	{
+		License license = this.setupLicenseMocking("LICENSE-ALL-7");
+		TestLicenseManager.licenseValidator.validateLicense(license);
+		EasyMock.expectLastCall();
+		TestLicenseManager.control.replay();
+
+		assertTrue("The returned value is not correct.",
+				   this.manager.hasLicenseForAllFeatures("LICENSE-ALL-7", new MockFeatureObject("feature#1")
+		));
+	}
+
+	@Test
+	public void testHasLicenseForAllFeatures08()
+	{
+		License license = this.setupLicenseMocking("LICENSE-ALL-8");
+		TestLicenseManager.licenseValidator.validateLicense(license);
+		EasyMock.expectLastCall();
+		TestLicenseManager.control.replay();
+
+		assertTrue("The returned value is not correct.", this.manager.hasLicenseForAllFeatures(
+				"LICENSE-ALL-8", new MockFeatureObject("feature#1"), new MockFeatureObject("feature#2")
+		));
+	}
+
+	@Test
+	public void testHasLicenseForAllFeatures09()
+	{
+		License license = this.setupLicenseMocking("LICENSE-ALL-9");
+		TestLicenseManager.licenseValidator.validateLicense(license);
+		EasyMock.expectLastCall();
+		TestLicenseManager.control.replay();
+
+		assertTrue("The returned value is not correct.", this.manager.hasLicenseForAllFeatures(
+				"LICENSE-ALL-9", new MockFeatureObject("feature#2"), new MockFeatureObject("feature#5"),
+				new MockFeatureObject("feature#1")
+		));
+	}
+
+	@Test
+	public void testHasLicenseForAllFeatures10()
+	{
+		License license = this.setupLicenseMocking("LICENSE-ALL-10");
+		TestLicenseManager.licenseValidator.validateLicense(license);
+		EasyMock.expectLastCall();
+		TestLicenseManager.control.replay();
+
+		assertFalse("The returned value is not correct.",
+					this.manager.hasLicenseForAllFeatures("LICENSE-ALL-10", new MockFeatureObject("feature#6"))
+		);
+	}
+
+	@Test
+	public void testHasLicenseForAllFeatures11()
+	{
+		License license = this.setupLicenseMocking("LICENSE-ALL-11");
+		TestLicenseManager.licenseValidator.validateLicense(license);
+		EasyMock.expectLastCall();
+		TestLicenseManager.control.replay();
+
+		assertFalse("The returned value is not correct.", this.manager.hasLicenseForAllFeatures(
+				"LICENSE-ALL-11", new MockFeatureObject("feature#2"), new MockFeatureObject("feature#5"),
+				new MockFeatureObject("feature#1"), new MockFeatureObject("feature#3")
+		));
+	}
+
+	@Test
+	public void testHasLicenseForAllFeatures12()
+	{
+		this.setupNullLicenseMocking("NULL-LICENSE-ALL-12");
+		TestLicenseManager.control.replay();
+
+		assertFalse("The returned value is not correct.", this.manager.hasLicenseForAllFeatures(
+				"NULL-LICENSE-ALL-12", new MockFeatureObject("feature#2"), new MockFeatureObject("feature#5"),
+				new MockFeatureObject("feature#1")
+		));
 	}
 
 	@Test
 	public void testHasLicenseForAnyFeatures01()
 	{
-		License license = this.setupLicenseMocking("LICENSE-ANY--1");
+		License license = this.setupLicenseMocking("LICENSE-ANY-1");
 		TestLicenseManager.licenseValidator.validateLicense(license);
 		EasyMock.expectLastCall();
 		TestLicenseManager.control.replay();
 
-		assertTrue("The returned value is not correct.", this.manager.hasLicenseForAnyFeature("LICENSE-ANY--1", "feature#1"));
+		assertTrue("The returned value is not correct.",
+				   this.manager.hasLicenseForAnyFeature("LICENSE-ANY-1", "feature#1")
+		);
 	}
 
 	@Test
 	public void testHasLicenseForAnyFeatures02()
 	{
-		License license = this.setupLicenseMocking("LICENSE-ANY--2");
+		License license = this.setupLicenseMocking("LICENSE-ANY-2");
 		TestLicenseManager.licenseValidator.validateLicense(license);
 		EasyMock.expectLastCall();
 		TestLicenseManager.control.replay();
 
-		assertTrue("The returned value is not correct.", this.manager.hasLicenseForAnyFeature("LICENSE-ANY--2", "feature#1",
-																							  "feature#2"));
+		assertTrue("The returned value is not correct.",
+				   this.manager.hasLicenseForAnyFeature("LICENSE-ANY-2", "feature#1", "feature#2")
+		);
 	}
 
 	@Test
 	public void testHasLicenseForAnyFeatures03()
 	{
-		License license = this.setupLicenseMocking("LICENSE-ANY--3");
+		License license = this.setupLicenseMocking("LICENSE-ANY-3");
 		TestLicenseManager.licenseValidator.validateLicense(license);
 		EasyMock.expectLastCall();
 		TestLicenseManager.control.replay();
 
-		assertTrue("The returned value is not correct.", this.manager.hasLicenseForAnyFeature("LICENSE-ANY--3", "feature#2",
-																							  "feature#5", "feature#1"));
+		assertTrue("The returned value is not correct.",
+				   this.manager.hasLicenseForAnyFeature("LICENSE-ANY-3", "feature#2", "feature#5", "feature#1")
+		);
 	}
 
 	@Test
 	public void testHasLicenseForAnyFeatures04()
 	{
-		License license = this.setupLicenseMocking("LICENSE-ANY--4");
+		License license = this.setupLicenseMocking("LICENSE-ANY-4");
 		TestLicenseManager.licenseValidator.validateLicense(license);
 		EasyMock.expectLastCall();
 		TestLicenseManager.control.replay();
 
-		assertFalse("The returned value is not correct.", this.manager.hasLicenseForAnyFeature("LICENSE-ANY--4", "feature#6"));
+		assertFalse("The returned value is not correct.",
+					this.manager.hasLicenseForAnyFeature("LICENSE-ANY-4", "feature#6")
+		);
 	}
 
 	@Test
 	public void testHasLicenseForAnyFeatures05()
 	{
-		License license = this.setupLicenseMocking("LICENSE-ANY--5");
+		License license = this.setupLicenseMocking("LICENSE-ANY-5");
 		TestLicenseManager.licenseValidator.validateLicense(license);
 		EasyMock.expectLastCall();
 		TestLicenseManager.control.replay();
 
-		assertTrue("The returned value is not correct.", this.manager.hasLicenseForAnyFeature("LICENSE-ANY--5", "feature#5",
-																							  "feature#3"));
+		assertTrue("The returned value is not correct.",
+				   this.manager.hasLicenseForAnyFeature("LICENSE-ANY-5", "feature#5", "feature#3")
+		);
 	}
 
 	@Test
 	public void testHasLicenseForAnyFeatures06()
 	{
-		this.setupNullLicenseMocking("NULL-LICENSE-ANY--3");
+		this.setupNullLicenseMocking("NULL-LICENSE-ANY-6");
 		TestLicenseManager.control.replay();
 
-		assertFalse("The returned value is not correct.", this.manager.hasLicenseForAnyFeature("NULL-LICENSE-ANY--3",
-																							   "feature#2",
-																							   "feature#5",
-																							   "feature#1"));
+		assertFalse("The returned value is not correct.",
+					this.manager.hasLicenseForAnyFeature("NULL-LICENSE-ANY-6", "feature#2", "feature#5", "feature#1")
+		);
+	}
+
+	@Test
+	public void testHasLicenseForAnyFeatures07()
+	{
+		License license = this.setupLicenseMocking("LICENSE-ANY-7");
+		TestLicenseManager.licenseValidator.validateLicense(license);
+		EasyMock.expectLastCall();
+		TestLicenseManager.control.replay();
+
+		assertTrue("The returned value is not correct.",
+				   this.manager.hasLicenseForAnyFeature("LICENSE-ANY-7", new MockFeatureObject("feature#1"))
+		);
+	}
+
+	@Test
+	public void testHasLicenseForAnyFeatures08()
+	{
+		License license = this.setupLicenseMocking("LICENSE-ANY-8");
+		TestLicenseManager.licenseValidator.validateLicense(license);
+		EasyMock.expectLastCall();
+		TestLicenseManager.control.replay();
+
+		assertTrue("The returned value is not correct.", this.manager.hasLicenseForAnyFeature(
+				"LICENSE-ANY-8", new MockFeatureObject("feature#1"), new MockFeatureObject("feature#2")
+		));
+	}
+
+	@Test
+	public void testHasLicenseForAnyFeatures09()
+	{
+		License license = this.setupLicenseMocking("LICENSE-ANY-9");
+		TestLicenseManager.licenseValidator.validateLicense(license);
+		EasyMock.expectLastCall();
+		TestLicenseManager.control.replay();
+
+		assertTrue("The returned value is not correct.", this.manager.hasLicenseForAnyFeature(
+				"LICENSE-ANY-9", new MockFeatureObject("feature#2"), new MockFeatureObject("feature#5"),
+				new MockFeatureObject("feature#1")
+		));
+	}
+
+	@Test
+	public void testHasLicenseForAnyFeatures10()
+	{
+		License license = this.setupLicenseMocking("LICENSE-ANY-10");
+		TestLicenseManager.licenseValidator.validateLicense(license);
+		EasyMock.expectLastCall();
+		TestLicenseManager.control.replay();
+
+		assertFalse("The returned value is not correct.",
+					this.manager.hasLicenseForAnyFeature("LICENSE-ANY-10", new MockFeatureObject("feature#6")));
+	}
+
+	@Test
+	public void testHasLicenseForAnyFeatures11()
+	{
+		License license = this.setupLicenseMocking("LICENSE-ANY-11");
+		TestLicenseManager.licenseValidator.validateLicense(license);
+		EasyMock.expectLastCall();
+		TestLicenseManager.control.replay();
+
+		assertTrue("The returned value is not correct.", this.manager.hasLicenseForAnyFeature(
+				"LICENSE-ANY-11", new MockFeatureObject("feature#5"), new MockFeatureObject("feature#3")
+		));
+	}
+
+	@Test
+	public void testHasLicenseForAnyFeatures12()
+	{
+		this.setupNullLicenseMocking("NULL-LICENSE-ANY-12");
+		TestLicenseManager.control.replay();
+
+		assertFalse("The returned value is not correct.", this.manager.hasLicenseForAnyFeature(
+				"NULL-LICENSE-ANY-12", new MockFeatureObject("feature#2"), new MockFeatureObject("feature#5"),
+				new MockFeatureObject("feature#1")
+		));
 	}
 
 	@Test

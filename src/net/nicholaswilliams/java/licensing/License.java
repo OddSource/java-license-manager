@@ -1,5 +1,5 @@
 /*
- * License.java from LicenseManager modified Saturday, May 19, 2012 08:21:13 CDT (-0500).
+ * License.java from LicenseManager modified Saturday, May 19, 2012 09:26:27 CDT (-0500).
  *
  * Copyright 2010-2012 the original author or authors.
  *
@@ -460,22 +460,22 @@ public final class License implements Serializable, Cloneable
 	{
 		int result = this.numberOfLicenses;
 
-		if(this.productKey != null)
+		if(this.productKey != null && this.productKey.length() > 0)
 			result = 31 * result + this.productKey.hashCode();
 		else
 			result = 31 * result;
 
-		if(this.holder != null)
+		if(this.holder != null && this.holder.length() > 0)
 			result = 31 * result + this.holder.hashCode();
 		else
 			result = 31 * result;
 
-		if(this.issuer != null)
+		if(this.issuer != null && this.issuer.length() > 0)
 			result = 31 * result + this.issuer.hashCode();
 		else
 			result = 31 * result;
 
-		if(this.subject != null)
+		if(this.subject != null && this.subject.length() > 0)
 			result = 31 * result + this.subject.hashCode();
 		else
 			result = 31 * result;

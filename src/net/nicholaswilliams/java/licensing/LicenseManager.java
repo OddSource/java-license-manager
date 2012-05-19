@@ -1,5 +1,5 @@
 /*
- * LicenseManager.java from LicenseManager modified Thursday, May 17, 2012 20:09:17 CDT (-0500).
+ * LicenseManager.java from LicenseManager modified Saturday, May 19, 2012 08:27:26 CDT (-0500).
  *
  * Copyright 2010-2012 the original author or authors.
  *
@@ -149,12 +149,34 @@ public final class LicenseManager
 	 * Throws the same exceptions as {@link #getLicense(Object)} and for the same reasons.
 	 *
 	 * @param context The context (account, client, etc.) for which to check the feature(s) against its license
+	 * @param featureName The feature (or features) to check against the license
+	 * @return {@code true} if the license exists and has this feature enabled, {@code false} otherwise.
+	 * @throws InvalidLicenseException when the license is invalid for any reason.
+	 * @throws net.nicholaswilliams.java.licensing.exception.ExpiredLicenseException when the license is expired.
+	 */
+	public final boolean hasLicenseForFeature(Object context, String featureName) throws InvalidLicenseException
+	{
+		License license = this.getLicense(context);
+		if(license == null)
+			return false;
+
+		this.validateLicense(license);
+
+		return license.hasLicenseForFeature(featureName);
+	}
+
+	/**
+	 * Checks whether the license assigned to the specified context is licensed to use the feature specified.<br />
+	 * <br />
+	 * Throws the same exceptions as {@link #getLicense(Object)} and for the same reasons.
+	 *
+	 * @param context The context (account, client, etc.) for which to check the feature(s) against its license
 	 * @param feature The feature (or features) to check against the license
 	 * @return {@code true} if the license exists and has this feature enabled, {@code false} otherwise.
 	 * @throws InvalidLicenseException when the license is invalid for any reason.
 	 * @throws net.nicholaswilliams.java.licensing.exception.ExpiredLicenseException when the license is expired.
 	 */
-	public final boolean hasLicenseForFeature(Object context, String feature) throws InvalidLicenseException
+	public final boolean hasLicenseForFeature(Object context, FeatureObject feature) throws InvalidLicenseException
 	{
 		License license = this.getLicense(context);
 		if(license == null)
@@ -171,12 +193,12 @@ public final class LicenseManager
 	 * Throws the same exceptions as {@link #getLicense(Object)} and for the same reasons.
 	 *
 	 * @param context The context (account, client, etc.) for which to check the feature(s) against its license
-	 * @param feature The feature (or features) to check against the license
+	 * @param featureNames The feature (or features) to check against the license
 	 * @return {@code true} if the license exists and has this feature enabled, {@code false} otherwise.
 	 * @throws InvalidLicenseException when the license is invalid for any reason.
 	 * @throws net.nicholaswilliams.java.licensing.exception.ExpiredLicenseException when the license is expired.
 	 */
-	public final boolean hasLicenseForAnyFeature(Object context, String... feature) throws InvalidLicenseException
+	public final boolean hasLicenseForAnyFeature(Object context, String... featureNames) throws InvalidLicenseException
 	{
 		License license = this.getLicense(context);
 		if(license == null)
@@ -184,7 +206,29 @@ public final class LicenseManager
 
 		this.validateLicense(license);
 
-		return license.hasLicenseForAnyFeature(feature);
+		return license.hasLicenseForAnyFeature(featureNames);
+	}
+
+	/**
+	 * Checks whether the license assigned to the specified context is licensed to use any of the features specified.<br />
+	 * <br />
+	 * Throws the same exceptions as {@link #getLicense(Object)} and for the same reasons.
+	 *
+	 * @param context The context (account, client, etc.) for which to check the feature(s) against its license
+	 * @param features The feature (or features) to check against the license
+	 * @return {@code true} if the license exists and has this feature enabled, {@code false} otherwise.
+	 * @throws InvalidLicenseException when the license is invalid for any reason.
+	 * @throws net.nicholaswilliams.java.licensing.exception.ExpiredLicenseException when the license is expired.
+	 */
+	public final boolean hasLicenseForAnyFeature(Object context, FeatureObject... features) throws InvalidLicenseException
+	{
+		License license = this.getLicense(context);
+		if(license == null)
+			return false;
+
+		this.validateLicense(license);
+
+		return license.hasLicenseForAnyFeature(features);
 	}
 
 	/**
@@ -193,12 +237,12 @@ public final class LicenseManager
 	 * Throws the same exceptions as {@link #getLicense(Object)} and for the same reasons.
 	 *
 	 * @param context The context (account, client, etc.) for which to check the feature(s) against its license
-	 * @param feature The feature (or features) to check against the license
+	 * @param featureNames The feature (or features) to check against the license
 	 * @return {@code true} if the license exists and has this feature enabled, {@code false} otherwise.
 	 * @throws InvalidLicenseException when the license is invalid for any reason.
 	 * @throws net.nicholaswilliams.java.licensing.exception.ExpiredLicenseException when the license is expired.
 	 */
-	public final boolean hasLicenseForAllFeatures(Object context, String... feature) throws InvalidLicenseException
+	public final boolean hasLicenseForAllFeatures(Object context, String... featureNames) throws InvalidLicenseException
 	{
 		License license = this.getLicense(context);
 		if(license == null)
@@ -206,7 +250,29 @@ public final class LicenseManager
 
 		this.validateLicense(license);
 
-		return license.hasLicenseForAllFeatures(feature);
+		return license.hasLicenseForAllFeatures(featureNames);
+	}
+
+	/**
+	 * Checks whether the license assigned to the specified context is licensed to use all of the features specified.<br />
+	 * <br />
+	 * Throws the same exceptions as {@link #getLicense(Object)} and for the same reasons.
+	 *
+	 * @param context The context (account, client, etc.) for which to check the feature(s) against its license
+	 * @param features The feature (or features) to check against the license
+	 * @return {@code true} if the license exists and has this feature enabled, {@code false} otherwise.
+	 * @throws InvalidLicenseException when the license is invalid for any reason.
+	 * @throws net.nicholaswilliams.java.licensing.exception.ExpiredLicenseException when the license is expired.
+	 */
+	public final boolean hasLicenseForAllFeatures(Object context, FeatureObject... features) throws InvalidLicenseException
+	{
+		License license = this.getLicense(context);
+		if(license == null)
+			return false;
+
+		this.validateLicense(license);
+
+		return license.hasLicenseForAllFeatures(features);
 	}
 
 	/**

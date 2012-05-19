@@ -1,5 +1,5 @@
 /*
- * LicenseSecurityManager.java from LicenseManager modified Thursday, May 17, 2012 19:37:54 CDT (-0500).
+ * LicenseSecurityManager.java from LicenseManager modified Saturday, May 19, 2012 09:07:08 CDT (-0500).
  *
  * Copyright 2010-2012 the original author or authors.
  *
@@ -159,8 +159,12 @@ final class LicenseSecurityManager extends SecurityManager
 		{
 			if(memberAccessType != Member.PUBLIC)
 			{
-				String packageName = reflectionClass.getPackage().getName();
-				if(packageName.startsWith("net.nicholaswilliams.java.licensing") && !reflectionClass.equals(FeatureRestriction.class))
+				Package packageObject = reflectionClass.getPackage();
+				if(
+						packageObject != null &&
+						packageObject.getName().startsWith("net.nicholaswilliams.java.licensing") &&
+						!reflectionClass.equals(FeatureRestriction.class)
+				)
 				{
 					throw new SecurityException("Reflection access to non-public members of LicenseManager classes prohibited.");
 				}

@@ -1,5 +1,5 @@
 /*
- * License.java from LicenseManager modified Friday, May 18, 2012 07:35:28 CDT (-0500).
+ * License.java from LicenseManager modified Saturday, May 19, 2012 08:21:13 CDT (-0500).
  *
  * Copyright 2010-2012 the original author or authors.
  *
@@ -262,6 +262,31 @@ public final class License implements Serializable, Cloneable
 	}
 
 	/**
+	 * Checks if the feature specified is licensed. If the feature is licensed and has an expiration, ensures that the
+	 * feature is not expired based on the current date before returning {@code true}.
+	 *
+	 * @param feature The feature to check
+	 * @return {@code true} if this feature is licensed and valid, {@code false} otherwise.
+	 */
+	public final boolean hasLicenseForFeature(FeatureObject feature)
+	{
+		return this.hasLicenseForFeature(System.currentTimeMillis(), feature.getName());
+	}
+
+	/**
+	 * Checks if the feature specified is licensed. If the feature is licensed and has an expiration, ensures that the
+	 * feature is not expired based on the provided date before returning {@code true}.
+	 *
+	 * @param currentDate The date (millisecond timestamp) to check the feature against
+	 * @param feature The feature to check
+	 * @return {@code true} if this feature is licensed and valid, {@code false} otherwise.
+	 */
+	public final boolean hasLicenseForFeature(long currentDate, FeatureObject feature)
+	{
+		return this.hasLicenseForFeature(currentDate, feature.getName());
+	}
+
+	/**
 	 * Checks if all of the features specified are licensed in this license. If any one feature is licensed, this
 	 * method returns {@code true}. Any features that contain expiration dates are checked against the current date.
 	 * Features are only valid if they have no expiration date or they are not expired.
@@ -294,6 +319,38 @@ public final class License implements Serializable, Cloneable
 	}
 
 	/**
+	 * Checks if all of the features specified are licensed in this license. If any one feature is licensed, this
+	 * method returns {@code true}. Any features that contain expiration dates are checked against the current date.
+	 * Features are only valid if they have no expiration date or they are not expired.
+	 *
+	 * @param features The features to check
+	 * @return {@code true} if any one feature listed is licensed and valid, {@code false} otherwise.
+	 */
+	public final boolean hasLicenseForAnyFeature(FeatureObject... features)
+	{
+		return this.hasLicenseForAnyFeature(System.currentTimeMillis(), features);
+	}
+
+	/**
+	 * Checks if all of the features specified are licensed in this license. If any one feature is licensed, this
+	 * method returns {@code true}. Any features that contain expiration dates are checked against the current date.
+	 * Features are only valid if they have no expiration date or they are not expired.
+	 *
+	 * @param currentDate The date (millisecond timestamp) to check features against
+	 * @param features The features to check
+	 * @return {@code true} if any one feature listed is licensed and valid, {@code false} otherwise.
+	 */
+	public final boolean hasLicenseForAnyFeature(long currentDate, FeatureObject... features)
+	{
+		for(FeatureObject feature : features)
+		{
+			if(this.hasLicenseForFeature(currentDate, feature))
+				return true;
+		}
+		return false;
+	}
+
+	/**
 	 * Checks if all of the features specified are licensed in this license. If any one feature isn't licensed, this
 	 * method returns {@code false}. Any features that contain expiration dates are checked against the current date.
 	 * If any one feature is expired, this method returns {@code false}.
@@ -320,6 +377,38 @@ public final class License implements Serializable, Cloneable
 		for(String featureName : featureNames)
 		{
 			if(!this.hasLicenseForFeature(currentDate, featureName))
+				return false;
+		}
+		return true;
+	}
+
+	/**
+	 * Checks if all of the features specified are licensed in this license. If any one feature isn't licensed, this
+	 * method returns {@code false}. Any features that contain expiration dates are checked against the current date.
+	 * If any one feature is expired, this method returns {@code false}.
+	 *
+	 * @param features The features to check
+	 * @return {@code true} if every feature listed is licensed and valid, {@code false} otherwise.
+	 */
+	public final boolean hasLicenseForAllFeatures(FeatureObject... features)
+	{
+		return this.hasLicenseForAllFeatures(System.currentTimeMillis(), features);
+	}
+
+	/**
+	 * Checks if all of the features specified are licensed in this license. If any one feature isn't licensed, this
+	 * method returns {@code false}. Any features that contain expiration dates are checked against the provided date.
+	 * If any one feature is expired, this method returns {@code false}.
+	 *
+	 * @param currentDate The date (millisecond timestamp) to check features against
+	 * @param features The features to check
+	 * @return {@code true} if every feature listed is licensed and valid, {@code false} otherwise.
+	 */
+	public final boolean hasLicenseForAllFeatures(long currentDate, FeatureObject... features)
+	{
+		for(FeatureObject feature : features)
+		{
+			if(!this.hasLicenseForFeature(currentDate, feature))
 				return false;
 		}
 		return true;

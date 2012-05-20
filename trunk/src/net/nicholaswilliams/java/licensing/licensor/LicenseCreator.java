@@ -1,5 +1,5 @@
 /*
- * LicenseCreator.java from LicenseManager modified Monday, March 5, 2012 14:17:02 CST (-0600).
+ * LicenseCreator.java from LicenseManager modified Saturday, May 19, 2012 21:08:34 CDT (-0500).
  *
  * Copyright 2010-2012 the original author or authors.
  *
@@ -53,7 +53,7 @@ import java.util.Arrays;
  */
 public final class LicenseCreator
 {
-	private static final LicenseCreator instance = new LicenseCreator();
+	private static LicenseCreator instance;
 
 	private final PrivateKeyDataProvider privateKeyDataProvider;
 
@@ -78,8 +78,13 @@ public final class LicenseCreator
 	 * @return the license creator instance.
 	 * @throws IllegalArgumentException if {@link LicenseCreatorProperties#setPrivateKeyDataProvider(PrivateKeyDataProvider) privateKeyDataProvider} or {@link LicenseCreatorProperties#setPrivateKeyPasswordProvider(PasswordProvider) privateKeyPasswordProvider} are null
 	 */
-	public static LicenseCreator getInstance()
+	public static synchronized LicenseCreator getInstance()
 	{
+		if(LicenseCreator.instance == null)
+		{
+			LicenseCreator.instance = new LicenseCreator();
+		}
+		
 		return LicenseCreator.instance;
 	}
 

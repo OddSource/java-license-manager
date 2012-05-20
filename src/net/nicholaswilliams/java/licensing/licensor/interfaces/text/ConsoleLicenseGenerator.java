@@ -1,5 +1,5 @@
 /*
- * ConsoleLicenseGenerator.java from LicenseManager modified Saturday, May 19, 2012 10:08:47 CDT (-0500).
+ * ConsoleLicenseGenerator.java from LicenseManager modified Saturday, May 19, 2012 21:46:34 CDT (-0500).
  *
  * Copyright 2010-2012 the original author or authors.
  *
@@ -242,7 +242,7 @@ public class ConsoleLicenseGenerator
 		File file = new File(fileName);
 
 		if(!file.exists())
-			throw new FileNotFoundException(fileName);
+			throw new FileNotFoundException("The file [" + fileName + "] does not exist.");
 		if(!file.canRead())
 			throw new IOException("The file [" + fileName + "] is not readable.");
 
@@ -309,7 +309,7 @@ public class ConsoleLicenseGenerator
 		return input != null && input.trim().equals("2");
 	}
 
-	private PrivateKeyDataProvider getPrivateKeyDataProvider(Properties properties)
+	private PrivateKeyDataProvider getPrivateKeyDataProvider(Properties properties) throws FileNotFoundException
 	{
 		PrivateKeyDataProvider provider;
 
@@ -354,7 +354,8 @@ public class ConsoleLicenseGenerator
 			{
 				File file = new File(fileName);
 				if(!file.exists() || !file.canRead())
-					throw new RuntimeException("The private key file [" + file.getAbsolutePath() + "] does not exist.");
+					throw new FileNotFoundException("The private key file [" + file.getAbsolutePath() +
+											   "] does not exist or cannot be read.");
 
 				provider = new FilePrivateKeyDataProvider(file);
 			}
@@ -795,7 +796,7 @@ public class ConsoleLicenseGenerator
 		}
 		catch(IOException e)
 		{
-			this.device.printErrLn("An error occurred writing the reading files from the system. Analyze the error " +
+			this.device.printErrLn("An error occurred writing or reading files from the system. Analyze the error " +
 					"below to determine what went wrong and fix it!");
 			this.device.printErrLn(e.toString());
 			e.printStackTrace();

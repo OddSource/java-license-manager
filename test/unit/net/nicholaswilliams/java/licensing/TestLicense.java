@@ -1,5 +1,5 @@
 /*
- * TestLicense.java from LicenseManager modified Saturday, May 19, 2012 08:40:07 CDT (-0500).
+ * TestLicense.java from LicenseManager modified Monday, May 21, 2012 21:23:10 CDT (-0500).
  *
  * Copyright 2010-2012 the original author or authors.
  *
@@ -714,6 +714,23 @@ public class TestLicense
 		assertEquals("Feature 3 is missing.", "hondaFeature3", license.getFeatures().get(2).getName());
 		assertFalse("Feature 3 should be expired.", license.hasLicenseForAllFeatures("hondaFeature3"));
 		assertTrue("Feature 4 is missing.", license.hasLicenseForAllFeatures("toyotaFeature4"));
+	}
+
+	@Test
+	public void testDeserialization03()
+	{
+		License license = License.deserialize(
+				( "[][][][][0][0][0][0][]" ).getBytes());
+
+		assertEquals("The product key is not correct.", "", license.getProductKey());
+		assertEquals("The holder is not correct.", "", license.getHolder());
+		assertEquals("The issuer is not correct.", "", license.getIssuer());
+		assertEquals("The company is not correct.", "", license.getSubject());
+		assertEquals("The issue date is not correct.", 0L, license.getIssueDate());
+		assertEquals("The good after date is not correct.", 0L, license.getGoodAfterDate());
+		assertEquals("The good before date is not correct.", 0L, license.getGoodBeforeDate());
+		assertEquals("The number of licenses is not correct.", 0, license.getNumberOfLicenses());
+		assertEquals("The number of features is not correct.", 0, license.getFeatures().size());
 	}
 
 	@Test

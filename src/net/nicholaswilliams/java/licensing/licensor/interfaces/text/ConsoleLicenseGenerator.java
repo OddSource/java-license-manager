@@ -1,5 +1,5 @@
 /*
- * ConsoleLicenseGenerator.java from LicenseManager modified Monday, May 21, 2012 20:07:08 CDT (-0500).
+ * ConsoleLicenseGenerator.java from LicenseManager modified Monday, May 21, 2012 21:12:53 CDT (-0500).
  *
  * Copyright 2010-2012 the original author or authors.
  *
@@ -744,7 +744,7 @@ public class ConsoleLicenseGenerator
 			}
 			else
 			{
-				this.device.printOut(Base64.encodeBase64(licenseData));
+				this.device.printOut(new String(Base64.encodeBase64(licenseData)));
 			}
 		}
 	}

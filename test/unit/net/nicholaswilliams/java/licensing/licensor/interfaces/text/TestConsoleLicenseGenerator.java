@@ -1,5 +1,5 @@
 /*
- * TestConsoleLicenseGenerator.java from LicenseManager modified Monday, May 21, 2012 21:38:17 CDT (-0500).
+ * TestConsoleLicenseGenerator.java from LicenseManager modified Monday, May 21, 2012 22:09:11 CDT (-0500).
  *
  * Copyright 2010-2012 the original author or authors.
  *
@@ -971,7 +971,9 @@ public class TestConsoleLicenseGenerator
 		if(file.exists())
 			FileUtils.forceDelete(file);
 
-		FileUtils.writeStringToFile(file, "net.nicholaswilliams.java.licensing.password=somePassword04");
+		FileUtils.writeStringToFile(file, "net.nicholaswilliams.java.licensing.password=somePassword04\r\n" +
+										  "net.nicholaswilliams.java.licensing.issueDate=abcdefg\r\n" +
+										  "net.nicholaswilliams.java.licensing.numberOfLicenses=gfedcba");
 
 		Capture<String> capture = new Capture<String>();
 
@@ -1040,7 +1042,7 @@ public class TestConsoleLicenseGenerator
 
 		SamplePasswordProvider passwordProvider = new SamplePasswordProvider();
 
-		String fileName = "testGenerateLicense04.properties";
+		String fileName = "testGenerateLicense05.properties";
 		File file = new File(fileName);
 		if(file.exists())
 			FileUtils.forceDelete(file);
@@ -1122,6 +1124,98 @@ public class TestConsoleLicenseGenerator
 			this.resetLicenseCreator();
 
 			FileUtils.forceDelete(file);
+
+			EasyMock.verify(this.console.cli);
+		}
+	}
+
+	@Test
+	@SuppressWarnings("deprecation")
+	public void testGenerateLicense06() throws Exception
+	{
+		this.resetLicenseCreator();
+
+		SamplePasswordProvider passwordProvider = new SamplePasswordProvider();
+
+		String fileName = "testGenerateLicense06.properties";
+		File file = new File(fileName);
+		if(file.exists())
+			FileUtils.forceDelete(file);
+
+		String licenseFileName = "testGenerateLicense06.license";
+		File licenseFile = new File(licenseFileName);
+		if(licenseFile.exists())
+			FileUtils.forceDelete(licenseFile);
+
+		FileUtils.writeStringToFile(file, "net.nicholaswilliams.java.licensing.password=finalPassword06\r\n" +
+										  "net.nicholaswilliams.java.licensing.productKey=5565-1039-AF89-GGX7-TN31-14AL\r\n" +
+										  "net.nicholaswilliams.java.licensing.holder=someHolder01\r\n" +
+										  "net.nicholaswilliams.java.licensing.issuer=coolIssuer02\r\n" +
+										  "net.nicholaswilliams.java.licensing.subject=lameSubject03\r\n" +
+										  "net.nicholaswilliams.java.licensing.issueDate=2011-07-15 15:17:19\r\n" +
+										  "net.nicholaswilliams.java.licensing.goodAfterDate=2011-09-01 00:00:00\r\n" +
+										  "net.nicholaswilliams.java.licensing.goodBeforeDate=2011-12-31 23:59:59\r\n" +
+										  "net.nicholaswilliams.java.licensing.numberOfLicenses=21\r\n" +
+										  "net.nicholaswilliams.java.licensing.features.FINAL_FEATURE_03=\r\n" +
+										  "net.nicholaswilliams.java.licensing.licenseFile=" + licenseFileName + "\r\n");
+
+		this.console.cli = EasyMock.createMockBuilder(CommandLine.class).withConstructor().
+				addMockedMethod("hasOption", String.class).
+				addMockedMethod("getOptionValue", String.class).
+				createStrictMock();
+
+		EasyMock.expect(this.console.cli.hasOption("license")).andReturn(true);
+		EasyMock.expect(this.console.cli.getOptionValue("license")).andReturn(fileName);
+
+		EasyMock.replay(this.console.cli, this.device);
+
+		LicenseCreatorProperties.setPrivateKeyDataProvider(new SampleEmbeddedPrivateKeyDataProvider());
+		LicenseCreatorProperties.setPrivateKeyPasswordProvider(passwordProvider);
+
+		try
+		{
+			this.console.generateLicense();
+
+			assertTrue("The license file should exist.", licenseFile.exists());
+
+			byte[] data = FileUtils.readFileToByteArray(licenseFile);
+
+			assertNotNull("The license data should not be null.", data);
+			assertTrue("The license data should not be empty.", data.length > 0);
+
+			SignedLicense signed = (new ObjectSerializer()).readObject(SignedLicense.class, data);
+
+			assertNotNull("The signed license should not be null.", signed);
+
+			License license = MockLicenseHelper.deserialize(Encryptor.decryptRaw(
+					signed.getLicenseContent(), "finalPassword06".toCharArray()
+			));
+
+			assertNotNull("The license is not correct.", license);
+
+			assertEquals("The product key is not correct.", "5565-1039-AF89-GGX7-TN31-14AL", license.getProductKey());
+			assertEquals("The holder is not correct.", "someHolder01", license.getHolder());
+			assertEquals("The issuer is not correct.", "coolIssuer02", license.getIssuer());
+			assertEquals("The subject is not correct.", "lameSubject03", license.getSubject());
+			assertEquals("The issue date is not correct.", new Date(111, 6, 15, 15, 17, 19).getTime(), license.getIssueDate());
+			assertEquals("The good after date is not correct.", new Date(111, 8, 1, 0, 0, 0).getTime(), license.getGoodAfterDate());
+			assertEquals("The good before date is not correct.", new Date(111, 11, 31, 23, 59, 59).getTime(), license.getGoodBeforeDate());
+			assertEquals("The number of licenses is not correct.", 21, license.getNumberOfLicenses());
+			assertEquals("The number of features is not correct.", 1, license.getFeatures().size());
+
+			HashMap<String, License.Feature> map = new HashMap<String, License.Feature>();
+			for(License.Feature feature : license.getFeatures())
+				map.put(feature.getName(), feature);
+
+			assertNotNull("Feature 1 should not be null.", map.get("FINAL_FEATURE_03"));
+			assertEquals("Feature 1 is not correct.", -1L, map.get("FINAL_FEATURE_03").getGoodBeforeDate());
+		}
+		finally
+		{
+			this.resetLicenseCreator();
+
+			FileUtils.forceDelete(file);
+			FileUtils.forceDelete(licenseFile);
 
 			EasyMock.verify(this.console.cli);
 		}

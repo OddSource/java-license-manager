@@ -1,5 +1,5 @@
 /*
- * TestConsoleLicenseGenerator.java from LicenseManager modified Monday, May 21, 2012 22:09:11 CDT (-0500).
+ * TestConsoleLicenseGenerator.java from LicenseManager modified Monday, May 21, 2012 22:38:01 CDT (-0500).
  *
  * Copyright 2010-2012 the original author or authors.
  *
@@ -1221,7 +1221,558 @@ public class TestConsoleLicenseGenerator
 		}
 	}
 
+	@Test
+	public void testGenerateLicense07() throws Exception
+	{
+		this.resetLicenseCreator();
 
+		SamplePasswordProvider passwordProvider = new SamplePasswordProvider();
+
+		Capture<String> capture = new Capture<String>();
+
+		this.console.cli = EasyMock.createMockBuilder(CommandLine.class).withConstructor().
+				addMockedMethod("hasOption", String.class).
+				addMockedMethod("getOptionValue", String.class).
+				createStrictMock();
+
+		EasyMock.expect(this.console.cli.hasOption("license")).andReturn(true);
+		EasyMock.expect(this.console.cli.getOptionValue("license")).andReturn("  ");
+
+		EasyMock.expect(this.device.readLine("Please enter a product key for this license (you can leave this " +
+											 "blank): ")).
+				andReturn(" ");
+		this.device.printOutLn();
+		EasyMock.expectLastCall();
+		EasyMock.expect(this.device.readLine("Please enter a holder for this license (you can leave this blank): ")).
+				andReturn(null);
+		this.device.printOutLn();
+		EasyMock.expectLastCall();
+		EasyMock.expect(this.device.readLine("Please enter an issuer for this license (you can leave this blank): ")).
+				andReturn(" ");
+		this.device.printOutLn();
+		EasyMock.expectLastCall();
+		EasyMock.expect(this.device.readLine("Please enter a subject for this license (you can leave this blank): ")).
+				andReturn(null);
+		this.device.printOutLn();
+		EasyMock.expectLastCall();
+		EasyMock.expect(this.device.readLine("Please enter an issue date for this license (YYYY-MM-DD hh:mm:ss " +
+											 "or blank): ")).
+				andReturn(" ");
+		this.device.printOutLn();
+		EasyMock.expectLastCall();
+		EasyMock.expect(this.device.readLine("Please enter an activation/good-after date for this license " +
+											 "(YYYY-MM-DD hh:mm:ss or blank): ")).
+				andReturn(null);
+		this.device.printOutLn();
+		EasyMock.expectLastCall();
+		EasyMock.expect(this.device.readLine("Please enter an expiration date for this license " +
+											 "(YYYY-MM-DD hh:mm:ss or blank): ")).
+				andReturn(" ");
+		this.device.printOutLn();
+		EasyMock.expectLastCall();
+		EasyMock.expect(this.device.readLine("Please enter a number of seats/licenses for this license " +
+											 "(you can leave this blank): ")).
+				andReturn(null);
+		this.device.printOutLn();
+		EasyMock.expectLastCall();
+		EasyMock.expect(this.device.readLine("Optionally enter the name/key of a feature you want to add to this " +
+											 "license (you can leave this blank): ")).
+				andReturn(" ");
+		this.device.printOutLn();
+		EasyMock.expectLastCall();
+		EasyMock.expect(this.device.readPassword("Please enter a password to encrypt the license with (if left " +
+												 "blank, will use the private key password provider): ")).
+				andReturn(null);
+		this.device.printOutLn();
+		EasyMock.expectLastCall();
+		this.device.printOutLn("Would you like to...");
+		EasyMock.expectLastCall();
+		this.device.printOutLn("    (1) Output the Base64-encoded license data to the screen?");
+		EasyMock.expectLastCall();
+		this.device.printOutLn("    (2) Write the raw, binary license data to a file?");
+		EasyMock.expectLastCall();
+		EasyMock.expect(this.device.readLine("Your selection (default 1)? ")).andReturn(" ");
+		this.device.printOutLn();
+		EasyMock.expectLastCall();
+
+		this.device.printOutLn("License Data:");
+		EasyMock.expectLastCall();
+		this.device.printOutLn(EasyMock.capture(capture));
+		EasyMock.expectLastCall();
+
+		EasyMock.replay(this.console.cli, this.device);
+
+		LicenseCreatorProperties.setPrivateKeyDataProvider(new SampleEmbeddedPrivateKeyDataProvider());
+		LicenseCreatorProperties.setPrivateKeyPasswordProvider(passwordProvider);
+
+		try
+		{
+			this.console.generateLicense();
+
+			assertNotNull("The encoded license data should not be null.", capture.getValue());
+
+			byte[] data = Base64.decodeBase64(capture.getValue());
+
+			assertNotNull("The license data should not be null.", data);
+			assertTrue("The license data should not be empty.", data.length > 0);
+
+			SignedLicense signed = (new ObjectSerializer()).readObject(SignedLicense.class, data);
+
+			assertNotNull("The signed license should not be null.", signed);
+
+			License license = MockLicenseHelper.deserialize(Encryptor.decryptRaw(
+					signed.getLicenseContent(), passwordProvider.getPassword()
+			));
+
+			assertNotNull("The license is not correct.", license);
+
+			assertEquals("The product key is not correct.", "", license.getProductKey());
+			assertEquals("The holder is not correct.", "", license.getHolder());
+			assertEquals("The issuer is not correct.", "", license.getIssuer());
+			assertEquals("The subject is not correct.", "", license.getSubject());
+			assertEquals("The issue date is not correct.", 0L, license.getIssueDate());
+			assertEquals("The good after date is not correct.", 0L, license.getGoodAfterDate());
+			assertEquals("The good before date is not correct.", 0L, license.getGoodBeforeDate());
+			assertEquals("The number of licenses is not correct.", 0, license.getNumberOfLicenses());
+			assertEquals("The number of features is not correct.", 0, license.getFeatures().size());
+		}
+		finally
+		{
+			this.resetLicenseCreator();
+
+			EasyMock.verify(this.console.cli);
+		}
+	}
+
+	@Test
+	public void testGenerateLicense08() throws Exception
+	{
+		this.resetLicenseCreator();
+
+		SamplePasswordProvider passwordProvider = new SamplePasswordProvider();
+
+		Capture<String> capture = new Capture<String>();
+
+		this.console.cli = EasyMock.createMockBuilder(CommandLine.class).withConstructor().
+				addMockedMethod("hasOption", String.class).
+				addMockedMethod("getOptionValue", String.class).
+				createStrictMock();
+
+		EasyMock.expect(this.console.cli.hasOption("license")).andReturn(false);
+
+		EasyMock.expect(this.device.readLine("Please enter a product key for this license (you can leave this " +
+											 "blank): ")).
+				andReturn(" ");
+		this.device.printOutLn();
+		EasyMock.expectLastCall();
+		EasyMock.expect(this.device.readLine("Please enter a holder for this license (you can leave this blank): ")).
+				andReturn(null);
+		this.device.printOutLn();
+		EasyMock.expectLastCall();
+		EasyMock.expect(this.device.readLine("Please enter an issuer for this license (you can leave this blank): ")).
+				andReturn(" ");
+		this.device.printOutLn();
+		EasyMock.expectLastCall();
+		EasyMock.expect(this.device.readLine("Please enter a subject for this license (you can leave this blank): ")).
+				andReturn(null);
+		this.device.printOutLn();
+		EasyMock.expectLastCall();
+		EasyMock.expect(this.device.readLine("Please enter an issue date for this license (YYYY-MM-DD hh:mm:ss " +
+											 "or blank): ")).
+				andReturn("abcdefg");
+		this.device.printOutLn();
+		EasyMock.expectLastCall();
+		EasyMock.expect(this.device.readLine("Please enter an activation/good-after date for this license " +
+											 "(YYYY-MM-DD hh:mm:ss or blank): ")).
+				andReturn(null);
+		this.device.printOutLn();
+		EasyMock.expectLastCall();
+		EasyMock.expect(this.device.readLine("Please enter an expiration date for this license " +
+											 "(YYYY-MM-DD hh:mm:ss or blank): ")).
+				andReturn(" ");
+		this.device.printOutLn();
+		EasyMock.expectLastCall();
+		EasyMock.expect(this.device.readLine("Please enter a number of seats/licenses for this license " +
+											 "(you can leave this blank): ")).
+				andReturn("gfedcba");
+		this.device.printOutLn();
+		EasyMock.expectLastCall();
+		EasyMock.expect(this.device.readLine("Optionally enter the name/key of a feature you want to add to this " +
+											 "license (you can leave this blank): ")).
+				andReturn(" ");
+		this.device.printOutLn();
+		EasyMock.expectLastCall();
+		EasyMock.expect(this.device.readPassword("Please enter a password to encrypt the license with (if left " +
+												 "blank, will use the private key password provider): ")).
+				andReturn("somePassword04".toCharArray());
+		this.device.printOutLn();
+		EasyMock.expectLastCall();
+		this.device.printOutLn("Would you like to...");
+		EasyMock.expectLastCall();
+		this.device.printOutLn("    (1) Output the Base64-encoded license data to the screen?");
+		EasyMock.expectLastCall();
+		this.device.printOutLn("    (2) Write the raw, binary license data to a file?");
+		EasyMock.expectLastCall();
+		EasyMock.expect(this.device.readLine("Your selection (default 1)? ")).andReturn("1");
+		this.device.printOutLn();
+		EasyMock.expectLastCall();
+
+		this.device.printOutLn("License Data:");
+		EasyMock.expectLastCall();
+		this.device.printOutLn(EasyMock.capture(capture));
+		EasyMock.expectLastCall();
+
+		EasyMock.replay(this.console.cli, this.device);
+
+		LicenseCreatorProperties.setPrivateKeyDataProvider(new SampleEmbeddedPrivateKeyDataProvider());
+		LicenseCreatorProperties.setPrivateKeyPasswordProvider(passwordProvider);
+
+		try
+		{
+			this.console.generateLicense();
+
+			assertNotNull("The encoded license data should not be null.", capture.getValue());
+
+			byte[] data = Base64.decodeBase64(capture.getValue());
+
+			assertNotNull("The license data should not be null.", data);
+			assertTrue("The license data should not be empty.", data.length > 0);
+
+			SignedLicense signed = (new ObjectSerializer()).readObject(SignedLicense.class, data);
+
+			assertNotNull("The signed license should not be null.", signed);
+
+			License license = MockLicenseHelper.deserialize(Encryptor.decryptRaw(
+					signed.getLicenseContent(), "somePassword04".toCharArray()
+			));
+
+			assertNotNull("The license is not correct.", license);
+
+			assertEquals("The product key is not correct.", "", license.getProductKey());
+			assertEquals("The holder is not correct.", "", license.getHolder());
+			assertEquals("The issuer is not correct.", "", license.getIssuer());
+			assertEquals("The subject is not correct.", "", license.getSubject());
+			assertEquals("The issue date is not correct.", 0L, license.getIssueDate());
+			assertEquals("The good after date is not correct.", 0L, license.getGoodAfterDate());
+			assertEquals("The good before date is not correct.", 0L, license.getGoodBeforeDate());
+			assertEquals("The number of licenses is not correct.", 0, license.getNumberOfLicenses());
+			assertEquals("The number of features is not correct.", 0, license.getFeatures().size());
+		}
+		finally
+		{
+			this.resetLicenseCreator();
+
+			EasyMock.verify(this.console.cli);
+		}
+	}
+
+	@Test
+	@SuppressWarnings("deprecation")
+	public void testGenerateLicense09() throws Exception
+	{
+		this.resetLicenseCreator();
+
+		SamplePasswordProvider passwordProvider = new SamplePasswordProvider();
+
+		Capture<String> capture = new Capture<String>();
+
+		this.console.cli = EasyMock.createMockBuilder(CommandLine.class).withConstructor().
+				addMockedMethod("hasOption", String.class).
+				addMockedMethod("getOptionValue", String.class).
+				createStrictMock();
+
+		EasyMock.expect(this.console.cli.hasOption("license")).andReturn(false);
+
+		EasyMock.expect(this.device.readLine("Please enter a product key for this license (you can leave this " +
+											 "blank): ")).
+				andReturn("6575-TH0T-SNL5-7XGG-1099-1040");
+		this.device.printOutLn();
+		EasyMock.expectLastCall();
+		EasyMock.expect(this.device.readLine("Please enter a holder for this license (you can leave this blank): ")).
+				andReturn("myHolder01");
+		this.device.printOutLn();
+		EasyMock.expectLastCall();
+		EasyMock.expect(this.device.readLine("Please enter an issuer for this license (you can leave this blank): ")).
+				andReturn("yourIssuer02");
+		this.device.printOutLn();
+		EasyMock.expectLastCall();
+		EasyMock.expect(this.device.readLine("Please enter a subject for this license (you can leave this blank): ")).
+				andReturn("aSubject03");
+		this.device.printOutLn();
+		EasyMock.expectLastCall();
+		EasyMock.expect(this.device.readLine("Please enter an issue date for this license (YYYY-MM-DD hh:mm:ss " +
+											 "or blank): ")).
+				andReturn("2012-05-01 22:21:20");
+		this.device.printOutLn();
+		EasyMock.expectLastCall();
+		EasyMock.expect(this.device.readLine("Please enter an activation/good-after date for this license " +
+											 "(YYYY-MM-DD hh:mm:ss or blank): ")).
+				andReturn("2012-06-01 00:00:00");
+		this.device.printOutLn();
+		EasyMock.expectLastCall();
+		EasyMock.expect(this.device.readLine("Please enter an expiration date for this license " +
+											 "(YYYY-MM-DD hh:mm:ss or blank): ")).
+				andReturn("2012-06-30 23:59:59");
+		this.device.printOutLn();
+		EasyMock.expectLastCall();
+		EasyMock.expect(this.device.readLine("Please enter a number of seats/licenses for this license " +
+											 "(you can leave this blank): ")).
+				andReturn("83");
+		this.device.printOutLn();
+		EasyMock.expectLastCall();
+		EasyMock.expect(this.device.readLine("Optionally enter the name/key of a feature you want to add to this " +
+											 "license (you can leave this blank): ")).
+				andReturn("MY_FEATURE_01");
+		this.device.printOutLn();
+		EasyMock.expectLastCall();
+		EasyMock.expect(this.device.readLine("Optionally enter an expiration date for feature [MY_FEATURE_01] " +
+											 "(YYYY-MM-DD hh:mm:ss or blank): ")).
+				andReturn(" ");
+		this.device.printOutLn();
+		EasyMock.expectLastCall();
+		EasyMock.expect(this.device.readLine("Enter another feature to add to this license (you can leave " +
+											 "this blank): ")).
+				andReturn("ANOTHER_FEATURE_02");
+		this.device.printOutLn();
+		EasyMock.expectLastCall();
+		EasyMock.expect(this.device.readLine("Optionally enter an expiration date for feature [ANOTHER_FEATURE_02] " +
+											 "(YYYY-MM-DD hh:mm:ss or blank): ")).
+				andReturn("2012-06-15 23:59:59");
+		this.device.printOutLn();
+		EasyMock.expectLastCall();
+		EasyMock.expect(this.device.readLine("Enter another feature to add to this license (you can leave " +
+											 "this blank): ")).
+				andReturn("    ");
+		this.device.printOutLn();
+		EasyMock.expectLastCall();
+		EasyMock.expect(this.device.readPassword("Please enter a password to encrypt the license with (if left " +
+												 "blank, will use the private key password provider): ")).
+				andReturn("anotherPassword05".toCharArray());
+		this.device.printOutLn();
+		EasyMock.expectLastCall();
+		this.device.printOutLn("Would you like to...");
+		EasyMock.expectLastCall();
+		this.device.printOutLn("    (1) Output the Base64-encoded license data to the screen?");
+		EasyMock.expectLastCall();
+		this.device.printOutLn("    (2) Write the raw, binary license data to a file?");
+		EasyMock.expectLastCall();
+		EasyMock.expect(this.device.readLine("Your selection (default 1)? ")).andReturn(" ");
+		this.device.printOutLn();
+		EasyMock.expectLastCall();
+
+		this.device.printOutLn("License Data:");
+		EasyMock.expectLastCall();
+		this.device.printOutLn(EasyMock.capture(capture));
+		EasyMock.expectLastCall();
+
+		EasyMock.replay(this.console.cli, this.device);
+
+		LicenseCreatorProperties.setPrivateKeyDataProvider(new SampleEmbeddedPrivateKeyDataProvider());
+		LicenseCreatorProperties.setPrivateKeyPasswordProvider(passwordProvider);
+
+		try
+		{
+			this.console.generateLicense();
+
+			assertNotNull("The encoded license data should not be null.", capture.getValue());
+
+			byte[] data = Base64.decodeBase64(capture.getValue());
+
+			assertNotNull("The license data should not be null.", data);
+			assertTrue("The license data should not be empty.", data.length > 0);
+
+			SignedLicense signed = (new ObjectSerializer()).readObject(SignedLicense.class, data);
+
+			assertNotNull("The signed license should not be null.", signed);
+
+			License license = MockLicenseHelper.deserialize(Encryptor.decryptRaw(
+					signed.getLicenseContent(), "anotherPassword05".toCharArray()
+			));
+
+			assertNotNull("The license is not correct.", license);
+
+			assertEquals("The product key is not correct.", "6575-TH0T-SNL5-7XGG-1099-1040", license.getProductKey());
+			assertEquals("The holder is not correct.", "myHolder01", license.getHolder());
+			assertEquals("The issuer is not correct.", "yourIssuer02", license.getIssuer());
+			assertEquals("The subject is not correct.", "aSubject03", license.getSubject());
+			assertEquals("The issue date is not correct.", new Date(112, 4, 1, 22, 21, 20).getTime(), license.getIssueDate());
+			assertEquals("The good after date is not correct.", new Date(112, 5, 1, 0, 0, 0).getTime(), license.getGoodAfterDate());
+			assertEquals("The good before date is not correct.", new Date(112, 5, 30, 23, 59, 59).getTime(), license.getGoodBeforeDate());
+			assertEquals("The number of licenses is not correct.", 83, license.getNumberOfLicenses());
+			assertEquals("The number of features is not correct.", 2, license.getFeatures().size());
+
+			HashMap<String, License.Feature> map = new HashMap<String, License.Feature>();
+			for(License.Feature feature : license.getFeatures())
+				map.put(feature.getName(), feature);
+
+			assertNotNull("Feature 1 should not be null.", map.get("MY_FEATURE_01"));
+			assertEquals("Feature 1 is not correct.", -1L, map.get("MY_FEATURE_01").getGoodBeforeDate());
+
+			assertNotNull("Feature 2 should not be null.", map.get("ANOTHER_FEATURE_02"));
+			assertEquals("Feature 2 is not correct.", new Date(112, 5, 15, 23, 59, 59).getTime(),
+						 map.get("ANOTHER_FEATURE_02").getGoodBeforeDate());
+		}
+		finally
+		{
+			this.resetLicenseCreator();
+
+			EasyMock.verify(this.console.cli);
+		}
+	}
+
+	@Test
+	@SuppressWarnings("deprecation")
+	public void testGenerateLicense10() throws Exception
+	{
+		this.resetLicenseCreator();
+
+		SamplePasswordProvider passwordProvider = new SamplePasswordProvider();
+
+		String licenseFileName = "testGenerateLicense10.license";
+		File licenseFile = new File(licenseFileName);
+		if(licenseFile.exists())
+			FileUtils.forceDelete(licenseFile);
+
+		this.console.cli = EasyMock.createMockBuilder(CommandLine.class).withConstructor().
+				addMockedMethod("hasOption", String.class).
+				addMockedMethod("getOptionValue", String.class).
+				createStrictMock();
+
+		EasyMock.expect(this.console.cli.hasOption("license")).andReturn(false);
+
+		EasyMock.expect(this.device.readLine("Please enter a product key for this license (you can leave this " +
+											 "blank): ")).
+				andReturn("5565-1039-AF89-GGX7-TN31-14AL");
+		this.device.printOutLn();
+		EasyMock.expectLastCall();
+		EasyMock.expect(this.device.readLine("Please enter a holder for this license (you can leave this blank): ")).
+				andReturn("someHolder01");
+		this.device.printOutLn();
+		EasyMock.expectLastCall();
+		EasyMock.expect(this.device.readLine("Please enter an issuer for this license (you can leave this blank): ")).
+				andReturn("coolIssuer02");
+		this.device.printOutLn();
+		EasyMock.expectLastCall();
+		EasyMock.expect(this.device.readLine("Please enter a subject for this license (you can leave this blank): ")).
+				andReturn("lameSubject03");
+		this.device.printOutLn();
+		EasyMock.expectLastCall();
+		EasyMock.expect(this.device.readLine("Please enter an issue date for this license (YYYY-MM-DD hh:mm:ss " +
+											 "or blank): ")).
+				andReturn("2011-07-15 15:17:19");
+		this.device.printOutLn();
+		EasyMock.expectLastCall();
+		EasyMock.expect(this.device.readLine("Please enter an activation/good-after date for this license " +
+											 "(YYYY-MM-DD hh:mm:ss or blank): ")).
+				andReturn("2011-09-01 00:00:00");
+		this.device.printOutLn();
+		EasyMock.expectLastCall();
+		EasyMock.expect(this.device.readLine("Please enter an expiration date for this license " +
+											 "(YYYY-MM-DD hh:mm:ss or blank): ")).
+				andReturn("2011-12-31 23:59:59");
+		this.device.printOutLn();
+		EasyMock.expectLastCall();
+		EasyMock.expect(this.device.readLine("Please enter a number of seats/licenses for this license " +
+											 "(you can leave this blank): ")).
+				andReturn("21");
+		this.device.printOutLn();
+		EasyMock.expectLastCall();
+		EasyMock.expect(this.device.readLine("Optionally enter the name/key of a feature you want to add to this " +
+											 "license (you can leave this blank): ")).
+				andReturn("FINAL_FEATURE_03");
+		this.device.printOutLn();
+		EasyMock.expectLastCall();
+		EasyMock.expect(this.device.readLine("Optionally enter an expiration date for feature [FINAL_FEATURE_03] " +
+											 "(YYYY-MM-DD hh:mm:ss or blank): ")).
+				andReturn(" ");
+		this.device.printOutLn();
+		EasyMock.expectLastCall();
+		EasyMock.expect(this.device.readLine("Enter another feature to add to this license (you can leave " +
+											 "this blank): ")).
+				andReturn(null);
+		this.device.printOutLn();
+		EasyMock.expectLastCall();
+		EasyMock.expect(this.device.readPassword("Please enter a password to encrypt the license with (if left " +
+												 "blank, will use the private key password provider): ")).
+				andReturn("finalPassword06".toCharArray());
+		this.device.printOutLn();
+		EasyMock.expectLastCall();
+		this.device.printOutLn("Would you like to...");
+		EasyMock.expectLastCall();
+		this.device.printOutLn("    (1) Output the Base64-encoded license data to the screen?");
+		EasyMock.expectLastCall();
+		this.device.printOutLn("    (2) Write the raw, binary license data to a file?");
+		EasyMock.expectLastCall();
+		EasyMock.expect(this.device.readLine("Your selection (default 1)? ")).andReturn("2");
+		this.device.printOutLn();
+		EasyMock.expectLastCall();
+		EasyMock.expect(this.device.readLine("Please enter the name of the file to save the license to: ")).
+				andReturn("");
+		this.device.printOutLn();
+		EasyMock.expectLastCall();
+		EasyMock.expect(this.device.readLine("Invalid file name. Please enter the name of the file to save the " +
+											 "license to: ")).
+				andReturn("   ");
+		this.device.printOutLn();
+		EasyMock.expectLastCall();
+		EasyMock.expect(this.device.readLine("Invalid file name. Please enter the name of the file to save the " +
+											 "license to: ")).
+				andReturn(licenseFileName);
+		this.device.printOutLn();
+		EasyMock.expectLastCall();
+
+		EasyMock.replay(this.console.cli, this.device);
+
+		LicenseCreatorProperties.setPrivateKeyDataProvider(new SampleEmbeddedPrivateKeyDataProvider());
+		LicenseCreatorProperties.setPrivateKeyPasswordProvider(passwordProvider);
+
+		try
+		{
+			this.console.generateLicense();
+
+			assertTrue("The license file should exist.", licenseFile.exists());
+
+			byte[] data = FileUtils.readFileToByteArray(licenseFile);
+
+			assertNotNull("The license data should not be null.", data);
+			assertTrue("The license data should not be empty.", data.length > 0);
+
+			SignedLicense signed = (new ObjectSerializer()).readObject(SignedLicense.class, data);
+
+			assertNotNull("The signed license should not be null.", signed);
+
+			License license = MockLicenseHelper.deserialize(Encryptor.decryptRaw(
+					signed.getLicenseContent(), "finalPassword06".toCharArray()
+			));
+
+			assertNotNull("The license is not correct.", license);
+
+			assertEquals("The product key is not correct.", "5565-1039-AF89-GGX7-TN31-14AL", license.getProductKey());
+			assertEquals("The holder is not correct.", "someHolder01", license.getHolder());
+			assertEquals("The issuer is not correct.", "coolIssuer02", license.getIssuer());
+			assertEquals("The subject is not correct.", "lameSubject03", license.getSubject());
+			assertEquals("The issue date is not correct.", new Date(111, 6, 15, 15, 17, 19).getTime(), license.getIssueDate());
+			assertEquals("The good after date is not correct.", new Date(111, 8, 1, 0, 0, 0).getTime(), license.getGoodAfterDate());
+			assertEquals("The good before date is not correct.", new Date(111, 11, 31, 23, 59, 59).getTime(), license.getGoodBeforeDate());
+			assertEquals("The number of licenses is not correct.", 21, license.getNumberOfLicenses());
+			assertEquals("The number of features is not correct.", 1, license.getFeatures().size());
+
+			HashMap<String, License.Feature> map = new HashMap<String, License.Feature>();
+			for(License.Feature feature : license.getFeatures())
+				map.put(feature.getName(), feature);
+
+			assertNotNull("Feature 1 should not be null.", map.get("FINAL_FEATURE_03"));
+			assertEquals("Feature 1 is not correct.", -1L, map.get("FINAL_FEATURE_03").getGoodBeforeDate());
+		}
+		finally
+		{
+			this.resetLicenseCreator();
+
+			FileUtils.forceDelete(licenseFile);
+
+			EasyMock.verify(this.console.cli);
+		}
+	}
 
 	@Test
 	public void testRun01() throws Exception

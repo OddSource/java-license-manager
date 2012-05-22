@@ -1,5 +1,5 @@
 /*
- * License.java from LicenseManager modified Saturday, May 19, 2012 09:26:27 CDT (-0500).
+ * License.java from LicenseManager modified Monday, May 21, 2012 21:23:21 CDT (-0500).
  *
  * Copyright 2010-2012 the original author or authors.
  *
@@ -124,7 +124,7 @@ public final class License implements Serializable, Cloneable
 	protected static License deserialize(byte[] data)
 	{
 		String string = new String(data);
-		String[] parts = string.substring(1, string.length() - 1).split("\\]\\[");
+		String[] parts = string.substring(1, string.length() - 1).split("\\]\\[", -1);
 
 		return new License(parts);
 	}

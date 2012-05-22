@@ -1,5 +1,5 @@
 /*
- * TestConsoleLicenseGenerator.java from LicenseManager modified Saturday, May 19, 2012 22:03:29 CDT (-0500).
+ * TestConsoleLicenseGenerator.java from LicenseManager modified Monday, May 21, 2012 20:17:06 CDT (-0500).
  *
  * Copyright 2010-2012 the original author or authors.
  *
@@ -29,6 +29,7 @@ import net.nicholaswilliams.java.licensing.licensor.LicenseCreator;
 import net.nicholaswilliams.java.licensing.licensor.LicenseCreatorProperties;
 import net.nicholaswilliams.java.licensing.licensor.PrivateKeyDataProvider;
 import net.nicholaswilliams.java.licensing.licensor.interfaces.text.abstraction.TextInterfaceDevice;
+import net.nicholaswilliams.java.licensing.samples.SampleEmbeddedPrivateKeyDataProvider;
 import net.nicholaswilliams.java.licensing.samples.SampleFilePrivateKeyDataProvider;
 import net.nicholaswilliams.java.licensing.samples.SamplePasswordProvider;
 import net.nicholaswilliams.java.mock.MockPermissiveSecurityManager;
@@ -494,7 +495,103 @@ public class TestConsoleLicenseGenerator
 	{
 		this.resetLicenseCreator();
 
-		String fileName = "testInitializeLicenseCreator04.properties";
+		String fileName = "testInitializeLicenseCreator05.properties";
+		File file = new File(fileName);
+		if(file.exists())
+			FileUtils.forceDelete(file);
+
+		File keyFile = new File("testInitializeLicenseCreator05.key");
+		FileUtils.writeStringToFile(keyFile, "aKey");
+
+		FileUtils.writeStringToFile(
+				file,
+				"net.nicholaswilliams.java.licensing.privateKeyFile=testInitializeLicenseCreator05.key"
+		);
+
+		this.console.cli = EasyMock.createMockBuilder(CommandLine.class).withConstructor().
+				addMockedMethod("hasOption", String.class).
+				addMockedMethod("getOptionValue", String.class).
+				createStrictMock();
+
+		EasyMock.expect(this.console.cli.hasOption("config")).andReturn(true);
+		EasyMock.expect(this.console.cli.getOptionValue("config")).andReturn(fileName);
+
+		EasyMock.replay(this.console.cli, this.device);
+
+		try
+		{
+			this.console.initializeLicenseCreator();
+			fail("Expected exception RuntimeException.");
+		}
+		catch(RuntimeException ignore) { }
+		finally
+		{
+			LicenseCreatorProperties.setPrivateKeyDataProvider(null);
+			LicenseCreatorProperties.setPrivateKeyPasswordProvider(null);
+
+			this.resetLicenseCreator();
+
+			FileUtils.forceDelete(file);
+			FileUtils.forceDelete(keyFile);
+
+			EasyMock.verify(this.console.cli);
+		}
+	}
+
+	@Test
+	public void testInitializeLicenseCreator06() throws Exception
+	{
+		this.resetLicenseCreator();
+
+		String fileName = "testInitializeLicenseCreator06.properties";
+		File file = new File(fileName);
+		if(file.exists())
+			FileUtils.forceDelete(file);
+
+		File keyFile = new File("testInitializeLicenseCreator06.key");
+		FileUtils.writeStringToFile(keyFile, "aKey");
+
+		FileUtils.writeStringToFile(
+				file,
+				"net.nicholaswilliams.java.licensing.privateKeyPassword=testPassword06"
+		);
+
+		this.console.cli = EasyMock.createMockBuilder(CommandLine.class).withConstructor().
+				addMockedMethod("hasOption", String.class).
+				addMockedMethod("getOptionValue", String.class).
+				createStrictMock();
+
+		EasyMock.expect(this.console.cli.hasOption("config")).andReturn(true);
+		EasyMock.expect(this.console.cli.getOptionValue("config")).andReturn(fileName);
+
+		EasyMock.replay(this.console.cli, this.device);
+
+		try
+		{
+			this.console.initializeLicenseCreator();
+			fail("Expected exception RuntimeException.");
+		}
+		catch(RuntimeException ignore) { }
+		finally
+		{
+			LicenseCreatorProperties.setPrivateKeyDataProvider(null);
+			LicenseCreatorProperties.setPrivateKeyPasswordProvider(null);
+
+			this.resetLicenseCreator();
+
+			FileUtils.forceDelete(file);
+			FileUtils.forceDelete(keyFile);
+
+			EasyMock.verify(this.console.cli);
+		}
+	}
+
+	@Test
+	public void testInitializeLicenseCreator07() throws Exception
+	{
+		this.resetLicenseCreator();
+
+		String fileName = "testInitializeLicenseCreator07.properties";
 		File file = new File(fileName);
 		if(file.exists())
 			FileUtils.forceDelete(file);
@@ -535,6 +632,171 @@ public class TestConsoleLicenseGenerator
 			this.resetLicenseCreator();
 
 			FileUtils.forceDelete(file);
+
+			EasyMock.verify(this.console.cli);
+		}
+	}
+
+	@Test
+	public void testInitializeLicenseCreator08() throws Exception
+	{
+		this.resetLicenseCreator();
+
+		File keyFile = new File("testInitializeLicenseCreator08.key");
+		FileUtils.writeStringToFile(keyFile, "aKey");
+
+		this.console.cli = EasyMock.createMockBuilder(CommandLine.class).withConstructor().
+				addMockedMethod("hasOption", String.class).
+				addMockedMethod("getOptionValue", String.class).
+				createStrictMock();
+
+		EasyMock.expect(this.console.cli.hasOption("config")).andReturn(true);
+		EasyMock.expect(this.console.cli.getOptionValue("config")).andReturn("  ");
+
+		this.device.printOutLn("Would you like to...");
+		EasyMock.expectLastCall();
+		this.device.printOutLn("    (1) Read the private key from a file?");
+		EasyMock.expectLastCall();
+		this.device.printOutLn("    (2) Use a PrivateKeyDataProvider implementation from the classpath?");
+		EasyMock.expectLastCall();
+		EasyMock.expect(this.device.readLine("Your selection (default 1)? ")).andReturn(" ");
+		this.device.printOutLn();
+		EasyMock.expectLastCall();
+		EasyMock.expect(this.device.readLine("Please enter the name of the private key file to use: ")).andReturn(null);
+		this.device.printOutLn();
+		EasyMock.expectLastCall();
+		EasyMock.expect(this.device.readLine("Invalid or non-existent file. Please enter the name of the private " +
+											 "key file to use: ")).andReturn("  ");
+		this.device.printOutLn();
+		EasyMock.expectLastCall();
+		EasyMock.expect(this.device.readLine("Invalid or non-existent file. Please enter the name of the private " +
+											 "key file to use: ")).andReturn("testInitializeLicenseCreator08-bad.key");
+		this.device.printOutLn();
+		EasyMock.expectLastCall();
+		EasyMock.expect(this.device.readLine("Invalid or non-existent file. Please enter the name of the private " +
+											 "key file to use: ")).andReturn("testInitializeLicenseCreator08.key");
+		this.device.printOutLn();
+		EasyMock.expectLastCall();
+
+		this.device.printOutLn("Would you like to...");
+		EasyMock.expectLastCall();
+		this.device.printOutLn("    (1) Type the private key password in manually?");
+		EasyMock.expectLastCall();
+		this.device.printOutLn("    (2) Use a PasswordProvider implementation from the classpath?");
+		EasyMock.expectLastCall();
+		EasyMock.expect(this.device.readLine("Your selection (default 1)? ")).andReturn("2");
+		this.device.printOutLn();
+		EasyMock.expectLastCall();
+		EasyMock.expect(this.device.readLine("Please enter the fully-qualified class name for the " +
+											 "PasswordProvider implementation: ")).andReturn(null);
+		this.device.printOutLn();
+		EasyMock.expectLastCall();
+		EasyMock.expect(this.device.readLine("Please enter the fully-qualified class name for the " +
+											 "PasswordProvider implementation: ")).andReturn("  ");
+		this.device.printOutLn();
+		EasyMock.expectLastCall();
+		EasyMock.expect(this.device.readLine("Please enter the fully-qualified class name for the " +
+											 "PasswordProvider implementation: ")).
+				andReturn("net.nicholaswilliams.java.licensing.samples.SamplePasswordProvider");
+		this.device.printOutLn();
+		EasyMock.expectLastCall();
+
+		EasyMock.replay(this.console.cli, this.device);
+
+		try
+		{
+			this.console.initializeLicenseCreator();
+
+			PrivateKeyDataProvider key = this.getPrivateKeyDataProvider();
+			assertNotNull("The key provider should not be null.", key);
+			assertSame("The key provider is not correct.", FilePrivateKeyDataProvider.class, key.getClass());
+			assertEquals("The file is not correct.", keyFile.getAbsolutePath(),
+						 ((FilePrivateKeyDataProvider)key).getPrivateKeyFile().getAbsolutePath());
+
+			PasswordProvider password = this.getPasswordProvider();
+			assertNotNull("The password provider should not be null.", password);
+			assertSame("The password provider is not correct.", SamplePasswordProvider.class, password.getClass());
+		}
+		finally
+		{
+			this.resetLicenseCreator();
+
+			FileUtils.forceDelete(keyFile);
+
+			EasyMock.verify(this.console.cli);
+		}
+	}
+
+	@Test
+	public void testInitializeLicenseCreator09() throws Exception
+	{
+		this.resetLicenseCreator();
+
+		this.console.cli = EasyMock.createMockBuilder(CommandLine.class).withConstructor().
+				addMockedMethod("hasOption", String.class).
+				addMockedMethod("getOptionValue", String.class).
+				createStrictMock();
+
+		EasyMock.expect(this.console.cli.hasOption("config")).andReturn(true);
+		EasyMock.expect(this.console.cli.getOptionValue("config")).andReturn("  ");
+
+		this.device.printOutLn("Would you like to...");
+		EasyMock.expectLastCall();
+		this.device.printOutLn("    (1) Read the private key from a file?");
+		EasyMock.expectLastCall();
+		this.device.printOutLn("    (2) Use a PrivateKeyDataProvider implementation from the classpath?");
+		EasyMock.expectLastCall();
+		EasyMock.expect(this.device.readLine("Your selection (default 1)? ")).andReturn("2");
+		this.device.printOutLn();
+		EasyMock.expectLastCall();
+		EasyMock.expect(this.device.readLine("Please enter the fully-qualified class name for the " +
+											 "PrivateKeyDataProvider implementation: ")).andReturn(null);
+		this.device.printOutLn();
+		EasyMock.expectLastCall();
+		EasyMock.expect(this.device.readLine("Please enter the fully-qualified class name for the " +
+											 "PrivateKeyDataProvider implementation: ")).andReturn("  ");
+		this.device.printOutLn();
+		EasyMock.expectLastCall();
+		EasyMock.expect(this.device.readLine("Please enter the fully-qualified class name for the " +
+											 "PrivateKeyDataProvider implementation: ")).
+				andReturn("net.nicholaswilliams.java.licensing.samples.SampleEmbeddedPrivateKeyDataProvider");
+		this.device.printOutLn();
+		EasyMock.expectLastCall();
+
+		this.device.printOutLn("Would you like to...");
+		EasyMock.expectLastCall();
+		this.device.printOutLn("    (1) Type the private key password in manually?");
+		EasyMock.expectLastCall();
+		this.device.printOutLn("    (2) Use a PasswordProvider implementation from the classpath?");
+		EasyMock.expectLastCall();
+		EasyMock.expect(this.device.readLine("Your selection (default 1)? ")).andReturn(" ");
+		this.device.printOutLn();
+		EasyMock.expectLastCall();
+		EasyMock.expect(this.device.readPassword("Please type the password for the private key: ")).andReturn(null);
+		this.device.printOutLn();
+		EasyMock.expectLastCall();
+		EasyMock.expect(this.device.readPassword("Invalid password. Please type the password for the private key: ")).
+				andReturn("testPassword09".toCharArray());
+		this.device.printOutLn();
+		EasyMock.expectLastCall();
+
+		EasyMock.replay(this.console.cli, this.device);
+
+		try
+		{
+			this.console.initializeLicenseCreator();
+
+			PrivateKeyDataProvider key = this.getPrivateKeyDataProvider();
+			assertNotNull("The key provider should not be null.", key);
+			assertSame("The key provider is not correct.", SampleEmbeddedPrivateKeyDataProvider.class, key.getClass());
+
+			PasswordProvider password = this.getPasswordProvider();
+			assertNotNull("The password provider should not be null.", password);
+			assertArrayEquals("The password is not correct.", "testPassword09".toCharArray(), password.getPassword());
+		}
+		finally
+		{
+			this.resetLicenseCreator();
 
 			EasyMock.verify(this.console.cli);
 		}

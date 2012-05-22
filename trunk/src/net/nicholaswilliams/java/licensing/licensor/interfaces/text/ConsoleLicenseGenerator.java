@@ -1,5 +1,5 @@
 /*
- * ConsoleLicenseGenerator.java from LicenseManager modified Saturday, May 19, 2012 21:46:34 CDT (-0500).
+ * ConsoleLicenseGenerator.java from LicenseManager modified Monday, May 21, 2012 20:07:08 CDT (-0500).
  *
  * Copyright 2010-2012 the original author or authors.
  *
@@ -329,7 +329,10 @@ public class ConsoleLicenseGenerator
 
 					file = new File(fileName);
 					if(!file.exists() || !file.canRead())
+					{
+						fileName = null;
 						file = null;
+					}
 				}
 
 				provider = new FilePrivateKeyDataProvider(file);

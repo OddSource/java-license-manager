@@ -1,5 +1,5 @@
 /*
- * ConsoleRSAKeyPairGenerator.java from LicenseManager modified Thursday, May 17, 2012 20:02:59 CDT (-0500).
+ * ConsoleRSAKeyPairGenerator.java from LicenseManager modified Tuesday, May 22, 2012 17:01:56 CDT (-0500).
  *
  * Copyright 2010-2012 the original author or authors.
  *
@@ -290,9 +290,12 @@ public class ConsoleRSAKeyPairGenerator
 		if(file.exists())
 		{
 			String filePath;
-			try {
+			try
+			{
 				filePath = file.getCanonicalPath();
-			} catch(IOException e) {
+			}
+			catch(IOException e)
+			{
 				// in theory, if we got here, this is impossible
 				filePath = file.getAbsolutePath();
 			}
@@ -396,7 +399,7 @@ public class ConsoleRSAKeyPairGenerator
 			if(this.passwordClass != null)
 			{
 				device.printOutLn();
-				device.printOutLn(this.useDifferentPasswords ? "Public key password provider:" : "Key password provider");
+				device.printOutLn(this.useDifferentPasswords ? "Public key password provider:" : "Key password provider:");
 				device.printOutLn();
 				device.printOutLn(passwordDescriptor.getJavaFileContents());
 			}
@@ -435,6 +438,7 @@ public class ConsoleRSAKeyPairGenerator
 
 			periods.stop();
 			device.printOutLn("+++");
+			device.printOutLn();
 
 			device.printOutLn("Private key written to " + this.privateOutputStore);
 			device.printOutLn("Public key written to " + this.publicOutputStore);

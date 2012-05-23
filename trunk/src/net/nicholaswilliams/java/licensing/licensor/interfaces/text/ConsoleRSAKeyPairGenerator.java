@@ -1,5 +1,5 @@
 /*
- * ConsoleRSAKeyPairGenerator.java from LicenseManager modified Tuesday, May 22, 2012 17:01:56 CDT (-0500).
+ * ConsoleRSAKeyPairGenerator.java from LicenseManager modified Tuesday, May 22, 2012 19:24:24 CDT (-0500).
  *
  * Copyright 2010-2012 the original author or authors.
  *
@@ -458,18 +458,22 @@ public class ConsoleRSAKeyPairGenerator
 		this.device.printOutLn();
 
 		while(internal.publicOutputStore == null)
+		{
 			internal.publicOutputStore = this.promptForString(internal.generateClasses ?
 									  "Please enter the name of a Java class to embed the public key in: " :
 									  "Please enter the name of a file to store the public key in: ");
+		}
 
 		internal.publicClassPackage = internal.generateClasses ?
 									 	this.promptForString("Enter an optional package name for the public key class: ") :
 										 null;
 
 		while(internal.privateOutputStore == null)
+		{
 			internal.privateOutputStore = this.promptForString(internal.generateClasses ?
 									  "Please enter the name of a Java class to embed the private key in: " :
 									  "Please enter the name of a file to store the private key in: ");
+		}
 
 		internal.privateClassPackage = internal.generateClasses ?
 									 	this.promptForString("Enter an optional package name for the private key class: ") :

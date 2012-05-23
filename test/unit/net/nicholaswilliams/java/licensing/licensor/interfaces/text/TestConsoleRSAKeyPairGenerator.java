@@ -1,5 +1,5 @@
 /*
- * TestConsoleRSAKeyPairGenerator.java from LicenseManager modified Tuesday, May 22, 2012 17:16:20 CDT (-0500).
+ * TestConsoleRSAKeyPairGenerator.java from LicenseManager modified Tuesday, May 22, 2012 20:06:02 CDT (-0500).
  *
  * Copyright 2010-2012 the original author or authors.
  *
@@ -216,7 +216,8 @@ public class TestConsoleRSAKeyPairGenerator
 	{
 		EasyMock.replay(this.generator, this.device);
 
-		this.console.processCommandLineOptions(new String[] { "-private", "private.key", "-public", "public.key", "-password", "myPassword01" });
+		this.console.processCommandLineOptions(
+				new String[] { "-private", "private.key", "-public", "public.key", "-password", "myPassword01" });
 
 		assertNotNull("There should be a cli value.", this.console.cli);
 		assertFalse("The interactive flag should be false.", this.console.interactive);
@@ -443,7 +444,8 @@ public class TestConsoleRSAKeyPairGenerator
 		EasyMock.expect(this.device.readPassword("Enter pass phrase to encrypt the public key: ")).andReturn(password1);
 
 		char[] password2 = "testPassword01".toCharArray();
-		EasyMock.expect(this.device.readPassword("Verifying - Reenter pass phrase to encrypt the public key: ")).andReturn(password2);
+		EasyMock.expect(this.device.readPassword("Verifying - Reenter pass phrase to encrypt the public key: ")).andReturn(
+				password2);
 		EasyMock.expect(this.generator.passwordsMatch(password1, password2)).andReturn(false);
 		this.device.printErrLn("ERROR: Passwords do not match. Please try again, or press Ctrl+C to cancel.");
 		EasyMock.expectLastCall();
@@ -718,7 +720,665 @@ public class TestConsoleRSAKeyPairGenerator
 		}
 	}
 
-	// TODO: Test do interactive
+	@Test
+	public void testDoInteractive01() throws Exception
+	{
+		ByteArrayOutputStream stream = new ByteArrayOutputStream();
+
+		String privateFileName = "testDoInteractive01Private.key";
+		String publicFileName = "testDoInteractive01Public.key";
+
+		this.console.cli = EasyMock.createMockBuilder(CommandLine.class).withConstructor().
+				addMockedMethod("hasOption", String.class).
+				addMockedMethod("getOptionValue", String.class).
+				createMock();
+
+		PrivateKey privateKey = EasyMock.createMock(PrivateKey.class);
+		PublicKey publicKey = EasyMock.createMock(PublicKey.class);
+		KeyPair keyPair = new KeyPair(publicKey, privateKey);
+
+		this.device.printOutLn("Would you like to...");
+		EasyMock.expectLastCall();
+		this.device.printOutLn("    (1) Save the public and private keys to .key files?");
+		EasyMock.expectLastCall();
+		this.device.printOutLn("    (2) Generate compilable Java code with embedded keys?");
+		EasyMock.expectLastCall();
+		EasyMock.expect(this.device.readLine("Your selection (default 1)? ")).andReturn(" ");
+		this.device.printOutLn();
+		EasyMock.expectLastCall();
+
+		this.device.printOutLn("Would you like to...");
+		EasyMock.expectLastCall();
+		this.device.printOutLn("    (1) Use the same password to encrypt both keys?");
+		EasyMock.expectLastCall();
+		this.device.printOutLn("    (2) Use a different password for each key?");
+		EasyMock.expectLastCall();
+		EasyMock.expect(this.device.readLine("Your selection (default 1)? ")).andReturn(" ");
+		this.device.printOutLn();
+		EasyMock.expectLastCall();
+
+		EasyMock.expect(this.device.readPassword("Enter pass phrase to encrypt both keys: ")).
+				andReturn("keyPassword01".toCharArray());
+		EasyMock.expect(this.device.readPassword("Verifying - Reenter pass phrase to encrypt both keys: ")).
+				andReturn("keyPassword01".toCharArray());
+		EasyMock.expect(this.generator.passwordsMatch(
+				EasyMock.aryEq("keyPassword01".toCharArray()), EasyMock.aryEq("keyPassword01".toCharArray())
+		)).andReturn(true);
+		this.device.printOutLn("Passwords match.");
+		EasyMock.expectLastCall();
+		this.device.printOutLn();
+		EasyMock.expectLastCall();
+
+		EasyMock.expect(this.device.readLine("Please enter the name of a file to store the public key in: ")).
+				andReturn(publicFileName);
+		this.device.printOutLn();
+		EasyMock.expectLastCall();
+		EasyMock.expect(this.device.readLine("Please enter the name of a file to store the private key in: ")).
+				andReturn(privateFileName);
+		this.device.printOutLn();
+		EasyMock.expectLastCall();
+
+		this.device.printOut("Generating RSA key pair, 2048-bit long modulus");
+		EasyMock.expectLastCall();
+		EasyMock.expect(this.device.out()).andReturn(new PrintStream(stream));
+
+		EasyMock.expect(this.generator.generateKeyPair()).andReturn(keyPair);
+
+		this.device.printOutLn("+++");
+		EasyMock.expectLastCall();
+		this.device.printOutLn();
+		EasyMock.expectLastCall();
+		this.device.printOut("Key pair generated. Encrypting keys with 128-bit AES security");
+		EasyMock.expectLastCall();
+		EasyMock.expect(this.device.out()).andReturn(new PrintStream(stream));
+
+		final Capture<char[]> capture1 = new Capture<char[]>();
+
+		this.generator.saveKeyPairToFiles(
+				EasyMock.eq(keyPair), EasyMock.eq(privateFileName), EasyMock.eq(publicFileName),
+				EasyMock.capture(capture1)
+		);
+		EasyMock.expectLastCall().andAnswer(new IAnswer<Void>()
+		{
+			@Override
+			public Void answer() throws Throwable
+			{
+				assertNotNull("The captured key password should not be null.", capture1.getValue());
+				assertArrayEquals("The captured key password is not correct.", "keyPassword01".toCharArray(),
+								  capture1.getValue());
+				return null;
+			}
+		});
+
+		this.device.printOutLn("+++");
+		EasyMock.expectLastCall();
+		this.device.printOutLn();
+		EasyMock.expectLastCall();
+		this.device.printOutLn("Private key written to " + privateFileName);
+		EasyMock.expectLastCall();
+		this.device.printOutLn("Public key written to " + publicFileName);
+
+		EasyMock.replay(this.generator, this.device, this.console.cli, privateKey, publicKey);
+
+		try
+		{
+			this.console.doInteractive();
+
+			assertNotNull("The captured key password should still not be null.", capture1.getValue());
+			assertArrayEquals("The captured key password should have been erased.",
+							  new char[capture1.getValue().length], capture1.getValue());
+		}
+		finally
+		{
+			EasyMock.verify(this.console.cli, privateKey, publicKey);
+		}
+	}
+
+	@Test
+	public void testDoInteractive02() throws Exception
+	{
+		ByteArrayOutputStream stream = new ByteArrayOutputStream();
+
+		String privateFileName = "testDoInteractive01Private.key";
+		String publicFileName = "testDoInteractive01Public.key";
+
+		this.console.cli = EasyMock.createMockBuilder(CommandLine.class).withConstructor().
+				addMockedMethod("hasOption", String.class).
+				addMockedMethod("getOptionValue", String.class).
+				createMock();
+
+		PrivateKey privateKey = EasyMock.createMock(PrivateKey.class);
+		PublicKey publicKey = EasyMock.createMock(PublicKey.class);
+		KeyPair keyPair = new KeyPair(publicKey, privateKey);
+
+		this.device.printOutLn("Would you like to...");
+		EasyMock.expectLastCall();
+		this.device.printOutLn("    (1) Save the public and private keys to .key files?");
+		EasyMock.expectLastCall();
+		this.device.printOutLn("    (2) Generate compilable Java code with embedded keys?");
+		EasyMock.expectLastCall();
+		EasyMock.expect(this.device.readLine("Your selection (default 1)? ")).andReturn("1");
+		this.device.printOutLn();
+		EasyMock.expectLastCall();
+
+		this.device.printOutLn("Would you like to...");
+		EasyMock.expectLastCall();
+		this.device.printOutLn("    (1) Use the same password to encrypt both keys?");
+		EasyMock.expectLastCall();
+		this.device.printOutLn("    (2) Use a different password for each key?");
+		EasyMock.expectLastCall();
+		EasyMock.expect(this.device.readLine("Your selection (default 1)? ")).andReturn("2");
+		this.device.printOutLn();
+		EasyMock.expectLastCall();
+
+		EasyMock.expect(this.device.readPassword("Enter pass phrase to encrypt the public key: ")).
+				andReturn("publicPassword02".toCharArray());
+		EasyMock.expect(this.device.readPassword("Verifying - Reenter pass phrase to encrypt the public key: ")).
+				andReturn("publicPassword02".toCharArray());
+		EasyMock.expect(this.generator.passwordsMatch(
+				EasyMock.aryEq("publicPassword02".toCharArray()), EasyMock.aryEq("publicPassword02".toCharArray())
+		)).andReturn(true);
+		this.device.printOutLn("Passwords match.");
+		EasyMock.expectLastCall();
+		this.device.printOutLn();
+		EasyMock.expectLastCall();
+
+		EasyMock.expect(this.device.readPassword("Enter pass phrase to encrypt the private key: ")).
+				andReturn("privatePassword02".toCharArray());
+		EasyMock.expect(this.device.readPassword("Verifying - Reenter pass phrase to encrypt the private key: ")).
+				andReturn("privatePassword02".toCharArray());
+		EasyMock.expect(this.generator.passwordsMatch(
+				EasyMock.aryEq("privatePassword02".toCharArray()), EasyMock.aryEq("privatePassword02".toCharArray())
+		)).andReturn(true);
+		this.device.printOutLn("Passwords match.");
+		EasyMock.expectLastCall();
+		this.device.printOutLn();
+		EasyMock.expectLastCall();
+
+		EasyMock.expect(this.device.readLine("Please enter the name of a file to store the public key in: ")).
+				andReturn(publicFileName);
+		this.device.printOutLn();
+		EasyMock.expectLastCall();
+		EasyMock.expect(this.device.readLine("Please enter the name of a file to store the private key in: ")).
+				andReturn(privateFileName);
+		this.device.printOutLn();
+		EasyMock.expectLastCall();
+
+		this.device.printOut("Generating RSA key pair, 2048-bit long modulus");
+		EasyMock.expectLastCall();
+		EasyMock.expect(this.device.out()).andReturn(new PrintStream(stream));
+
+		EasyMock.expect(this.generator.generateKeyPair()).andReturn(keyPair);
+
+		this.device.printOutLn("+++");
+		EasyMock.expectLastCall();
+		this.device.printOutLn();
+		EasyMock.expectLastCall();
+		this.device.printOut("Key pair generated. Encrypting keys with 128-bit AES security");
+		EasyMock.expectLastCall();
+		EasyMock.expect(this.device.out()).andReturn(new PrintStream(stream));
+
+		final Capture<char[]> capture1 = new Capture<char[]>();
+		final Capture<char[]> capture2 = new Capture<char[]>();
+
+		this.generator.saveKeyPairToFiles(
+				EasyMock.eq(keyPair), EasyMock.eq(privateFileName), EasyMock.eq(publicFileName),
+				EasyMock.capture(capture1), EasyMock.capture(capture2)
+		);
+		EasyMock.expectLastCall().andAnswer(new IAnswer<Void>()
+		{
+			@Override
+			public Void answer() throws Throwable
+			{
+				assertNotNull("The private key password should not be null.", capture1.getValue());
+				assertArrayEquals("The private key password is not correct.", "privatePassword02".toCharArray(),
+								  capture1.getValue());
+				assertNotNull("The public key password should not be null.", capture2.getValue());
+				assertArrayEquals("The public key password is not correct.", "publicPassword02".toCharArray(),
+								  capture2.getValue());
+				return null;
+			}
+		});
+
+		this.device.printOutLn("+++");
+		EasyMock.expectLastCall();
+		this.device.printOutLn();
+		EasyMock.expectLastCall();
+		this.device.printOutLn("Private key written to " + privateFileName);
+		EasyMock.expectLastCall();
+		this.device.printOutLn("Public key written to " + publicFileName);
+
+		EasyMock.replay(this.generator, this.device, this.console.cli, privateKey, publicKey);
+
+		try
+		{
+			this.console.doInteractive();
+
+			assertNotNull("The private key password should still not be null.", capture1.getValue());
+			assertArrayEquals("The private key password should have been erased.",
+							  new char[capture1.getValue().length], capture1.getValue());
+			assertNotNull("The public key password should still not be null.", capture2.getValue());
+			assertArrayEquals("The public key password should have been erased.",
+							  new char[capture2.getValue().length], capture2.getValue());
+		}
+		finally
+		{
+			EasyMock.verify(this.console.cli, privateKey, publicKey);
+		}
+	}
+
+	@Test
+	public void testDoInteractive03() throws Exception
+	{
+		ByteArrayOutputStream stream = new ByteArrayOutputStream();
+
+		this.console.cli = EasyMock.createMockBuilder(CommandLine.class).withConstructor().
+				addMockedMethod("hasOption", String.class).
+				addMockedMethod("getOptionValue", String.class).
+				createMock();
+
+		PrivateKey privateKey = EasyMock.createMock(PrivateKey.class);
+		PublicKey publicKey = EasyMock.createMock(PublicKey.class);
+		KeyPair keyPair = new KeyPair(publicKey, privateKey);
+
+		this.device.printOutLn("Would you like to...");
+		EasyMock.expectLastCall();
+		this.device.printOutLn("    (1) Save the public and private keys to .key files?");
+		EasyMock.expectLastCall();
+		this.device.printOutLn("    (2) Generate compilable Java code with embedded keys?");
+		EasyMock.expectLastCall();
+		EasyMock.expect(this.device.readLine("Your selection (default 1)? ")).andReturn("2");
+		this.device.printOutLn();
+		EasyMock.expectLastCall();
+
+		this.device.printOutLn("Would you like to...");
+		EasyMock.expectLastCall();
+		this.device.printOutLn("    (1) Use the same password to encrypt both keys?");
+		EasyMock.expectLastCall();
+		this.device.printOutLn("    (2) Use a different password for each key?");
+		EasyMock.expectLastCall();
+		EasyMock.expect(this.device.readLine("Your selection (default 1)? ")).andReturn("1");
+		this.device.printOutLn();
+		EasyMock.expectLastCall();
+
+		EasyMock.expect(this.device.readPassword("Enter pass phrase to encrypt both keys: ")).
+				andReturn("keyPassword03".toCharArray());
+		EasyMock.expect(this.device.readPassword("Verifying - Reenter pass phrase to encrypt both keys: ")).
+				andReturn("keyPassword03".toCharArray());
+		EasyMock.expect(this.generator.passwordsMatch(
+				EasyMock.aryEq("keyPassword03".toCharArray()), EasyMock.aryEq("keyPassword03".toCharArray())
+		)).andReturn(true);
+		this.device.printOutLn("Passwords match.");
+		EasyMock.expectLastCall();
+		this.device.printOutLn();
+		EasyMock.expectLastCall();
+
+		EasyMock.expect(this.device.readLine("Please enter the name of a Java class to embed the public key in: ")).
+				andReturn("PublicKey01");
+		this.device.printOutLn();
+		EasyMock.expectLastCall();
+		EasyMock.expect(this.device.readLine("Enter an optional package name for the public key class: ")).
+				andReturn("org.example.licensing.public");
+		this.device.printOutLn();
+		EasyMock.expectLastCall();
+		EasyMock.expect(this.device.readLine("Please enter the name of a Java class to embed the private key in: ")).
+				andReturn("PrivateKey01");
+		this.device.printOutLn();
+		EasyMock.expectLastCall();
+		EasyMock.expect(this.device.readLine("Enter an optional package name for the private key class: ")).
+				andReturn("org.example.licensing.private");
+		this.device.printOutLn();
+		EasyMock.expectLastCall();
+
+		EasyMock.expect(this.device.readLine("If you wish to embed the key password in a Java class, " +
+											 "enter the class name now: ")).
+				andReturn("KeyPassword01");
+		this.device.printOutLn();
+		EasyMock.expectLastCall();
+		EasyMock.expect(this.device.readLine("You can optionally enter a package name for the key storage class: ")).
+				andReturn("org.example.licensing.public");
+		this.device.printOutLn();
+		EasyMock.expectLastCall();
+
+		this.device.printOut("Generating RSA key pair, 2048-bit long modulus");
+		EasyMock.expectLastCall();
+		EasyMock.expect(this.device.out()).andReturn(new PrintStream(stream));
+
+		EasyMock.expect(this.generator.generateKeyPair()).andReturn(keyPair);
+
+		this.device.printOutLn("+++");
+		EasyMock.expectLastCall();
+		this.device.printOutLn();
+		EasyMock.expectLastCall();
+		this.device.printOut("Key pair generated. Encrypting keys with 128-bit AES security");
+		EasyMock.expectLastCall();
+		EasyMock.expect(this.device.out()).andReturn(new PrintStream(stream));
+
+		final Capture<GeneratedClassDescriptor> descriptorA01 = new Capture<GeneratedClassDescriptor>();
+		final Capture<GeneratedClassDescriptor> descriptorA02 = new Capture<GeneratedClassDescriptor>();
+		final Capture<GeneratedClassDescriptor> descriptorB01 = new Capture<GeneratedClassDescriptor>();
+
+		final Capture<char[]> passwordA01 = new Capture<char[]>();
+		final Capture<char[]> passwordB01 = new Capture<char[]>();
+
+		this.generator.saveKeyPairToProviders(
+				EasyMock.eq(keyPair), EasyMock.capture(descriptorA01), EasyMock.capture(descriptorA02),
+				EasyMock.capture(passwordA01)
+		);
+		EasyMock.expectLastCall().andAnswer(new IAnswer<Void>()
+		{
+			@Override
+			public Void answer() throws Throwable
+			{
+				assertNotNull("The public key password should not be null.", passwordA01.getValue());
+				assertArrayEquals("The public key password is not correct.", "keyPassword03".toCharArray(),
+								  passwordA01.getValue());
+				descriptorA01.getValue().setJavaFileContents("privateKeyContents01");
+				descriptorA02.getValue().setJavaFileContents("publicKeyContents01");
+				return null;
+			}
+		});
+
+		this.generator.savePasswordToProvider(EasyMock.capture(passwordB01), EasyMock.capture(descriptorB01));
+		EasyMock.expectLastCall().andAnswer(new IAnswer<Void>()
+		{
+			@Override
+			public Void answer() throws Throwable
+			{
+				assertNotNull("The public key password should still not be null.", passwordB01.getValue());
+				assertArrayEquals("The public key password is now not correct.", "keyPassword03".toCharArray(),
+								  passwordB01.getValue());
+				descriptorB01.getValue().setJavaFileContents("publicPasswordContents01");
+				return null;
+			}
+		});
+
+		this.device.printOutLn("+++");
+		EasyMock.expectLastCall();
+		this.device.printOutLn();
+		EasyMock.expectLastCall();
+		this.device.printOutLn("Private key provider:");
+		EasyMock.expectLastCall();
+		this.device.printOutLn();
+		EasyMock.expectLastCall();
+		this.device.printOutLn("privateKeyContents01");
+		EasyMock.expectLastCall();
+		this.device.printOutLn();
+		EasyMock.expectLastCall();
+		this.device.printOutLn("Public key provider:");
+		EasyMock.expectLastCall();
+		this.device.printOutLn();
+		EasyMock.expectLastCall();
+		this.device.printOutLn("publicKeyContents01");
+		EasyMock.expectLastCall();
+		this.device.printOutLn();
+		EasyMock.expectLastCall();
+		this.device.printOutLn("Key password provider:");
+		EasyMock.expectLastCall();
+		this.device.printOutLn();
+		EasyMock.expectLastCall();
+		this.device.printOutLn("publicPasswordContents01");
+		EasyMock.expectLastCall();
+
+		EasyMock.replay(this.generator, this.device, this.console.cli, privateKey, publicKey);
+
+		try
+		{
+			this.console.doInteractive();
+
+			assertNotNull("The public key password should again still not be null.", passwordA01.getValue());
+			assertArrayEquals("The public key password should have been erased.",
+							  new char[passwordA01.getValue().length], passwordA01.getValue());
+
+			assertEquals("The private key package is not correct.", "org.example.licensing.private", descriptorA01.getValue().getPackageName());
+			assertEquals("The public key package is not correct.", "org.example.licensing.public", descriptorA02.getValue().getPackageName());
+			assertEquals("The public password package is not correct.", "org.example.licensing.public", descriptorB01.getValue().getPackageName());
+
+			assertEquals("The private key class is not correct.", "PrivateKey01", descriptorA01.getValue().getClassName());
+			assertEquals("The public key class is not correct.", "PublicKey01", descriptorA02.getValue().getClassName());
+			assertEquals("The public password class is not correct.", "KeyPassword01", descriptorB01.getValue().getClassName());
+		}
+		finally
+		{
+			EasyMock.verify(this.console.cli, privateKey, publicKey);
+		}
+	}
+
+	@Test
+	public void testDoInteractive04() throws Exception
+	{
+		ByteArrayOutputStream stream = new ByteArrayOutputStream();
+
+		this.console.cli = EasyMock.createMockBuilder(CommandLine.class).withConstructor().
+				addMockedMethod("hasOption", String.class).
+				addMockedMethod("getOptionValue", String.class).
+				createMock();
+
+		PrivateKey privateKey = EasyMock.createMock(PrivateKey.class);
+		PublicKey publicKey = EasyMock.createMock(PublicKey.class);
+		KeyPair keyPair = new KeyPair(publicKey, privateKey);
+
+		this.device.printOutLn("Would you like to...");
+		EasyMock.expectLastCall();
+		this.device.printOutLn("    (1) Save the public and private keys to .key files?");
+		EasyMock.expectLastCall();
+		this.device.printOutLn("    (2) Generate compilable Java code with embedded keys?");
+		EasyMock.expectLastCall();
+		EasyMock.expect(this.device.readLine("Your selection (default 1)? ")).andReturn("2");
+		this.device.printOutLn();
+		EasyMock.expectLastCall();
+
+		this.device.printOutLn("Would you like to...");
+		EasyMock.expectLastCall();
+		this.device.printOutLn("    (1) Use the same password to encrypt both keys?");
+		EasyMock.expectLastCall();
+		this.device.printOutLn("    (2) Use a different password for each key?");
+		EasyMock.expectLastCall();
+		EasyMock.expect(this.device.readLine("Your selection (default 1)? ")).andReturn("2");
+		this.device.printOutLn();
+		EasyMock.expectLastCall();
+
+		EasyMock.expect(this.device.readPassword("Enter pass phrase to encrypt the public key: ")).
+				andReturn("publicPassword04".toCharArray());
+		EasyMock.expect(this.device.readPassword("Verifying - Reenter pass phrase to encrypt the public key: ")).
+				andReturn("publicPassword04".toCharArray());
+		EasyMock.expect(this.generator.passwordsMatch(
+				EasyMock.aryEq("publicPassword04".toCharArray()), EasyMock.aryEq("publicPassword04".toCharArray())
+		)).andReturn(true);
+		this.device.printOutLn("Passwords match.");
+		EasyMock.expectLastCall();
+		this.device.printOutLn();
+		EasyMock.expectLastCall();
+
+		EasyMock.expect(this.device.readPassword("Enter pass phrase to encrypt the private key: ")).
+				andReturn("privatePassword04".toCharArray());
+		EasyMock.expect(this.device.readPassword("Verifying - Reenter pass phrase to encrypt the private key: ")).
+				andReturn("privatePassword04".toCharArray());
+		EasyMock.expect(this.generator.passwordsMatch(
+				EasyMock.aryEq("privatePassword04".toCharArray()), EasyMock.aryEq("privatePassword04".toCharArray())
+		)).andReturn(true);
+		this.device.printOutLn("Passwords match.");
+		EasyMock.expectLastCall();
+		this.device.printOutLn();
+		EasyMock.expectLastCall();
+
+		EasyMock.expect(this.device.readLine("Please enter the name of a Java class to embed the public key in: ")).
+				andReturn("PublicKey02");
+		this.device.printOutLn();
+		EasyMock.expectLastCall();
+		EasyMock.expect(this.device.readLine("Enter an optional package name for the public key class: ")).
+				andReturn("org.example.licensing.public");
+		this.device.printOutLn();
+		EasyMock.expectLastCall();
+		EasyMock.expect(this.device.readLine("Please enter the name of a Java class to embed the private key in: ")).
+				andReturn("PrivateKey02");
+		this.device.printOutLn();
+		EasyMock.expectLastCall();
+		EasyMock.expect(this.device.readLine("Enter an optional package name for the private key class: ")).
+				andReturn("org.example.licensing.private");
+		this.device.printOutLn();
+		EasyMock.expectLastCall();
+
+		EasyMock.expect(this.device.readLine("If you wish to embed the public key password in a Java class, " +
+											 "enter the class name now: ")).
+				andReturn("PublicPassword02");
+		this.device.printOutLn();
+		EasyMock.expectLastCall();
+		EasyMock.expect(this.device.readLine("You can optionally enter a package name for the public key storage " +
+											 "class: ")).
+				andReturn("org.example.licensing.public");
+		this.device.printOutLn();
+		EasyMock.expectLastCall();
+
+		EasyMock.expect(this.device.readLine("If you wish to embed the private key password in a Java class, " +
+											 "enter the class name now: ")).
+				andReturn("PrivatePassword02");
+		this.device.printOutLn();
+		EasyMock.expectLastCall();
+		EasyMock.expect(this.device.readLine("You can optionally enter a package name for the private key storage " +
+											 "class: ")).
+				andReturn("org.example.licensing.private");
+		this.device.printOutLn();
+		EasyMock.expectLastCall();
+
+		this.device.printOut("Generating RSA key pair, 2048-bit long modulus");
+		EasyMock.expectLastCall();
+		EasyMock.expect(this.device.out()).andReturn(new PrintStream(stream));
+
+		EasyMock.expect(this.generator.generateKeyPair()).andReturn(keyPair);
+
+		this.device.printOutLn("+++");
+		EasyMock.expectLastCall();
+		this.device.printOutLn();
+		EasyMock.expectLastCall();
+		this.device.printOut("Key pair generated. Encrypting keys with 128-bit AES security");
+		EasyMock.expectLastCall();
+		EasyMock.expect(this.device.out()).andReturn(new PrintStream(stream));
+
+		final Capture<GeneratedClassDescriptor> descriptorA01 = new Capture<GeneratedClassDescriptor>();
+		final Capture<GeneratedClassDescriptor> descriptorA02 = new Capture<GeneratedClassDescriptor>();
+		final Capture<GeneratedClassDescriptor> descriptorB01 = new Capture<GeneratedClassDescriptor>();
+		final Capture<GeneratedClassDescriptor> descriptorB02 = new Capture<GeneratedClassDescriptor>();
+
+		final Capture<char[]> passwordA01 = new Capture<char[]>();
+		final Capture<char[]> passwordA02 = new Capture<char[]>();
+		final Capture<char[]> passwordB01 = new Capture<char[]>();
+		final Capture<char[]> passwordB02 = new Capture<char[]>();
+
+		this.generator.saveKeyPairToProviders(
+				EasyMock.eq(keyPair), EasyMock.capture(descriptorA01), EasyMock.capture(descriptorA02),
+				EasyMock.capture(passwordA01), EasyMock.capture(passwordA02)
+		);
+		EasyMock.expectLastCall().andAnswer(new IAnswer<Void>()
+		{
+			@Override
+			public Void answer() throws Throwable
+			{
+				assertNotNull("The private key password should not be null.", passwordA01.getValue());
+				assertArrayEquals("The private key password is not correct.", "privatePassword04".toCharArray(),
+								  passwordA01.getValue());
+				assertNotNull("The public key password should not be null.", passwordA02.getValue());
+				assertArrayEquals("The public key password is not correct.", "publicPassword04".toCharArray(),
+								  passwordA02.getValue());
+				descriptorA01.getValue().setJavaFileContents("privateKeyContents02");
+				descriptorA02.getValue().setJavaFileContents("publicKeyContents02");
+				return null;
+			}
+		});
+
+		this.generator.savePasswordToProvider(EasyMock.capture(passwordB01), EasyMock.capture(descriptorB01));
+		EasyMock.expectLastCall().andAnswer(new IAnswer<Void>()
+		{
+			@Override
+			public Void answer() throws Throwable
+			{
+				assertNotNull("The public key password should still not be null.", passwordB01.getValue());
+				assertArrayEquals("The public key password is now not correct.", "publicPassword04".toCharArray(),
+								  passwordB01.getValue());
+				descriptorB01.getValue().setJavaFileContents("publicPasswordContents02");
+				return null;
+			}
+		});
+
+		this.generator.savePasswordToProvider(EasyMock.capture(passwordB02), EasyMock.capture(descriptorB02));
+		EasyMock.expectLastCall().andAnswer(new IAnswer<Void>()
+		{
+			@Override
+			public Void answer() throws Throwable
+			{
+				assertNotNull("The private key password should still not be null.", passwordB02.getValue());
+				assertArrayEquals("The private key password is now not correct.", "privatePassword04".toCharArray(),
+								  passwordB02.getValue());
+				descriptorB02.getValue().setJavaFileContents("privatePasswordContents02");
+				return null;
+			}
+		});
+
+		this.device.printOutLn("+++");
+		EasyMock.expectLastCall();
+		this.device.printOutLn();
+		EasyMock.expectLastCall();
+		this.device.printOutLn("Private key provider:");
+		EasyMock.expectLastCall();
+		this.device.printOutLn();
+		EasyMock.expectLastCall();
+		this.device.printOutLn("privateKeyContents02");
+		EasyMock.expectLastCall();
+		this.device.printOutLn();
+		EasyMock.expectLastCall();
+		this.device.printOutLn("Public key provider:");
+		EasyMock.expectLastCall();
+		this.device.printOutLn();
+		EasyMock.expectLastCall();
+		this.device.printOutLn("publicKeyContents02");
+		EasyMock.expectLastCall();
+		this.device.printOutLn();
+		EasyMock.expectLastCall();
+		this.device.printOutLn("Public key password provider:");
+		EasyMock.expectLastCall();
+		this.device.printOutLn();
+		EasyMock.expectLastCall();
+		this.device.printOutLn("publicPasswordContents02");
+		EasyMock.expectLastCall();
+		this.device.printOutLn();
+		EasyMock.expectLastCall();
+		this.device.printOutLn("Private key password provider:");
+		EasyMock.expectLastCall();
+		this.device.printOutLn();
+		EasyMock.expectLastCall();
+		this.device.printOutLn("privatePasswordContents02");
+		EasyMock.expectLastCall();
+
+		EasyMock.replay(this.generator, this.device, this.console.cli, privateKey, publicKey);
+
+		try
+		{
+			this.console.doInteractive();
+
+			assertNotNull("The public key password should again still not be null.", passwordA01.getValue());
+			assertArrayEquals("The public key password should have been erased.",
+							  new char[passwordA01.getValue().length], passwordA01.getValue());
+			assertNotNull("The private key password should again still not be null.", passwordA02.getValue());
+			assertArrayEquals("The private key password should have been erased.",
+							  new char[passwordA02.getValue().length], passwordA02.getValue());
+
+			assertEquals("The private key package is not correct.", "org.example.licensing.private", descriptorA01.getValue().getPackageName());
+			assertEquals("The public key package is not correct.", "org.example.licensing.public", descriptorA02.getValue().getPackageName());
+			assertEquals("The public password package is not correct.", "org.example.licensing.public", descriptorB01.getValue().getPackageName());
+			assertEquals("The private password package is not correct.", "org.example.licensing.private", descriptorB02.getValue().getPackageName());
+
+			assertEquals("The private key class is not correct.", "PrivateKey02",
+						 descriptorA01.getValue().getClassName());
+			assertEquals("The public key class is not correct.", "PublicKey02", descriptorA02.getValue().getClassName());
+			assertEquals("The public password class is not correct.", "PublicPassword02",
+						 descriptorB01.getValue().getClassName());
+			assertEquals("The private password class is not correct.", "PrivatePassword02", descriptorB02.getValue().getClassName());
+		}
+		finally
+		{
+			EasyMock.verify(this.console.cli, privateKey, publicKey);
+		}
+	}
 
 	@Test
 	public void testDoCommandLine01() throws Exception
@@ -803,87 +1463,6 @@ public class TestConsoleRSAKeyPairGenerator
 
 	@Test
 	public void testDoCommandLine02() throws Exception
-	{
-		ByteArrayOutputStream stream = new ByteArrayOutputStream();
-
-		String privateFileName = "testDoCommandLine01Private.key";
-		String publicFileName = "testDoCommandLine01Public.key";
-
-		this.console.cli = EasyMock.createMockBuilder(CommandLine.class).withConstructor().
-				addMockedMethod("hasOption", String.class).
-				addMockedMethod("getOptionValue", String.class).
-				createMock();
-
-		PrivateKey privateKey = EasyMock.createMock(PrivateKey.class);
-		PublicKey publicKey = EasyMock.createMock(PublicKey.class);
-		KeyPair keyPair = new KeyPair(publicKey, privateKey);
-
-		EasyMock.expect(this.console.cli.hasOption("classes")).andReturn(false);
-		EasyMock.expect(this.console.cli.hasOption("privatePassword")).andReturn(false);
-		EasyMock.expect(this.console.cli.getOptionValue("password")).andReturn("keyPassword01");
-		EasyMock.expect(this.console.cli.getOptionValue("public")).andReturn(publicFileName);
-		EasyMock.expect(this.console.cli.getOptionValue("publicPackage")).andReturn(null);
-		EasyMock.expect(this.console.cli.getOptionValue("private")).andReturn(privateFileName);
-		EasyMock.expect(this.console.cli.getOptionValue("privatePackage")).andReturn(null);
-
-		this.device.printOut("Generating RSA key pair, 2048-bit long modulus");
-		EasyMock.expectLastCall();
-		EasyMock.expect(this.device.out()).andReturn(new PrintStream(stream));
-
-		EasyMock.expect(this.generator.generateKeyPair()).andReturn(keyPair);
-
-		this.device.printOutLn("+++");
-		EasyMock.expectLastCall();
-		this.device.printOutLn();
-		EasyMock.expectLastCall();
-		this.device.printOut("Key pair generated. Encrypting keys with 128-bit AES security");
-		EasyMock.expectLastCall();
-		EasyMock.expect(this.device.out()).andReturn(new PrintStream(stream));
-
-		final Capture<char[]> capture1 = new Capture<char[]>();
-
-		this.generator.saveKeyPairToFiles(
-				EasyMock.eq(keyPair), EasyMock.eq(privateFileName), EasyMock.eq(publicFileName),
-				EasyMock.capture(capture1)
-		);
-		EasyMock.expectLastCall().andAnswer(new IAnswer<Void>()
-		{
-			@Override
-			public Void answer() throws Throwable
-			{
-				assertNotNull("The captured key password should not be null.", capture1.getValue());
-				assertArrayEquals("The captured key password is not correct.", "keyPassword01".toCharArray(),
-								  capture1.getValue());
-				return null;
-			}
-		});
-
-		this.device.printOutLn("+++");
-		EasyMock.expectLastCall();
-		this.device.printOutLn();
-		EasyMock.expectLastCall();
-		this.device.printOutLn("Private key written to " + privateFileName);
-		EasyMock.expectLastCall();
-		this.device.printOutLn("Public key written to " + publicFileName);
-
-		EasyMock.replay(this.generator, this.device, this.console.cli, privateKey, publicKey);
-
-		try
-		{
-			this.console.doCommandLine();
-
-			assertNotNull("The captured key password should still not be null.", capture1.getValue());
-			assertArrayEquals("The captured key password should have been erased.",
-							  new char[capture1.getValue().length], capture1.getValue());
-		}
-		finally
-		{
-			EasyMock.verify(this.console.cli, privateKey, publicKey);
-		}
-	}
-
-	@Test
-	public void testDoCommandLine03() throws Exception
 	{
 		ByteArrayOutputStream stream = new ByteArrayOutputStream();
 
@@ -972,7 +1551,7 @@ public class TestConsoleRSAKeyPairGenerator
 	}
 
 	@Test
-	public void testDoCommandLine04() throws Exception
+	public void testDoCommandLine03() throws Exception
 	{
 		ByteArrayOutputStream stream = new ByteArrayOutputStream();
 
@@ -1100,7 +1679,7 @@ public class TestConsoleRSAKeyPairGenerator
 	}
 
 	@Test
-	public void testDoCommandLine05() throws Exception
+	public void testDoCommandLine04() throws Exception
 	{
 		ByteArrayOutputStream stream = new ByteArrayOutputStream();
 

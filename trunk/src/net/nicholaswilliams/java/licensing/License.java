@@ -1,5 +1,5 @@
 /*
- * License.java from LicenseManager modified Monday, May 21, 2012 21:23:21 CDT (-0500).
+ * License.java from LicenseManager modified Tuesday, May 29, 2012 19:37:31 CDT (-0500).
  *
  * Copyright 2010-2012 the original author or authors.
  *
@@ -547,7 +547,7 @@ public final class License implements Serializable, Cloneable
 	 * @see License
 	 * @see License.Builder
 	 */
-	public static final class Feature implements Serializable
+	public static final class Feature implements Serializable, FeatureObject
 	{
 		private final String name;
 
@@ -598,6 +598,7 @@ public final class License implements Serializable, Cloneable
 		 *
 		 * @return the feature name.
 		 */
+		@Override
 		public final String getName()
 		{
 			return name;

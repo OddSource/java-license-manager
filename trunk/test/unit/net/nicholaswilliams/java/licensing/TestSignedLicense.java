@@ -1,5 +1,5 @@
 /*
- * TestSignedLicense.java from LicenseManager modified Tuesday, February 21, 2012 10:56:34 CST (-0600).
+ * TestSignedLicense.java from LicenseManager modified Friday, June 1, 2012 15:35:45 CDT (-0500).
  *
  * Copyright 2010-2012 the original author or authors.
  *
@@ -53,7 +53,22 @@ public class TestSignedLicense
 	@Test
 	public void testSignatureContent()
 	{
-		assertArrayEquals("The license content is not correct.", new byte[]{ 0x01, 0x02, 0x77, 0x40, 0x0F },
+		assertArrayEquals("The signature content is not correct.", new byte[]{ 0x01, 0x02, 0x77, 0x40, 0x0F },
 						  this.license.getSignatureContent());
+	}
+
+	@Test
+	public void testDeserialization() throws ClassNotFoundException
+	{
+		Class.forName("net.nicholaswilliams.java.licensing.LicenseSecurityManager");
+
+		byte[] data = new ObjectSerializer().writeObject(this.license);
+
+		SignedLicense signedLicense = new ObjectSerializer().readObject(SignedLicense.class, data);
+
+		assertArrayEquals("The license content is not correct.",
+						  this.license.getLicenseContent(), signedLicense.getLicenseContent());
+		assertArrayEquals("The signature content is not correct.",
+						  this.license.getSignatureContent(), signedLicense.getSignatureContent());
 	}
 }

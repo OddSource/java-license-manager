@@ -1,5 +1,5 @@
 /*
- * TestLicenseSecurityManager.java from LicenseManager modified Tuesday, February 21, 2012 10:56:34 CST (-0600).
+ * TestLicenseSecurityManager.java from LicenseManager modified Friday, June 1, 2012 16:27:21 CDT (-0500).
  *
  * Copyright 2010-2012 the original author or authors.
  *
@@ -240,7 +240,7 @@ public class TestLicenseSecurityManager
 		this.manager.checkMemberAccess(net.nicholaswilliams.java.licensing.ObjectSerializer.class, Member.DECLARED);
 	}
 
-	@Test(expected=SecurityException.class)
+	@Test
 	public void testCheckMemberAccess06()
 	{
 		this.manager.checkMemberAccess(net.nicholaswilliams.java.licensing.SignedLicense.class, Member.DECLARED);
@@ -345,29 +345,41 @@ public class TestLicenseSecurityManager
 	@Test
 	public void testCheckMemberAccess23()
 	{
-		this.manager.checkMemberAccess(String.class, Member.DECLARED);
+		this.manager.checkMemberAccess(net.nicholaswilliams.java.licensing.FeatureRestriction.class, Member.PUBLIC);
 	}
 
 	@Test
 	public void testCheckMemberAccess24()
 	{
-		this.manager.checkMemberAccess(Test.class, Member.DECLARED);
+		this.manager.checkMemberAccess(net.nicholaswilliams.java.licensing.FeatureRestriction.class, Member.DECLARED);
 	}
 
 	@Test
 	public void testCheckMemberAccess25()
 	{
-		this.manager.checkMemberAccess(Member.class, Member.DECLARED);
+		this.manager.checkMemberAccess(String.class, Member.DECLARED);
 	}
 
 	@Test
 	public void testCheckMemberAccess26()
 	{
-		this.manager.checkMemberAccess(Object.class, Member.DECLARED);
+		this.manager.checkMemberAccess(Test.class, Member.DECLARED);
 	}
 
 	@Test
 	public void testCheckMemberAccess27()
+	{
+		this.manager.checkMemberAccess(Member.class, Member.DECLARED);
+	}
+
+	@Test
+	public void testCheckMemberAccess28()
+	{
+		this.manager.checkMemberAccess(Object.class, Member.DECLARED);
+	}
+
+	@Test
+	public void testCheckMemberAccess29()
 	{
 		this.manager.checkMemberAccess(java.util.ArrayList.class, Member.DECLARED);
 	}

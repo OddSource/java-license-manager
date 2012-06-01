@@ -1,5 +1,5 @@
 /*
- * TestEncryptor.java from LicenseManager modified Thursday, February 23, 2012 15:33:21 CST (-0600).
+ * TestEncryptor.java from LicenseManager modified Friday, June 1, 2012 16:31:29 CDT (-0500).
  *
  * Copyright 2010-2012 the original author or authors.
  *
@@ -387,10 +387,8 @@ public class TestEncryptor
 		try {
 			Encryptor.decrypt(encrypted, "MyDecryptPassword1".toCharArray());
 			fail("Expected FailedToDecryptException, but no exception thrown.");
-		} catch(FailedToDecryptException e) {
-			// this is good
-		} catch(Throwable t) {
-			fail("Expected FailedToDecryptException, but got: " + t.toString());
+		} catch(FailedToDecryptException ignore) {
+			
 		}
 	}
 
@@ -426,10 +424,8 @@ public class TestEncryptor
 		try {
 			Encryptor.decrypt(encrypted, "YourDecryptPassword2".toCharArray());
 			fail("Expected FailedToDecryptException, but no exception thrown.");
-		} catch(FailedToDecryptException e) {
-			// this is good
-		} catch(Throwable t) {
-			fail("Expected FailedToDecryptException, but got: " + t.toString());
+		} catch(FailedToDecryptException ignore) {
+
 		}
 	}
 
@@ -465,10 +461,8 @@ public class TestEncryptor
 		try {
 			Encryptor.decrypt(encrypted, "hisDecryptPassword3".toCharArray());
 			fail("Expected FailedToDecryptException, but no exception thrown.");
-		} catch(FailedToDecryptException e) {
-			// this is good
-		} catch(Throwable t) {
-			fail("Expected FailedToDecryptException, but got: " + t.toString());
+		} catch(FailedToDecryptException ignore) {
+
 		}
 	}
 
@@ -522,10 +516,8 @@ public class TestEncryptor
 		try {
 			Encryptor.decrypt(encrypted, "herDecryptPassword3".toCharArray());
 			fail("Expected FailedToDecryptException, but no exception thrown.");
-		} catch(FailedToDecryptException e) {
-			// this is good
-		} catch(Throwable t) {
-			fail("Expected FailedToDecryptException, but got: " + t.toString());
+		} catch(FailedToDecryptException ignore) {
+
 		}
 	}
 }

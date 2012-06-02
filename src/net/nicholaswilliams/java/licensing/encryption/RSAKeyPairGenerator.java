@@ -1,5 +1,5 @@
 /*
- * RSAKeyPairGenerator.java from LicenseManager modified Monday, March 5, 2012 18:18:52 CST (-0600).
+ * RSAKeyPairGenerator.java from LicenseManager modified Saturday, June 2, 2012 07:54:07 CDT (-0500).
  *
  * Copyright 2010-2012 the original author or authors.
  *
@@ -45,28 +45,6 @@ public final class RSAKeyPairGenerator implements RSAKeyPairGeneratorInterface
 	public RSAKeyPairGenerator()
 	{
 		
-	}
-
-	/**
-	 * Checks whether the two passwords match.
-	 *
-	 * @param password1 The entered password
-	 * @param password2 The confirmed password
-	 * @return {@code true} if the passwords match, {@code false} otherwise.
-	 */
-	@Override
-	public boolean passwordsMatch(char[] password1, char[] password2)
-	{
-		if(password1.length != password2.length)
-			return false;
-
-		for(int i = 0; i < password1.length; i++)
-		{
-			if(password1[i] != password2[i])
-				return false;
-		}
-
-		return true;
 	}
 
 	/**

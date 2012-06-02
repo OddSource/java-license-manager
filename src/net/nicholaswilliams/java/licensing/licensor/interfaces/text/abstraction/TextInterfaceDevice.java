@@ -1,5 +1,5 @@
 /*
- * TextInterfaceDevice.java from LicenseManager modified Saturday, March 3, 2012 19:12:40 CST (-0600).
+ * TextInterfaceDevice.java from LicenseManager modified Saturday, June 2, 2012 07:36:01 CDT (-0500).
  *
  * Copyright 2010-2012 the original author or authors.
  *
@@ -17,6 +17,9 @@
  */
 
 package net.nicholaswilliams.java.licensing.licensor.interfaces.text.abstraction;
+
+import net.nicholaswilliams.java.licensing.licensor.interfaces.abstraction.OutputDevice;
+import net.nicholaswilliams.java.licensing.licensor.interfaces.abstraction.PasswordPrompter;
 
 import java.io.Flushable;
 import java.io.IOError;
@@ -39,7 +42,7 @@ import java.util.IllegalFormatException;
  * @version 1.0.0
  * @since 1.0.0
  */
-public interface TextInterfaceDevice extends Flushable
+public interface TextInterfaceDevice extends PasswordPrompter, Flushable, OutputDevice
 {
 	public static final TextInterfaceDevice CONSOLE = new ConsoleInterfaceDevice();
 

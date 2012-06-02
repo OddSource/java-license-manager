@@ -1,5 +1,5 @@
 /*
- * TestAbstractTextInterfaceDevice.java from LicenseManager modified Monday, March 5, 2012 18:48:01 CST (-0600).
+ * TestAbstractTextInterfaceDevice.java from LicenseManager modified Saturday, June 2, 2012 08:18:19 CDT (-0500).
  *
  * Copyright 2010-2012 the original author or authors.
  *
@@ -18,6 +18,7 @@
 
 package net.nicholaswilliams.java.licensing.licensor.interfaces.text.abstraction;
 
+import net.nicholaswilliams.java.licensing.licensor.interfaces.abstraction.OutputDevice;
 import org.easymock.EasyMock;
 import org.junit.After;
 import org.junit.Before;
@@ -201,6 +202,28 @@ public class TestAbstractTextInterfaceDevice
 	}
 
 	@Test
+	public void testOutputMessage01()
+	{
+		this.outputStream.println("hello");
+		EasyMock.expectLastCall();
+
+		EasyMock.replay(this.device, this.inputStream, this.outputStream, this.errorStream);
+
+		this.device.outputMessage("hello");
+	}
+
+	@Test
+	public void testOutputMessage02()
+	{
+		this.outputStream.println("world");
+		EasyMock.expectLastCall();
+
+		EasyMock.replay(this.device, this.inputStream, this.outputStream, this.errorStream);
+
+		this.device.outputMessage("world");
+	}
+
+	@Test
 	public void testPrintOutLn05()
 	{
 		Object object = new Object();
@@ -326,6 +349,28 @@ public class TestAbstractTextInterfaceDevice
 	}
 
 	@Test
+	public void testOutputErrorMessage01()
+	{
+		this.errorStream.println("hello");
+		EasyMock.expectLastCall();
+
+		EasyMock.replay(this.device, this.inputStream, this.outputStream, this.errorStream);
+
+		this.device.outputErrorMessage("hello");
+	}
+
+	@Test
+	public void testOutputErrorMessage02()
+	{
+		this.errorStream.println("world");
+		EasyMock.expectLastCall();
+
+		EasyMock.replay(this.device, this.inputStream, this.outputStream, this.errorStream);
+
+		this.device.outputErrorMessage("world");
+	}
+
+	@Test
 	public void testPrintErrLn05()
 	{
 		Object object = new Object();
@@ -347,5 +392,125 @@ public class TestAbstractTextInterfaceDevice
 		EasyMock.replay(this.device, this.inputStream, this.outputStream, this.errorStream);
 
 		this.device.printErrLn();
+	}
+
+	@Test
+	public void testPromptForValidPasswordSimple01()
+	{
+		this.device = EasyMock.createMockBuilder(AbstractTextInterfaceDevice.class).
+				withConstructor(InputStream.class, PrintStream.class, PrintStream.class).
+				withArgs(this.inputStream, this.outputStream, this.errorStream).
+				addMockedMethod("promptForValidPassword", int.class, int.class, String.class, String.class,
+								String.class, String.class, OutputDevice.class).
+				createStrictMock();
+
+		char[] password = "testPassword01".toCharArray();
+
+		EasyMock.expect(
+				this.device.promptForValidPassword(6, 32,
+												   "Enter pass phrase to encrypt coolness: ",
+												   "Verifying - Reenter pass phrase to encrypt coolness: ",
+												   "The password must be at least six characters and no more than 32 characters long.",
+												   "ERROR: Passwords do not match. Please try again, or press Ctrl+C to cancel.",
+												   this.device)
+		).andReturn(password);
+
+		EasyMock.replay(this.device, this.inputStream, this.outputStream, this.errorStream);
+
+		char[] returned = this.device.promptForValidPassword(6, 32, "coolness");
+
+		assertNotNull("The returned value should not be null.", returned);
+		assertSame("The returned value is not correct.", password, returned);
+		assertArrayEquals("The returned value should match.", "testPassword01".toCharArray(), returned);
+	}
+
+	@Test
+	public void testPromptForValidPasswordSimple02()
+	{
+		this.device = EasyMock.createMockBuilder(AbstractTextInterfaceDevice.class).
+				withConstructor(InputStream.class, PrintStream.class, PrintStream.class).
+				withArgs(this.inputStream, this.outputStream, this.errorStream).
+				addMockedMethod("promptForValidPassword", int.class, int.class, String.class, String.class,
+								String.class, String.class, OutputDevice.class).
+				createStrictMock();
+
+		char[] password = "anotherPassword02".toCharArray();
+
+		EasyMock.expect(
+				this.device.promptForValidPassword(10, 11,
+												   "Enter pass phrase to encrypt flying monkeys: ",
+												   "Verifying - Reenter pass phrase to encrypt flying monkeys: ",
+												   "The password must be at least ten characters and no more than 11 characters long.",
+												   "ERROR: Passwords do not match. Please try again, or press Ctrl+C to cancel.",
+												   this.device)
+		).andReturn(password);
+
+		EasyMock.replay(this.device, this.inputStream, this.outputStream, this.errorStream);
+
+		char[] returned = this.device.promptForValidPassword(10, 11, "flying monkeys");
+
+		assertNotNull("The returned value should not be null.", returned);
+		assertSame("The returned value is not correct.", password, returned);
+		assertArrayEquals("The returned value should match.", "anotherPassword02".toCharArray(), returned);
+	}
+
+	@Test
+	public void testPromptForValidPasswordSimple03()
+	{
+		this.device = EasyMock.createMockBuilder(AbstractTextInterfaceDevice.class).
+				withConstructor(InputStream.class, PrintStream.class, PrintStream.class).
+				withArgs(this.inputStream, this.outputStream, this.errorStream).
+				addMockedMethod("promptForValidPassword", int.class, int.class, String.class, String.class,
+								String.class, String.class, OutputDevice.class).
+				createStrictMock();
+
+		char[] password = "closingPassword03".toCharArray();
+
+		EasyMock.expect(
+				this.device.promptForValidPassword(-1, 0,
+												   "Enter pass phrase to encrypt warmness: ",
+												   "Verifying - Reenter pass phrase to encrypt warmness: ",
+												   "The password must be at least -1 characters and no more than zero characters long.",
+												   "ERROR: Passwords do not match. Please try again, or press Ctrl+C to cancel.",
+												   this.device)
+		).andReturn(password);
+
+		EasyMock.replay(this.device, this.inputStream, this.outputStream, this.errorStream);
+
+		char[] returned = this.device.promptForValidPassword(-1, 0, "warmness");
+
+		assertNotNull("The returned value should not be null.", returned);
+		assertSame("The returned value is not correct.", password, returned);
+		assertArrayEquals("The returned value should match.", "closingPassword03".toCharArray(), returned);
+	}
+
+	@Test
+	public void testPromptForValidPasswordSimple04()
+	{
+		this.device = EasyMock.createMockBuilder(AbstractTextInterfaceDevice.class).
+				withConstructor(InputStream.class, PrintStream.class, PrintStream.class).
+				withArgs(this.inputStream, this.outputStream, this.errorStream).
+				addMockedMethod("promptForValidPassword", int.class, int.class, String.class, String.class,
+								String.class, String.class, OutputDevice.class).
+				createStrictMock();
+
+		char[] password = "finalPassword04".toCharArray();
+
+		EasyMock.expect(
+				this.device.promptForValidPassword(5, 10,
+												   "Enter pass phrase to encrypt the movie: ",
+												   "Verifying - Reenter pass phrase to encrypt the movie: ",
+												   "The password must be at least five characters and no more than ten characters long.",
+												   "ERROR: Passwords do not match. Please try again, or press Ctrl+C to cancel.",
+												   this.device)
+		).andReturn(password);
+
+		EasyMock.replay(this.device, this.inputStream, this.outputStream, this.errorStream);
+
+		char[] returned = this.device.promptForValidPassword(5, 10, "the movie");
+
+		assertNotNull("The returned value should not be null.", returned);
+		assertSame("The returned value is not correct.", password, returned);
+		assertArrayEquals("The returned value should match.", "finalPassword04".toCharArray(), returned);
 	}
 }

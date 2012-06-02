@@ -1,5 +1,5 @@
 /*
- * ConsoleRSAKeyPairGenerator.java from LicenseManager modified Tuesday, May 22, 2012 19:24:24 CDT (-0500).
+ * ConsoleRSAKeyPairGenerator.java from LicenseManager modified Saturday, June 2, 2012 07:38:57 CDT (-0500).
  *
  * Copyright 2010-2012 the original author or authors.
  *
@@ -231,51 +231,6 @@ public class ConsoleRSAKeyPairGenerator
 		return input != null && input.trim().equals("2");
 	}
 
-	protected char[] promptForValidPassword(String which)
-	{
-		char[] password1 = null, password2 = null;
-		boolean passwordVerified = false;
-
-		try
-		{
-			while(!passwordVerified)
-			{
-				password1 = this.device.readPassword("Enter pass phrase to encrypt " + which + ": ");
-
-				if(password1.length < 6 || password1.length > 32)
-				{
-					this.device.printErrLn(
-							"The password must be at least six characters and no more than 32 characters long."
-					);
-					this.device.printErrLn();
-					continue;
-				}
-
-				password2 = this.device.readPassword("Verifying - Reenter pass phrase to encrypt " + which + ": ");
-
-				passwordVerified = this.generator.passwordsMatch(password1, password2);
-				if(!passwordVerified)
-				{
-					this.device.printErrLn(
-							"ERROR: Passwords do not match. Please try again, or press Ctrl+C to cancel."
-					);
-					this.device.printErrLn();
-				}
-			}
-
-			this.device.printOutLn("Passwords match.");
-
-			return Arrays.copyOf(password1, password1.length);
-		}
-		finally
-		{
-			if(password1 != null)
-				Arrays.fill(password1, '\u0000');
-			if(password2 != null)
-				Arrays.fill(password2, '\u0000');
-		}
-	}
-
 	protected String promptForString(String message)
 	{
 		String input = this.device.readLine(message);
@@ -451,10 +406,19 @@ public class ConsoleRSAKeyPairGenerator
 
 		internal.generateClasses = this.promptToGenerateClasses();
 		internal.useDifferentPasswords = this.promptToUseDifferentPasswords();
-		internal.password = this.promptForValidPassword(internal.useDifferentPasswords ? "the public key" : "both keys");
+		internal.password = this.device.promptForValidPassword(6, 32,
+															   internal.useDifferentPasswords ? "the public key" :
+															   "both keys");
+		this.device.printOutLn("Passwords match.");
 		if(internal.useDifferentPasswords)
 			this.device.printOutLn();
-		internal.privatePassword = internal.useDifferentPasswords ? this.promptForValidPassword("the private key") : null;
+		if(internal.useDifferentPasswords)
+		{
+			internal.privatePassword = this.device.promptForValidPassword(6, 32, "the private key");
+			this.device.printOutLn("Passwords match.");
+		}
+		else
+			internal.privatePassword = null;
 		this.device.printOutLn();
 
 		while(internal.publicOutputStore == null)

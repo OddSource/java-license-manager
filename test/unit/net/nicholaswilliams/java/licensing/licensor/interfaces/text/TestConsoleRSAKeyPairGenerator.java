@@ -1,5 +1,5 @@
 /*
- * TestConsoleRSAKeyPairGenerator.java from LicenseManager modified Tuesday, May 22, 2012 20:06:02 CDT (-0500).
+ * TestConsoleRSAKeyPairGenerator.java from LicenseManager modified Saturday, June 2, 2012 07:42:56 CDT (-0500).
  *
  * Copyright 2010-2012 the original author or authors.
  *
@@ -368,139 +368,6 @@ public class TestConsoleRSAKeyPairGenerator
 	}
 
 	@Test
-	public void testPromptForValidPassword01()
-	{
-		char[] password1 = "testPassword01".toCharArray();
-		EasyMock.expect(this.device.readPassword("Enter pass phrase to encrypt both keys: ")).andReturn(password1);
-
-		char[] password2 = "testPassword01".toCharArray();
-		EasyMock.expect(this.device.readPassword("Verifying - Reenter pass phrase to encrypt both keys: ")).andReturn(password2);
-
-		EasyMock.expect(this.generator.passwordsMatch(password1, password2)).andReturn(true);
-		this.device.printOutLn("Passwords match.");
-		EasyMock.expectLastCall();
-
-		EasyMock.replay(this.generator, this.device);
-
-		char[] password = this.console.promptForValidPassword("both keys");
-
-		assertArrayEquals("The password is not correct.", "testPassword01".toCharArray(), password);
-		assertNotSame("The arrays should be different objects (1).", password1, password);
-		assertNotSame("The arrays should be different objects (2).", password2, password);
-		assertFalse("The arrays should not equal each other (1).", new String(password1).equals(new String(password)));
-		assertFalse("The arrays should not equal each other (2).", new String(password2).equals(new String(password)));
-	}
-
-	@Test
-	public void testPromptForValidPassword02()
-	{
-		char[] password1 = "test2".toCharArray();
-		EasyMock.expect(this.device.readPassword("Enter pass phrase to encrypt the private key: ")).andReturn(password1);
-		this.device.printErrLn("The password must be at least six characters and no more than 32 characters long.");
-		EasyMock.expectLastCall();
-		this.device.printErrLn();
-		EasyMock.expectLastCall();
-		password1 = "123456789012345678901234567890123".toCharArray();
-		EasyMock.expect(this.device.readPassword("Enter pass phrase to encrypt the private key: ")).andReturn(password1);
-		this.device.printErrLn("The password must be at least six characters and no more than 32 characters long.");
-		EasyMock.expectLastCall();
-		this.device.printErrLn();
-		EasyMock.expectLastCall();
-		password1 = "12345678901234567890123456789012".toCharArray();
-		EasyMock.expect(this.device.readPassword("Enter pass phrase to encrypt the private key: ")).andReturn(password1);
-
-		char[] password2 = "testPassword01".toCharArray();
-		EasyMock.expect(this.device.readPassword("Verifying - Reenter pass phrase to encrypt the private key: ")).andReturn(password2);
-		EasyMock.expect(this.generator.passwordsMatch(password1, password2)).andReturn(false);
-		this.device.printErrLn("ERROR: Passwords do not match. Please try again, or press Ctrl+C to cancel.");
-		EasyMock.expectLastCall();
-		this.device.printErrLn();
-		EasyMock.expectLastCall();
-
-		password1 = "test02".toCharArray();
-		EasyMock.expect(this.device.readPassword("Enter pass phrase to encrypt the private key: ")).andReturn(password1);
-
-		password2 = "test02".toCharArray();
-		EasyMock.expect(this.device.readPassword("Verifying - Reenter pass phrase to encrypt the private key: ")).andReturn(password2);
-		EasyMock.expect(this.generator.passwordsMatch(password1, password2)).andReturn(true);
-		this.device.printOutLn("Passwords match.");
-		EasyMock.expectLastCall();
-
-		EasyMock.replay(this.generator, this.device);
-
-		char[] password = this.console.promptForValidPassword("the private key");
-
-		assertArrayEquals("The password is not correct.", "test02".toCharArray(), password);
-		assertNotSame("The arrays should be different objects (1).", password1, password);
-		assertNotSame("The arrays should be different objects (2).", password2, password);
-		assertFalse("The arrays should not equal each other (1).", new String(password1).equals(new String(password)));
-		assertFalse("The arrays should not equal each other (2).", new String(password2).equals(new String(password)));
-	}
-
-	@Test
-	public void testPromptForValidPassword03()
-	{
-		char[] password1 = "another03".toCharArray();
-		EasyMock.expect(this.device.readPassword("Enter pass phrase to encrypt the public key: ")).andReturn(password1);
-
-		char[] password2 = "testPassword01".toCharArray();
-		EasyMock.expect(this.device.readPassword("Verifying - Reenter pass phrase to encrypt the public key: ")).andReturn(
-				password2);
-		EasyMock.expect(this.generator.passwordsMatch(password1, password2)).andReturn(false);
-		this.device.printErrLn("ERROR: Passwords do not match. Please try again, or press Ctrl+C to cancel.");
-		EasyMock.expectLastCall();
-		this.device.printErrLn();
-		EasyMock.expectLastCall();
-
-		EasyMock.expect(this.device.readPassword("Enter pass phrase to encrypt the public key: ")).andReturn(password1);
-
-		password2 = "another03".toCharArray();
-		EasyMock.expect(this.device.readPassword("Verifying - Reenter pass phrase to encrypt the public key: ")).andReturn(password2);
-		EasyMock.expect(this.generator.passwordsMatch(password1, password2)).andReturn(true);
-		this.device.printOutLn("Passwords match.");
-		EasyMock.expectLastCall();
-
-		EasyMock.replay(this.generator, this.device);
-
-		char[] password = this.console.promptForValidPassword("the public key");
-
-		assertArrayEquals("The password is not correct.", "another03".toCharArray(), password);
-		assertNotSame("The arrays should be different objects (1).", password1, password);
-		assertNotSame("The arrays should be different objects (2).", password2, password);
-		assertFalse("The arrays should not equal each other (1).", new String(password1).equals(new String(password)));
-		assertFalse("The arrays should not equal each other (2).", new String(password2).equals(new String(password)));
-	}
-
-	@Test
-	public void testPromptForValidPassword04()
-	{
-		char[] password1 = "test".toCharArray();
-		EasyMock.expect(this.device.readPassword("Enter pass phrase to encrypt both keys: ")).andReturn(password1);
-		this.device.printErrLn("The password must be at least six characters and no more than 32 characters long.");
-		EasyMock.expectLastCall();
-		this.device.printErrLn();
-		EasyMock.expectLastCall();
-		password1 = "finalTest04".toCharArray();
-		EasyMock.expect(this.device.readPassword("Enter pass phrase to encrypt both keys: ")).andReturn(password1);
-
-		char[] password2 = "finalTest04".toCharArray();
-		EasyMock.expect(this.device.readPassword("Verifying - Reenter pass phrase to encrypt both keys: ")).andReturn(password2);
-		EasyMock.expect(this.generator.passwordsMatch(password1, password2)).andReturn(true);
-		this.device.printOutLn("Passwords match.");
-		EasyMock.expectLastCall();
-
-		EasyMock.replay(this.generator, this.device);
-
-		char[] password = this.console.promptForValidPassword("both keys");
-
-		assertArrayEquals("The password is not correct.", "finalTest04".toCharArray(), password);
-		assertNotSame("The arrays should be different objects (1).", password1, password);
-		assertNotSame("The arrays should be different objects (2).", password2, password);
-		assertFalse("The arrays should not equal each other (1).", new String(password1).equals(new String(password)));
-		assertFalse("The arrays should not equal each other (2).", new String(password2).equals(new String(password)));
-	}
-
-	@Test
 	public void testPromptForString01()
 	{
 		EasyMock.expect(this.device.readLine("Test message 01")).andReturn(null);
@@ -757,13 +624,8 @@ public class TestConsoleRSAKeyPairGenerator
 		this.device.printOutLn();
 		EasyMock.expectLastCall();
 
-		EasyMock.expect(this.device.readPassword("Enter pass phrase to encrypt both keys: ")).
+		EasyMock.expect(this.device.promptForValidPassword(6, 32, "both keys")).
 				andReturn("keyPassword01".toCharArray());
-		EasyMock.expect(this.device.readPassword("Verifying - Reenter pass phrase to encrypt both keys: ")).
-				andReturn("keyPassword01".toCharArray());
-		EasyMock.expect(this.generator.passwordsMatch(
-				EasyMock.aryEq("keyPassword01".toCharArray()), EasyMock.aryEq("keyPassword01".toCharArray())
-		)).andReturn(true);
 		this.device.printOutLn("Passwords match.");
 		EasyMock.expectLastCall();
 		this.device.printOutLn();
@@ -871,25 +733,15 @@ public class TestConsoleRSAKeyPairGenerator
 		this.device.printOutLn();
 		EasyMock.expectLastCall();
 
-		EasyMock.expect(this.device.readPassword("Enter pass phrase to encrypt the public key: ")).
+		EasyMock.expect(this.device.promptForValidPassword(6, 32, "the public key")).
 				andReturn("publicPassword02".toCharArray());
-		EasyMock.expect(this.device.readPassword("Verifying - Reenter pass phrase to encrypt the public key: ")).
-				andReturn("publicPassword02".toCharArray());
-		EasyMock.expect(this.generator.passwordsMatch(
-				EasyMock.aryEq("publicPassword02".toCharArray()), EasyMock.aryEq("publicPassword02".toCharArray())
-		)).andReturn(true);
 		this.device.printOutLn("Passwords match.");
 		EasyMock.expectLastCall();
 		this.device.printOutLn();
 		EasyMock.expectLastCall();
 
-		EasyMock.expect(this.device.readPassword("Enter pass phrase to encrypt the private key: ")).
+		EasyMock.expect(this.device.promptForValidPassword(6, 32, "the private key")).
 				andReturn("privatePassword02".toCharArray());
-		EasyMock.expect(this.device.readPassword("Verifying - Reenter pass phrase to encrypt the private key: ")).
-				andReturn("privatePassword02".toCharArray());
-		EasyMock.expect(this.generator.passwordsMatch(
-				EasyMock.aryEq("privatePassword02".toCharArray()), EasyMock.aryEq("privatePassword02".toCharArray())
-		)).andReturn(true);
 		this.device.printOutLn("Passwords match.");
 		EasyMock.expectLastCall();
 		this.device.printOutLn();
@@ -1001,13 +853,8 @@ public class TestConsoleRSAKeyPairGenerator
 		this.device.printOutLn();
 		EasyMock.expectLastCall();
 
-		EasyMock.expect(this.device.readPassword("Enter pass phrase to encrypt both keys: ")).
+		EasyMock.expect(this.device.promptForValidPassword(6, 32, "both keys")).
 				andReturn("keyPassword03".toCharArray());
-		EasyMock.expect(this.device.readPassword("Verifying - Reenter pass phrase to encrypt both keys: ")).
-				andReturn("keyPassword03".toCharArray());
-		EasyMock.expect(this.generator.passwordsMatch(
-				EasyMock.aryEq("keyPassword03".toCharArray()), EasyMock.aryEq("keyPassword03".toCharArray())
-		)).andReturn(true);
 		this.device.printOutLn("Passwords match.");
 		EasyMock.expectLastCall();
 		this.device.printOutLn();
@@ -1178,25 +1025,15 @@ public class TestConsoleRSAKeyPairGenerator
 		this.device.printOutLn();
 		EasyMock.expectLastCall();
 
-		EasyMock.expect(this.device.readPassword("Enter pass phrase to encrypt the public key: ")).
+		EasyMock.expect(this.device.promptForValidPassword(6, 32, "the public key")).
 				andReturn("publicPassword04".toCharArray());
-		EasyMock.expect(this.device.readPassword("Verifying - Reenter pass phrase to encrypt the public key: ")).
-				andReturn("publicPassword04".toCharArray());
-		EasyMock.expect(this.generator.passwordsMatch(
-				EasyMock.aryEq("publicPassword04".toCharArray()), EasyMock.aryEq("publicPassword04".toCharArray())
-		)).andReturn(true);
 		this.device.printOutLn("Passwords match.");
 		EasyMock.expectLastCall();
 		this.device.printOutLn();
 		EasyMock.expectLastCall();
 
-		EasyMock.expect(this.device.readPassword("Enter pass phrase to encrypt the private key: ")).
+		EasyMock.expect(this.device.promptForValidPassword(6, 32, "the private key")).
 				andReturn("privatePassword04".toCharArray());
-		EasyMock.expect(this.device.readPassword("Verifying - Reenter pass phrase to encrypt the private key: ")).
-				andReturn("privatePassword04".toCharArray());
-		EasyMock.expect(this.generator.passwordsMatch(
-				EasyMock.aryEq("privatePassword04".toCharArray()), EasyMock.aryEq("privatePassword04".toCharArray())
-		)).andReturn(true);
 		this.device.printOutLn("Passwords match.");
 		EasyMock.expectLastCall();
 		this.device.printOutLn();

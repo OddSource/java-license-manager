@@ -1,5 +1,5 @@
 /*
- * AbstractTextInterfaceDevice.java from LicenseManager modified Saturday, March 3, 2012 19:15:45 CST (-0600).
+ * AbstractTextInterfaceDevice.java from LicenseManager modified Saturday, June 2, 2012 08:11:19 CDT (-0500).
  *
  * Copyright 2010-2012 the original author or authors.
  *
@@ -18,6 +18,10 @@
 
 package net.nicholaswilliams.java.licensing.licensor.interfaces.text.abstraction;
 
+import net.nicholaswilliams.java.licensing.licensor.interfaces.abstraction.AbstractPasswordPrompter;
+import net.nicholaswilliams.java.licensing.licensor.interfaces.abstraction.OutputDevice;
+import net.nicholaswilliams.java.licensing.licensor.interfaces.abstraction.PasswordPrompter;
+
 import java.io.IOError;
 import java.io.InputStream;
 import java.io.PrintStream;
@@ -30,7 +34,8 @@ import java.io.PrintStream;
  * @version 1.0.0
  * @since 1.0.0
  */
-public abstract class AbstractTextInterfaceDevice implements TextInterfaceDevice
+public abstract class AbstractTextInterfaceDevice extends AbstractPasswordPrompter
+		implements TextInterfaceDevice, PasswordPrompter, OutputDevice
 {
 	protected final InputStream in;
 
@@ -162,6 +167,12 @@ public abstract class AbstractTextInterfaceDevice implements TextInterfaceDevice
 		this.out.println(s);
 	}
 
+	@Override
+	public void outputMessage(String message) throws IOError
+	{
+		this.printOutLn(message);
+	}
+
 	/**
 	 * Prints an {@code Object} to standard-out, then terminates the current line by writing the line separator string.
 	 *
@@ -209,6 +220,12 @@ public abstract class AbstractTextInterfaceDevice implements TextInterfaceDevice
 		this.err.println(s);
 	}
 
+	@Override
+	public void outputErrorMessage(String message) throws IOError
+	{
+		this.printErrLn(message);
+	}
+
 	/**
 	 * Prints an {@code Object} to standard-err, then terminates the current line by writing the line separator string.
 	 *
@@ -252,5 +269,43 @@ public abstract class AbstractTextInterfaceDevice implements TextInterfaceDevice
 	public PrintStream err()
 	{
 		return this.err;
+	}
+
+	/**
+	 * Prompts for a valid password by asking for the password using {@link #readPassword(String, Object...)}, checking
+	 * its length against the constraints, asking for the password to be confirmed, and checking to make sure the
+	 * passwords match.<br />
+	 * <br />
+	 * This method should continue to ask for the password over and over again until a valid password is entered and
+	 * confirmed or the user cancels the operation.
+	 *
+	 * @param minLength The minimum legal length for the password
+	 * @param maxLength The maximum legal length for the password
+	 * @param what What we're prompting for a password for
+	 * @return the valid, confirmed password entered by the user.
+	 * @throws IOError if an I/O error occurs.
+	 */
+	@Override
+	public char[] promptForValidPassword(int minLength, int maxLength, String what) throws IOError
+	{
+		String minString = AbstractTextInterfaceDevice.getNumberString(minLength);
+
+		String maxString = AbstractTextInterfaceDevice.getNumberString(maxLength);
+
+		return this.promptForValidPassword(minLength, maxLength,
+										   "Enter pass phrase to encrypt " + what + ": ",
+										   "Verifying - Reenter pass phrase to encrypt " + what + ": ",
+										   "The password must be at least " + minString +
+										   			" characters and no more than " + maxString + " characters long.",
+										   "ERROR: Passwords do not match. Please try again, or press Ctrl+C to cancel.",
+										   this);
+	}
+
+	private static final String[] FIRST_TEN_NUMBERS = new String[] { "zero", "one", "two", "three", "four", "five",
+																	 "six", "seven", "eight", "nine", "ten" };
+
+	private static String getNumberString(int number)
+	{
+		return number < 0 || number > 10 ? "" + number : AbstractTextInterfaceDevice.FIRST_TEN_NUMBERS[number];
 	}
 }

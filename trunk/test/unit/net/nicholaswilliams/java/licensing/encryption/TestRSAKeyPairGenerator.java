@@ -1,5 +1,5 @@
 /*
- * TestRSAKeyPairGenerator.java from LicenseManager modified Monday, March 5, 2012 19:09:53 CST (-0600).
+ * TestRSAKeyPairGenerator.java from LicenseManager modified Saturday, June 2, 2012 07:12:56 CDT (-0500).
  *
  * Copyright 2010-2012 the original author or authors.
  *
@@ -87,51 +87,6 @@ public class TestRSAKeyPairGenerator
 	public void tearDown()
 	{
 
-	}
-
-	@Test
-	public void testPasswordsMatch01()
-	{
-		assertTrue("The passwords should match.", this.generator.passwordsMatch(
-				new char[] {'s', 'a', 'm', 'p', 'l', 'e', 'K', 'e', 'y', '1', '9', '8', '4'},
-				new char[] {'s', 'a', 'm', 'p', 'l', 'e', 'K', 'e', 'y', '1', '9', '8', '4'}
-		));
-	}
-
-	@Test
-	public void testPasswordsMatch02()
-	{
-		assertTrue("The passwords should match.", this.generator.passwordsMatch(
-				new char[] {'y', 'o', 'u', 'r', 'K', 'e', 'y', '1', '9', '4', '8'},
-				new char[] {'y', 'o', 'u', 'r', 'K', 'e', 'y', '1', '9', '4', '8'}
-		));
-	}
-
-	@Test
-	public void testPasswordsMatch03()
-	{
-		assertFalse("The passwords should not match.", this.generator.passwordsMatch(
-				new char[] {'s', 'a', 'm', 'p', 'l', 'e', 'K', 'e', 'y', '1', '9', '8', '4'},
-				new char[] {'S', 'a', 'm', 'p', 'l', 'e', 'K', 'e', 'y', '1', '9', '8', '4'}
-		));
-	}
-
-	@Test
-	public void testPasswordsMatch04()
-	{
-		assertFalse("The passwords should not match.", this.generator.passwordsMatch(
-				new char[] {'y', 'o', 'u', 'r', 'K', 'e', 'y', '1', '9', '4', '8'},
-				new char[] {'y', 'o', 'u', 'r', 'K', 'e', 'y', '1', '9', '4', '9'}
-		));
-	}
-
-	@Test
-	public void testPasswordsMatch05()
-	{
-		assertFalse("The passwords should not match.", this.generator.passwordsMatch(
-				new char[] {'y', 'o', 'u', 'r', 'K', 'e', 'y', '1', '9', '4', '8'},
-				new char[] {'y'}
-		));
 	}
 
 	@Test

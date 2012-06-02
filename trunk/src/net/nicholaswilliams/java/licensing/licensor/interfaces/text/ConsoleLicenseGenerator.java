@@ -1,5 +1,5 @@
 /*
- * ConsoleLicenseGenerator.java from LicenseManager modified Monday, May 21, 2012 22:38:12 CDT (-0500).
+ * ConsoleLicenseGenerator.java from LicenseManager modified Saturday, June 2, 2012 08:06:49 CDT (-0500).
  *
  * Copyright 2010-2012 the original author or authors.
  *
@@ -690,8 +690,9 @@ public class ConsoleLicenseGenerator
 	{
 		if(properties == null)
 		{
-			char[] password = this.promptForPassword("Please enter a password to encrypt the license with (if left " +
-													 "blank, will use the private key password provider): ");
+			char[] password = this.device.promptForValidPassword(0, 32, "the license with (if left blank, will use " +
+																		"the private key password provider)");
+			this.device.printOutLn();
 			return password == null || password.length == 0 ? null : password;
 		}
 		else

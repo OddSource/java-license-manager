@@ -1,5 +1,5 @@
 /*
- * TestConsoleLicenseGenerator.java from LicenseManager modified Monday, May 21, 2012 22:38:01 CDT (-0500).
+ * TestConsoleLicenseGenerator.java from LicenseManager modified Saturday, June 2, 2012 08:07:17 CDT (-0500).
  *
  * Copyright 2010-2012 the original author or authors.
  *
@@ -1280,8 +1280,8 @@ public class TestConsoleLicenseGenerator
 				andReturn(" ");
 		this.device.printOutLn();
 		EasyMock.expectLastCall();
-		EasyMock.expect(this.device.readPassword("Please enter a password to encrypt the license with (if left " +
-												 "blank, will use the private key password provider): ")).
+		EasyMock.expect(this.device.promptForValidPassword(0, 32, "the license with (if left blank, will use the " +
+																  "private key password provider)")).
 				andReturn(null);
 		this.device.printOutLn();
 		EasyMock.expectLastCall();
@@ -1402,8 +1402,8 @@ public class TestConsoleLicenseGenerator
 				andReturn(" ");
 		this.device.printOutLn();
 		EasyMock.expectLastCall();
-		EasyMock.expect(this.device.readPassword("Please enter a password to encrypt the license with (if left " +
-												 "blank, will use the private key password provider): ")).
+		EasyMock.expect(this.device.promptForValidPassword(0, 32, "the license with (if left blank, will use the " +
+																  "private key password provider)")).
 				andReturn("somePassword04".toCharArray());
 		this.device.printOutLn();
 		EasyMock.expectLastCall();
@@ -1545,8 +1545,8 @@ public class TestConsoleLicenseGenerator
 				andReturn("    ");
 		this.device.printOutLn();
 		EasyMock.expectLastCall();
-		EasyMock.expect(this.device.readPassword("Please enter a password to encrypt the license with (if left " +
-												 "blank, will use the private key password provider): ")).
+		EasyMock.expect(this.device.promptForValidPassword(0, 32, "the license with (if left blank, will use the " +
+																  "private key password provider)")).
 				andReturn("anotherPassword05".toCharArray());
 		this.device.printOutLn();
 		EasyMock.expectLastCall();
@@ -1692,8 +1692,8 @@ public class TestConsoleLicenseGenerator
 				andReturn(null);
 		this.device.printOutLn();
 		EasyMock.expectLastCall();
-		EasyMock.expect(this.device.readPassword("Please enter a password to encrypt the license with (if left " +
-												 "blank, will use the private key password provider): ")).
+		EasyMock.expect(this.device.promptForValidPassword(0, 32, "the license with (if left blank, will use the " +
+																  "private key password provider)")).
 				andReturn("finalPassword06".toCharArray());
 		this.device.printOutLn();
 		EasyMock.expectLastCall();

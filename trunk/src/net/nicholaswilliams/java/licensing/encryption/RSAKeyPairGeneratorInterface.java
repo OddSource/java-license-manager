@@ -1,5 +1,5 @@
 /*
- * RSAKeyPairGeneratorInterface.java from LicenseManager modified Monday, March 5, 2012 13:10:33 CST (-0600).
+ * RSAKeyPairGeneratorInterface.java from LicenseManager modified Saturday, June 2, 2012 07:53:53 CDT (-0500).
  *
  * Copyright 2010-2012 the original author or authors.
  *
@@ -36,15 +36,6 @@ import java.security.KeyPair;
  */
 public interface RSAKeyPairGeneratorInterface
 {
-	/**
-	 * Checks whether the two passwords match.
-	 *
-	 * @param password1 The entered password
-	 * @param password2 The confirmed password
-	 * @return {@code true} if the passwords match, {@code false} otherwise.
-	 */
-	public boolean passwordsMatch(char[] password1, char[] password2);
-
 	/**
 	 * Generates a key pair with RSA 2048-bit security.
 	 * @return a public/private key pair.

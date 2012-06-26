@@ -1,5 +1,5 @@
 /*
- * LicenseManager.java from LicenseManager modified Saturday, May 19, 2012 08:27:26 CDT (-0500).
+ * LicenseManager.java from LicenseManager modified Monday, June 25, 2012 22:36:52 CDT (-0500).
  *
  * Copyright 2010-2012 the original author or authors.
  *
@@ -359,6 +359,9 @@ public final class LicenseManager
 														   InappropriateKeyException, CorruptSignatureException,
 														   InvalidSignatureException, FailedToDecryptException
 	{
+		if(context == null)
+			throw new IllegalArgumentException("License context cannot be null.");
+
 		long time = System.currentTimeMillis();
 
 		synchronized(this.licenseCache)
@@ -392,6 +395,18 @@ public final class LicenseManager
 			}
 
 			return entry.license;
+		}
+	}
+
+	/**
+	 * Clears the cache of licenses, forcing all license data to be re-retrieved from the license data provider on the
+	 * next call to {@link #getLicense(Object)}.
+	 */
+	public final void clearLicenseCache()
+	{
+		synchronized(this.licenseCache)
+		{
+			this.licenseCache.clear();
 		}
 	}
 

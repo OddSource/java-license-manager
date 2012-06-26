@@ -1,5 +1,5 @@
 /*
- * LicenseSecurityManager.java from LicenseManager modified Friday, June 1, 2012 15:36:01 CDT (-0500).
+ * LicenseSecurityManager.java from LicenseManager modified Monday, June 25, 2012 22:28:55 CDT (-0500).
  *
  * Copyright 2010-2012 the original author or authors.
  *
@@ -167,14 +167,16 @@ final class LicenseSecurityManager extends SecurityManager
 						!reflectionClass.equals(SignedLicense.class)
 				)
 				{
-					throw new SecurityException("Reflection access to non-public members of LicenseManager classes prohibited.");
+					throw new SecurityException("Reflection access to non-public members of LicenseManager class [" +
+												reflectionClass.getSimpleName() + "] prohibited.");
 				}
 
 				if(reflectionClass == java.lang.Class.class || reflectionClass == java.lang.System.class)
 				{
 					Class stack[] = getClassContext();
 					if(stack.length < 4 || !stack[3].getPackage().getName().startsWith("java."))
-						throw new SecurityException("Reflection access to non-public members of java.lang.Class and java.lang.System prohibited.");
+						throw new SecurityException("Reflection access to non-public members of java.lang.Class " +
+													"and java.lang.System prohibited.");
 				}
 
 				if(this.next != null)

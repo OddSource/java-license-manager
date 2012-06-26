@@ -1,5 +1,5 @@
 /*
- * LicenseSecurityManager.java from LicenseManager modified Monday, June 25, 2012 22:28:55 CDT (-0500).
+ * LicenseSecurityManager.java from LicenseManager modified Monday, June 25, 2012 23:43:24 CDT (-0500).
  *
  * Copyright 2010-2012 the original author or authors.
  *
@@ -56,6 +56,10 @@ import java.security.Permission;
 final class LicenseSecurityManager extends SecurityManager
 {
 	private static LicenseSecurityManager instance;
+
+	private static final String FEATURE_RESTRICTION = FeatureRestriction.class.getCanonicalName();
+
+	private static final String SIGNED_LICENSE = SignedLicense.class.getCanonicalName();
 
 	private static final RuntimePermission CHECK_MEMBER_ACCESS_PERMISSION =
 			new RuntimePermission("accessDeclaredMembers");
@@ -159,12 +163,18 @@ final class LicenseSecurityManager extends SecurityManager
 		{
 			if(memberAccessType != Member.PUBLIC)
 			{
+				/*
+				 * We check class canonical name, not class object, for equivalency. This is because
+				 * (SomeClass.class == SomeClass.class) evaluates to false when the classes are loaded by two different
+				 * ClassLoaders and (SomeClass.class.equals(SomeClass.class)) evaluates to false when the classes are
+				 * loaded by two different ClassLoaders. Only their class canonical names are guaranteed to be the same.
+				 */
 				Package packageObject = reflectionClass.getPackage();
 				if(
 						packageObject != null &&
 						packageObject.getName().startsWith("net.nicholaswilliams.java.licensing") &&
-						!reflectionClass.equals(FeatureRestriction.class) &&
-						!reflectionClass.equals(SignedLicense.class)
+						!reflectionClass.getCanonicalName().equals(LicenseSecurityManager.FEATURE_RESTRICTION) &&
+						!reflectionClass.getCanonicalName().equals(LicenseSecurityManager.SIGNED_LICENSE)
 				)
 				{
 					throw new SecurityException("Reflection access to non-public members of LicenseManager class [" +

@@ -1,5 +1,5 @@
 /*
- * TestLicenseManager.java from LicenseManager modified Saturday, May 19, 2012 09:09:08 CDT (-0500).
+ * TestLicenseManager.java from LicenseManager modified Sunday, September 2, 2012 12:26:05 CDT (-0500).
  *
  * Copyright 2010-2012 the original author or authors.
  *
@@ -135,8 +135,8 @@ public class TestLicenseManager
 									withGoodAfterDate(2348907325000L).
 									withGoodBeforeDate(2348917325000L).
 									withNumberOfLicenses(57).
-									withFeature("nickFeature1").
-									withFeature("allisonFeature2").
+									addFeature("nickFeature1").
+									addFeature("allisonFeature2").
 									build();
 
 		byte[] data = Encryptor.encryptRaw(license.serialize(), TestLicenseManager.licensePassword);
@@ -165,9 +165,9 @@ public class TestLicenseManager
 									withGoodAfterDate(2348114987000L).
 									withGoodBeforeDate(2348914987000L).
 									withNumberOfLicenses(5).
-									withFeature("feature#1").
-									withFeature("feature#2").
-									withFeature("feature#5").
+									addFeature("feature#1").
+									addFeature("feature#2").
+									addFeature("feature#5").
 									build();
 
 		byte[] data = Encryptor.encryptRaw(license.serialize(), TestLicenseManager.licensePassword);
@@ -242,6 +242,38 @@ public class TestLicenseManager
 		assertNotNull("The returned license should not be null.", returnedAgain);
 		assertEquals("The returned license is not correct.", license, returnedAgain);
 		assertNotSame("The returned objects should not be the same anymore.", returned, returnedAgain);
+	}
+
+	@Test
+	public void testClearLicenseCache01() throws Exception
+	{
+		License license1 = this.setupLicenseMocking("CUSTOMER-5");
+		License license2 = this.setupLicenseMocking("CUSTOMER-5");
+		TestLicenseManager.control.replay();
+
+		License returned = this.manager.getLicense("CUSTOMER-5");
+
+		assertNotNull("The returned license should not be null (1).", returned);
+		assertEquals("The returned license is not correct (1).", license1, returned);
+
+		Thread.sleep(1000);
+
+		License returnedAgain = this.manager.getLicense("CUSTOMER-5");
+
+		assertSame("The returned objects should be the same (1).", returned, returnedAgain);
+
+		this.manager.clearLicenseCache();
+
+		returned = this.manager.getLicense("CUSTOMER-5");
+
+		assertNotNull("The returned license should not be null (2).", returned);
+		assertEquals("The returned license is not correct (2).", license2, returned);
+
+		Thread.sleep(1000);
+
+		returnedAgain = this.manager.getLicense("CUSTOMER-5");
+
+		assertSame("The returned objects should be the same (2).", returned, returnedAgain);
 	}
 
 	@Test
@@ -686,6 +718,7 @@ public class TestLicenseManager
 
 		Object object = new Object() {
 			@FeatureRestriction(value={"feature#1", "feature#5"})
+			@SuppressWarnings("unused")
 			public void method()
 			{
 
@@ -707,6 +740,7 @@ public class TestLicenseManager
 
 		Object object = new Object() {
 			@FeatureRestriction(value={"feature#1", "feature#3"})
+			@SuppressWarnings("unused")
 			public void method()
 			{
 
@@ -728,6 +762,7 @@ public class TestLicenseManager
 
 		Object object = new Object() {
 			@FeatureRestriction(value={"feature#6", "feature#3"})
+			@SuppressWarnings("unused")
 			public void method()
 			{
 
@@ -749,6 +784,7 @@ public class TestLicenseManager
 
 		Object object = new Object() {
 			@FeatureRestriction(value={"feature#1", "feature#5"}, operand=FeatureRestrictionOperand.OR)
+			@SuppressWarnings("unused")
 			public void method()
 			{
 
@@ -770,6 +806,7 @@ public class TestLicenseManager
 
 		Object object = new Object() {
 			@FeatureRestriction(value={"feature#1", "feature#3"}, operand=FeatureRestrictionOperand.OR)
+			@SuppressWarnings("unused")
 			public void method()
 			{
 
@@ -791,6 +828,7 @@ public class TestLicenseManager
 
 		Object object = new Object() {
 			@FeatureRestriction(value={"feature#6", "feature#3"}, operand=FeatureRestrictionOperand.OR)
+			@SuppressWarnings("unused")
 			public void method()
 			{
 
@@ -810,6 +848,7 @@ public class TestLicenseManager
 
 		Object object = new Object() {
 			@FeatureRestriction(value={"feature#1", "feature#5"}, operand=FeatureRestrictionOperand.OR)
+			@SuppressWarnings("unused")
 			public void method()
 			{
 
@@ -832,6 +871,7 @@ public class TestLicenseManager
 
 		Object object = new Object() {
 			@FeatureRestriction(value={"feature#1", "feature#5"})
+			@SuppressWarnings("unused")
 			public void method()
 			{
 
@@ -851,6 +891,7 @@ public class TestLicenseManager
 
 		Object object = new Object() {
 			@FeatureRestriction(value={"feature#1", "feature#3"})
+			@SuppressWarnings("unused")
 			public void method()
 			{
 
@@ -870,6 +911,7 @@ public class TestLicenseManager
 
 		Object object = new Object() {
 			@FeatureRestriction(value={"feature#6", "feature#3"})
+			@SuppressWarnings("unused")
 			public void method()
 			{
 
@@ -889,6 +931,7 @@ public class TestLicenseManager
 
 		Object object = new Object() {
 			@FeatureRestriction(value={"feature#1", "feature#5"}, operand=FeatureRestrictionOperand.OR)
+			@SuppressWarnings("unused")
 			public void method()
 			{
 
@@ -908,6 +951,7 @@ public class TestLicenseManager
 
 		Object object = new Object() {
 			@FeatureRestriction(value={"feature#1", "feature#3"}, operand=FeatureRestrictionOperand.OR)
+			@SuppressWarnings("unused")
 			public void method()
 			{
 
@@ -927,6 +971,7 @@ public class TestLicenseManager
 
 		Object object = new Object() {
 			@FeatureRestriction(value={"feature#6", "feature#3"}, operand=FeatureRestrictionOperand.OR)
+			@SuppressWarnings("unused")
 			public void method()
 			{
 
@@ -944,6 +989,7 @@ public class TestLicenseManager
 
 		Object object = new Object() {
 			@FeatureRestriction(value={"feature#1", "feature#5"}, operand=FeatureRestrictionOperand.OR)
+			@SuppressWarnings("unused")
 			public void method()
 			{
 

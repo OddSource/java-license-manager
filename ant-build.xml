@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
-  ~ ant-build.xml from LicenseManager modified Wednesday, May 16, 2012 09:36:45 CDT (-0500).
+  ~ ant-build.xml from LicenseManager modified Sunday, September 2, 2012 12:34:14 CDT (-0500).
   ~
   ~ Copyright 2010-2012 the original author or authors.
   ~
@@ -19,9 +19,11 @@
 
 <project name="licensemanager" default="all">
 
-	<property file="ant-build.properties" />
-
 	<dirname property="module.licensemanager.basedir" file="${ant.file}" />
+
+	<property environment="nwts.build.environment" />
+
+	<property file="ant-build.properties" />
 
 	<taskdef resource="net/sf/antcontrib/antcontrib.properties">
 		<classpath>
@@ -38,6 +40,7 @@
 
 	<!-- JDK definitions -->
 
+	<property name="jdk.home.1.6" value="${nwts.build.environment.JDK_16}" />
 	<property name="jdk.bin.1.6" value="${jdk.home.1.6}/bin" />
 
 	<property name="project.jdk.home" value="${jdk.home.1.6}" />
@@ -63,9 +66,9 @@
 	<property name="licensemanager.dir.artifactOutput" value="${module.licensemanager.basedir}/out/artifacts" />
 	<property name="licensemanager.dir.javaDoc" value="${module.licensemanager.basedir}/out/javadoc" />
 
-	<property name="jar.name.core" value="net.nicholaswilliams.java.licensing-core-${licensemanager.version}.jar" />
-	<property name="jar.name.licensor" value="net.nicholaswilliams.java.licensing-licensor-${licensemanager.version}.jar" />
-	<property name="jar.name.samples" value="net.nicholaswilliams.java.licensing-samples-${licensemanager.version}.jar" />
+	<property name="jar.name.core" value="net.nicholaswilliams.java.licensing-${licensemanager.version}.jar" />
+	<property name="jar.name.licensor" value="net.nicholaswilliams.java.licensing.licensor-${licensemanager.version}.jar" />
+	<property name="jar.name.samples" value="net.nicholaswilliams.java.licensing.samples-${licensemanager.version}.jar" />
 	<property name="jar.name.sources" value="net.nicholaswilliams.java.licensing-sources-${licensemanager.version}.jar" />
 	<property name="jar.name.javadoc" value="net.nicholaswilliams.java.licensing-javadoc-${licensemanager.version}.jar" />
 
@@ -240,18 +243,6 @@
 	<target name="package.artifact.core" depends="clean, init, compile.module.source" description="Package core Jar">
 		<mkdir dir="${licensemanager.dir.artifactOutput}" />
 
-		<!-- Determine the manifest class-path property -->
-		<pathconvert property="manifest.classpath.core" pathsep=" ">
-			<path>
-				<fileset dir="${module.licensemanager.basedir}/lib">
-					<include name="*.jar" />
-					<exclude name="org.apache.commons.cli*.jar" />
-				</fileset>
-			</path>
-			<flattenmapper />
-		</pathconvert>
-		<echo message="Manifest class-path is ${manifest.classpath.core}" />
-
 		<!-- Package the JAR file -->
 		<jar destfile="${licensemanager.dir.artifactOutput}/${jar.name.core}"
 			 duplicate="preserve" filesetmanifest="skip" index="true">
@@ -265,7 +256,6 @@
 				<attribute name="Specification-Version" value="${licensemanager.version}" />
 				<attribute name="Implementation-Version" value="${licensemanager.version}" />
 				<attribute name="Sealed" value="true" />
-				<attribute name="Class-Path" value="${manifest.classpath.core}" />
 			</manifest>
 			<zipfileset file="${module.licensemanager.basedir}/jar/META-INF/LICENSE.txt" prefix="META-INF" />
 			<zipfileset file="${module.licensemanager.basedir}/jar/META-INF/NOTICE.txt" prefix="META-INF" />
@@ -286,13 +276,6 @@
 	<target name="package.artifact.licensor" depends="clean, init, compile.module.source" description="Package Licensor App Jar">
 		<mkdir dir="${licensemanager.dir.artifactOutput}" />
 
-		<!-- Determine the manifest class-path property -->
-		<pathconvert property="manifest.classpath.licensor" pathsep=" ">
-			<path refid="${licensemanager.dependencies.runtime}" />
-			<flattenmapper />
-		</pathconvert>
-		<echo message="Manifest class-path is ${manifest.classpath.licensor}" />
-
 		<!-- Package the JAR file -->
 		<jar destfile="${licensemanager.dir.artifactOutput}/${jar.name.licensor}"
 			 duplicate="preserve" filesetmanifest="skip" index="true">
@@ -306,7 +289,6 @@
 				<attribute name="Specification-Version" value="${licensemanager.version}" />
 				<attribute name="Implementation-Version" value="${licensemanager.version}" />
 				<attribute name="Sealed" value="true" />
-				<attribute name="Class-Path" value="${manifest.classpath.licensor} ${jar.name.core}" />
 			</manifest>
 			<zipfileset file="${module.licensemanager.basedir}/jar/META-INF/LICENSE.txt" prefix="META-INF" />
 			<zipfileset file="${module.licensemanager.basedir}/jar/META-INF/NOTICE.txt" prefix="META-INF" />
@@ -324,13 +306,6 @@
 	<target name="package.artifact.samples" depends="clean, init, compile.module.source" description="Package Samples Jar">
 		<mkdir dir="${licensemanager.dir.artifactOutput}" />
 
-		<!-- Determine the manifest class-path property -->
-		<pathconvert property="manifest.classpath.samples" pathsep=" ">
-			<path refid="${licensemanager.dependencies.runtime}" />
-			<flattenmapper />
-		</pathconvert>
-		<echo message="Manifest class-path is ${manifest.classpath.samples}" />
-
 		<!-- Package the JAR file -->
 		<jar destfile="${licensemanager.dir.artifactOutput}/${jar.name.samples}"
 			 duplicate="preserve" filesetmanifest="skip" index="true">
@@ -344,7 +319,6 @@
 				<attribute name="Specification-Version" value="${licensemanager.version}" />
 				<attribute name="Implementation-Version" value="${licensemanager.version}" />
 				<attribute name="Sealed" value="true" />
-				<attribute name="Class-Path" value="${manifest.classpath.samples} ${jar.name.core} ${jar.name.licensor}" />
 			</manifest>
 			<zipfileset file="${module.licensemanager.basedir}/jar/META-INF/LICENSE.txt" prefix="META-INF" />
 			<zipfileset file="${module.licensemanager.basedir}/jar/META-INF/NOTICE.txt" prefix="META-INF" />
@@ -362,13 +336,6 @@
 	<target name="package.artifact.sources" depends="clean, init" description="Package Sources Jar">
 		<mkdir dir="${licensemanager.dir.artifactOutput}" />
 
-		<!-- Determine the manifest class-path property -->
-		<pathconvert property="manifest.classpath.sources" pathsep=" ">
-			<path refid="${licensemanager.dependencies.runtime}" />
-			<flattenmapper />
-		</pathconvert>
-		<echo message="Manifest class-path is ${manifest.classpath.sources}" />
-
 		<!-- Package the JAR file -->
 		<jar destfile="${licensemanager.dir.artifactOutput}/${jar.name.sources}"
 			 duplicate="preserve" filesetmanifest="skip" index="false">
@@ -381,7 +348,6 @@
 				<attribute name="Specification-Title" value="LicenseManager" />
 				<attribute name="Specification-Version" value="${licensemanager.version}" />
 				<attribute name="Implementation-Version" value="${licensemanager.version}" />
-				<attribute name="Class-Path" value="${manifest.classpath.sources}" />
 			</manifest>
 			<zipfileset file="${module.licensemanager.basedir}/jar/META-INF/LICENSE.txt" prefix="META-INF" />
 			<zipfileset file="${module.licensemanager.basedir}/jar/META-INF/NOTICE.txt" prefix="META-INF" />

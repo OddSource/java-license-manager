@@ -1,5 +1,5 @@
 /*
- * TestConsoleRSAKeyPairGenerator.java from LicenseManager modified Saturday, June 2, 2012 07:42:56 CDT (-0500).
+ * TestConsoleRSAKeyPairGenerator.java from LicenseManager modified Sunday, September 2, 2012 13:11:53 CDT (-0500).
  *
  * Copyright 2010-2012 the original author or authors.
  *
@@ -539,9 +539,10 @@ public class TestConsoleRSAKeyPairGenerator
 	public void testCheckAndPromptToOverwriteFile07() throws IOException
 	{
 		File file = new File("testCheckAndPromptToOverwriteFile07");
+		file = file.getCanonicalFile();
 		FileUtils.writeStringToFile(file, "test string");
 
-		assertTrue("Setting the file readable flag to false should have succeeded.", file.setReadable(false));
+		assertTrue("Setting the file readable flag to false should have succeeded.", file.setReadable(false, false));
 		assertTrue("The file should still be writable.", file.canWrite());
 		assertFalse("The file should not be readable.", file.canRead());
 
@@ -565,9 +566,10 @@ public class TestConsoleRSAKeyPairGenerator
 	public void testCheckAndPromptToOverwriteFile08() throws IOException
 	{
 		File file = new File("testCheckAndPromptToOverwriteFile08");
+		file = file.getCanonicalFile();
 		FileUtils.writeStringToFile(file, "test string");
 
-		assertTrue("Setting the file readable flag to false should have succeeded.", file.setWritable(false));
+		assertTrue("Setting the file readable flag to false should have succeeded.", file.setWritable(false, false));
 		assertTrue("The file should still be readable.", file.canRead());
 		assertFalse("The file should not be writable.", file.canWrite());
 
@@ -2033,7 +2035,7 @@ public class TestConsoleRSAKeyPairGenerator
 
 		System.setSecurityManager(securityManager);
 
-		ConsoleRSAKeyPairGenerator.main(new String[] { "-help" });
+		ConsoleRSAKeyPairGenerator.main("-help");
 
 		System.setSecurityManager(null);
 	}
@@ -2060,7 +2062,7 @@ public class TestConsoleRSAKeyPairGenerator
 
 		System.setSecurityManager(securityManager);
 
-		ConsoleRSAKeyPairGenerator.main(new String[] { "-private" });
+		ConsoleRSAKeyPairGenerator.main("-private");
 
 		System.setSecurityManager(null);
 	}

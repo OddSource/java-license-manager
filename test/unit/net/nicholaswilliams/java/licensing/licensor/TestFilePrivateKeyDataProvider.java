@@ -1,5 +1,5 @@
 /*
- * TestFilePrivateKeyDataProvider.java from LicenseManager modified Friday, May 18, 2012 09:55:55 CDT (-0500).
+ * TestFilePrivateKeyDataProvider.java from LicenseManager modified Sunday, September 2, 2012 13:01:57 CDT (-0500).
  *
  * Copyright 2010-2012 the original author or authors.
  *
@@ -108,6 +108,7 @@ public class TestFilePrivateKeyDataProvider
 	{
 		final String fileName = "testGetEncryptedPrivateKeyData02.key";
 		File file = new File(fileName);
+		file = file.getCanonicalFile();
 
 		if(file.exists())
 			FileUtils.forceDelete(file);
@@ -118,7 +119,7 @@ public class TestFilePrivateKeyDataProvider
 
 		try
 		{
-			assertTrue("Setting the file to not-readable should have succeeded.", file.setReadable(false));
+			assertTrue("Setting the file to not-readable should have succeeded.", file.setReadable(false, false));
 			assertFalse("The file should not be readable.", file.canRead());
 			assertTrue("The file should still be writable.", file.canWrite());
 

@@ -1,5 +1,5 @@
 /*
- * ConsoleLicenseGenerator.java from LicenseManager modified Saturday, June 2, 2012 08:06:49 CDT (-0500).
+ * ConsoleLicenseGenerator.java from LicenseManager modified Sunday, September 2, 2012 12:12:01 CDT (-0500).
  *
  * Copyright 2010-2012 the original author or authors.
  *
@@ -530,9 +530,9 @@ public class ConsoleLicenseGenerator
 			Long expiration = map.get(name);
 
 			if(expiration == null || expiration <= 0L)
-				builder.withFeature(name);
+				builder.addFeature(name);
 			else
-				builder.withFeature(name, expiration);
+				builder.addFeature(name, expiration);
 		}
 
 		char[] password = this.getLicensePassword(properties);
@@ -818,7 +818,7 @@ public class ConsoleLicenseGenerator
 		this.device.exit(0);
 	}
 
-	public static void main(String[] arguments)
+	public static void main(String... arguments)
 	{
 		TextInterfaceDevice device = TextInterfaceDevice.CONSOLE;
 

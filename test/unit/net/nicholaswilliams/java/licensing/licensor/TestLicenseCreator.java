@@ -1,5 +1,5 @@
 /*
- * TestLicenseCreator.java from LicenseManager modified Monday, March 5, 2012 19:09:53 CST (-0600).
+ * TestLicenseCreator.java from LicenseManager modified Sunday, September 2, 2012 12:11:24 CDT (-0500).
  *
  * Copyright 2010-2012 the original author or authors.
  *
@@ -118,7 +118,7 @@ public class TestLicenseCreator
 		License license = new License.Builder().
 									withSubject("myLicense").
 									withNumberOfLicenses(22).
-									withFeature("newFeature").
+									addFeature("newFeature").
 									build();
 
 		SignedLicense signedLicense = this.creator.signLicense(license);
@@ -155,7 +155,7 @@ public class TestLicenseCreator
 		License license = new License.Builder().
 									withSubject("myLicense").
 									withNumberOfLicenses(22).
-									withFeature("newFeature").
+									addFeature("newFeature").
 									build();
 
 		SignedLicense signedLicense = this.creator.signLicense(license, TestLicenseCreator.licensePassword);
@@ -194,7 +194,7 @@ public class TestLicenseCreator
 		License license = new License.Builder().
 									withSubject("myLicense").
 									withNumberOfLicenses(22).
-									withFeature("newFeature").
+									addFeature("newFeature").
 									build();
 
 		byte[] signedLicenseData = this.creator.signAndSerializeLicense(license);
@@ -236,7 +236,7 @@ public class TestLicenseCreator
 		License license = new License.Builder().
 									withSubject("myLicense").
 									withNumberOfLicenses(22).
-									withFeature("newFeature").
+									addFeature("newFeature").
 									build();
 
 		byte[] signedLicenseData = this.creator.signAndSerializeLicense(license, TestLicenseCreator.licensePassword);

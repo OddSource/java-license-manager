@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
-  ~ ant-build.xml from LicenseManager modified Sunday, September 2, 2012 14:22:33 CDT (-0500).
+  ~ ant-build.xml from LicenseManager modified Sunday, September 2, 2012 14:25:44 CDT (-0500).
   ~
   ~ Copyright 2010-2012 the original author or authors.
   ~
@@ -24,9 +24,6 @@
 	<property environment="nwts.build.environment" />
 
 	<property file="ant-build.properties" />
-	<propertyregex property="licensemanager.version.without.build" override="true" input="${licensemanager.version}"
-				   regexp="(\d\.\d\.\d)(\.\d+)(.*)" replace="\1\2" />
-	<echo message="build=${licensemanager.version}, version=${licensemanager.version.without.build}" />
 
 	<taskdef resource="net/sf/antcontrib/antcontrib.properties">
 		<classpath>
@@ -34,6 +31,10 @@
 		</classpath>
 	</taskdef>
 
+	<propertyregex property="licensemanager.version.without.build" override="true" input="${licensemanager.version}"
+				   regexp="(\d\.\d\.\d)(\.\d+)(.*)" replace="\1\2" />
+	<echo message="build=${licensemanager.version}, version=${licensemanager.version.without.build}" />
+	
 	<!-- Compiler options -->
 
 	<property name="compiler.debug" value="on" />

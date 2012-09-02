@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
-  ~ ant-build.xml from LicenseManager modified Sunday, September 2, 2012 14:33:59 CDT (-0500).
+  ~ ant-build.xml from LicenseManager modified Sunday, September 2, 2012 14:34:58 CDT (-0500).
   ~
   ~ Copyright 2010-2012 the original author or authors.
   ~
@@ -132,11 +132,11 @@
 			<arg value="-version" />
 		</exec>
 		<propertyregex property="java.jvm.version" input="${java.jvm.version}" casesensitive="false" override="true"
-					   regexp="javac ([0-9a-b\.\_]+)" select="\1" />
+					   regexp="javac ([0-9a-b\.\_]+)" replace="\1" />
 		<echo message="Java compiler version is ${java.jvm.version}" />
 
 		<property name="licensemanager.version.without.build" value="licensemanager.version" />
-		<propertyregex property="licensemanager.version.without.build" override="true" input="${licensemanager.version}"
+		<propertyregex property="licensemanager.version.without.build" input="${licensemanager.version}" override="true"
 					   regexp="(\d\.\d\.\d)(\.\d+)(.*)" replace="\1\3" />
 		<echo message="build=${licensemanager.version}, version=${licensemanager.version.without.build}" />
 

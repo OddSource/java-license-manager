@@ -1,5 +1,5 @@
 /*
- * TestFilePrivateKeyDataProvider.java from LicenseManager modified Sunday, September 2, 2012 13:54:16 CDT (-0500).
+ * TestFilePrivateKeyDataProvider.java from LicenseManager modified Sunday, September 2, 2012 14:07:48 CDT (-0500).
  *
  * Copyright 2010-2012 the original author or authors.
  *
@@ -22,6 +22,7 @@ import net.nicholaswilliams.java.licensing.exception.KeyNotFoundException;
 import org.apache.commons.io.FileUtils;
 import org.junit.After;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import java.io.File;
@@ -104,6 +105,7 @@ public class TestFilePrivateKeyDataProvider
 	}
 
 	@Test
+	@Ignore("canRead()/canWrite() do not work on Win; setReadable()/setWritable() do not work on some Macs.")
 	public void testGetEncryptedPrivateKeyData02() throws IOException
 	{
 		final String fileName = "testGetEncryptedPrivateKeyData02.key";
@@ -120,7 +122,7 @@ public class TestFilePrivateKeyDataProvider
 		try
 		{
 			assertTrue("Setting the file to not-readable should have succeeded.", file.setReadable(false, false));
-			//assertFalse("The file should not be readable.", file.canRead());
+			assertFalse("The file should not be readable.", file.canRead());
 			assertTrue("The file should still be writable.", file.canWrite());
 
 			FilePrivateKeyDataProvider provider = new FilePrivateKeyDataProvider(file);

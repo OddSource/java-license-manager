@@ -1,5 +1,5 @@
 /*
- * TestDefaultLicenseValidator.java from LicenseManager modified Tuesday, February 21, 2012 10:56:34 CST (-0600).
+ * TestDefaultLicenseValidator.java from LicenseManager modified Sunday, September 2, 2012 12:11:23 CDT (-0500).
  *
  * Copyright 2010-2012 the original author or authors.
  *
@@ -61,8 +61,8 @@ public class TestDefaultLicenseValidator
 									withGoodAfterDate(2348907325000L).
 									withGoodBeforeDate(2348917325000L).
 									withNumberOfLicenses(57).
-									withFeature("nickFeature1").
-									withFeature("allisonFeature2").
+									addFeature("nickFeature1").
+									addFeature("allisonFeature2").
 									build();
 
 		assertEquals("The description is not correct.",
@@ -97,8 +97,8 @@ public class TestDefaultLicenseValidator
 									withGoodAfterDate(goodAfter).
 									withGoodBeforeDate(goodBefore).
 									withNumberOfLicenses(57).
-									withFeature("nickFeature1").
-									withFeature("allisonFeature2").
+									addFeature("nickFeature1").
+									addFeature("allisonFeature2").
 									build();
 
 		this.validator.validateLicense(license);
@@ -121,8 +121,8 @@ public class TestDefaultLicenseValidator
 									withGoodAfterDate(goodAfter).
 									withGoodBeforeDate(goodBefore).
 									withNumberOfLicenses(57).
-									withFeature("nickFeature1").
-									withFeature("allisonFeature2").
+									addFeature("nickFeature1").
+									addFeature("allisonFeature2").
 									build();
 
 		this.validator.validateLicense(license);
@@ -145,8 +145,8 @@ public class TestDefaultLicenseValidator
 									withGoodAfterDate(goodAfter).
 									withGoodBeforeDate(goodBefore).
 									withNumberOfLicenses(57).
-									withFeature("nickFeature1").
-									withFeature("allisonFeature2").
+									addFeature("nickFeature1").
+									addFeature("allisonFeature2").
 									build();
 
 		this.validator.validateLicense(license);
@@ -169,8 +169,8 @@ public class TestDefaultLicenseValidator
 									withGoodAfterDate(goodAfter).
 									withGoodBeforeDate(goodBefore).
 									withNumberOfLicenses(57).
-									withFeature("nickFeature1").
-									withFeature("allisonFeature2").
+									addFeature("nickFeature1").
+									addFeature("allisonFeature2").
 									build();
 
 		this.validator.validateLicense(license);

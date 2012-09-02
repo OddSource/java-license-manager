@@ -1,5 +1,5 @@
 /*
- * TestConsoleLicenseGenerator.java from LicenseManager modified Saturday, June 2, 2012 08:07:17 CDT (-0500).
+ * TestConsoleLicenseGenerator.java from LicenseManager modified Sunday, September 2, 2012 13:11:53 CDT (-0500).
  *
  * Copyright 2010-2012 the original author or authors.
  *
@@ -365,12 +365,13 @@ public class TestConsoleLicenseGenerator
 
 		String fileName = "testInitializeLicenseCreator02.properties";
 		File file = new File(fileName);
+		file = file.getCanonicalFile();
 		if(file.exists())
 			FileUtils.forceDelete(file);
 
 		FileUtils.writeStringToFile(file, "test");
 
-		assertTrue("Setting the file to not readable should have returned true.", file.setReadable(false));
+		assertTrue("Setting the file to not readable should have returned true.", file.setReadable(false, false));
 		assertTrue("The file should be writable.", file.canWrite());
 		assertFalse("The file should not be readable.", file.canRead());
 
@@ -851,12 +852,13 @@ public class TestConsoleLicenseGenerator
 
 		String fileName = "testGenerateLicense02.properties";
 		File file = new File(fileName);
+		file = file.getCanonicalFile();
 		if(file.exists())
 			FileUtils.forceDelete(file);
 
 		FileUtils.writeStringToFile(file, "test");
 
-		assertTrue("Setting the file to not readable should have returned true.", file.setReadable(false));
+		assertTrue("Setting the file to not readable should have returned true.", file.setReadable(false, false));
 		assertTrue("The file should be writable.", file.canWrite());
 		assertFalse("The file should not be readable.", file.canRead());
 
@@ -2126,7 +2128,7 @@ public class TestConsoleLicenseGenerator
 
 		System.setSecurityManager(securityManager);
 
-		ConsoleLicenseGenerator.main(new String[] { "-help" });
+		ConsoleLicenseGenerator.main("-help");
 
 		System.setSecurityManager(null);
 	}
@@ -2153,7 +2155,7 @@ public class TestConsoleLicenseGenerator
 
 		System.setSecurityManager(securityManager);
 
-		ConsoleLicenseGenerator.main(new String[] { "-badOption" });
+		ConsoleLicenseGenerator.main("-badOption");
 
 		System.setSecurityManager(null);
 	}

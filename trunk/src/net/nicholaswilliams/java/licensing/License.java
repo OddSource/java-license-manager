@@ -1,5 +1,5 @@
 /*
- * License.java from LicenseManager modified Tuesday, May 29, 2012 19:37:31 CDT (-0500).
+ * License.java from LicenseManager modified Sunday, September 2, 2012 13:11:53 CDT (-0500).
  *
  * Copyright 2010-2012 the original author or authors.
  *
@@ -496,16 +496,18 @@ public final class License implements Serializable, Cloneable
 	@Override
 	public final String toString()
 	{
-		return new StringBuilder().append('[').
-				append(this.productKey == null ? "" : this.productKey).append("][").
-				append(this.holder == null ? "" : this.holder).append("][").
-				append(this.issuer == null ? "" : this.issuer).append("][").
-				append(this.subject == null ? "" : this.subject).append("][").
-				append(this.issueDate).append("][").
-				append(this.goodAfterDate).append("][").
-				append(this.goodBeforeDate).append("][").
-				append(this.numberOfLicenses).append(']').
-				append(this.features).toString();
+		StringBuilder builder = new StringBuilder();
+		builder.append('[')
+			   .append(this.productKey == null ? "" : this.productKey).append("][")
+			   .append(this.holder == null ? "" : this.holder).append("][")
+			   .append(this.issuer == null ? "" : this.issuer).append("][")
+			   .append(this.subject == null ? "" : this.subject).append("][")
+			   .append(this.issueDate).append("][")
+			   .append(this.goodAfterDate).append("][")
+			   .append(this.goodBeforeDate).append("][")
+			   .append(this.numberOfLicenses).append(']')
+			   .append(this.features).toString();
+		return builder.toString();
 	}
 
 	/**
@@ -528,7 +530,7 @@ public final class License implements Serializable, Cloneable
 				withNumberOfLicenses(this.numberOfLicenses);
 
 		for(License.Feature feature : this.features)
-			builder.withFeature(feature.clone());
+			builder.addFeature(feature.clone());
 
 		return builder.build();
 	}
@@ -805,10 +807,16 @@ public final class License implements Serializable, Cloneable
 		 * @param featureName The feature to add to this license
 		 * @return the builder instance.
 		 */
-		public Builder withFeature(String featureName)
+		public Builder addFeature(String featureName)
 		{
 			this.features.add(new License.Feature(featureName));
 			return this;
+		}
+		@Deprecated
+		@SuppressWarnings("unused")
+		public Builder withFeature(String featureName)
+		{
+			return this.addFeature(featureName);
 		}
 
 		/**
@@ -818,10 +826,16 @@ public final class License implements Serializable, Cloneable
 		 * @param goodBeforeDate The expiration date for this license
 		 * @return the builder instance.
 		 */
-		public Builder withFeature(String featureName, long goodBeforeDate)
+		public Builder addFeature(String featureName, long goodBeforeDate)
 		{
 			this.features.add(new License.Feature(featureName, goodBeforeDate));
 			return this;
+		}
+		@Deprecated
+		@SuppressWarnings("unused")
+		public Builder withFeature(String featureName, long goodBeforeDate)
+		{
+			return this.addFeature(featureName, goodBeforeDate);
 		}
 
 		/**
@@ -830,10 +844,16 @@ public final class License implements Serializable, Cloneable
 		 * @param feature The feature object to add to this license
 		 * @return the builder instance.
 		 */
-		public Builder withFeature(License.Feature feature)
+		public Builder addFeature(License.Feature feature)
 		{
 			this.features.add(feature);
 			return this;
+		}
+		@Deprecated
+		@SuppressWarnings("unused")
+		public Builder withFeature(License.Feature feature)
+		{
+			return this.addFeature(feature);
 		}
 
 		/**

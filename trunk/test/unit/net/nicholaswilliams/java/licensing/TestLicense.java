@@ -1,5 +1,5 @@
 /*
- * TestLicense.java from LicenseManager modified Monday, May 21, 2012 21:23:10 CDT (-0500).
+ * TestLicense.java from LicenseManager modified Sunday, September 2, 2012 12:11:24 CDT (-0500).
  *
  * Copyright 2010-2012 the original author or authors.
  *
@@ -49,8 +49,8 @@ public class TestLicense
 								withGoodAfterDate(2348907325000L).
 								withGoodBeforeDate(2348917325000L).
 								withNumberOfLicenses(57).
-								withFeature("nickFeature1").
-								withFeature("allisonFeature2", 2348917325000L).
+								addFeature("nickFeature1").
+								addFeature("allisonFeature2", 2348917325000L).
 								build();
 	}
 
@@ -244,9 +244,9 @@ public class TestLicense
 								withGoodAfterDate(2348907325000L).
 								withGoodBeforeDate(2348917325000L).
 								withNumberOfLicenses(57).
-								withFeature("goodFeature1").
-								withFeature("goodFeature2", 2348917325000L).
-								withFeature("expiredFeature3", 1L).
+								addFeature("goodFeature1").
+								addFeature("goodFeature2", 2348917325000L).
+								addFeature("expiredFeature3", 1L).
 								build();
 
 		assertTrue("Feature 1 is missing now.", this.license.hasLicenseForFeature("goodFeature1"));
@@ -339,9 +339,9 @@ public class TestLicense
 								withGoodAfterDate(2348907325000L).
 								withGoodBeforeDate(2348917325000L).
 								withNumberOfLicenses(57).
-								withFeature("goodFeature1").
-								withFeature("goodFeature2", 2348917325000L).
-								withFeature("expiredFeature3", 1L).
+								addFeature("goodFeature1").
+								addFeature("goodFeature2", 2348917325000L).
+								addFeature("expiredFeature3", 1L).
 								build();
 
 		assertTrue("Feature 1 is missing now.",
@@ -402,8 +402,8 @@ public class TestLicense
 									withGoodAfterDate(2348907325000L).
 									withGoodBeforeDate(2348917325000L).
 									withNumberOfLicenses(57).
-									withFeature("nickFeature1").
-									withFeature("allisonFeature2", 2348917325000L).
+									addFeature("nickFeature1").
+									addFeature("allisonFeature2", 2348917325000L).
 									build();
 
 		assertNotSame("The objects should not be the same.", this.license, duplicate);
@@ -423,8 +423,8 @@ public class TestLicense
 									withGoodAfterDate(2348907325000L).
 									withGoodBeforeDate(2348917325000L).
 									withNumberOfLicenses(57).
-									withFeature("allisonFeature2", 2348917325000L).
-									withFeature("nickFeature1").
+									addFeature("allisonFeature2", 2348917325000L).
+									addFeature("nickFeature1").
 									build();
 
 		assertNotSame("The objects should not be the same.", this.license, duplicate);
@@ -444,8 +444,8 @@ public class TestLicense
 									withGoodAfterDate(2348907325000L).
 									withGoodBeforeDate(2348917325000L).
 									withNumberOfLicenses(57).
-									withFeature("allisonFeature2", 2348917325000L).
-									withFeature("nickFeature1").
+									addFeature("allisonFeature2", 2348917325000L).
+									addFeature("nickFeature1").
 									build();
 
 		assertNotSame("The objects should not be the same.", this.license, duplicate);
@@ -465,8 +465,8 @@ public class TestLicense
 									withGoodAfterDate(2348907325000L).
 									withGoodBeforeDate(2348917325001L).
 									withNumberOfLicenses(57).
-									withFeature("allisonFeature2", 2348917325000L).
-									withFeature("nickFeature1").
+									addFeature("allisonFeature2", 2348917325000L).
+									addFeature("nickFeature1").
 									build();
 
 		assertNotSame("The objects should not be the same.", this.license, duplicate);
@@ -486,8 +486,8 @@ public class TestLicense
 									withGoodAfterDate(2348907325000L).
 									withGoodBeforeDate(2348917325000L).
 									withNumberOfLicenses(56).
-									withFeature("allisonFeature2", 2348917325000L).
-									withFeature("nickFeature1").
+									addFeature("allisonFeature2", 2348917325000L).
+									addFeature("nickFeature1").
 									build();
 
 		assertNotSame("The objects should not be the same.", this.license, duplicate);
@@ -507,8 +507,8 @@ public class TestLicense
 									withGoodAfterDate(2348907324999L).
 									withGoodBeforeDate(2348917325000L).
 									withNumberOfLicenses(57).
-									withFeature("allisonFeature2", 2348917325000L).
-									withFeature("nickFeature1").
+									addFeature("allisonFeature2", 2348917325000L).
+									addFeature("nickFeature1").
 									build();
 
 		assertNotSame("The objects should not be the same.", this.license, duplicate);
@@ -528,8 +528,8 @@ public class TestLicense
 									withGoodAfterDate(2348907325000L).
 									withGoodBeforeDate(2348917325000L).
 									withNumberOfLicenses(57).
-									withFeature("allisonFeature2", 2348917325000L).
-									withFeature("nickFeature1").
+									addFeature("allisonFeature2", 2348917325000L).
+									addFeature("nickFeature1").
 									build();
 
 		assertNotSame("The objects should not be the same.", this.license, duplicate);
@@ -549,8 +549,8 @@ public class TestLicense
 								withGoodAfterDate(2348907325000L).
 								withGoodBeforeDate(2348917325000L).
 								withNumberOfLicenses(57).
-								withFeature("allisonFeature2", 2348917325000L).
-								withFeature("nickFeature1").
+								addFeature("allisonFeature2", 2348917325000L).
+								addFeature("nickFeature1").
 								build();
 
 		assertNotSame("The objects should not be the same.", this.license, duplicate);
@@ -570,8 +570,8 @@ public class TestLicense
 									withGoodAfterDate(2348907325000L).
 									withGoodBeforeDate(2348917325000L).
 									withNumberOfLicenses(57).
-									withFeature("allisonFeature2", 2348917325000L).
-									withFeature("nickFeature1").
+									addFeature("allisonFeature2", 2348917325000L).
+									addFeature("nickFeature1").
 									build();
 
 		assertNotSame("The objects should not be the same.", this.license, duplicate);
@@ -591,8 +591,8 @@ public class TestLicense
 									withGoodAfterDate(2348907325000L).
 									withGoodBeforeDate(2348917325000L).
 									withNumberOfLicenses(57).
-									withFeature("allisonFeature3").
-									withFeature("nickFeature1").
+									addFeature("allisonFeature3").
+									addFeature("nickFeature1").
 									build();
 
 		assertNotSame("The objects should not be the same.", this.license, duplicate);
@@ -612,8 +612,8 @@ public class TestLicense
 									withGoodAfterDate(2348907325000L).
 									withGoodBeforeDate(2348917325000L).
 									withNumberOfLicenses(57).
-									withFeature("allisonFeature2").
-									withFeature("nickFeature4").
+									addFeature("allisonFeature2").
+									addFeature("nickFeature4").
 									build();
 
 		assertNotSame("The objects should not be the same.", this.license, duplicate);
@@ -633,8 +633,8 @@ public class TestLicense
 									withGoodAfterDate(2348907325000L).
 									withGoodBeforeDate(2348917325000L).
 									withNumberOfLicenses(57).
-									withFeature("nickFeature1").
-									withFeature("allisonFeature2", 2348917325000L).
+									addFeature("nickFeature1").
+									addFeature("allisonFeature2", 2348917325000L).
 									build();
 
 		assertNotSame("The objects should not be the same.", this.license, duplicate);

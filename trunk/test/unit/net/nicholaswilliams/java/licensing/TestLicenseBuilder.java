@@ -1,5 +1,5 @@
 /*
- * TestLicenseBuilder.java from LicenseManager modified Tuesday, February 21, 2012 10:56:33 CST (-0600).
+ * TestLicenseBuilder.java from LicenseManager modified Sunday, September 2, 2012 12:11:24 CDT (-0500).
  *
  * Copyright 2010-2012 the original author or authors.
  *
@@ -71,8 +71,8 @@ public class TestLicenseBuilder
 									withGoodAfterDate(1199145600000L).
 									withGoodBeforeDate(1924991999000L).
 									withNumberOfLicenses(15).
-									withFeature("FEATURE1").
-									withFeature("FEATURE3").
+									addFeature("FEATURE1").
+									addFeature("FEATURE3").
 									build();
 
 		assertEquals("The product key is not correct.", "5565-1039-AF89-GGX7-TN31-14AL", license.getProductKey());
@@ -98,7 +98,7 @@ public class TestLicenseBuilder
 									withGoodAfterDate(1136073600000L).
 									withGoodBeforeDate(1230767999000L).
 									withNumberOfLicenses(5).
-									withFeature("FEATURE2").
+									addFeature("FEATURE2").
 									build();
 
 		assertEquals("The product key is not correct.", "5655-9301-98AF-X7GE-RTV5-1092", license.getProductKey());

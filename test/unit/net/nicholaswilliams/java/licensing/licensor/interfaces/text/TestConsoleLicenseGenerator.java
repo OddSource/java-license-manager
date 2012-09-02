@@ -1,5 +1,5 @@
 /*
- * TestConsoleLicenseGenerator.java from LicenseManager modified Sunday, September 2, 2012 13:11:53 CDT (-0500).
+ * TestConsoleLicenseGenerator.java from LicenseManager modified Sunday, September 2, 2012 14:07:48 CDT (-0500).
  *
  * Copyright 2010-2012 the original author or authors.
  *
@@ -48,6 +48,7 @@ import org.easymock.Capture;
 import org.easymock.EasyMock;
 import org.junit.After;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import java.io.ByteArrayOutputStream;
@@ -359,6 +360,7 @@ public class TestConsoleLicenseGenerator
 	}
 
 	@Test
+	@Ignore("canRead()/canWrite() do not work on Win; setReadable()/setWritable() do not work on some Macs.")
 	public void testInitializeLicenseCreator02() throws Exception
 	{
 		this.resetLicenseCreator();
@@ -846,6 +848,7 @@ public class TestConsoleLicenseGenerator
 	}
 
 	@Test
+	@Ignore("canRead()/canWrite() do not work on Win; setReadable()/setWritable() do not work on some Macs.")
 	public void testGenerateLicense02() throws Exception
 	{
 		this.resetLicenseCreator();

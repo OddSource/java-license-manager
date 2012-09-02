@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
-  ~ ant-build.xml from LicenseManager modified Sunday, September 2, 2012 14:25:44 CDT (-0500).
+  ~ ant-build.xml from LicenseManager modified Sunday, September 2, 2012 14:28:27 CDT (-0500).
   ~
   ~ Copyright 2010-2012 the original author or authors.
   ~
@@ -32,9 +32,9 @@
 	</taskdef>
 
 	<propertyregex property="licensemanager.version.without.build" override="true" input="${licensemanager.version}"
-				   regexp="(\d\.\d\.\d)(\.\d+)(.*)" replace="\1\2" />
+				   regexp="(\d\.\d\.\d)(\.\d+)(.*)" replace="\1\3" />
 	<echo message="build=${licensemanager.version}, version=${licensemanager.version.without.build}" />
-	
+
 	<!-- Compiler options -->
 
 	<property name="compiler.debug" value="on" />
@@ -70,13 +70,13 @@
 	<property name="licensemanager.dir.artifactOutput" value="${module.licensemanager.basedir}/out/artifacts" />
 	<property name="licensemanager.dir.javaDoc" value="${module.licensemanager.basedir}/out/javadoc" />
 
-	<property name="jar.name.core" value="net.nicholaswilliams.java.licensing-${licensemanager.version}.jar" />
-	<property name="jar.name.licensor" value="net.nicholaswilliams.java.licensing.licensor-${licensemanager.version}.jar" />
-	<property name="jar.name.samples" value="net.nicholaswilliams.java.licensing.samples-${licensemanager.version}.jar" />
-	<property name="jar.name.sources" value="net.nicholaswilliams.java.licensing-sources-${licensemanager.version}.jar" />
-	<property name="jar.name.javadoc" value="net.nicholaswilliams.java.licensing-javadoc-${licensemanager.version}.jar" />
+	<property name="jar.name.core" value="net.nicholaswilliams.java.licensing-${licensemanager.version.without.build}.jar" />
+	<property name="jar.name.licensor" value="net.nicholaswilliams.java.licensing.licensor-${licensemanager.version.without.build}.jar" />
+	<property name="jar.name.samples" value="net.nicholaswilliams.java.licensing.samples-${licensemanager.version.without.build}.jar" />
+	<property name="jar.name.sources" value="net.nicholaswilliams.java.licensing-sources-${licensemanager.version.without.build}.jar" />
+	<property name="jar.name.javadoc" value="net.nicholaswilliams.java.licensing-javadoc-${licensemanager.version.without.build}.jar" />
 
-	<property name="zip.name.all" value="net.nicholaswilliams.java.licensing-${licensemanager.version}.zip" />
+	<property name="zip.name.all" value="net.nicholaswilliams.java.licensing-${licensemanager.version.without.build}.zip" />
 
 	<path id="licensemanager.module.bootClasspath">
 		<!-- Paths to be included in compilation boot classpath -->
@@ -189,10 +189,10 @@
 				 version="true"
 				 use="true"
 				 author="true"
-				 windowtitle="LicenseManager ${licensemanager.version}"
+				 windowtitle="LicenseManager ${licensemanager.version.without.build}"
 				 breakiterator="yes"
 				 failonerror="true">
-			<doctitle><![CDATA[<h2>LicenseManager ${licensemanager.version} API Documentation</h2>]]></doctitle>
+			<doctitle><![CDATA[<h2>LicenseManager ${licensemanager.version.without.build} API Documentation</h2>]]></doctitle>
 			<bottom>
 				<![CDATA[<i>Copyright &#169; 2010-2012 Nicholas Williams. All Rights Reserved. Licensed Under the
 				<a href="http://www.apache.org/licenses/LICENSE-2.0">Apache License version 2.0</a>.</i>]]>

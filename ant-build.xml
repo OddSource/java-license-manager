@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
-  ~ ant-build.xml from LicenseManager modified Wednesday, September 5, 2012 11:31:59 CDT (-0500).
+  ~ ant-build.xml from LicenseManager modified Wednesday, September 5, 2012 11:46:21 CDT (-0500).
   ~
   ~ Copyright 2010-2012 the original author or authors.
   ~
@@ -146,12 +146,9 @@
 
 		<property name="zip.name.all" value="net.nicholaswilliams.java.licensing-${licensemanager.version.without.build}.zip" />
 
-		<property name="location.distribute" location="${directory.distribute}" />
-
 		<echo message="Running JRE version is ${ant.java.version}" />
 		<echo message="Specified JDK version is ${java.jvm.version}" />
 		<echo message="Current build number is ${licensemanager.version}, version number is ${licensemanager.version.without.build}" />
-		<echo message="Distribution directory is ${directory.distribute}, location is ${location.distribute}" />
 	</target>
 
 	<target name="compile.module.all"
@@ -398,12 +395,6 @@
 				<include name="ant-build.xml" />
 			</fileset>
 		</zip>
-		<copy todir="${directory.distribute}" failonerror="true" preservelastmodified="true" verbose="true">
-			<fileset dir="${licensemanager.dir.artifactOutput}">
-				<include name="*.jar" />
-				<include name="*.zip" />
-			</fileset>
-		</copy>
 	</target>
 
 	<target name="all" depends="compile.module.all, test.module.all, package.artifact.all" description="Build and package all" />

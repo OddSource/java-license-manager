@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
-  ~ ant-build.xml from LicenseManager modified Wednesday, September 5, 2012 11:46:21 CDT (-0500).
+  ~ ant-build.xml from LicenseManager modified Wednesday, September 5, 2012 11:55:11 CDT (-0500).
   ~
   ~ Copyright 2010-2012 the original author or authors.
   ~
@@ -395,6 +395,8 @@
 				<include name="ant-build.xml" />
 			</fileset>
 		</zip>
+		<checksum file="${licensemanager.dir.artifactOutput}/${zip.name.all}" algorithm="md5" />
+		<checksum file="${licensemanager.dir.artifactOutput}/${zip.name.all}" algorithm="sha1" />
 	</target>
 
 	<target name="all" depends="compile.module.all, test.module.all, package.artifact.all" description="Build and package all" />

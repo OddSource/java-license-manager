@@ -1,5 +1,5 @@
 /*
- * License.java from LicenseManager modified Sunday, September 2, 2012 13:11:53 CDT (-0500).
+ * License.java from LicenseManager modified Wednesday, September 5, 2012 10:52:21 CDT (-0500).
  *
  * Copyright 2010-2012 the original author or authors.
  *
@@ -790,7 +790,7 @@ public final class License implements Serializable, Cloneable
 		}
 
 		/**
-		 * The number of licenses/seats this license is good for.
+		 * Sets the number of licenses/seats/users this license is good for.
 		 *
 		 * @param numberOfLicenses The number of licenses this license is good for
 		 * @return the builder instance.

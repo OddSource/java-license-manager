@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
-  ~ ant-build.xml from LicenseManager modified Sunday, September 2, 2012 14:52:58 CDT (-0500).
+  ~ ant-build.xml from LicenseManager modified Wednesday, September 5, 2012 11:31:59 CDT (-0500).
   ~
   ~ Copyright 2010-2012 the original author or authors.
   ~
@@ -133,12 +133,10 @@
 		</exec>
 		<propertyregex property="java.jvm.version" input="${java.jvm.version}" casesensitive="false" override="true"
 					   regexp="javac ([0-9a-b\.\_]+)" replace="\1" />
-		<echo message="Java compiler version is ${java.jvm.version}" />
 
 		<property name="licensemanager.version.without.build" value="licensemanager.version" />
 		<propertyregex property="licensemanager.version.without.build" input="${licensemanager.version}" override="true"
 					   regexp="(\d\.\d\.\d)(\.\d+)(.*)" replace="\1\3" />
-		<echo message="build=${licensemanager.version}, version=${licensemanager.version.without.build}" />
 
 		<property name="jar.name.core" value="net.nicholaswilliams.java.licensing-${licensemanager.version.without.build}.jar" />
 		<property name="jar.name.licensor" value="net.nicholaswilliams.java.licensing.licensor-${licensemanager.version.without.build}.jar" />
@@ -147,6 +145,13 @@
 		<property name="jar.name.javadoc" value="net.nicholaswilliams.java.licensing-javadoc-${licensemanager.version.without.build}.jar" />
 
 		<property name="zip.name.all" value="net.nicholaswilliams.java.licensing-${licensemanager.version.without.build}.zip" />
+
+		<property name="location.distribute" location="${directory.distribute}" />
+
+		<echo message="Running JRE version is ${ant.java.version}" />
+		<echo message="Specified JDK version is ${java.jvm.version}" />
+		<echo message="Current build number is ${licensemanager.version}, version number is ${licensemanager.version.without.build}" />
+		<echo message="Distribution directory is ${directory.distribute}, location is ${location.distribute}" />
 	</target>
 
 	<target name="compile.module.all"
@@ -393,7 +398,7 @@
 				<include name="ant-build.xml" />
 			</fileset>
 		</zip>
-		<copy todir="${directory.distribute}" failonerror="true">
+		<copy todir="${directory.distribute}" failonerror="true" preservelastmodified="true" verbose="true">
 			<fileset dir="${licensemanager.dir.artifactOutput}">
 				<include name="*.jar" />
 				<include name="*.zip" />

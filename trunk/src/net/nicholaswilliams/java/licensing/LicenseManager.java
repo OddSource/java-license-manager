@@ -1,5 +1,5 @@
 /*
- * LicenseManager.java from LicenseManager modified Monday, June 25, 2012 22:36:52 CDT (-0500).
+ * LicenseManager.java from LicenseManager modified Friday, September 21, 2012 17:45:44 CDT (-0500).
  *
  * Copyright 2010-2012 the original author or authors.
  *
@@ -66,7 +66,7 @@ import java.util.Hashtable;
  */
 public final class LicenseManager
 {
-	private static final LicenseManager instance = new LicenseManager();
+	private static LicenseManager instance = null;
 
 	private final PublicKeyDataProvider publicKeyDataProvider;
 
@@ -87,11 +87,11 @@ public final class LicenseManager
 		if(LicenseManagerProperties.getLicenseProvider() == null)
 			throw new IllegalArgumentException("Parameter licenseProvider must not be null.");
 
-		if(LicenseManagerProperties.getPublicKeyPasswordProvider() == null)
-			throw new IllegalArgumentException("Parameter publicKeyPasswordProvider must not be null.");
-
 		if(LicenseManagerProperties.getPublicKeyDataProvider() == null)
 			throw new IllegalArgumentException("Parameter publicKeyDataProvider must not be null.");
+
+		if(LicenseManagerProperties.getPublicKeyPasswordProvider() == null)
+			throw new IllegalArgumentException("Parameter publicKeyPasswordProvider must not be null.");
 
 		// install the security manager
 		try
@@ -124,8 +124,13 @@ public final class LicenseManager
 	 * @throws InsecureEnvironmentException if the {@link LicenseSecurityManager} cannot be instantiated
 	 * @see LicenseSecurityManager for more information on the security features that protect the license manager
 	 */
-	public static LicenseManager getInstance()
+	public static synchronized LicenseManager getInstance()
 	{
+		if(LicenseManager.instance == null)
+		{
+			LicenseManager.instance = new LicenseManager();
+		}
+
 		return LicenseManager.instance;
 	}
 

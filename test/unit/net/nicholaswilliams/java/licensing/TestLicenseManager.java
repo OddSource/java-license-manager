@@ -1,5 +1,5 @@
 /*
- * TestLicenseManager.java from LicenseManager modified Friday, September 21, 2012 17:46:55 CDT (-0500).
+ * TestLicenseManager.java from LicenseManager modified Friday, September 21, 2012 17:57:32 CDT (-0500).
  *
  * Copyright 2010-2012 the original author or authors.
  *
@@ -135,6 +135,19 @@ public class TestLicenseManager
 	public void tearDown()
 	{
 		TestLicenseManager.control.verify();
+	}
+
+	@Test
+	public void testGetLicenseIllegalArgument()
+	{
+		TestLicenseManager.control.replay();
+
+		try
+		{
+			this.manager.getLicense(null);
+			fail("Expected java.lang.IllegalArgumentException, got no exception.");
+		}
+		catch(IllegalArgumentException ignore) { }
 	}
 
 	@Test

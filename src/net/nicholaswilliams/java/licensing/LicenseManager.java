@@ -1,5 +1,5 @@
 /*
- * LicenseManager.java from LicenseManager modified Friday, September 21, 2012 17:45:44 CDT (-0500).
+ * LicenseManager.java from LicenseManager modified Friday, September 21, 2012 17:58:29 CDT (-0500).
  *
  * Copyright 2010-2012 the original author or authors.
  *
@@ -369,9 +369,11 @@ public final class LicenseManager
 
 		long time = System.currentTimeMillis();
 
+		LicenseCacheEntry entry;
+
 		synchronized(this.licenseCache)
 		{
-			LicenseCacheEntry entry = this.licenseCache.get(context);
+			entry = this.licenseCache.get(context);
 			
 			if(entry != null && entry.license != null)
 			{
@@ -398,9 +400,9 @@ public final class LicenseManager
 				
 				this.licenseCache.put(context, entry);
 			}
-
-			return entry.license;
 		}
+
+		return entry.license;
 	}
 
 	/**

@@ -1,5 +1,5 @@
 /*
- * TestLicenseManager.java from LicenseManager modified Sunday, September 2, 2012 12:26:05 CDT (-0500).
+ * TestLicenseManager.java from LicenseManager modified Friday, September 21, 2012 17:46:55 CDT (-0500).
  *
  * Copyright 2010-2012 the original author or authors.
  *
@@ -76,9 +76,32 @@ public class TestLicenseManager
 		TestLicenseManager.keyDataProvider = TestLicenseManager.control.createMock(PublicKeyDataProvider.class);
 		TestLicenseManager.licenseValidator = TestLicenseManager.control.createMock(LicenseValidator.class);
 
-		LicenseManagerProperties.setPublicKeyDataProvider(TestLicenseManager.keyDataProvider);
-		LicenseManagerProperties.setPublicKeyPasswordProvider(TestLicenseManager.publicKeyPasswordProvider);
+		try
+		{
+			LicenseManager.getInstance();
+			fail("Expected java.lang.IllegalArgumentException, got no exception.");
+		}
+		catch(IllegalArgumentException ignore) { }
+
 		LicenseManagerProperties.setLicenseProvider(TestLicenseManager.licenseProvider);
+
+		try
+		{
+			LicenseManager.getInstance();
+			fail("Expected java.lang.IllegalArgumentException, got no exception.");
+		}
+		catch(IllegalArgumentException ignore) { }
+
+		LicenseManagerProperties.setPublicKeyDataProvider(TestLicenseManager.keyDataProvider);
+
+		try
+		{
+			LicenseManager.getInstance();
+			fail("Expected java.lang.IllegalArgumentException, got no exception.");
+		}
+		catch(IllegalArgumentException ignore) { }
+
+		LicenseManagerProperties.setPublicKeyPasswordProvider(TestLicenseManager.publicKeyPasswordProvider);
 		LicenseManagerProperties.setLicensePasswordProvider(TestLicenseManager.licensePasswordProvider);
 		LicenseManagerProperties.setLicenseValidator(TestLicenseManager.licenseValidator);
 		LicenseManagerProperties.setCacheTimeInMinutes(0);

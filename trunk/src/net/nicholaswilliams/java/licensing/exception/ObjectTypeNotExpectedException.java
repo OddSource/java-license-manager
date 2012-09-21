@@ -1,5 +1,5 @@
 /*
- * ObjectTypeNotExpectedException.java from LicenseManager modified Thursday, May 17, 2012 20:12:41 CDT (-0500).
+ * ObjectTypeNotExpectedException.java from LicenseManager modified Friday, September 21, 2012 07:37:45 CDT (-0500).
  *
  * Copyright 2010-2012 the original author or authors.
  *
@@ -28,6 +28,8 @@ package net.nicholaswilliams.java.licensing.exception;
 @SuppressWarnings("unused")
 public class ObjectTypeNotExpectedException extends ObjectDeserializationException
 {
+	private static final long serialVersionUID = 1L;
+
 	public ObjectTypeNotExpectedException()
 	{
 		super("The type of object read did not match the type expected.");

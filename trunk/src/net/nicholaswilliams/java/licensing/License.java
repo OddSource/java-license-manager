@@ -1,5 +1,5 @@
 /*
- * License.java from LicenseManager modified Wednesday, September 5, 2012 10:52:21 CDT (-0500).
+ * License.java from LicenseManager modified Friday, September 21, 2012 07:37:45 CDT (-0500).
  *
  * Copyright 2010-2012 the original author or authors.
  *
@@ -551,6 +551,8 @@ public final class License implements Serializable, Cloneable
 	 */
 	public static final class Feature implements Serializable, FeatureObject
 	{
+		private static final long serialVersionUID = 1L;
+
 		private final String name;
 
 		private final long goodBeforeDate;

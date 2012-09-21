@@ -1,5 +1,5 @@
 /*
- * FailedToDecryptException.java from LicenseManager modified Tuesday, February 21, 2012 10:56:33 CST (-0600).
+ * FailedToDecryptException.java from LicenseManager modified Friday, September 21, 2012 07:37:45 CDT (-0500).
  *
  * Copyright 2010-2012 the original author or authors.
  *
@@ -30,6 +30,8 @@ package net.nicholaswilliams.java.licensing.exception;
 @SuppressWarnings("unused")
 public class FailedToDecryptException extends RuntimeException
 {
+	private static final long serialVersionUID = 1L;
+
 	public FailedToDecryptException()
 	{
 		super("Failed to decrypt the data. Either the password was incorrect or the data was corrupt.");

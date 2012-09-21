@@ -1,6 +1,55 @@
+Licensing
+---------
 NWTS LicenseManager
 Copyright (c) 2010-2012 Nicholas Williams
 Licensed under the Apache License version 2.0 (see LICENSE.txt)
 
 This product includes software developed by
 The Apache Software Foundation (http://www.apache.org/).
+
+
+Cryptographic Software Notice
+-----------------------------
+
+This distribution may include software that has been designed for use
+with cryptographic software. The country in which you currently reside
+may have restrictions on the import, possession, use, and/or re-export
+to another country, of encryption software. BEFORE using any encryption
+software, please check your country's laws, regulations and policies
+concerning the import, possession, or use, and re-export of encryption
+software, to see if this is permitted. See <http://www.wassenaar.org/>
+for more information.
+
+The U.S. Government Department of Commerce, Bureau of Industry and
+Security (BIS), has classified this software as Export Commodity
+Control Number (ECCN) 5D002.c.1, which includes information security
+software using or performing cryptographic functions with symmetric and
+asymmetric algorithms (5A002.a.1.a and 5A002.a.1.b, respectively).
+The form and manner of this NWTS Java Code distribution makes it
+eligible for export under the License Exception ENC Technology Software
+Unrestricted (TSU) exception (see the BIS Export Administration
+Regulations, Section 740.13) for both object code and source code.
+
+The following provides more details on the included software that
+may be subject to export controls on cryptographic software:
+
+    NWTS License Manager interfaces with the
+    Java(TM) Cryptography Architecture (JCA) API to provide:
+
+        o Shared key-based encryption and decryption
+          of licensing components
+
+        o Key pair-based signature and verification
+          of licensing data
+
+    NWTS License Manager does not include any implementation of JCA.
+
+
+Contact
+-------
+
+    o For general information visit the main project site at
+      http://java.nicholaswilliams.net/LicenseManager
+
+    o For help and bug reports visit the issue tracker at
+      http://issues.java.nicholaswilliams.net/issues/LICEN

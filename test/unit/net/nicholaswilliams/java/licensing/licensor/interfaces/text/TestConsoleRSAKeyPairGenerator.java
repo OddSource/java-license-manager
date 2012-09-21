@@ -1,5 +1,5 @@
 /*
- * TestConsoleRSAKeyPairGenerator.java from LicenseManager modified Sunday, September 2, 2012 14:07:48 CDT (-0500).
+ * TestConsoleRSAKeyPairGenerator.java from LicenseManager modified Friday, September 21, 2012 07:37:45 CDT (-0500).
  *
  * Copyright 2010-2012 the original author or authors.
  *
@@ -2013,7 +2013,7 @@ public class TestConsoleRSAKeyPairGenerator
 
 	private static class ThisExceptionMeansTestSucceededException extends SecurityException
 	{
-
+		private static final long serialVersionUID = 1L;
 	}
 
 	@Test(expected=ThisExceptionMeansTestSucceededException.class)

@@ -1,5 +1,5 @@
 /*
- * TestObjectSerializer.java from LicenseManager modified Monday, March 5, 2012 18:51:28 CST (-0600).
+ * TestObjectSerializer.java from LicenseManager modified Friday, September 21, 2012 07:37:45 CDT (-0500).
  *
  * Copyright 2010-2012 the original author or authors.
  *
@@ -343,6 +343,8 @@ public class TestObjectSerializer
 
 class MockTestObject1 implements Serializable
 {
+	private static final long serialVersionUID = 1L;
+
 	boolean coolTest = false;
 
 	byte[] myArray = new byte[] { (byte)2, (byte)3, (byte)5, (byte)7, (byte)11, (byte)13 };
@@ -359,6 +361,8 @@ class MockTestObject1 implements Serializable
 
 class MockTestObject2 implements Serializable
 {
+	private static final long serialVersionUID = 1L;
+
 	String aString = "Hello, world";
 
 	char[] password = new char[] { 'a', 'p', 'a', 's', 's', 'w', 'o', 'r', 'd' };

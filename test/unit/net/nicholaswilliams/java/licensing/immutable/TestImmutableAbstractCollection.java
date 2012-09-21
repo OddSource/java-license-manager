@@ -1,5 +1,5 @@
 /*
- * TestImmutableAbstractCollection.java from LicenseManager modified Monday, March 5, 2012 18:27:33 CST (-0600).
+ * TestImmutableAbstractCollection.java from LicenseManager modified Friday, September 21, 2012 07:37:45 CDT (-0500).
  *
  * Copyright 2010-2012 the original author or authors.
  *
@@ -42,6 +42,8 @@ public class TestImmutableAbstractCollection
 	@Test(expected=IllegalArgumentException.class)
 	public void testConstruct01()
 	{
-		new ImmutableAbstractCollection<String>(null) {};
+		new ImmutableAbstractCollection<String>(null) {
+			private static final long serialVersionUID = 1L;
+		};
 	}
 }

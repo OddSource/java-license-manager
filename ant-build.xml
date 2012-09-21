@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
-  ~ ant-build.xml from LicenseManager modified Wednesday, September 5, 2012 11:55:11 CDT (-0500).
+  ~ ant-build.xml from LicenseManager modified Friday, September 21, 2012 07:39:24 CDT (-0500).
   ~
   ~ Copyright 2010-2012 the original author or authors.
   ~
@@ -34,8 +34,9 @@
 	<!-- Compiler options -->
 
 	<property name="compiler.debug" value="on" />
+	<property name="compiler.debug.level" value="lines,source" />
 	<property name="compiler.generate.no.warnings" value="off" />
-	<property name="compiler.args" value="" />
+	<property name="compiler.arguments" value="-Xmaxerrs 10000 -Xlint -Xmaxwarns 10000 -Werror" />
 	<property name="compiler.max.memory" value="256m" />
 
 	<!-- JDK definitions -->
@@ -56,8 +57,6 @@
 
 	<property name="module.jdk.home.licensemanager" value="${project.jdk.home}" />
 	<property name="module.jdk.bin.licensemanager" value="${project.jdk.bin}" />
-
-	<property name="compiler.args.licensemanager" value="${compiler.args}" />
 
 	<property name="licensemanager.dir.output" value="${module.licensemanager.basedir}/out/production/LicenseManager" />
 	<property name="licensemanager.dir.testOutput.unit" value="${module.licensemanager.basedir}/out/test/LicenseManager/unit" />
@@ -158,10 +157,10 @@
 	<target name="compile.module.source" depends="clean, init" description="Compile production classes">
 		<mkdir dir="${licensemanager.dir.output}" />
 
-		<javac destdir="${licensemanager.dir.output}" debug="${compiler.debug}"
-			   nowarn="${compiler.generate.no.warnings}" memorymaximumsize="${compiler.max.memory}" fork="true"
-			   executable="${module.jdk.bin.licensemanager}/javac" includeantruntime="false">
-			<compilerarg line="${compiler.args.licensemanager}" />
+		<javac destdir="${licensemanager.dir.output}" fork="true" includeantruntime="false" debug="${compiler.debug}"
+			   debuglevel="${compiler.debug.level}" nowarn="${compiler.generate.no.warnings}"
+			   memorymaximumsize="${compiler.max.memory}" executable="${module.jdk.bin.licensemanager}/javac">
+			<compilerarg line="${compiler.arguments}" />
 			<bootclasspath refid="licensemanager.module.bootClasspath" />
 			<classpath refid="licensemanager.classpath.build" />
 			<src refid="licensemanager.path.build.source" />
@@ -172,10 +171,10 @@
 			unless="skip.tests">
 		<mkdir dir="${licensemanager.dir.testOutput.unit}" />
 
-		<javac destdir="${licensemanager.dir.testOutput.unit}" debug="${compiler.debug}"
-			   nowarn="${compiler.generate.no.warnings}" memorymaximumsize="${compiler.max.memory}" fork="true"
-			   executable="${module.jdk.bin.licensemanager}/javac" includeantruntime="false">
-			<compilerarg line="${compiler.args.licensemanager}" />
+		<javac destdir="${licensemanager.dir.testOutput.unit}" fork="true" includeantruntime="false"
+			   debug="${compiler.debug}" debuglevel="${compiler.debug.level}" nowarn="${compiler.generate.no.warnings}"
+			   memorymaximumsize="${compiler.max.memory}" executable="${module.jdk.bin.licensemanager}/javac">
+			<compilerarg line="${compiler.arguments}" />
 			<bootclasspath refid="licensemanager.module.bootClasspath" />
 			<classpath refid="licensemanager.classpath.test.build" />
 			<src refid="licensemanager.path.build.test.unit" />
@@ -236,6 +235,20 @@
 					<exclude name="**/Mock*.java" />
 					<exclude name="net/nicholaswilliams/java/mock/**" />
 					<exclude name="net/nicholaswilliams/java/licensing/LicenseHelper.java" />
+					<exclude name="net/nicholaswilliams/java/licensing/TestLicenseManager.java" />
+					<exclude name="net/nicholaswilliams/java/licensing/TestLicenseSecurityManager.java" />
+				</fileset>
+			</batchtest>
+
+			<batchtest fork="yes" todir="${licensemanager.dir.junitOutput.unit}">
+				<fileset dir="${licensemanager.dir.build.test.unit}">
+					<include name="net/nicholaswilliams/java/licensing/TestLicenseManager.java" />
+				</fileset>
+			</batchtest>
+
+			<batchtest fork="yes" todir="${licensemanager.dir.junitOutput.unit}">
+				<fileset dir="${licensemanager.dir.build.test.unit}">
+					<include name="net/nicholaswilliams/java/licensing/TestLicenseSecurityManager.java" />
 				</fileset>
 			</batchtest>
 		</junit>

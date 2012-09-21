@@ -1,5 +1,5 @@
 /*
- * LicenseCreator.java from LicenseManager modified Saturday, May 19, 2012 21:08:34 CDT (-0500).
+ * LicenseCreator.java from LicenseManager modified Friday, September 21, 2012 17:53:41 CDT (-0500).
  *
  * Copyright 2010-2012 the original author or authors.
  *
@@ -65,7 +65,7 @@ public final class LicenseCreator
 			throw new IllegalArgumentException("Parameter privateKeyDataProvider must not be null.");
 
 		if(LicenseCreatorProperties.getPrivateKeyPasswordProvider() == null)
-			throw new IllegalArgumentException("Parameter privateKeyDataProvider must not be null.");
+			throw new IllegalArgumentException("Parameter privateKeyPasswordProvider must not be null.");
 
 		this.privateKeyPasswordProvider = LicenseCreatorProperties.getPrivateKeyPasswordProvider();
 		this.privateKeyDataProvider = LicenseCreatorProperties.getPrivateKeyDataProvider();

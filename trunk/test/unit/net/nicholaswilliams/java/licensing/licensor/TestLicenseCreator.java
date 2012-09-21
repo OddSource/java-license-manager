@@ -1,5 +1,5 @@
 /*
- * TestLicenseCreator.java from LicenseManager modified Friday, September 21, 2012 17:35:01 CDT (-0500).
+ * TestLicenseCreator.java from LicenseManager modified Friday, September 21, 2012 17:54:18 CDT (-0500).
  *
  * Copyright 2010-2012 the original author or authors.
  *
@@ -76,7 +76,7 @@ public class TestLicenseCreator
 		}
 		catch(IllegalArgumentException ignore) { }
 
-		LicenseCreatorProperties.setPrivateKeyPasswordProvider(TestLicenseCreator.passwordProvider);
+		LicenseCreatorProperties.setPrivateKeyDataProvider(TestLicenseCreator.keyDataProvider);
 
 		try
 		{
@@ -85,7 +85,7 @@ public class TestLicenseCreator
 		}
 		catch(IllegalArgumentException ignore) { }
 
-		LicenseCreatorProperties.setPrivateKeyDataProvider(TestLicenseCreator.keyDataProvider);
+		LicenseCreatorProperties.setPrivateKeyPasswordProvider(TestLicenseCreator.passwordProvider);
 
 		LicenseCreator.getInstance();
 

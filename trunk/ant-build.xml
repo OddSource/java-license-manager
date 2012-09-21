@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
-  ~ ant-build.xml from LicenseManager modified Friday, September 21, 2012 16:45:10 CDT (-0500).
+  ~ ant-build.xml from LicenseManager modified Friday, September 21, 2012 17:09:17 CDT (-0500).
   ~
   ~ Copyright 2010-2012 the original author or authors.
   ~
@@ -235,8 +235,8 @@
 					<exclude name="**/Mock*.java" />
 					<exclude name="net/nicholaswilliams/java/mock/**" />
 					<exclude name="net/nicholaswilliams/java/licensing/LicenseHelper.java" />
-					<exclude name="net/nicholaswilliams/java/licensing/TestLicenseManager.java" />
-					<exclude name="net/nicholaswilliams/java/licensing/TestLicenseSecurityManager.java" />
+					<!--<exclude name="net/nicholaswilliams/java/licensing/TestLicenseManager.java" />
+					<exclude name="net/nicholaswilliams/java/licensing/TestLicenseSecurityManager.java" />-->
 				</fileset>
 			</batchtest>
 		</junit>

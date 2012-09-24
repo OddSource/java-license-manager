@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
-  ~ ant-build.xml from LicenseManager modified Friday, September 21, 2012 17:25:26 CDT (-0500).
+  ~ ant-build.xml from LicenseManager modified Monday, September 24, 2012 15:56:53 CDT (-0500).
   ~
   ~ Copyright 2010-2012 the original author or authors.
   ~
@@ -135,7 +135,7 @@
 
 		<property name="licensemanager.version.without.build" value="licensemanager.version" />
 		<propertyregex property="licensemanager.version.without.build" input="${licensemanager.version}" override="true"
-					   regexp="(\d\.\d\.\d)(\.\d+)(.*)" replace="\1\3" />
+					   regexp="(\d+\.\d+\.\d+)(\.\d+)(.*)" replace="\1\3" />
 
 		<property name="jar.name.core" value="net.nicholaswilliams.java.licensing-${licensemanager.version.without.build}.jar" />
 		<property name="jar.name.licensor" value="net.nicholaswilliams.java.licensing.licensor-${licensemanager.version.without.build}.jar" />

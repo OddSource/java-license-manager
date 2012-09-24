@@ -1,5 +1,5 @@
 /*
- * TestFileLicenseProvider.java from LicenseManager modified Tuesday, February 21, 2012 10:56:34 CST (-0600).
+ * TestFileLicenseProvider.java from LicenseManager modified Monday, September 24, 2012 16:11:33 CDT (-0500).
  *
  * Copyright 2010-2012 the original author or authors.
  *
@@ -160,13 +160,17 @@ public class TestFileLicenseProvider
 		File file = this.provider.getLicenseFile("file03");
 
 		assertNotNull("The file should not null.", file);
-		assertEquals("The file name is not correct.", "prefix02/file03.suffix", file.getPath());
+		assertEquals("The file name is not correct.",
+					 "prefix02" + System.getProperty("file.separator") + "file03.suffix",
+					 file.getPath());
 	}
 
 	@Test
 	public void testGetLicenseFile03() throws IOException
 	{
 		URL url = this.getClass().getClassLoader().getResource("");
+		assertNotNull("The URL should not be null.", url);
+
 		File temp;
 		try
 		{
@@ -196,6 +200,8 @@ public class TestFileLicenseProvider
 	public void testGetLicenseFile04() throws IOException
 	{
 		URL url = this.getClass().getClassLoader().getResource("");
+		assertNotNull("The URL should not be null.", url);
+		
 		File temp;
 		try
 		{

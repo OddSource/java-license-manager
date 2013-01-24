@@ -1,5 +1,5 @@
 /*
- * StateFlag.java from LicenseManager modified Thursday, January 24, 2013 16:04:29 CST (-0600).
+ * StateFlag.java from LicenseManager modified Thursday, January 24, 2013 17:22:59 CST (-0600).
  *
  * Copyright 2010-2013 the original author or authors.
  *
@@ -16,7 +16,7 @@
  * limitations under the License.
  */
 
-package net.nicholaswilliams.java.mock;
+package net.nicholaswilliams.java.licensing.mock;
 
 public class StateFlag
 {

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
-  ~ ant-build.xml from LicenseManager modified Thursday, January 24, 2013 17:04:01 CST (-0600).
+  ~ ant-build.xml from LicenseManager modified Thursday, January 24, 2013 17:09:32 CST (-0600).
   ~
   ~ Copyright 2010-2013 the original author or authors.
   ~
@@ -263,8 +263,8 @@
 				<attribute name="Implementation-Version" value="${licensemanager.version}" />
 				<attribute name="Sealed" value="true" />
 			</manifest>
-			<zipfileset file="${module.licensemanager.basedir}/jar/META-INF/LICENSE.txt" prefix="META-INF" />
-			<zipfileset file="${module.licensemanager.basedir}/jar/META-INF/NOTICE.txt" prefix="META-INF" />
+			<zipfileset file="/build/jar/META-INF/LICENSE.txt" prefix="META-INF" />
+			<zipfileset file="/build/jar/META-INF/NOTICE.txt" prefix="META-INF" />
 			<zipfileset dir="${licensemanager.dir.output}">
 				<exclude name="net/nicholaswilliams/java/licensing/licensor/**" />
 				<exclude name="net/nicholaswilliams/java/licensing/samples/**" />
@@ -296,8 +296,8 @@
 				<attribute name="Implementation-Version" value="${licensemanager.version}" />
 				<attribute name="Sealed" value="true" />
 			</manifest>
-			<zipfileset file="${module.licensemanager.basedir}/jar/META-INF/LICENSE.txt" prefix="META-INF" />
-			<zipfileset file="${module.licensemanager.basedir}/jar/META-INF/NOTICE.txt" prefix="META-INF" />
+			<zipfileset file="/build/jar/META-INF/LICENSE.txt" prefix="META-INF" />
+			<zipfileset file="/build/jar/META-INF/NOTICE.txt" prefix="META-INF" />
 			<zipfileset dir="${licensemanager.dir.output}">
 				<include name="net/nicholaswilliams/java/licensing/licensor/**" />
 			</zipfileset>
@@ -326,8 +326,8 @@
 				<attribute name="Implementation-Version" value="${licensemanager.version}" />
 				<attribute name="Sealed" value="true" />
 			</manifest>
-			<zipfileset file="${module.licensemanager.basedir}/jar/META-INF/LICENSE.txt" prefix="META-INF" />
-			<zipfileset file="${module.licensemanager.basedir}/jar/META-INF/NOTICE.txt" prefix="META-INF" />
+			<zipfileset file="/build/jar/META-INF/LICENSE.txt" prefix="META-INF" />
+			<zipfileset file="/build/jar/META-INF/NOTICE.txt" prefix="META-INF" />
 			<zipfileset dir="${licensemanager.dir.output}">
 				<include name="net/nicholaswilliams/java/licensing/samples/**" />
 			</zipfileset>
@@ -355,8 +355,8 @@
 				<attribute name="Specification-Version" value="${licensemanager.version}" />
 				<attribute name="Implementation-Version" value="${licensemanager.version}" />
 			</manifest>
-			<zipfileset file="${module.licensemanager.basedir}/jar/META-INF/LICENSE.txt" prefix="META-INF" />
-			<zipfileset file="${module.licensemanager.basedir}/jar/META-INF/NOTICE.txt" prefix="META-INF" />
+			<zipfileset file="/build/jar/META-INF/LICENSE.txt" prefix="META-INF" />
+			<zipfileset file="/build/jar/META-INF/NOTICE.txt" prefix="META-INF" />
 			<zipfileset dir="${module.licensemanager.basedir}/src" />
 		</jar>
 	</target>
@@ -376,11 +376,11 @@
 			<zipfileset dir="${licensemanager.dir.artifactOutput}" prefix="dist">
 				<include name="*.jar" />
 			</zipfileset>
-			<zipfileset dir="${module.licensemanager.basedir}/jar/META-INF/">
+			<zipfileset dir="/build/jar/META-INF/">
 				<include name="LICENSE.txt" />
 				<include name="NOTICE.txt" />
 			</zipfileset>
-			<zipfileset dir="${module.licensemanager.basedir}/jar" prefix="jar" />
+			<zipfileset dir="/build/jar" prefix="jar" />
 			<zipfileset dir="${module.licensemanager.basedir}/lib" prefix="lib">
 				<include name="*.jar" />
 			</zipfileset>

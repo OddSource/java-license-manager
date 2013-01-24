@@ -1,5 +1,5 @@
 /*
- * LicenseCreator.java from LicenseManager modified Friday, September 21, 2012 17:54:48 CDT (-0500).
+ * LicenseCreator.java from LicenseManager modified Thursday, January 24, 2013 16:39:57 CST (-0600).
  *
  * Copyright 2010-2013 the original author or authors.
  *
@@ -25,6 +25,7 @@ import net.nicholaswilliams.java.licensing.SignedLicense;
 import net.nicholaswilliams.java.licensing.encryption.Encryptor;
 import net.nicholaswilliams.java.licensing.encryption.KeyFileUtilities;
 import net.nicholaswilliams.java.licensing.encryption.PasswordProvider;
+import net.nicholaswilliams.java.licensing.encryption.PrivateKeyDataProvider;
 import net.nicholaswilliams.java.licensing.exception.AlgorithmNotSupportedException;
 import net.nicholaswilliams.java.licensing.exception.InappropriateKeyException;
 import net.nicholaswilliams.java.licensing.exception.InappropriateKeySpecificationException;

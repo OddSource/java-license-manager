@@ -1,5 +1,5 @@
 /*
- * TestRSAKeyPairGenerator.java from LicenseManager modified Saturday, June 2, 2012 08:25:54 CDT (-0500).
+ * TestRSAKeyPairGenerator.java from LicenseManager modified Thursday, January 24, 2013 16:37:10 CST (-0600).
  *
  * Copyright 2010-2013 the original author or authors.
  *
@@ -18,7 +18,6 @@
 
 package net.nicholaswilliams.java.licensing.encryption;
 
-import net.nicholaswilliams.java.licensing.licensor.PrivateKeyDataProvider;
 import org.apache.commons.io.FileUtils;
 import org.junit.After;
 import org.junit.AfterClass;

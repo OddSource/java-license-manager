@@ -1,5 +1,5 @@
 /*
- * TestConsoleLicenseGenerator.java from LicenseManager modified Thursday, January 24, 2013 16:03:03 CST (-0600).
+ * TestConsoleLicenseGenerator.java from LicenseManager modified Thursday, January 24, 2013 16:41:55 CST (-0600).
  *
  * Copyright 2010-2013 the original author or authors.
  *
@@ -23,16 +23,16 @@ import net.nicholaswilliams.java.licensing.MockLicenseHelper;
 import net.nicholaswilliams.java.licensing.ObjectSerializer;
 import net.nicholaswilliams.java.licensing.SignedLicense;
 import net.nicholaswilliams.java.licensing.encryption.Encryptor;
+import net.nicholaswilliams.java.licensing.encryption.FilePrivateKeyDataProvider;
 import net.nicholaswilliams.java.licensing.encryption.PasswordProvider;
+import net.nicholaswilliams.java.licensing.encryption.PrivateKeyDataProvider;
 import net.nicholaswilliams.java.licensing.exception.AlgorithmNotSupportedException;
 import net.nicholaswilliams.java.licensing.exception.InappropriateKeyException;
 import net.nicholaswilliams.java.licensing.exception.InappropriateKeySpecificationException;
 import net.nicholaswilliams.java.licensing.exception.KeyNotFoundException;
 import net.nicholaswilliams.java.licensing.exception.ObjectSerializationException;
-import net.nicholaswilliams.java.licensing.licensor.FilePrivateKeyDataProvider;
 import net.nicholaswilliams.java.licensing.licensor.LicenseCreator;
 import net.nicholaswilliams.java.licensing.licensor.LicenseCreatorProperties;
-import net.nicholaswilliams.java.licensing.licensor.PrivateKeyDataProvider;
 import net.nicholaswilliams.java.licensing.licensor.interfaces.cli.spi.TextInterfaceDevice;
 import net.nicholaswilliams.java.licensing.mock.MockEmbeddedPrivateKeyDataProvider;
 import net.nicholaswilliams.java.licensing.mock.MockFilePrivateKeyDataProvider;

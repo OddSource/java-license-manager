@@ -1,5 +1,5 @@
 /*
- * LicenseCreatorProperties.java from LicenseManager modified Monday, March 5, 2012 14:19:27 CST (-0600).
+ * LicenseCreatorProperties.java from LicenseManager modified Thursday, January 24, 2013 16:37:10 CST (-0600).
  *
  * Copyright 2010-2013 the original author or authors.
  *
@@ -19,6 +19,7 @@
 package net.nicholaswilliams.java.licensing.licensor;
 
 import net.nicholaswilliams.java.licensing.encryption.PasswordProvider;
+import net.nicholaswilliams.java.licensing.encryption.PrivateKeyDataProvider;
 
 /**
  * This class is used to set properties that will be used to instantiate the {@link LicenseCreator}. Read the

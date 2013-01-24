@@ -1,5 +1,5 @@
 /*
- * PrivateKeyDataProvider.java from LicenseManager modified Tuesday, February 21, 2012 10:59:34 CST (-0600).
+ * PrivateKeyDataProvider.java from LicenseManager modified Thursday, January 24, 2013 16:37:10 CST (-0600).
  *
  * Copyright 2010-2013 the original author or authors.
  *
@@ -16,7 +16,7 @@
  * limitations under the License.
  */
 
-package net.nicholaswilliams.java.licensing.licensor;
+package net.nicholaswilliams.java.licensing.encryption;
 
 import net.nicholaswilliams.java.licensing.exception.KeyNotFoundException;
 

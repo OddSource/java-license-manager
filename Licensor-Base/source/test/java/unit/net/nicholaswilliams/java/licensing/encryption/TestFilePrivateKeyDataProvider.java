@@ -1,5 +1,5 @@
 /*
- * TestFilePrivateKeyDataProvider.java from LicenseManager modified Sunday, September 2, 2012 14:09:10 CDT (-0500).
+ * TestFilePrivateKeyDataProvider.java from LicenseManager modified Thursday, January 24, 2013 16:41:55 CST (-0600).
  *
  * Copyright 2010-2013 the original author or authors.
  *
@@ -16,7 +16,7 @@
  * limitations under the License.
  */
 
-package net.nicholaswilliams.java.licensing.licensor;
+package net.nicholaswilliams.java.licensing.encryption;
 
 import net.nicholaswilliams.java.licensing.exception.KeyNotFoundException;
 import org.apache.commons.io.FileUtils;

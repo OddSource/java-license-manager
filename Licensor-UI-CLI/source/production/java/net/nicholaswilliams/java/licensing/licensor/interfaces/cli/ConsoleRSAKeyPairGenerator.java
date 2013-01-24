@@ -1,5 +1,5 @@
 /*
- * ConsoleRSAKeyPairGenerator.java from LicenseManager modified Thursday, January 24, 2013 14:51:21 CST (-0600).
+ * ConsoleRSAKeyPairGenerator.java from LicenseManager modified Thursday, January 24, 2013 16:37:10 CST (-0600).
  *
  * Copyright 2010-2013 the original author or authors.
  *
@@ -57,7 +57,7 @@ import static net.nicholaswilliams.java.licensing.encryption.RSAKeyPairGenerator
  * <code>java net.nicholaswilliams.java.licensing.text ConsoleRSAKeyPairGenerator -password &lt;password&gt; -private &lt;file|class name&gt; -public &lt;file|class name&gt; [-privatePassword &lt;password&gt;] [-classes -passwordClass &lt;class name&gt; -privatePasswordClass &lt;class name&gt; [-privatePackage &lt;package&gt;] [-publicPackage &lt;package&gt;] [-passwordPackage &lt;package&gt;] [-privatePasswordPackage &lt;package&gt;]]</code><br />
  * <br />
  * Be sure to review the documentation for {@link net.nicholaswilliams.java.licensing.encryption.PasswordProvider},
- * {@link net.nicholaswilliams.java.licensing.licensor.PrivateKeyDataProvider} and {@link PublicKeyDataProvider} for
+ * {@link net.nicholaswilliams.java.licensing.encryption.PrivateKeyDataProvider} and {@link PublicKeyDataProvider} for
  * further instructions.
  *
  * @author Nick Williams

@@ -1,5 +1,5 @@
 /*
- * TestLicenseCreator.java from LicenseManager modified Friday, September 21, 2012 17:54:48 CDT (-0500).
+ * TestLicenseCreator.java from LicenseManager modified Thursday, January 24, 2013 16:37:10 CST (-0600).
  *
  * Copyright 2010-2013 the original author or authors.
  *
@@ -26,6 +26,7 @@ import net.nicholaswilliams.java.licensing.SignedLicense;
 import net.nicholaswilliams.java.licensing.encryption.Encryptor;
 import net.nicholaswilliams.java.licensing.encryption.KeyFileUtilities;
 import net.nicholaswilliams.java.licensing.encryption.PasswordProvider;
+import net.nicholaswilliams.java.licensing.encryption.PrivateKeyDataProvider;
 import org.apache.commons.io.IOUtils;
 import org.easymock.EasyMock;
 import org.easymock.IMocksControl;

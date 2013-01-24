@@ -1,5 +1,5 @@
 /*
- * RSAKeyPairGeneratorInterface.java from LicenseManager modified Saturday, June 2, 2012 08:25:54 CDT (-0500).
+ * RSAKeyPairGeneratorInterface.java from LicenseManager modified Thursday, January 24, 2013 16:37:10 CST (-0600).
  *
  * Copyright 2010-2013 the original author or authors.
  *
@@ -84,7 +84,7 @@ public interface RSAKeyPairGeneratorInterface
 	 * the provided {@link GeneratedClassDescriptor}s, encrypting both with the specified password.
 	 *
 	 * @param keyPair The key pair to save
-	 * @param privateKeyProvider An object describing the {@link net.nicholaswilliams.java.licensing.licensor.PrivateKeyDataProvider} class to generate, and into which the generated code will be saved
+	 * @param privateKeyProvider An object describing the {@link PrivateKeyDataProvider} class to generate, and into which the generated code will be saved
 	 * @param publicKeyProvider An object describing the {@link PublicKeyDataProvider} class to generate, and into which the generated code will be saved
 	 * @param password The password to encrypt the keys with
 	 * @throws AlgorithmNotSupportedException If the encryption algorithm is not supported
@@ -101,7 +101,7 @@ public interface RSAKeyPairGeneratorInterface
 	 * the provided {@link GeneratedClassDescriptor}s, encrypting each with their respective passwords.
 	 *
 	 * @param keyPair The key pair to save
-	 * @param privateKeyProvider An object describing the {@link net.nicholaswilliams.java.licensing.licensor.PrivateKeyDataProvider} class to generate, and into which the generated code will be saved
+	 * @param privateKeyProvider An object describing the {@link PrivateKeyDataProvider} class to generate, and into which the generated code will be saved
 	 * @param publicKeyProvider An object describing the {@link PublicKeyDataProvider} class to generate, and into which the generated code will be saved
 	 * @param privatePassword The password to encrypt the private key with
 	 * @param publicPassword The password to encrypt the public key with

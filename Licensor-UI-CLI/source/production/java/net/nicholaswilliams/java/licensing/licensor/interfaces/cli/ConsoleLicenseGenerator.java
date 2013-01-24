@@ -1,5 +1,5 @@
 /*
- * ConsoleLicenseGenerator.java from LicenseManager modified Thursday, January 24, 2013 14:51:21 CST (-0600).
+ * ConsoleLicenseGenerator.java from LicenseManager modified Thursday, January 24, 2013 16:41:55 CST (-0600).
  *
  * Copyright 2010-2013 the original author or authors.
  *
@@ -19,16 +19,16 @@
 package net.nicholaswilliams.java.licensing.licensor.interfaces.cli;
 
 import net.nicholaswilliams.java.licensing.License;
+import net.nicholaswilliams.java.licensing.encryption.FilePrivateKeyDataProvider;
 import net.nicholaswilliams.java.licensing.encryption.PasswordProvider;
+import net.nicholaswilliams.java.licensing.encryption.PrivateKeyDataProvider;
 import net.nicholaswilliams.java.licensing.exception.AlgorithmNotSupportedException;
 import net.nicholaswilliams.java.licensing.exception.InappropriateKeyException;
 import net.nicholaswilliams.java.licensing.exception.InappropriateKeySpecificationException;
 import net.nicholaswilliams.java.licensing.exception.KeyNotFoundException;
 import net.nicholaswilliams.java.licensing.exception.ObjectSerializationException;
-import net.nicholaswilliams.java.licensing.licensor.FilePrivateKeyDataProvider;
 import net.nicholaswilliams.java.licensing.licensor.LicenseCreator;
 import net.nicholaswilliams.java.licensing.licensor.LicenseCreatorProperties;
-import net.nicholaswilliams.java.licensing.licensor.PrivateKeyDataProvider;
 import net.nicholaswilliams.java.licensing.licensor.interfaces.cli.spi.CliOptionsBuilder;
 import net.nicholaswilliams.java.licensing.licensor.interfaces.cli.spi.TextInterfaceDevice;
 import org.apache.commons.cli.CommandLine;
@@ -78,7 +78,7 @@ import java.util.Properties;
  * <br />
  * <b>Required Config Properties File Properties</b><br />
  * <code>net.nicholaswilliams.java.licensing.privateKeyFile=[The path to the file containing the encrypted private key; either this or net.nicholaswilliams.java.licensing.privateKeyClass must be specified.]<br />
- * net.nicholaswilliams.java.licensing.privateKeyProvider=[The fully-qualified (canonical) name of the implementation of {@link net.nicholaswilliams.java.licensing.licensor.PrivateKeyDataProvider}; either this or net.nicholaswilliams.java.licensing.privateKeyFile must be specified.]<br />
+ * net.nicholaswilliams.java.licensing.privateKeyProvider=[The fully-qualified (canonical) name of the implementation of {@link net.nicholaswilliams.java.licensing.encryption.PrivateKeyDataProvider}; either this or net.nicholaswilliams.java.licensing.privateKeyFile must be specified.]<br />
  * net.nicholaswilliams.java.licensing.privateKeyPassword=[The password for decrypting the private key; either this or net.nicholaswilliams.java.licensing.privateKeyPasswordClass must be specified.]<br />
  * net.nicholaswilliams.java.licensing.privateKeyPasswordProvider=[The fully-qualified (canonical) name of the implementation of {@link net.nicholaswilliams.java.licensing.encryption.PasswordProvider} that provides the private key password; either this or net.nicholaswilliams.java.licensing.privateKeyPassword must be specified]</code><br />
  * <br />

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
-  ~ ant-build.xml from LicenseManager modified Thursday, January 24, 2013 16:59:19 CST (-0600).
+  ~ ant-build.xml from LicenseManager modified Thursday, January 24, 2013 17:04:01 CST (-0600).
   ~
   ~ Copyright 2010-2013 the original author or authors.
   ~
@@ -209,7 +209,7 @@
 		</javadoc>
 
 		<copy todir="${licensemanager.dir.javaDoc}" overwrite="true">
-			<fileset dir="${module.licensemanager.basedir}/jar/javadoc-css" />
+			<fileset dir="/build/javadoc-css" />
 		</copy>
 	</target>
 

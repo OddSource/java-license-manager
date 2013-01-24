@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
-  ~ pom.xml from LicenseManager modified Wednesday, January 23, 2013 21:17:50 CST (-0600).
+  ~ pom.xml from LicenseManager modified Thursday, January 24, 2013 13:03:25 CST (-0600).
   ~
   ~ Copyright 2010-2013 the original author or authors.
   ~
@@ -22,79 +22,37 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>net.nicholaswilliams.java.licensing</groupId>
+	<parent>
+		<groupId>net.nicholaswilliams.java.licensing</groupId>
+		<artifactId>parent</artifactId>
+		<version>1.1.0-SNAPSHOT</version>
+	</parent>
+
     <artifactId>licensor-ui-desktop</artifactId>
 	<packaging>jar</packaging>
 
-	<name>LicenseManager - Licensor - UI - Desktop</name>
-	<version>1.1.0-SNAPSHOT</version>
-	<description>NWTS License Manager - Licensor - UI - Desktop</description>
-
-	<url>http://java.nicholaswilliams.net/LicenseManager/</url>
-	<issueManagement>
-		<system>YouTrack</system>
-		<url>http://issues.java.nicholaswilliams.net/</url>
-	</issueManagement>
-	<ciManagement>
-		<system>TeamCity</system>
-		<url>http://build.java.nicholaswilliams.net/</url>
-	</ciManagement>
-	<inceptionYear>2010</inceptionYear>
-
-	<developers>
-		<developer>
-			<name>Nick Williams</name>
-			<email>nicholas@nicholaswilliams.net</email>
-			<url>http://www.nicholaswilliams.net</url>
-			<timezone>America/Chicago</timezone>
-		</developer>
-	</developers>
-
-	<contributors>
-
-	</contributors>
+	<name>LicenseManager - Licensor Desktop UI</name>
 
 	<dependencies>
 		<dependency>
 			<groupId>net.nicholaswilliams.java.licensing</groupId>
 			<artifactId>core</artifactId>
-			<version>1.1.0-SNAPSHOT</version>
+			<version>${project.version}</version>
 			<scope>compile</scope>
 		</dependency>
 
 		<dependency>
 			<groupId>net.nicholaswilliams.java.licensing</groupId>
 			<artifactId>licensor-base</artifactId>
-			<version>1.1.0-SNAPSHOT</version>
+			<version>${project.version}</version>
 			<scope>compile</scope>
 		</dependency>
 
 		<dependency>
 			<groupId>net.nicholaswilliams.java.licensing</groupId>
 			<artifactId>licensor-ui-core</artifactId>
-			<version>1.1.0-SNAPSHOT</version>
+			<version>${project.version}</version>
 			<scope>compile</scope>
-		</dependency>
-
-		<dependency>
-			<groupId>junit</groupId>
-			<artifactId>junit</artifactId>
-			<version>4.11</version>
-			<scope>test</scope>
-		</dependency>
-
-		<dependency>
-			<groupId>org.easymock</groupId>
-			<artifactId>easymock</artifactId>
-			<version>3.1</version>
-			<scope>test</scope>
-		</dependency>
-
-		<dependency>
-			<groupId>org.ow2.asm</groupId>
-			<artifactId>asm</artifactId>
-			<version>4.1</version>
-			<scope>test</scope>
 		</dependency>
 	</dependencies>
 

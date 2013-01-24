@@ -1,5 +1,5 @@
 /*
- * TestLicenseSecurityManager.java from LicenseManager modified Friday, June 1, 2012 16:28:35 CDT (-0500).
+ * TestLicenseSecurityManager.java from LicenseManager modified Thursday, January 24, 2013 17:22:59 CST (-0600).
  *
  * Copyright 2010-2013 the original author or authors.
  *
@@ -18,7 +18,7 @@
 
 package net.nicholaswilliams.java.licensing;
 
-import net.nicholaswilliams.java.mock.StateFlag;
+import net.nicholaswilliams.java.licensing.mock.StateFlag;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;

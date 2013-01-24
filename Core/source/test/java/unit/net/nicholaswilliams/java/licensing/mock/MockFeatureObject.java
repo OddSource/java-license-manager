@@ -1,5 +1,5 @@
 /*
- * MockFeatureObject.java from LicenseManager modified Thursday, January 24, 2013 16:04:29 CST (-0600).
+ * MockFeatureObject.java from LicenseManager modified Thursday, January 24, 2013 16:33:31 CST (-0600).
  *
  * Copyright 2010-2013 the original author or authors.
  *

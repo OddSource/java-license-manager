@@ -26,6 +26,17 @@
     <option name="LOCALE" />
     <option name="OPEN_IN_BROWSER" value="true" />
   </component>
+  <component name="MavenProjectsManager">
+    <option name="originalFiles">
+      <list>
+        <option value="$PROJECT_DIR$/Core/pom.xml" />
+        <option value="$PROJECT_DIR$/Licensor-Base/pom.xml" />
+        <option value="$PROJECT_DIR$/Licensor-UI-Core/pom.xml" />
+        <option value="$PROJECT_DIR$/Licensor-UI-CLI/pom.xml" />
+        <option value="$PROJECT_DIR$/Licensor-UI-Desktop/pom.xml" />
+      </list>
+    </option>
+  </component>
   <component name="ProjectResources">
     <default-html-doctype>http://www.w3.org/1999/xhtml</default-html-doctype>
   </component>

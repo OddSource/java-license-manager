@@ -1,7 +1,7 @@
 /*
- * TestFileLicenseProvider.java from LicenseManager modified Monday, September 24, 2012 16:11:33 CDT (-0500).
+ * TestFileLicenseProvider.java from LicenseManager modified Monday, September 24, 2012 16:12:06 CDT (-0500).
  *
- * Copyright 2010-2012 the original author or authors.
+ * Copyright 2010-2013 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -201,7 +201,7 @@ public class TestFileLicenseProvider
 	{
 		URL url = this.getClass().getClassLoader().getResource("");
 		assertNotNull("The URL should not be null.", url);
-		
+
 		File temp;
 		try
 		{

@@ -1,5 +1,5 @@
 /*
- * SampleEmbeddedPrivateKeyDataProvider.java from LicenseManager modified Monday, March 5, 2012 22:05:18 CST (-0600).
+ * SampleEmbeddedPrivateKeyDataProvider.java from LicenseManager modified Thursday, January 24, 2013 16:38:28 CST (-0600).
  *
  * Copyright 2010-2013 the original author or authors.
  *
@@ -18,8 +18,8 @@
 
 package net.nicholaswilliams.java.licensing.samples;
 
+import net.nicholaswilliams.java.licensing.encryption.PrivateKeyDataProvider;
 import net.nicholaswilliams.java.licensing.exception.KeyNotFoundException;
-import net.nicholaswilliams.java.licensing.licensor.PrivateKeyDataProvider;
 
 @SuppressWarnings("unused")
 public final class SampleEmbeddedPrivateKeyDataProvider implements PrivateKeyDataProvider

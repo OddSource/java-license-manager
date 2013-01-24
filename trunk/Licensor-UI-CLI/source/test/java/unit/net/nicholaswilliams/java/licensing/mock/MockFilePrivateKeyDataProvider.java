@@ -1,5 +1,5 @@
 /*
- * MockFilePrivateKeyDataProvider.java from LicenseManager modified Thursday, January 24, 2013 16:03:03 CST (-0600).
+ * MockFilePrivateKeyDataProvider.java from LicenseManager modified Thursday, January 24, 2013 16:41:55 CST (-0600).
  *
  * Copyright 2010-2013 the original author or authors.
  *
@@ -18,8 +18,8 @@
 
 package net.nicholaswilliams.java.licensing.mock;
 
+import net.nicholaswilliams.java.licensing.encryption.PrivateKeyDataProvider;
 import net.nicholaswilliams.java.licensing.exception.KeyNotFoundException;
-import net.nicholaswilliams.java.licensing.licensor.PrivateKeyDataProvider;
 import org.apache.commons.io.IOUtils;
 
 import java.io.IOException;

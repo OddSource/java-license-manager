@@ -29,6 +29,8 @@
         <module name="Licensor-UI-CLI" />
         <module name="Licensor-UI-Core" />
         <module name="Licensor-UI-Desktop" />
+        <module name="Mock" />
+        <module name="Samples" />
       </profile>
     </annotationProcessing>
   </component>

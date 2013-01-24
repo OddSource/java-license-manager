@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
-  ~ pom.xml from LicenseManager modified Thursday, January 24, 2013 12:50:00 CST (-0600).
+  ~ pom.xml from LicenseManager modified Thursday, January 24, 2013 15:52:54 CST (-0600).
   ~
   ~ Copyright 2010-2013 the original author or authors.
   ~
@@ -45,6 +45,13 @@
 			<groupId>commons-io</groupId>
 			<artifactId>commons-io</artifactId>
 			<version>2.4</version>
+		</dependency>
+
+		<dependency>
+			<groupId>net.nicholaswilliams.java.licensing</groupId>
+			<artifactId>testing-mocks</artifactId>
+			<version>${project.version}</version>
+			<scope>test</scope>
 		</dependency>
 	</dependencies>
 

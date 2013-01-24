@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
-  ~ pom.xml from LicenseManager modified Thursday, January 24, 2013 13:01:35 CST (-0600).
+  ~ pom.xml from LicenseManager modified Thursday, January 24, 2013 16:05:20 CST (-0600).
   ~
   ~ Copyright 2010-2013 the original author or authors.
   ~
@@ -39,6 +39,10 @@
 			<distribution>repo,maven,manual</distribution>
 		</license>
 	</licenses>
+	<modules>
+		<module>Mock</module>
+		<module>Samples</module>
+	</modules>
 
 	<url>http://java.nicholaswilliams.net/LicenseManager/</url>
 	<scm>

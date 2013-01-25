@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
-  ~ pom.xml from LicenseManager modified Thursday, January 24, 2013 16:05:20 CST (-0600).
+  ~ pom.xml from LicenseManager modified Friday, January 25, 2013 16:40:09 CST (-0600).
   ~
   ~ Copyright 2010-2013 the original author or authors.
   ~
@@ -16,7 +16,6 @@
   ~ See the License for the specific language governing permissions and
   ~ limitations under the License.
   -->
-
 <project xmlns="http://maven.apache.org/POM/4.0.0"
 		 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 		 xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
@@ -40,6 +39,11 @@
 		</license>
 	</licenses>
 	<modules>
+		<module>Core</module>
+		<module>Licensor-Base</module>
+		<module>Licensor-UI-Core</module>
+		<module>Licensor-UI-CLI</module>
+		<module>Licensor-UI-Desktop</module>
 		<module>Mock</module>
 		<module>Samples</module>
 	</modules>
@@ -59,6 +63,11 @@
 		<url>http://build.java.nicholaswilliams.net/</url>
 	</ciManagement>
 	<inceptionYear>2010</inceptionYear>
+
+	<organization>
+		<name>NWTS Java Code</name>
+		<url>http://java.nicholaswilliams.net/</url>
+	</organization>
 
 	<developers>
 		<developer>
@@ -96,4 +105,218 @@
 		</dependency>
 	</dependencies>
 
+	<properties>
+		<project.build.directory>out</project.build.directory>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+		<project.tasks.maximum.memory>256m</project.tasks.maximum.memory>
+	</properties>
+
+	<build>
+		<plugins>
+			<!--<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-antrun-plugin</artifactId>
+				<version>1.7</version>
+				<executions>
+					<execution>
+						<id>javadoc.interceptor</id>
+						<phase>package</phase>
+						<goals>
+							<goal>run</goal>
+						</goals>
+						<inherited>false</inherited>
+						<configuration>
+							<target>
+								<echo message="JavaDoc Interceptor Target" />
+								<copy todir="../out/production/Core" overwrite="false" failonerror="true"
+									  verbose="true">
+									<fileset dir="../build/jar" />
+								</copy>
+							</target>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>-->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-source-plugin</artifactId>
+				<version>2.2.1</version>
+				<executions>
+					<execution>
+						<id>make-sources</id>
+						<phase>package</phase>
+						<goals>
+							<goal>jar</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-javadoc-plugin</artifactId>
+				<version>2.9</version>
+				<configuration>
+					<outputDirectory>out/apidocs</outputDirectory>
+					<reportOutputDirectory>out/artifacts/apidocs</reportOutputDirectory>
+					<jarOutputDirectory>out/artifacts</jarOutputDirectory>
+					<finalName>${project.groupId}-${project.artifactId}-${project.version}</finalName>
+					<maxmemory>${project.tasks.maximum.memory}</maxmemory>
+					<show>protected</show>
+					<version>true</version>
+					<use>true</use>
+					<author>true</author>
+					<windowtitle>${project.name} ${project.version}</windowtitle>
+					<breakiterator>true</breakiterator>
+					<failOnError>true</failOnError>
+					<doctitle><![CDATA[<h2>${project.name} ${project.version} API Documentation</h2>]]></doctitle>
+					<bottom>
+						<![CDATA[<i>Copyright &#169; 2010-2013 Nicholas Williams. All Rights Reserved. Licensed
+							Under the <a href="http://www.apache.org/licenses/LICENSE-2.0">Apache License version
+							2.0</a>.</i>]]>
+					</bottom>
+					<detectJavaApiLink>true</detectJavaApiLink>
+					<detectLinks>true</detectLinks>
+					<links>
+						<link>http://commons.apache.org/cli/api-1.2/</link>
+						<link>http://commons.apache.org/codec/api-1.7/</link>
+						<link>http://commons.apache.org/io/api-2.4/</link>
+					</links>
+					<sourceFileExcludes>
+						<exclude>**Mock*.java</exclude>
+						<exclude>net/nicholaswilliams/java/mock/**</exclude>
+						<exclude>net/nicholaswilliams/java/licensing/mock/**</exclude>
+						<exclude>net/nicholaswilliams/java/licensing/samples/**</exclude>
+					</sourceFileExcludes>
+				</configuration>
+				<!--<executions>
+					<execution>
+						<id>make-javadoc</id>
+						<phase>package</phase>
+						<goals>
+							<goal>aggregate-jar</goal>
+						</goals>
+						<inherited>false</inherited>
+					</execution>
+				</executions>-->
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-assembly-plugin</artifactId>
+				<version>2.4</version>
+				<configuration>
+					<appendAssemblyId>false</appendAssemblyId>
+					<runOnlyAtExecutionRoot>true</runOnlyAtExecutionRoot>
+					<outputDirectory>out/artifacts</outputDirectory>
+					<finalName>${project.groupId}-${project.version}</finalName>
+					<descriptors>
+						<descriptor>build/maven-assembly.xml</descriptor>
+					</descriptors>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>net.ju-n.maven.plugins</groupId>
+				<artifactId>maven-checksum-plugin</artifactId>
+				<version>1.0</version>
+				<inherited>false</inherited>
+				<configuration>
+					<algorithms>
+						<algorithm>MD5</algorithm>
+						<algorithm>SHA-1</algorithm>
+					</algorithms>
+					<failOnError>true</failOnError>
+					<individualFiles>true</individualFiles>
+					<files>
+						<file>out/artifacts/${project.groupId}-${project.version}.zip</file>
+					</files>
+				</configuration>
+			</plugin>
+		</plugins>
+
+		<pluginManagement>
+			<plugins>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-compiler-plugin</artifactId>
+					<version>3.0</version>
+					<inherited>true</inherited>
+					<configuration>
+						<fork>true</fork>
+						<maxmem>${project.tasks.maximum.memory}</maxmem>
+						<source>1.6</source>
+						<target>1.6</target>
+						<debug>true</debug>
+						<debuglevel>lines,source</debuglevel>
+						<compilerArguments>
+							<Xmaxerrs>10000</Xmaxerrs>
+							<Xmaxwarns>10000</Xmaxwarns>
+							<Xlint />
+							<Werror />
+						</compilerArguments>
+					</configuration>
+				</plugin>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-surefire-plugin</artifactId>
+					<version>2.9</version>
+					<inherited>true</inherited>
+					<configuration>
+						<forkMode>always</forkMode>
+					</configuration>
+				</plugin>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-source-plugin</artifactId>
+					<version>2.2.1</version>
+					<inherited>true</inherited>
+					<configuration>
+						<outputDirectory>../out/artifacts/sources</outputDirectory>
+						<finalName>${project.groupId}-${project.artifactId}-${project.version}</finalName>
+					</configuration>
+				</plugin>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-jar-plugin</artifactId>
+					<version>2.4</version>
+					<inherited>true</inherited>
+					<configuration>
+						<outputDirectory>../out/artifacts/dist</outputDirectory>
+						<finalName>${project.groupId}-${project.artifactId}-${project.version}</finalName>
+						<archive>
+							<addMavenDescriptor>true</addMavenDescriptor>
+							<compress>true</compress>
+							<forced>true</forced>
+							<index>true</index>
+							<manifest>
+								<addClasspath>false</addClasspath>
+								<addDefaultSpecificationEntries>true</addDefaultSpecificationEntries>
+								<addDefaultImplementationEntries>true</addDefaultImplementationEntries>
+							</manifest>
+							<manifestEntries>
+								<Java-Vendor>${java.vendor}</Java-Vendor>
+								<Java-Version>${java.version}</Java-Version>
+								<Java-Specification>${java.specification.name}</Java-Specification>
+								<Java-Specification-Vendor>${java.specification.vendor}</Java-Specification-Vendor>
+								<Java-Specification-Version>${java.specification.version}</Java-Specification-Version>
+								<Built-By>TeamCity</Built-By>
+								<Created-By>TeamCity</Created-By>
+								<Bundle-Vendor>${project.organization.name}</Bundle-Vendor>
+								<Sealed>false</Sealed>
+							</manifestEntries>
+						</archive>
+					</configuration>
+				</plugin>
+				<plugin>
+					<groupId>net.ju-n.maven.plugins</groupId>
+					<artifactId>maven-checksum-plugin</artifactId>
+					<version>1.0</version>
+					<inherited>true</inherited>
+					<configuration>
+						<files />
+						<failOnError>false</failOnError>
+					</configuration>
+				</plugin>
+			</plugins>
+		</pluginManagement>
+	</build>
 </project>

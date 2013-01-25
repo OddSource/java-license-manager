@@ -1,5 +1,5 @@
 /*
- * ConsoleLicenseGenerator.java from LicenseManager modified Thursday, January 24, 2013 16:41:55 CST (-0600).
+ * ConsoleLicenseGenerator.java from LicenseManager modified Friday, January 25, 2013 14:05:54 CST (-0600).
  *
  * Copyright 2010-2013 the original author or authors.
  *
@@ -82,7 +82,7 @@ import java.util.Properties;
  * net.nicholaswilliams.java.licensing.privateKeyPassword=[The password for decrypting the private key; either this or net.nicholaswilliams.java.licensing.privateKeyPasswordClass must be specified.]<br />
  * net.nicholaswilliams.java.licensing.privateKeyPasswordProvider=[The fully-qualified (canonical) name of the implementation of {@link net.nicholaswilliams.java.licensing.encryption.PasswordProvider} that provides the private key password; either this or net.nicholaswilliams.java.licensing.privateKeyPassword must be specified]</code><br />
  * <br />
- * <b>License Properties File Properties<b/> (Specify only those that you wish to include in the license)<br />
+ * <b>License Properties File Properties</b> (Specify only those that you wish to include in the license)<br />
  * <code>net.nicholaswilliams.java.licensing.productKey=[The product key/serial number (String) for this license]
  * net.nicholaswilliams.java.licensing.holder=[The holder (String) for this license]
  * net.nicholaswilliams.java.licensing.issuer=[The issuer (String) for this license]

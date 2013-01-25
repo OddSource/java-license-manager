@@ -1,5 +1,5 @@
 /*
- * ImmutableArrayList.java from LicenseManager modified Tuesday, February 21, 2012 10:59:35 CST (-0600).
+ * ImmutableArrayList.java from LicenseManager modified Thursday, January 24, 2013 23:33:43 CST (-0600).
  *
  * Copyright 2010-2013 the original author or authors.
  *
@@ -102,7 +102,7 @@ public final class ImmutableArrayList<E> extends ImmutableAbstractCollection<E>
 		synchronized(this.internalList)
 		{
 			this.checkValidity();
-			return new ImmutableListIterator(this.internalList.listIterator(), this);
+			return new ImmutableListIterator<E>(this.internalList.listIterator(), this);
 		}
 	}
 
@@ -113,7 +113,7 @@ public final class ImmutableArrayList<E> extends ImmutableAbstractCollection<E>
 		synchronized(this.internalList)
 		{
 			this.checkValidity();
-			return new ImmutableListIterator(this.internalList.listIterator(index), this);
+			return new ImmutableListIterator<E>(this.internalList.listIterator(index), this);
 		}
 	}
 

@@ -19,20 +19,66 @@
       <profile default="true" name="Default" enabled="false">
         <processorPath useClasspath="true" />
       </profile>
-      <profile default="false" name="Maven default annotation processors profile" enabled="true">
-        <sourceOutputDir name="target/generated-sources/annotations" />
-        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
+      <profile default="false" name="Annotation profile for Core" enabled="true">
+        <sourceOutputDir name="../out/artifacts/generated-sources/annotations" />
+        <sourceTestOutputDir name="../out/artifacts/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
         <processorPath useClasspath="true" />
         <module name="Core" />
+      </profile>
+      <profile default="false" name="Annotation profile for Licensor-Base" enabled="true">
+        <sourceOutputDir name="../out/artifacts/generated-sources/annotations" />
+        <sourceTestOutputDir name="../out/artifacts/generated-test-sources/test-annotations" />
+        <outputRelativeToContentRoot value="true" />
+        <processorPath useClasspath="true" />
         <module name="Licensor-Base" />
+      </profile>
+      <profile default="false" name="Annotation profile for Licensor-UI-CLI" enabled="true">
+        <sourceOutputDir name="../out/artifacts/generated-sources/annotations" />
+        <sourceTestOutputDir name="../out/artifacts/generated-test-sources/test-annotations" />
+        <outputRelativeToContentRoot value="true" />
+        <processorPath useClasspath="true" />
         <module name="Licensor-UI-CLI" />
+      </profile>
+      <profile default="false" name="Annotation profile for Licensor-UI-Core" enabled="true">
+        <sourceOutputDir name="../out/artifacts/generated-sources/annotations" />
+        <sourceTestOutputDir name="../out/artifacts/generated-test-sources/test-annotations" />
+        <outputRelativeToContentRoot value="true" />
+        <processorPath useClasspath="true" />
         <module name="Licensor-UI-Core" />
+      </profile>
+      <profile default="false" name="Annotation profile for Licensor-UI-Desktop" enabled="true">
+        <sourceOutputDir name="../out/artifacts/generated-sources/annotations" />
+        <sourceTestOutputDir name="../out/artifacts/generated-test-sources/test-annotations" />
+        <outputRelativeToContentRoot value="true" />
+        <processorPath useClasspath="true" />
         <module name="Licensor-UI-Desktop" />
+      </profile>
+      <profile default="false" name="Annotation profile for Mock" enabled="true">
+        <sourceOutputDir name="../out/artifacts/generated-sources/annotations" />
+        <sourceTestOutputDir name="../out/artifacts/generated-test-sources/test-annotations" />
+        <outputRelativeToContentRoot value="true" />
+        <processorPath useClasspath="true" />
         <module name="Mock" />
+      </profile>
+      <profile default="false" name="Annotation profile for Samples" enabled="true">
+        <sourceOutputDir name="../out/artifacts/generated-sources/annotations" />
+        <sourceTestOutputDir name="../out/artifacts/generated-test-sources/test-annotations" />
+        <outputRelativeToContentRoot value="true" />
+        <processorPath useClasspath="true" />
         <module name="Samples" />
       </profile>
     </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="Core" target="1.6" />
+      <module name="LicenseManager" target="1.6" />
+      <module name="Licensor-Base" target="1.6" />
+      <module name="Licensor-UI-CLI" target="1.6" />
+      <module name="Licensor-UI-Core" target="1.6" />
+      <module name="Licensor-UI-Desktop" target="1.6" />
+      <module name="Mock" target="1.6" />
+      <module name="Samples" target="1.6" />
+    </bytecodeTargetLevel>
   </component>
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_STRING" value="-Xlint -Xmaxwarns 10000" />

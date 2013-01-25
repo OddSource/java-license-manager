@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
-  ~ pom.xml from LicenseManager modified Thursday, January 24, 2013 17:22:56 CST (-0600).
+  ~ pom.xml from LicenseManager modified Friday, January 25, 2013 16:30:58 CST (-0600).
   ~
   ~ Copyright 2010-2013 the original author or authors.
   ~
@@ -16,11 +16,10 @@
   ~ See the License for the specific language governing permissions and
   ~ limitations under the License.
   -->
-
 <project xmlns="http://maven.apache.org/POM/4.0.0"
-         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-    <modelVersion>4.0.0</modelVersion>
+		 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+		 xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
 
 	<parent>
 		<groupId>net.nicholaswilliams.java.licensing</groupId>
@@ -28,7 +27,7 @@
 		<version>1.1.0-SNAPSHOT</version>
 	</parent>
 
-    <artifactId>core</artifactId>
+	<artifactId>core</artifactId>
 	<packaging>jar</packaging>
 
 	<name>LicenseManager - Core</name>
@@ -48,5 +47,55 @@
 		</dependency>
 	</dependencies>
 
-    
+	<build>
+		<sourceDirectory>source/production/java</sourceDirectory>
+		<outputDirectory>../out/production/Core</outputDirectory>
+		<resources>
+			<resource>
+				<directory>source/production/resources</directory>
+			</resource>
+			<resource>
+				<targetPath>META-INF</targetPath>
+				<directory>../build/jar/META-INF</directory>
+			</resource>
+		</resources>
+
+		<testSourceDirectory>source/test/java/unit</testSourceDirectory>
+		<testOutputDirectory>../out/test/Core</testOutputDirectory>
+		<testResources>
+			<testResource>
+				<directory>source/test/resources</directory>
+			</testResource>
+		</testResources>
+
+		<directory>../out/artifacts</directory>
+
+		<pluginManagement>
+			<plugins>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-jar-plugin</artifactId>
+					<version>2.4</version>
+					<configuration>
+						<archive>
+							<manifestSections>
+								<manifestSection>
+									<name>net/nicholaswilliams/java/licensing</name>
+									<manifestEntries>
+										<Sealed>true</Sealed>
+									</manifestEntries>
+								</manifestSection>
+								<manifestSection>
+									<name>net/nicholaswilliams/java/licensing/immutable</name>
+									<manifestEntries>
+										<Sealed>true</Sealed>
+									</manifestEntries>
+								</manifestSection>
+							</manifestSections>
+						</archive>
+					</configuration>
+				</plugin>
+			</plugins>
+		</pluginManagement>
+	</build>
 </project>

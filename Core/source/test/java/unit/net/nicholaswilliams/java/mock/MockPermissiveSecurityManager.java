@@ -1,5 +1,5 @@
 /*
- * MockPermissiveSecurityManager.java from LicenseManager modified Thursday, January 24, 2013 16:04:29 CST (-0600).
+ * MockPermissiveSecurityManager.java from LicenseManager modified Thursday, January 24, 2013 16:33:30 CST (-0600).
  *
  * Copyright 2010-2013 the original author or authors.
  *

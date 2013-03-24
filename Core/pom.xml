@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
-  ~ pom.xml from LicenseManager modified Sunday, March 24, 2013 10:01:25 CDT (-0500).
+  ~ pom.xml from LicenseManager modified Sunday, March 24, 2013 10:27:01 CDT (-0500).
   ~
   ~ Copyright 2010-2013 the original author or authors.
   ~
@@ -49,7 +49,6 @@
 
 	<build>
 		<sourceDirectory>source/production/java</sourceDirectory>
-		<outputDirectory>../out/production/Core</outputDirectory>
 		<resources>
 			<resource>
 				<directory>source/production/resources</directory>
@@ -61,14 +60,11 @@
 		</resources>
 
 		<testSourceDirectory>source/test/java/unit</testSourceDirectory>
-		<testOutputDirectory>../out/test/Core</testOutputDirectory>
 		<testResources>
 			<testResource>
 				<directory>source/test/resources</directory>
 			</testResource>
 		</testResources>
-
-		<directory>../out/artifacts</directory>
 
 		<pluginManagement>
 			<plugins>

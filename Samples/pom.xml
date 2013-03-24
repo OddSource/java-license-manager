@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
-  ~ pom.xml from LicenseManager modified Friday, January 25, 2013 16:31:48 CST (-0600).
+  ~ pom.xml from LicenseManager modified Sunday, March 24, 2013 10:28:47 CDT (-0500).
   ~
   ~ Copyright 2010-2013 the original author or authors.
   ~
@@ -49,7 +49,6 @@
 
 	<build>
 		<sourceDirectory>source/production/java</sourceDirectory>
-		<outputDirectory>../out/production/Samples</outputDirectory>
 		<resources>
 			<resource>
 				<directory>source/production/resources</directory>
@@ -59,8 +58,6 @@
 				<directory>../build/jar/META-INF</directory>
 			</resource>
 		</resources>
-
-		<directory>../out/artifacts</directory>
 
 		<pluginManagement>
 			<plugins>

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
-  ~ pom.xml from LicenseManager modified Sunday, March 24, 2013 10:21:26 CDT (-0500).
+  ~ pom.xml from LicenseManager modified Sunday, March 24, 2013 11:23:59 CDT (-0500).
   ~
   ~ Copyright 2010-2013 the original author or authors.
   ~
@@ -82,7 +82,6 @@
 	</contributors>
 
 	<properties>
-		<project.build.directory>out</project.build.directory>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 		<project.tasks.maximum.memory>256m</project.tasks.maximum.memory>
@@ -116,30 +115,6 @@
 
 	<build>
 		<plugins>
-			<!--<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-antrun-plugin</artifactId>
-				<version>1.7</version>
-				<executions>
-					<execution>
-						<id>javadoc.interceptor</id>
-						<phase>package</phase>
-						<goals>
-							<goal>run</goal>
-						</goals>
-						<inherited>false</inherited>
-						<configuration>
-							<target>
-								<echo message="JavaDoc Interceptor Target" />
-								<copy todir="../out/production/Core" overwrite="false" failonerror="true"
-									  verbose="true">
-									<fileset dir="../build/jar" />
-								</copy>
-							</target>
-						</configuration>
-					</execution>
-				</executions>
-			</plugin>-->
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-source-plugin</artifactId>
@@ -159,9 +134,6 @@
 				<artifactId>maven-javadoc-plugin</artifactId>
 				<version>2.9</version>
 				<configuration>
-					<outputDirectory>out/apidocs</outputDirectory>
-					<reportOutputDirectory>out/artifacts/apidocs</reportOutputDirectory>
-					<jarOutputDirectory>out/artifacts</jarOutputDirectory>
 					<finalName>${project.groupId}-${project.artifactId}-${project.version}</finalName>
 					<maxmemory>${project.tasks.maximum.memory}</maxmemory>
 					<show>protected</show>
@@ -203,16 +175,6 @@
 						</tag>
 					</tags>
 				</configuration>
-				<!--<executions>
-					<execution>
-						<id>make-javadoc</id>
-						<phase>package</phase>
-						<goals>
-							<goal>aggregate-jar</goal>
-						</goals>
-						<inherited>false</inherited>
-					</execution>
-				</executions>-->
 			</plugin>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
@@ -221,7 +183,6 @@
 				<configuration>
 					<appendAssemblyId>false</appendAssemblyId>
 					<runOnlyAtExecutionRoot>true</runOnlyAtExecutionRoot>
-					<outputDirectory>out/artifacts</outputDirectory>
 					<finalName>${project.groupId}-${project.version}</finalName>
 					<descriptors>
 						<descriptor>build/maven-assembly.xml</descriptor>
@@ -241,7 +202,7 @@
 					<failOnError>true</failOnError>
 					<individualFiles>true</individualFiles>
 					<files>
-						<file>out/artifacts/${project.groupId}-${project.version}.zip</file>
+						<file>target/${project.groupId}-${project.version}.zip</file>
 					</files>
 				</configuration>
 			</plugin>
@@ -284,7 +245,6 @@
 					<version>2.2.1</version>
 					<inherited>true</inherited>
 					<configuration>
-						<outputDirectory>../out/artifacts/sources</outputDirectory>
 						<finalName>${project.groupId}-${project.artifactId}-${project.version}</finalName>
 					</configuration>
 				</plugin>
@@ -294,7 +254,6 @@
 					<version>2.4</version>
 					<inherited>true</inherited>
 					<configuration>
-						<outputDirectory>../out/artifacts/dist</outputDirectory>
 						<finalName>${project.groupId}-${project.artifactId}-${project.version}</finalName>
 						<archive>
 							<addMavenDescriptor>true</addMavenDescriptor>

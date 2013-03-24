@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
-  ~ maven-assembly.xml from LicenseManager modified Friday, January 25, 2013 16:30:47 CST (-0600).
+  ~ maven-assembly.xml from LicenseManager modified Sunday, March 24, 2013 11:18:59 CDT (-0500).
   ~
   ~ Copyright 2010-2013 the original author or authors.
   ~
@@ -28,27 +28,39 @@
 	<includeSiteDirectory>false</includeSiteDirectory>
 	<fileSets>
 		<fileSet>
-			<directory>out/artifacts/dist</directory>
-			<includes>
-				<include>*.jar</include>
-			</includes>
-			<outputDirectory>/dist</outputDirectory>
-		</fileSet>
-		<fileSet>
-			<directory>out/artifacts/sources</directory>
-			<includes>
-				<include>*.jar</include>
-			</includes>
-			<outputDirectory>/sources</outputDirectory>
-		</fileSet>
-		<fileSet>
-			<directory>out/artifacts</directory>
+			<directory>target</directory>
 			<includes>
 				<include>*-javadoc.jar</include>
 			</includes>
 			<outputDirectory>/</outputDirectory>
 		</fileSet>
 	</fileSets>
+	<moduleSets>
+		<moduleSet>
+			<useAllReactorProjects>true</useAllReactorProjects>
+			<binaries>
+				<includes>
+					<include>*.jar</include>
+				</includes>
+				<excludes>
+					<exclude>*-javadoc.jar</exclude>
+					<exclude>*-sources.jar</exclude>
+				</excludes>
+				<outputDirectory>/dist</outputDirectory>
+				<unpack>false</unpack>
+			</binaries>
+		</moduleSet>
+		<moduleSet>
+			<useAllReactorProjects>true</useAllReactorProjects>
+			<binaries>
+				<includes>
+					<include>*-sources.jar</include>
+				</includes>
+				<outputDirectory>/sources</outputDirectory>
+				<unpack>false</unpack>
+			</binaries>
+		</moduleSet>
+	</moduleSets>
 	<files>
 		<file>
 			<source>build/jar/META-INF/LICENSE.txt</source>

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
-  ~ pom.xml from LicenseManager modified Sunday, January 27, 2013 11:00:50 CST (-0600).
+  ~ pom.xml from LicenseManager modified Sunday, March 24, 2013 10:02:55 CDT (-0500).
   ~
   ~ Copyright 2010-2013 the original author or authors.
   ~
@@ -43,7 +43,7 @@
 		<dependency>
 			<groupId>commons-io</groupId>
 			<artifactId>commons-io</artifactId>
-			<version>2.4</version>
+			<version>${commons.io.version}</version>
 			<scope>compile</scope>
 		</dependency>
 

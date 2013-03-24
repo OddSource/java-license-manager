@@ -54,13 +54,6 @@
         <processorPath useClasspath="true" />
         <module name="Licensor-UI-Desktop" />
       </profile>
-      <profile default="false" name="Annotation profile for Mock" enabled="true">
-        <sourceOutputDir name="../out/artifacts/generated-sources/annotations" />
-        <sourceTestOutputDir name="../out/artifacts/generated-test-sources/test-annotations" />
-        <outputRelativeToContentRoot value="true" />
-        <processorPath useClasspath="true" />
-        <module name="Mock" />
-      </profile>
       <profile default="false" name="Annotation profile for Samples" enabled="true">
         <sourceOutputDir name="../out/artifacts/generated-sources/annotations" />
         <sourceTestOutputDir name="../out/artifacts/generated-test-sources/test-annotations" />

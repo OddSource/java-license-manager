@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
-  ~ pom.xml from LicenseManager modified Sunday, March 24, 2013 10:06:25 CDT (-0500).
+  ~ pom.xml from LicenseManager modified Sunday, March 24, 2013 10:21:26 CDT (-0500).
   ~
   ~ Copyright 2010-2013 the original author or authors.
   ~
@@ -44,7 +44,6 @@
 		<module>Licensor-UI-Core</module>
 		<module>Licensor-UI-CLI</module>
 		<module>Licensor-UI-Desktop</module>
-		<module>Mock</module>
 		<module>Samples</module>
 	</modules>
 

@@ -8,7 +8,6 @@
       <module fileurl="file://$PROJECT_DIR$/Licensor-UI-CLI/Licensor-UI-CLI.iml" filepath="$PROJECT_DIR$/Licensor-UI-CLI/Licensor-UI-CLI.iml" />
       <module fileurl="file://$PROJECT_DIR$/Licensor-UI-Core/Licensor-UI-Core.iml" filepath="$PROJECT_DIR$/Licensor-UI-Core/Licensor-UI-Core.iml" />
       <module fileurl="file://$PROJECT_DIR$/Licensor-UI-Desktop/Licensor-UI-Desktop.iml" filepath="$PROJECT_DIR$/Licensor-UI-Desktop/Licensor-UI-Desktop.iml" />
-      <module fileurl="file://$PROJECT_DIR$/Mock/Mock.iml" filepath="$PROJECT_DIR$/Mock/Mock.iml" />
       <module fileurl="file://$PROJECT_DIR$/Samples/Samples.iml" filepath="$PROJECT_DIR$/Samples/Samples.iml" />
     </modules>
   </component>

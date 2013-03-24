@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
-  ~ pom.xml from LicenseManager modified Friday, January 25, 2013 16:40:09 CST (-0600).
+  ~ pom.xml from LicenseManager modified Sunday, March 24, 2013 10:06:25 CDT (-0500).
   ~
   ~ Copyright 2010-2013 the original author or authors.
   ~
@@ -82,6 +82,16 @@
 
 	</contributors>
 
+	<properties>
+		<project.build.directory>out</project.build.directory>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+		<project.tasks.maximum.memory>256m</project.tasks.maximum.memory>
+		<commons.cli.version>1.2</commons.cli.version>
+		<commons.codec.version>1.7</commons.codec.version>
+		<commons.io.version>2.4</commons.io.version>
+	</properties>
+
 	<dependencies>
 		<dependency>
 			<groupId>junit</groupId>
@@ -104,13 +114,6 @@
 			<scope>test</scope>
 		</dependency>
 	</dependencies>
-
-	<properties>
-		<project.build.directory>out</project.build.directory>
-		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-		<project.tasks.maximum.memory>256m</project.tasks.maximum.memory>
-	</properties>
 
 	<build>
 		<plugins>
@@ -178,9 +181,9 @@
 					<detectJavaApiLink>true</detectJavaApiLink>
 					<detectLinks>true</detectLinks>
 					<links>
-						<link>http://commons.apache.org/cli/api-1.2/</link>
-						<link>http://commons.apache.org/codec/api-1.7/</link>
-						<link>http://commons.apache.org/io/api-2.4/</link>
+						<link>http://commons.apache.org/proper/commons-cli/javadocs/api-${commons.cli.version}/</link>
+						<link>http://commons.apache.org/proper/commons-codec/javadocs/api-${commons.codec.version}/</link>
+						<link>http://commons.apache.org/proper/commons-io/javadocs/api-${commons.io.version}/</link>
 					</links>
 					<sourceFileExcludes>
 						<exclude>**Mock*.java</exclude>
@@ -188,6 +191,18 @@
 						<exclude>net/nicholaswilliams/java/licensing/mock/**</exclude>
 						<exclude>net/nicholaswilliams/java/licensing/samples/**</exclude>
 					</sourceFileExcludes>
+					<tags>
+						<tag>
+							<name>issue</name>
+							<placement>a</placement>
+							<head>YouTrack Issue:</head>
+						</tag>
+						<tag>
+							<name>todo</name>
+							<placement>a</placement>
+							<head>To Do:</head>
+						</tag>
+					</tags>
 				</configuration>
 				<!--<executions>
 					<execution>

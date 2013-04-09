@@ -24,6 +24,7 @@
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
         <processorPath useClasspath="true" />
+        <module name="Assembly" />
         <module name="Core" />
         <module name="Licensor-Base" />
         <module name="Licensor-UI-CLI" />
@@ -33,13 +34,13 @@
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
+      <module name="Assembly" target="1.6" />
       <module name="Core" target="1.6" />
       <module name="LicenseManager" target="1.6" />
       <module name="Licensor-Base" target="1.6" />
       <module name="Licensor-UI-CLI" target="1.6" />
       <module name="Licensor-UI-Core" target="1.6" />
       <module name="Licensor-UI-Desktop" target="1.6" />
-      <module name="Mock" target="1.6" />
       <module name="Samples" target="1.6" />
     </bytecodeTargetLevel>
   </component>

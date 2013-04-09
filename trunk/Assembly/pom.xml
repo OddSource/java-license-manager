@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
-  ~ pom.xml from LicenseManager modified Tuesday, April 9, 2013 15:16:46 CDT (-0500).
+  ~ pom.xml from LicenseManager modified Tuesday, April 9, 2013 16:10:32 CDT (-0500).
   ~
   ~ Copyright 2010-2013 the original author or authors.
   ~
@@ -96,6 +96,48 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-javadoc-plugin</artifactId>
+				<configuration>
+					<finalName>${project.groupId}-${project.version}</finalName>
+					<windowtitle><![CDATA[${project.parent.name} ${project.version} API Documentation]]></windowtitle>
+					<doctitle><![CDATA[<h2>${project.parent.name} ${project.version} API Documentation</h2>]]></doctitle>
+					<archive>
+						<addMavenDescriptor>true</addMavenDescriptor>
+						<compress>true</compress>
+						<forced>true</forced>
+						<index>true</index>
+						<manifest>
+							<addClasspath>false</addClasspath>
+							<addDefaultSpecificationEntries>false</addDefaultSpecificationEntries>
+							<addDefaultImplementationEntries>false</addDefaultImplementationEntries>
+							<addExtensions>false</addExtensions>
+						</manifest>
+						<manifestEntries>
+							<Manifest-Version>1.0</Manifest-Version>
+							<Name>${project.groupId}</Name>
+							<Java-Vendor>${java.vendor}</Java-Vendor>
+							<Java-Version>${java.version}</Java-Version>
+							<Java-Specification>${java.specification.name}</Java-Specification>
+							<Java-Specification-Vendor>${java.specification.vendor}</Java-Specification-Vendor>
+							<Java-Specification-Version>${java.specification.version}</Java-Specification-Version>
+							<Built-By>TeamCity</Built-By>
+							<Created-By>TeamCity</Created-By>
+							<Specification-Title>${project.groupId}</Specification-Title>
+							<Specification-Version>${project.version}</Specification-Version>
+							<Specification-Vendor>${project.organization.name}</Specification-Vendor>
+							<Specification-Vendor-Id>${project.parent.parent.groupId}</Specification-Vendor-Id>
+							<Implementation-Title>${project.parent.name}</Implementation-Title>
+							<Implementation-Version>${project.version}</Implementation-Version>
+							<Implementation-Vendor>${project.organization.name}</Implementation-Vendor>
+							<Implementation-Vendor-Id>${project.parent.parent.groupId}</Implementation-Vendor-Id>
+							<Implementation-Build-Number>${nwts.build.number}</Implementation-Build-Number>
+							<Implementation-Build-Date>${maven.build.timestamp}</Implementation-Build-Date>
+							<Bundle-Vendor>${project.organization.name}</Bundle-Vendor>
+							<X-Compile-Source-JDK>${javac.source.version}</X-Compile-Source-JDK>
+							<X-Compile-Target-JDK>${javac.target.version}</X-Compile-Target-JDK>
+							<Sealed>false</Sealed>
+						</manifestEntries>
+					</archive>
+				</configuration>
 				<executions>
 					<execution>
 						<id>make-javadoc</id>
@@ -119,7 +161,7 @@
 				</configuration>
 				<executions>
 					<execution>
-						<id>make-javadoc</id>
+						<id>make-zip</id>
 						<phase>package</phase>
 						<goals>
 							<goal>single</goal>

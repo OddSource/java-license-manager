@@ -1,5 +1,5 @@
 /*
- * Hasher.java from LicenseManager modified Thursday, May 17, 2012 20:15:04 CDT (-0500).
+ * Hasher.java from LicenseManager modified Monday, April 8, 2013 12:11:51 CDT (-0500).
  *
  * Copyright 2010-2013 the original author or authors.
  *
@@ -18,6 +18,7 @@
 
 package net.nicholaswilliams.java.licensing.encryption;
 
+import net.nicholaswilliams.java.licensing.LicensingCharsets;
 import net.nicholaswilliams.java.licensing.exception.AlgorithmNotSupportedException;
 import org.apache.commons.codec.binary.Base64;
 
@@ -59,9 +60,10 @@ public class Hasher
 			return new String(
 					Base64.encodeBase64(
 							MessageDigest.getInstance(Hasher.algorithm).digest(
-									(string + Hasher.salt).getBytes()
+									(string + Hasher.salt).getBytes(LicensingCharsets.UTF_8)
 							)
-					)
+					),
+					LicensingCharsets.UTF_8
 			);
 		}
 		catch(NoSuchAlgorithmException e)

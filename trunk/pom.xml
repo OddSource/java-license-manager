@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
-  ~ pom.xml from LicenseManager modified Tuesday, April 9, 2013 13:37:06 CDT (-0500).
+  ~ pom.xml from LicenseManager modified Tuesday, April 9, 2013 15:26:10 CDT (-0500).
   ~
   ~ Copyright 2010-2013 the original author or authors.
   ~
@@ -50,8 +50,8 @@
 	<url>http://java.nicholaswilliams.net/LicenseManager/</url>
 	<scm>
 		<url>http://svn.nicholaswilliams.net/browse/LicenseManager/</url>
-		<connection>http://svn.nicholaswilliams.net/LicenseManager/</connection>
-		<developerConnection>svn://svn.nicholaswilliams.net/LicenseManager/</developerConnection>
+		<connection>scm:svn:http://svn.nicholaswilliams.net/LicenseManager/</connection>
+		<developerConnection>scm:svn:svn://svn.nicholaswilliams.net/LicenseManager/</developerConnection>
 	</scm>
 	<inceptionYear>2010</inceptionYear>
 
@@ -328,16 +328,6 @@
 						</archive>
 					</configuration>
 				</plugin>
-				<!--<plugin>
-					<groupId>net.ju-n.maven.plugins</groupId>
-					<artifactId>maven-checksum-plugin</artifactId>
-					<version>1.0</version>
-					<inherited>true</inherited>
-					<configuration>
-						<files />
-						<failOnError>false</failOnError>
-					</configuration>
-				</plugin>-->
 				<plugin>
 					<groupId>org.codehaus.mojo</groupId>
 					<artifactId>findbugs-maven-plugin</artifactId>

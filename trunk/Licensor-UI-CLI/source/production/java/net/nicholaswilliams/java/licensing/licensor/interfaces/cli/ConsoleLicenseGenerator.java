@@ -1,5 +1,5 @@
 /*
- * ConsoleLicenseGenerator.java from LicenseManager modified Friday, January 25, 2013 14:05:54 CST (-0600).
+ * ConsoleLicenseGenerator.java from LicenseManager modified Monday, April 8, 2013 13:14:00 CDT (-0500).
  *
  * Copyright 2010-2013 the original author or authors.
  *
@@ -19,6 +19,7 @@
 package net.nicholaswilliams.java.licensing.licensor.interfaces.cli;
 
 import net.nicholaswilliams.java.licensing.License;
+import net.nicholaswilliams.java.licensing.LicensingCharsets;
 import net.nicholaswilliams.java.licensing.encryption.FilePrivateKeyDataProvider;
 import net.nicholaswilliams.java.licensing.encryption.PasswordProvider;
 import net.nicholaswilliams.java.licensing.encryption.PrivateKeyDataProvider;
@@ -42,9 +43,11 @@ import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.io.FileUtils;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.text.SimpleDateFormat;
 import java.util.HashMap;
@@ -212,10 +215,8 @@ public class ConsoleLicenseGenerator
 
 			if(this.cli.hasOption("help"))
 			{
-				PrintWriter writer = new PrintWriter(this.device.out());
 				HelpFormatter formatter = new HelpFormatter();
-				formatter.printHelp(writer, CLI_WIDTH, USAGE, null, options, 1, 3, null, false);
-				writer.flush();
+				this.printHelp(formatter, options);
 
 				this.device.exit(0);
 			}
@@ -228,12 +229,26 @@ public class ConsoleLicenseGenerator
 		{
 			this.device.printErrLn(e.getLocalizedMessage());
 
-			PrintWriter writer = new PrintWriter(this.device.out());
 			HelpFormatter formatter = new HelpFormatter();
-			formatter.printHelp(writer, CLI_WIDTH, USAGE, null, options, 1, 3, null, false);
-			writer.flush();
+			this.printHelp(formatter, options);
 
 			this.device.exit(1);
+		}
+	}
+
+	private void printHelp(HelpFormatter formatter, Options options)
+	{
+		OutputStreamWriter streamWriter = new OutputStreamWriter(this.device.out(), LicensingCharsets.UTF_8);
+		PrintWriter printWriter = new PrintWriter(streamWriter);
+		formatter.printHelp(printWriter, CLI_WIDTH, USAGE, null, options, 1, 3, null, false);
+		printWriter.close();
+		try
+		{
+			streamWriter.close();
+		}
+		catch(IOException e)
+		{
+			e.printStackTrace(this.device.err());
 		}
 	}
 
@@ -246,22 +261,31 @@ public class ConsoleLicenseGenerator
 		if(!file.canRead())
 			throw new IOException("The file [" + fileName + "] is not readable.");
 
-		FileReader fileReader = null;
+		InputStreamReader reader = null;
+		FileInputStream stream = null;
 		try
 		{
-			fileReader = new FileReader(file);
+			stream = new FileInputStream(file);
+			reader = new InputStreamReader(stream, LicensingCharsets.UTF_8);
 
 			Properties properties = new Properties();
-			properties.load(fileReader);
+			properties.load(reader);
 
 			return properties;
 		}
 		finally
 		{
-			if(fileReader != null)
+			if(reader != null)
 			{
 				try {
-					fileReader.close();
+					reader.close();
+				} catch(Throwable ignore) { }
+			}
+
+			if(stream != null)
+			{
+				try {
+					stream.close();
 				} catch(Throwable ignore) { }
 			}
 		}
@@ -392,7 +416,7 @@ public class ConsoleLicenseGenerator
 		return input != null && input.trim().equals("2");
 	}
 
-	private final class PrivatePasswordProvider implements PasswordProvider
+	private static final class PrivatePasswordProvider implements PasswordProvider
 	{
 		private final char[] password;
 
@@ -525,8 +549,9 @@ public class ConsoleLicenseGenerator
 		builder.withNumberOfLicenses(this.getLicenseNumberOfLicenses(properties));
 
 		Map<String, Long> map = this.getLicenseFeatures(properties);
-		for(String name : map.keySet())
+		for(Map.Entry<String, Long> entry : map.entrySet())
 		{
+			String name = entry.getKey();
 			Long expiration = map.get(name);
 
 			if(expiration == null || expiration <= 0L)
@@ -732,7 +757,7 @@ public class ConsoleLicenseGenerator
 			else
 			{
 				this.device.printOutLn("License Data:");
-				this.device.printOutLn(new String(Base64.encodeBase64(licenseData)));
+				this.device.printOutLn(new String(Base64.encodeBase64(licenseData), LicensingCharsets.UTF_8));
 			}
 		}
 		else
@@ -745,7 +770,7 @@ public class ConsoleLicenseGenerator
 			}
 			else
 			{
-				this.device.printOut(new String(Base64.encodeBase64(licenseData)));
+				this.device.printOut(new String(Base64.encodeBase64(licenseData), LicensingCharsets.UTF_8));
 			}
 		}
 	}

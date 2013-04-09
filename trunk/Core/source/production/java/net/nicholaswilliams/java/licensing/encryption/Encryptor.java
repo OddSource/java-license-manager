@@ -1,5 +1,5 @@
 /*
- * Encryptor.java from LicenseManager modified Thursday, February 23, 2012 15:59:29 CST (-0600).
+ * Encryptor.java from LicenseManager modified Monday, April 8, 2013 12:11:51 CDT (-0500).
  *
  * Copyright 2010-2013 the original author or authors.
  *
@@ -18,6 +18,7 @@
 
 package net.nicholaswilliams.java.licensing.encryption;
 
+import net.nicholaswilliams.java.licensing.LicensingCharsets;
 import net.nicholaswilliams.java.licensing.exception.AlgorithmNotSupportedException;
 import net.nicholaswilliams.java.licensing.exception.FailedToDecryptException;
 import net.nicholaswilliams.java.licensing.exception.InappropriateKeyException;
@@ -32,7 +33,6 @@ import javax.crypto.SecretKey;
 import javax.crypto.SecretKeyFactory;
 import javax.crypto.spec.PBEKeySpec;
 import javax.crypto.spec.SecretKeySpec;
-import java.io.UnsupportedEncodingException;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
@@ -67,14 +67,7 @@ public final class Encryptor
 	 */
 	public static String encrypt(String unencrypted)
 	{
-		try
-		{
-			return Encryptor.encrypt(unencrypted.getBytes("UTF8"));
-		}
-		catch(UnsupportedEncodingException e)
-		{
-			throw new RuntimeException("While encrypting the string...", e);
-		}
+		return Encryptor.encrypt(unencrypted.getBytes(LicensingCharsets.UTF_8));
 	}
 
 	/**
@@ -88,14 +81,7 @@ public final class Encryptor
 	 */
 	public static String encrypt(String unencrypted, char[] passphrase)
 	{
-		try
-		{
-			return Encryptor.encrypt(unencrypted.getBytes("UTF8"), passphrase);
-		}
-		catch(UnsupportedEncodingException e)
-		{
-			throw new RuntimeException("While encrypting the string...", e);
-		}
+		return Encryptor.encrypt(unencrypted.getBytes(LicensingCharsets.UTF_8), passphrase);
 	}
 
 	/**
@@ -110,7 +96,7 @@ public final class Encryptor
 	public static String encrypt(byte[] unencrypted)
 	{
 		return new String(
-				Base64.encodeBase64URLSafe(Encryptor.encryptRaw(unencrypted))
+				Base64.encodeBase64URLSafe(Encryptor.encryptRaw(unencrypted)), LicensingCharsets.UTF_8
 		);
 	}
 
@@ -129,7 +115,8 @@ public final class Encryptor
 		return new String(
 				Base64.encodeBase64URLSafe(Encryptor.encryptRaw(
 						unencrypted, passphrase
-				))
+				)),
+				LicensingCharsets.UTF_8
 		);
 	}
 
@@ -228,14 +215,7 @@ public final class Encryptor
 	 */
 	public static String decrypt(byte[] encrypted)
 	{
-		try
-		{
-			return new String(Encryptor.decryptRaw(encrypted), "UTF8");
-		}
-		catch(UnsupportedEncodingException e)
-		{
-			throw new RuntimeException("UTF-8 is not supported on this system, so the data could not be decrypted.", e);
-		}
+		return new String(Encryptor.decryptRaw(encrypted), LicensingCharsets.UTF_8);
 	}
 
 	/**
@@ -250,17 +230,9 @@ public final class Encryptor
 	 */
 	public static String decrypt(byte[] encrypted, char[] passphrase)
 	{
-		try
-		{
-			return new String(
-					Encryptor.decryptRaw(encrypted, passphrase),
-					"UTF8"
-			);
-		}
-		catch(UnsupportedEncodingException e)
-		{
-			throw new RuntimeException("UTF-8 is not supported on this system, so the data could not be decrypted.", e);
-		}
+		return new String(
+				Encryptor.decryptRaw(encrypted, passphrase), LicensingCharsets.UTF_8
+		);
 	}
 
 	/**

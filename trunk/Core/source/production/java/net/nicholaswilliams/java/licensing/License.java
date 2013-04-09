@@ -1,5 +1,5 @@
 /*
- * License.java from LicenseManager modified Friday, September 21, 2012 07:46:54 CDT (-0500).
+ * License.java from LicenseManager modified Monday, April 8, 2013 12:10:38 CDT (-0500).
  *
  * Copyright 2010-2013 the original author or authors.
  *
@@ -32,7 +32,7 @@ import java.util.Set;
  * {@link License.Builder}.
  *
  * @author Nick Williams
- * @version 1.6.0
+ * @version 1.7.0
  * @since 1.0.0
  * @see License.Builder
  * @see License.Feature
@@ -112,7 +112,7 @@ public final class License implements Serializable, Cloneable
 	 */
 	public byte[] serialize()
 	{
-		return this.toString().getBytes();
+		return this.toString().getBytes(LicensingCharsets.UTF_8);
 	}
 
 	/**
@@ -123,7 +123,7 @@ public final class License implements Serializable, Cloneable
 	 */
 	protected static License deserialize(byte[] data)
 	{
-		String string = new String(data);
+		String string = new String(data, LicensingCharsets.UTF_8);
 		String[] parts = string.substring(1, string.length() - 1).split("\\]\\[", -1);
 
 		return new License(parts);
@@ -480,9 +480,9 @@ public final class License implements Serializable, Cloneable
 		else
 			result = 31 * result;
 
-		result = 31 * result + new Long(this.issueDate).hashCode();
-		result = 31 * result + new Long(this.goodAfterDate).hashCode();
-		result = 31 * result + new Long(this.goodBeforeDate).hashCode();
+		result = 31 * result + Long.valueOf(this.issueDate).hashCode();
+		result = 31 * result + Long.valueOf(this.goodAfterDate).hashCode();
+		result = 31 * result + Long.valueOf(this.goodBeforeDate).hashCode();
 		result = 31 * result + this.features.hashCode();
 
 		return result;
@@ -544,12 +544,12 @@ public final class License implements Serializable, Cloneable
 	 * {@link License.Builder}.
 	 *
 	 * @author Nick Williams
-	 * @version 1.1.0
+	 * @version 1.2.0
 	 * @since 1.0.0
 	 * @see License
 	 * @see License.Builder
 	 */
-	public static final class Feature implements Serializable, FeatureObject
+	public static final class Feature implements Cloneable, Serializable, FeatureObject
 	{
 		private static final long serialVersionUID = 1L;
 

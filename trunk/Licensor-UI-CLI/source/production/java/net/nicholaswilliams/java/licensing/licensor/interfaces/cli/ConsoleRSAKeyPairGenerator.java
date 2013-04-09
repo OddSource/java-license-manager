@@ -1,5 +1,5 @@
 /*
- * ConsoleRSAKeyPairGenerator.java from LicenseManager modified Thursday, January 24, 2013 16:37:10 CST (-0600).
+ * ConsoleRSAKeyPairGenerator.java from LicenseManager modified Monday, April 8, 2013 13:14:45 CDT (-0500).
  *
  * Copyright 2010-2013 the original author or authors.
  *
@@ -18,6 +18,7 @@
 
 package net.nicholaswilliams.java.licensing.licensor.interfaces.cli;
 
+import net.nicholaswilliams.java.licensing.LicensingCharsets;
 import net.nicholaswilliams.java.licensing.encryption.PublicKeyDataProvider;
 import net.nicholaswilliams.java.licensing.encryption.RSAKeyPairGenerator;
 import net.nicholaswilliams.java.licensing.encryption.RSAKeyPairGeneratorInterface;
@@ -37,6 +38,7 @@ import org.apache.commons.cli.ParseException;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.security.KeyPair;
 import java.security.NoSuchAlgorithmException;
@@ -179,10 +181,8 @@ public class ConsoleRSAKeyPairGenerator
 
 			if(this.cli.hasOption("help"))
 			{
-				PrintWriter writer = new PrintWriter(this.device.out());
 				HelpFormatter formatter = new HelpFormatter();
-				formatter.printHelp(writer, CLI_WIDTH, USAGE, null, options, 1, 3, null, false);
-				writer.flush();
+				this.printHelp(formatter, options);
 
 				this.device.exit(0);
 			}
@@ -200,12 +200,26 @@ public class ConsoleRSAKeyPairGenerator
 		{
 			this.device.printErrLn(e.getLocalizedMessage());
 
-			PrintWriter writer = new PrintWriter(this.device.out());
 			HelpFormatter formatter = new HelpFormatter();
-			formatter.printHelp(writer, CLI_WIDTH, USAGE, null, options, 1, 3, null, false);
-			writer.flush();
+			this.printHelp(formatter, options);
 
 			this.device.exit(1);
+		}
+	}
+
+	private void printHelp(HelpFormatter formatter, Options options)
+	{
+		OutputStreamWriter streamWriter = new OutputStreamWriter(this.device.out(), LicensingCharsets.UTF_8);
+		PrintWriter printWriter = new PrintWriter(streamWriter);
+		formatter.printHelp(printWriter, CLI_WIDTH, USAGE, null, options, 1, 3, null, false);
+		printWriter.close();
+		try
+		{
+			streamWriter.close();
+		}
+		catch(IOException e)
+		{
+			e.printStackTrace(this.device.err());
 		}
 	}
 

@@ -1,5 +1,5 @@
 /*
- * PasswordProvider.java from LicenseManager modified Monday, March 5, 2012 13:25:35 CST (-0600).
+ * PasswordProvider.java from LicenseManager modified Tuesday, April 9, 2013 10:55:17 CDT (-0500).
  *
  * Copyright 2010-2013 the original author or authors.
  *
@@ -20,8 +20,9 @@ package net.nicholaswilliams.java.licensing.encryption;
 
 /**
  * This specifies an interface for providing a password for decrypting a key or license. Every user of this library
- * must implement this (one to three times). See the documentation for {@link RSAKeyPairGenerator},
- * {@link net.nicholaswilliams.java.licensing.licensor.LicenseCreator} and
+ * must implement this (one to three times). See the documentation for
+ * {@code net.nicholaswilliams.java.licensing.encryption.RSAKeyPairGenerator},
+ * {@code net.nicholaswilliams.java.licensing.licensor.LicenseCreator} and
  * {@link net.nicholaswilliams.java.licensing.LicenseManager} for more information.
  *
  * @author Nick Williams

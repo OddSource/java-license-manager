@@ -1,5 +1,5 @@
 /*
- * TestLicenseSecurityManager.java from LicenseManager modified Thursday, January 24, 2013 17:22:59 CST (-0600).
+ * TestLicenseSecurityManager.java from LicenseManager modified Tuesday, April 9, 2013 10:49:34 CDT (-0500).
  *
  * Copyright 2010-2013 the original author or authors.
  *
@@ -483,14 +483,14 @@ public class TestLicenseSecurityManager
 	@Test
 	public void testCheckMulticast() throws UnknownHostException
 	{
-		this.manager.checkMulticast(InetAddress.getLocalHost());
+		this.manager.checkMulticast(InetAddress.getByName("127.0.0.1"));
 	}
 
 	@SuppressWarnings("deprecation")
 	@Test
 	public void testCheckMulticastWithByte() throws UnknownHostException
 	{
-		this.manager.checkMulticast(InetAddress.getLocalHost(), (byte)0x00);
+		this.manager.checkMulticast(InetAddress.getByName("127.0.0.1"), (byte)0x00);
 	}
 
 	@Test

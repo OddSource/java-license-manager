@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
-  ~ pom.xml from LicenseManager modified Sunday, March 24, 2013 10:27:01 CDT (-0500).
+  ~ pom.xml from LicenseManager modified Monday, April 8, 2013 22:53:07 CDT (-0500).
   ~
   ~ Copyright 2010-2013 the original author or authors.
   ~
@@ -23,11 +23,11 @@
 
 	<parent>
 		<groupId>net.nicholaswilliams.java.licensing</groupId>
-		<artifactId>parent</artifactId>
+		<artifactId>licensing-parent</artifactId>
 		<version>1.1.0-SNAPSHOT</version>
 	</parent>
 
-	<artifactId>core</artifactId>
+	<artifactId>licensing-core</artifactId>
 	<packaging>jar</packaging>
 
 	<name>LicenseManager - Core</name>

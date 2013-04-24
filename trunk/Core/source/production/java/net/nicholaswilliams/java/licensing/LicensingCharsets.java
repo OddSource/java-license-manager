@@ -1,5 +1,5 @@
 /*
- * LicensingCharsets.java from LicenseManager modified Monday, April 8, 2013 22:34:52 CDT (-0500).
+ * LicensingCharsets.java from LicenseManager modified Wednesday, April 24, 2013 12:06:11 CDT (-0500).
  *
  * Copyright 2010-2013 the original author or authors.
  *
@@ -27,7 +27,18 @@ import java.nio.charset.Charset;
  * @version 1.0.0
  * @since 1.1.0
  */
-public class LicensingCharsets
+public final class LicensingCharsets
 {
+	/**
+	 * All operations in License Manager use the universal UTF-8 character set.
+	 */
 	public static final Charset UTF_8 = Charset.forName("UTF-8");
+
+	/**
+	 * This class cannot be instantiated.
+	 */
+	private LicensingCharsets()
+	{
+		throw new RuntimeException("This class cannot be instantiated.");
+	}
 }

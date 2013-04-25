@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
-  ~ pom.xml from LicenseManager modified Wednesday, April 24, 2013 12:20:37 CDT (-0500).
+  ~ pom.xml from LicenseManager modified Wednesday, April 24, 2013 22:40:39 CDT (-0500).
   ~
   ~ Copyright 2010-2013 the original author or authors.
   ~
@@ -24,7 +24,7 @@
 	<parent>
 		<groupId>net.nicholaswilliams.java</groupId>
 		<artifactId>nwts-parent</artifactId>
-		<version>1.0</version>
+		<version>1.1</version>
 	</parent>
 
 	<groupId>net.nicholaswilliams.java.licensing</groupId>

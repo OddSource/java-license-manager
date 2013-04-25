@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  ~ findbugs-exclude.xml from LicenseManager modified Monday, April 8, 2013 22:35:42 CDT (-0500).
+  ~
+  ~ Copyright 2010-2013 the original author or authors.
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~      http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+<FindBugsFilter>
+	<Match>
+		<Class name="net.nicholaswilliams.java.licensing.immutable.ImmutableArrayList" />
+		<Bug pattern="BC_BAD_CAST_TO_CONCRETE_COLLECTION" />
+	</Match>
+
+	<Match>
+		<Class name="net.nicholaswilliams.java.licensing.immutable.ImmutableLinkedHashSet" />
+		<Bug pattern="BC_BAD_CAST_TO_CONCRETE_COLLECTION" />
+	</Match>
+
+	<Match>
+		<Or>
+			<Class name="net.nicholaswilliams.java.licensing.exception.InsecureEnvironmentException" />
+			<Class name="net.nicholaswilliams.java.licensing.immutable.ImmutableModifiedThroughReflectionException" />
+		</Or>
+		<Bug pattern="NM_CLASS_NOT_EXCEPTION" />
+	</Match>
+
+	<Match>
+		<Class name="net.nicholaswilliams.java.licensing.ObjectSerializer" />
+		<Method name="readObject" />
+		<Bug pattern="DE_MIGHT_IGNORE" />
+	</Match>
+</FindBugsFilter>

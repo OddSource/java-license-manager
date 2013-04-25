@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/Assembly/Assembly.iml" filepath="$PROJECT_DIR$/Assembly/Assembly.iml" />
+      <module fileurl="file://$PROJECT_DIR$/Core/Core.iml" filepath="$PROJECT_DIR$/Core/Core.iml" />
+      <module fileurl="file://$PROJECT_DIR$/LicenseManager.iml" filepath="$PROJECT_DIR$/LicenseManager.iml" />
+      <module fileurl="file://$PROJECT_DIR$/Licensor-Base/Licensor-Base.iml" filepath="$PROJECT_DIR$/Licensor-Base/Licensor-Base.iml" />
+      <module fileurl="file://$PROJECT_DIR$/Licensor-UI-CLI/Licensor-UI-CLI.iml" filepath="$PROJECT_DIR$/Licensor-UI-CLI/Licensor-UI-CLI.iml" />
+      <module fileurl="file://$PROJECT_DIR$/Licensor-UI-Core/Licensor-UI-Core.iml" filepath="$PROJECT_DIR$/Licensor-UI-Core/Licensor-UI-Core.iml" />
+      <module fileurl="file://$PROJECT_DIR$/Licensor-UI-Desktop/Licensor-UI-Desktop.iml" filepath="$PROJECT_DIR$/Licensor-UI-Desktop/Licensor-UI-Desktop.iml" />
+      <module fileurl="file://$PROJECT_DIR$/Samples/Samples.iml" filepath="$PROJECT_DIR$/Samples/Samples.iml" />
+    </modules>
+  </component>
+</project>
+

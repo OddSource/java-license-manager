@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="CompilerConfiguration">
+    <option name="DEFAULT_COMPILER" value="Javac" />
+    <resourceExtensions />
+    <wildcardResourcePatterns>
+      <entry name="?*.properties" />
+      <entry name="?*.xml" />
+      <entry name="?*.gif" />
+      <entry name="?*.png" />
+      <entry name="?*.jpeg" />
+      <entry name="?*.jpg" />
+      <entry name="?*.html" />
+      <entry name="?*.dtd" />
+      <entry name="?*.tld" />
+      <entry name="?*.ftl" />
+    </wildcardResourcePatterns>
+    <annotationProcessing>
+      <profile default="true" name="Default" enabled="false">
+        <processorPath useClasspath="true" />
+      </profile>
+      <profile default="false" name="Maven default annotation processors profile" enabled="true">
+        <sourceOutputDir name="target/generated-sources/annotations" />
+        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
+        <outputRelativeToContentRoot value="true" />
+        <processorPath useClasspath="true" />
+        <module name="Assembly" />
+        <module name="Core" />
+        <module name="Licensor-Base" />
+        <module name="Licensor-UI-CLI" />
+        <module name="Licensor-UI-Core" />
+        <module name="Licensor-UI-Desktop" />
+        <module name="Samples" />
+      </profile>
+    </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="Assembly" target="1.6" />
+      <module name="Core" target="1.6" />
+      <module name="LicenseManager" target="1.6" />
+      <module name="Licensor-Base" target="1.6" />
+      <module name="Licensor-UI-CLI" target="1.6" />
+      <module name="Licensor-UI-Core" target="1.6" />
+      <module name="Licensor-UI-Desktop" target="1.6" />
+      <module name="Samples" target="1.6" />
+    </bytecodeTargetLevel>
+  </component>
+  <component name="JavacSettings">
+    <option name="ADDITIONAL_OPTIONS_STRING" value="-Xlint -Xmaxwarns 10000" />
+    <option name="MAXIMUM_HEAP_SIZE" value="256" />
+  </component>
+</project>
+

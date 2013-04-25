@@ -16,9 +16,7 @@
   ~ See the License for the specific language governing permissions and
   ~ limitations under the License.
   -->
-<project xmlns="http://maven.apache.org/POM/4.0.0"
-		 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-		 xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
 	<parent>
@@ -32,7 +30,7 @@
 	<packaging>pom</packaging>
 
 	<name>LicenseManager</name>
-	<version>1.1.0-SNAPSHOT</version>
+	<version>1.1.0</version>
 	<description>
 		NWTS License Manager - A Java-based licensing tool for licensing commercial applications.
 	</description>
@@ -49,9 +47,9 @@
 
 	<url>http://java.nicholaswilliams.net/LicenseManager/</url>
 	<scm>
-		<url>http://svn.nicholaswilliams.net/browse/LicenseManager/</url>
-		<connection>scm:svn:http://svn.nicholaswilliams.net/LicenseManager/</connection>
-		<developerConnection>scm:svn:svn://svn.nicholaswilliams.net/LicenseManager/</developerConnection>
+		<url>http://svn.nicholaswilliams.net/browse/LicenseManager/tags/license-manager-1.1.0</url>
+		<connection>scm:svn:http://svn.nicholaswilliams.net/LicenseManager/tags/license-manager-1.1.0</connection>
+		<developerConnection>scm:svn:svn://svn.nicholaswilliams.net/LicenseManager/tags/license-manager-1.1.0</developerConnection>
 	</scm>
 	<inceptionYear>2010</inceptionYear>
 

@@ -30,7 +30,7 @@
 	<packaging>pom</packaging>
 
 	<name>LicenseManager</name>
-	<version>1.1.0</version>
+	<version>1.2.0-SNAPSHOT</version>
 	<description>
 		NWTS License Manager - A Java-based licensing tool for licensing commercial applications.
 	</description>
@@ -47,9 +47,9 @@
 
 	<url>http://java.nicholaswilliams.net/LicenseManager/</url>
 	<scm>
-		<url>http://svn.nicholaswilliams.net/browse/LicenseManager/tags/license-manager-1.1.0</url>
-		<connection>scm:svn:http://svn.nicholaswilliams.net/LicenseManager/tags/license-manager-1.1.0</connection>
-		<developerConnection>scm:svn:svn://svn.nicholaswilliams.net/LicenseManager/tags/license-manager-1.1.0</developerConnection>
+		<url>http://svn.nicholaswilliams.net/browse/LicenseManager/</url>
+		<connection>scm:svn:http://svn.nicholaswilliams.net/LicenseManager/</connection>
+		<developerConnection>scm:svn:svn://svn.nicholaswilliams.net/LicenseManager/</developerConnection>
 	</scm>
 	<inceptionYear>2010</inceptionYear>
 

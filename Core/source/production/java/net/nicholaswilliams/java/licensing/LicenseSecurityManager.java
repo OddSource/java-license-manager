@@ -157,94 +157,85 @@ final class LicenseSecurityManager extends SecurityManager
 		if(reflectionClass == null)
 			throw new IllegalArgumentException("Parameter reflectionClass cannot be null.");
 
-		this.inCheck = true;
-
-		try
+		if(memberAccessType != Member.PUBLIC)
 		{
-			if(memberAccessType != Member.PUBLIC)
+			/*
+			 * We check class canonical name, not class object, for equivalency. This is because
+			 * (SomeClass.class == SomeClass.class) evaluates to false when the classes are loaded by two different
+			 * ClassLoaders and (SomeClass.class.equals(SomeClass.class)) evaluates to false when the classes are
+			 * loaded by two different ClassLoaders. Only their class canonical names are guaranteed to be the same.
+			 */
+			Package packageObject = reflectionClass.getPackage();
+			if(
+					packageObject != null &&
+					packageObject.getName().startsWith("net.nicholaswilliams.java.licensing") &&
+					!reflectionClass.getCanonicalName().equals(LicenseSecurityManager.FEATURE_RESTRICTION) &&
+					!reflectionClass.getCanonicalName().equals(LicenseSecurityManager.SIGNED_LICENSE)
+			)
 			{
-				/*
-				 * We check class canonical name, not class object, for equivalency. This is because
-				 * (SomeClass.class == SomeClass.class) evaluates to false when the classes are loaded by two different
-				 * ClassLoaders and (SomeClass.class.equals(SomeClass.class)) evaluates to false when the classes are
-				 * loaded by two different ClassLoaders. Only their class canonical names are guaranteed to be the same.
-				 */
-				Package packageObject = reflectionClass.getPackage();
-				if(
-						packageObject != null &&
-						packageObject.getName().startsWith("net.nicholaswilliams.java.licensing") &&
-						!reflectionClass.getCanonicalName().equals(LicenseSecurityManager.FEATURE_RESTRICTION) &&
-						!reflectionClass.getCanonicalName().equals(LicenseSecurityManager.SIGNED_LICENSE)
-				)
-				{
-					throw new SecurityException("Reflection access to non-public members of LicenseManager class [" +
-												reflectionClass.getSimpleName() + "] prohibited.");
-				}
+				throw new SecurityException("Reflection access to non-public members of LicenseManager class [" +
+											reflectionClass.getSimpleName() + "] prohibited.");
+			}
 
 				if(reflectionClass == java.lang.Class.class || reflectionClass == java.lang.System.class)
-				{
-					Class stack[] = getClassContext();
-					if(stack.length < 4 || !stack[3].getPackage().getName().startsWith("java."))
-						throw new SecurityException("Reflection access to non-public members of java.lang.Class " +
-													"and java.lang.System prohibited.");
-				}
+			{
+				Class stack[] = getClassContext();
+				if(stack.length < 4 || !stack[3].getPackage().getName().startsWith("java."))
+					throw new SecurityException("Reflection access to non-public members of java.lang.Class " +
+												"and java.lang.System prohibited.");
+			}
 
 				if(this.next != null)
-				{
-					/*
-					 * Per Java SE 6 documentation for java.lang.SecurityManager#checkMemberAccess: If this method is
-					 * overridden, then a call to super.checkMemberAccess cannot be made, as the default implementation
-					 * of checkMemberAccess relies on the code being checked being at a stack depth of 4. So, we
-					 * copy-and-paste the implementation from Java SE 6.
-					 *
-					 * this.next.checkMemberAccess(reflectionClass, memberAccessType);
-					 *
-					 * Copyright 1994-2007 Sun Microsystems, Inc.  All Rights Reserved.
-					 * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-					 *
-					 * This code is free software; you can redistribute it and/or modify it
-					 * under the terms of the GNU General Public License version 2 only, as
-					 * published by the Free Software Foundation.  Sun designates this
-					 * particular file as subject to the "Classpath" exception as provided
-					 * by Sun in the LICENSE file that accompanied this code.
-					 *
-					 * This code is distributed in the hope that it will be useful, but WITHOUT
-					 * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
-					 * FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License
-					 * version 2 for more details (a copy is included in the LICENSE file that
-					 * accompanied this code).
-					 *
-					 * You should have received a copy of the GNU General Public License version
-					 * 2 along with this work; if not, write to the Free Software Foundation,
-					 * Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
-					 *
-					 * Please contact Sun Microsystems, Inc., 4150 Network Circle, Santa Clara,
-					 * CA 95054 USA or visit www.sun.com if you need additional information or
-					 * have any questions.
-					 */
+			{
+				/*
+				 * Per Java SE 6 documentation for java.lang.SecurityManager#checkMemberAccess: If this method is
+				 * overridden, then a call to super.checkMemberAccess cannot be made, as the default implementation
+				 * of checkMemberAccess relies on the code being checked being at a stack depth of 4. So, we
+				 * copy-and-paste the implementation from Java SE 6.
+				 *
+				 * this.next.checkMemberAccess(reflectionClass, memberAccessType);
+				 *
+				 * Copyright 1994-2007 Sun Microsystems, Inc.  All Rights Reserved.
+				 * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+				 *
+				 * This code is free software; you can redistribute it and/or modify it
+				 * under the terms of the GNU General Public License version 2 only, as
+				 * published by the Free Software Foundation.  Sun designates this
+				 * particular file as subject to the "Classpath" exception as provided
+				 * by Sun in the LICENSE file that accompanied this code.
+				 *
+				 * This code is distributed in the hope that it will be useful, but WITHOUT
+				 * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+				 * FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License
+				 * version 2 for more details (a copy is included in the LICENSE file that
+				 * accompanied this code).
+				 *
+				 * You should have received a copy of the GNU General Public License version
+				 * 2 along with this work; if not, write to the Free Software Foundation,
+				 * Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
+				 *
+				 * Please contact Sun Microsystems, Inc., 4150 Network Circle, Santa Clara,
+				 * CA 95054 USA or visit www.sun.com if you need additional information or
+				 * have any questions.
+				 */
 
 					Class stack[] = getClassContext();
-					/*
-					 * stack depth of 4 should be the caller of one of the
-					 * methods in java.lang.Class that invoke checkMember
-					 * access. The stack should look like:
-					 *
-					 * someCaller                        [3]
-					 * java.lang.Class.someReflectionAPI [2]
-					 * java.lang.Class.checkMemberAccess [1]
-					 * SecurityManager.checkMemberAccess [0]
-					 *
-					 */
-					if((stack.length < 4) || (stack[3].getClassLoader() != reflectionClass.getClassLoader()))
-					{
-						this.checkPermission(LicenseSecurityManager.CHECK_MEMBER_ACCESS_PERMISSION);
-					}
+				/*
+				 * stack depth of 4 should be the caller of one of the
+				 * methods in java.lang.Class that invoke checkMember
+				 * access. The stack should look like:
+				 *
+				 * someCaller                        [3]
+				 * java.lang.Class.someReflectionAPI [2]
+				 * java.lang.Class.checkMemberAccess [1]
+				 * SecurityManager.checkMemberAccess [0]
+				 *
+				 */
+				if((stack.length < 4) || (stack[3].getClassLoader() != reflectionClass.getClassLoader()))
+				{
+					this.checkPermission(LicenseSecurityManager.CHECK_MEMBER_ACCESS_PERMISSION);
 				}
 			}
-		}
-		finally
-		{
-			this.inCheck = false;
 		}
 	}
 
@@ -252,20 +243,11 @@ final class LicenseSecurityManager extends SecurityManager
 	@SuppressWarnings("deprecation")
 	public void checkPermission(Permission permission)
 	{
-		this.inCheck = true;
+		if(permission.getName().equals("setSecurityManager"))
+			throw new SecurityException("Setting a SecurityManager other than the LicenseSecurityManager is prohibited.");
 
-		try
-		{
-			if(permission.getName().equals("setSecurityManager"))
-				throw new SecurityException("Setting a SecurityManager other than the LicenseSecurityManager is prohibited.");
-
-			if(this.next != null)
-				this.next.checkPermission(permission);
-		}
-		finally
-		{
-			this.inCheck = false;
-		}
+		if(this.next != null)
+			this.next.checkPermission(permission);
 	}
 
 	@Override

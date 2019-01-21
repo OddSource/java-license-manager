@@ -31,10 +31,10 @@ import net.nicholaswilliams.java.licensing.encryption.PasswordProvider;
 @SuppressWarnings("unused")
 public class SamplePasswordProvider implements PasswordProvider
 {
-	public char[] getPassword()
-	{
-		return new char[] {
-			's', 'a', 'm', 'p', 'l', 'e', 'K', 'e', 'y', '1', '9', '8', '4'
-		};
-	}
+    public char[] getPassword()
+    {
+        return new char[] {
+            's', 'a', 'm', 'p', 'l', 'e', 'K', 'e', 'y', '1', '9', '8', '4'
+        };
+    }
 }

@@ -40,250 +40,250 @@ import static org.junit.Assert.*;
 public class TestKeyFileUtilities
 {
 
-	public TestKeyFileUtilities()
-	{
+    public TestKeyFileUtilities()
+    {
 
-	}
+    }
 
-	@BeforeClass
-	public static void setUpClass() throws Exception
-	{
+    @BeforeClass
+    public static void setUpClass() throws Exception
+    {
 
-	}
+    }
 
-	@AfterClass
-	public static void tearDownClass() throws Exception
-	{
+    @AfterClass
+    public static void tearDownClass() throws Exception
+    {
 
-	}
+    }
 
-	@Before
-	public void setUp()
-	{
+    @Before
+    public void setUp()
+    {
 
-	}
+    }
 
-	@After
-	public void tearDown()
-	{
+    @After
+    public void tearDown()
+    {
 
-	}
+    }
 
-	@Test
-	public void testConstructionForbidden()
-			throws IllegalAccessException, InstantiationException, NoSuchMethodException
-	{
-		Constructor<KeyFileUtilities> constructor = KeyFileUtilities.class.getDeclaredConstructor();
-		constructor.setAccessible(true);
+    @Test
+    public void testConstructionForbidden()
+            throws IllegalAccessException, InstantiationException, NoSuchMethodException
+    {
+        Constructor<KeyFileUtilities> constructor = KeyFileUtilities.class.getDeclaredConstructor();
+        constructor.setAccessible(true);
 
-		try
-		{
-			constructor.newInstance();
-			fail("Expected exception java.lang.reflect.InvocationTargetException, but got no exception.");
-		}
-		catch(InvocationTargetException e)
-		{
-			Throwable cause = e.getCause();
-			assertNotNull("Expected cause for InvocationTargetException, but got no cause.", cause);
-			assertSame("Expected exception java.lang.RuntimeException, but got " + cause.getClass(), RuntimeException.class, cause.getClass());
-			assertEquals("The message was incorrect.", "This class cannot be instantiated.", cause.getMessage());
-		}
-	}
+        try
+        {
+            constructor.newInstance();
+            fail("Expected exception java.lang.reflect.InvocationTargetException, but got no exception.");
+        }
+        catch(InvocationTargetException e)
+        {
+            Throwable cause = e.getCause();
+            assertNotNull("Expected cause for InvocationTargetException, but got no cause.", cause);
+            assertSame("Expected exception java.lang.RuntimeException, but got " + cause.getClass(), RuntimeException.class, cause.getClass());
+            assertEquals("The message was incorrect.", "This class cannot be instantiated.", cause.getMessage());
+        }
+    }
 
-	@Test
-	public void testPrivateKeyEncryption01() throws Throwable
-	{
-		File file = new File("testPrivateKeyEncryption01.key");
+    @Test
+    public void testPrivateKeyEncryption01() throws Throwable
+    {
+        File file = new File("testPrivateKeyEncryption01.key");
 
-		if(file.exists())
-			FileUtils.forceDelete(file);
+        if(file.exists())
+            FileUtils.forceDelete(file);
 
-		PrivateKey privateKey = KeyPairGenerator.getInstance(KeyFileUtilities.keyAlgorithm).
-				generateKeyPair().getPrivate();
+        PrivateKey privateKey = KeyPairGenerator.getInstance(KeyFileUtilities.keyAlgorithm).
+                generateKeyPair().getPrivate();
 
-		KeyFileUtilities.writeEncryptedPrivateKey(privateKey, file, "myTestPassword01".toCharArray());
+        KeyFileUtilities.writeEncryptedPrivateKey(privateKey, file, "myTestPassword01".toCharArray());
 
-		PrivateKey privateKey2 = KeyFileUtilities.readEncryptedPrivateKey(file, "myTestPassword01".toCharArray());
+        PrivateKey privateKey2 = KeyFileUtilities.readEncryptedPrivateKey(file, "myTestPassword01".toCharArray());
 
-		assertNotNull("The key should not be null.", privateKey2);
-		assertFalse("The objects should not be the same.", privateKey == privateKey2);
-		assertEquals("The keys should be the same.", privateKey, privateKey2);
+        assertNotNull("The key should not be null.", privateKey2);
+        assertFalse("The objects should not be the same.", privateKey == privateKey2);
+        assertEquals("The keys should be the same.", privateKey, privateKey2);
 
-		FileUtils.forceDelete(file);
-	}
+        FileUtils.forceDelete(file);
+    }
 
-	@Test
-	public void testPrivateKeyEncryption02() throws Throwable
-	{
-		File file = new File("testPrivateKeyEncryption02.key");
+    @Test
+    public void testPrivateKeyEncryption02() throws Throwable
+    {
+        File file = new File("testPrivateKeyEncryption02.key");
 
-		if(file.exists())
-			FileUtils.forceDelete(file);
+        if(file.exists())
+            FileUtils.forceDelete(file);
 
-		PrivateKey privateKey = KeyPairGenerator.getInstance(KeyFileUtilities.keyAlgorithm).
-				generateKeyPair().getPrivate();
-		
-		PrivateKey otherKey = KeyPairGenerator.getInstance(KeyFileUtilities.keyAlgorithm).
-				generateKeyPair().getPrivate();
+        PrivateKey privateKey = KeyPairGenerator.getInstance(KeyFileUtilities.keyAlgorithm).
+                generateKeyPair().getPrivate();
 
-		assertFalse("The keys should not be equal (1).", otherKey.equals(privateKey));
+        PrivateKey otherKey = KeyPairGenerator.getInstance(KeyFileUtilities.keyAlgorithm).
+                generateKeyPair().getPrivate();
 
-		KeyFileUtilities.writeEncryptedPrivateKey(privateKey, file, "yourTestPassword02".toCharArray());
+        assertFalse("The keys should not be equal (1).", otherKey.equals(privateKey));
 
-		PrivateKey privateKey2 = KeyFileUtilities.readEncryptedPrivateKey(file, "yourTestPassword02".toCharArray());
+        KeyFileUtilities.writeEncryptedPrivateKey(privateKey, file, "yourTestPassword02".toCharArray());
 
-		assertNotNull("The key should not be null.", privateKey2);
-		assertFalse("The objects should not be the same.", privateKey == privateKey2);
-		assertEquals("The keys should be the same.", privateKey, privateKey2);
+        PrivateKey privateKey2 = KeyFileUtilities.readEncryptedPrivateKey(file, "yourTestPassword02".toCharArray());
 
-		assertFalse("The keys should not be equal (2).", otherKey.equals(privateKey2));
+        assertNotNull("The key should not be null.", privateKey2);
+        assertFalse("The objects should not be the same.", privateKey == privateKey2);
+        assertEquals("The keys should be the same.", privateKey, privateKey2);
 
-		FileUtils.forceDelete(file);
-	}
+        assertFalse("The keys should not be equal (2).", otherKey.equals(privateKey2));
 
-	@Test
-	public void testPrivateKeyEncryption03() throws Throwable
-	{
-		PrivateKey privateKey = KeyPairGenerator.getInstance(
-				KeyFileUtilities.keyAlgorithm
-		).generateKeyPair().getPrivate();
+        FileUtils.forceDelete(file);
+    }
 
-		byte[] privateKeyData = KeyFileUtilities.writeEncryptedPrivateKey(privateKey,
-																		  "myTestPassword01".toCharArray());
+    @Test
+    public void testPrivateKeyEncryption03() throws Throwable
+    {
+        PrivateKey privateKey = KeyPairGenerator.getInstance(
+                KeyFileUtilities.keyAlgorithm
+        ).generateKeyPair().getPrivate();
 
-		assertNotNull("The key data should not be null.", privateKeyData);
-		assertTrue("The key data should have length.", privateKeyData.length > 0);
+        byte[] privateKeyData = KeyFileUtilities.writeEncryptedPrivateKey(privateKey,
+                                                                          "myTestPassword01".toCharArray());
 
-		PrivateKey privateKey2 = KeyFileUtilities.readEncryptedPrivateKey(privateKeyData,
-																		  "myTestPassword01".toCharArray());
+        assertNotNull("The key data should not be null.", privateKeyData);
+        assertTrue("The key data should have length.", privateKeyData.length > 0);
 
-		assertNotNull("The key should not be null.", privateKey2);
-		assertFalse("The objects should not be the same.", privateKey == privateKey2);
-		assertEquals("The keys should be the same.", privateKey, privateKey2);
-	}
+        PrivateKey privateKey2 = KeyFileUtilities.readEncryptedPrivateKey(privateKeyData,
+                                                                          "myTestPassword01".toCharArray());
 
-	@Test
-	public void testPrivateKeyEncryption04() throws Throwable
-	{
-		PrivateKey privateKey = KeyPairGenerator.getInstance(KeyFileUtilities.keyAlgorithm).
-				generateKeyPair().getPrivate();
+        assertNotNull("The key should not be null.", privateKey2);
+        assertFalse("The objects should not be the same.", privateKey == privateKey2);
+        assertEquals("The keys should be the same.", privateKey, privateKey2);
+    }
 
-		PrivateKey otherKey = KeyPairGenerator.getInstance(KeyFileUtilities.keyAlgorithm).
-				generateKeyPair().getPrivate();
+    @Test
+    public void testPrivateKeyEncryption04() throws Throwable
+    {
+        PrivateKey privateKey = KeyPairGenerator.getInstance(KeyFileUtilities.keyAlgorithm).
+                generateKeyPair().getPrivate();
 
-		assertFalse("The keys should not be equal (1).", otherKey.equals(privateKey));
+        PrivateKey otherKey = KeyPairGenerator.getInstance(KeyFileUtilities.keyAlgorithm).
+                generateKeyPair().getPrivate();
 
-		byte[] privateKeyData = KeyFileUtilities.writeEncryptedPrivateKey(privateKey,
-																		  "yourTestPassword02".toCharArray());
+        assertFalse("The keys should not be equal (1).", otherKey.equals(privateKey));
 
-		assertNotNull("The key data should not be null.", privateKeyData);
-		assertTrue("The key data should have length.", privateKeyData.length > 0);
+        byte[] privateKeyData = KeyFileUtilities.writeEncryptedPrivateKey(privateKey,
+                                                                          "yourTestPassword02".toCharArray());
 
-		PrivateKey privateKey2 = KeyFileUtilities.readEncryptedPrivateKey(privateKeyData,
-																		  "yourTestPassword02".toCharArray());
+        assertNotNull("The key data should not be null.", privateKeyData);
+        assertTrue("The key data should have length.", privateKeyData.length > 0);
 
-		assertNotNull("The key should not be null.", privateKey2);
-		assertFalse("The objects should not be the same.", privateKey == privateKey2);
-		assertEquals("The keys should be the same.", privateKey, privateKey2);
+        PrivateKey privateKey2 = KeyFileUtilities.readEncryptedPrivateKey(privateKeyData,
+                                                                          "yourTestPassword02".toCharArray());
 
-		assertFalse("The keys should not be equal (2).", otherKey.equals(privateKey2));
-	}
+        assertNotNull("The key should not be null.", privateKey2);
+        assertFalse("The objects should not be the same.", privateKey == privateKey2);
+        assertEquals("The keys should be the same.", privateKey, privateKey2);
 
-	@Test
-	public void testPublicKeyEncryption01() throws Throwable
-	{
-		File file = new File("testPublicKeyEncryption01.key");
+        assertFalse("The keys should not be equal (2).", otherKey.equals(privateKey2));
+    }
 
-		if(file.exists())
-			FileUtils.forceDelete(file);
+    @Test
+    public void testPublicKeyEncryption01() throws Throwable
+    {
+        File file = new File("testPublicKeyEncryption01.key");
 
-		PublicKey publicKey = KeyPairGenerator.getInstance(KeyFileUtilities.keyAlgorithm).
-				generateKeyPair().getPublic();
+        if(file.exists())
+            FileUtils.forceDelete(file);
 
-		KeyFileUtilities.writeEncryptedPublicKey(publicKey, file, "myTestPassword01".toCharArray());
+        PublicKey publicKey = KeyPairGenerator.getInstance(KeyFileUtilities.keyAlgorithm).
+                generateKeyPair().getPublic();
 
-		PublicKey publicKey2 = KeyFileUtilities.readEncryptedPublicKey(file, "myTestPassword01".toCharArray());
+        KeyFileUtilities.writeEncryptedPublicKey(publicKey, file, "myTestPassword01".toCharArray());
 
-		assertNotNull("The key should not be null.", publicKey2);
-		assertFalse("The objects should not be the same.", publicKey == publicKey2);
-		assertEquals("The keys should be the same.", publicKey, publicKey2);
+        PublicKey publicKey2 = KeyFileUtilities.readEncryptedPublicKey(file, "myTestPassword01".toCharArray());
 
-		FileUtils.forceDelete(file);
-	}
+        assertNotNull("The key should not be null.", publicKey2);
+        assertFalse("The objects should not be the same.", publicKey == publicKey2);
+        assertEquals("The keys should be the same.", publicKey, publicKey2);
 
-	@Test
-	public void testPublicKeyEncryption02() throws Throwable
-	{
-		File file = new File("testPublicKeyEncryption02.key");
+        FileUtils.forceDelete(file);
+    }
 
-		if(file.exists())
-			FileUtils.forceDelete(file);
+    @Test
+    public void testPublicKeyEncryption02() throws Throwable
+    {
+        File file = new File("testPublicKeyEncryption02.key");
 
-		PublicKey publicKey = KeyPairGenerator.getInstance(KeyFileUtilities.keyAlgorithm).
-				generateKeyPair().getPublic();
+        if(file.exists())
+            FileUtils.forceDelete(file);
 
-		PublicKey otherKey = KeyPairGenerator.getInstance(KeyFileUtilities.keyAlgorithm).
-				generateKeyPair().getPublic();
+        PublicKey publicKey = KeyPairGenerator.getInstance(KeyFileUtilities.keyAlgorithm).
+                generateKeyPair().getPublic();
 
-		assertFalse("The keys should not be equal (1).", otherKey.equals(publicKey));
+        PublicKey otherKey = KeyPairGenerator.getInstance(KeyFileUtilities.keyAlgorithm).
+                generateKeyPair().getPublic();
 
-		KeyFileUtilities.writeEncryptedPublicKey(publicKey, file, "yourTestPassword02".toCharArray());
+        assertFalse("The keys should not be equal (1).", otherKey.equals(publicKey));
 
-		PublicKey publicKey2 = KeyFileUtilities.readEncryptedPublicKey(file, "yourTestPassword02".toCharArray());
+        KeyFileUtilities.writeEncryptedPublicKey(publicKey, file, "yourTestPassword02".toCharArray());
 
-		assertNotNull("The key should not be null.", publicKey2);
-		assertFalse("The objects should not be the same.", publicKey == publicKey2);
-		assertEquals("The keys should be the same.", publicKey, publicKey2);
+        PublicKey publicKey2 = KeyFileUtilities.readEncryptedPublicKey(file, "yourTestPassword02".toCharArray());
 
-		assertFalse("The keys should not be equal (2).", otherKey.equals(publicKey2));
+        assertNotNull("The key should not be null.", publicKey2);
+        assertFalse("The objects should not be the same.", publicKey == publicKey2);
+        assertEquals("The keys should be the same.", publicKey, publicKey2);
 
-		FileUtils.forceDelete(file);
-	}
+        assertFalse("The keys should not be equal (2).", otherKey.equals(publicKey2));
 
-	@Test
-	public void testPublicKeyEncryption03() throws Throwable
-	{
-		PublicKey publicKey = KeyPairGenerator.getInstance(KeyFileUtilities.keyAlgorithm).
-				generateKeyPair().getPublic();
+        FileUtils.forceDelete(file);
+    }
 
-		byte[] publicKeyData = KeyFileUtilities.writeEncryptedPublicKey(publicKey,
-																		 "myTestPassword01".toCharArray());
+    @Test
+    public void testPublicKeyEncryption03() throws Throwable
+    {
+        PublicKey publicKey = KeyPairGenerator.getInstance(KeyFileUtilities.keyAlgorithm).
+                generateKeyPair().getPublic();
 
-		assertNotNull("The key data should not be null.", publicKeyData);
-		assertTrue("The key data should have length.", publicKeyData.length > 0);
+        byte[] publicKeyData = KeyFileUtilities.writeEncryptedPublicKey(publicKey,
+                                                                         "myTestPassword01".toCharArray());
 
-		PublicKey publicKey2 = KeyFileUtilities.readEncryptedPublicKey(publicKeyData,
-																	   "myTestPassword01".toCharArray());
+        assertNotNull("The key data should not be null.", publicKeyData);
+        assertTrue("The key data should have length.", publicKeyData.length > 0);
 
-		assertNotNull("The key should not be null.", publicKey2);
-		assertFalse("The objects should not be the same.", publicKey == publicKey2);
-		assertEquals("The keys should be the same.", publicKey, publicKey2);
-	}
+        PublicKey publicKey2 = KeyFileUtilities.readEncryptedPublicKey(publicKeyData,
+                                                                       "myTestPassword01".toCharArray());
 
-	@Test
-	public void testPublicKeyEncryption04() throws Throwable
-	{
-		PublicKey publicKey = KeyPairGenerator.getInstance(KeyFileUtilities.keyAlgorithm).
-				generateKeyPair().getPublic();
+        assertNotNull("The key should not be null.", publicKey2);
+        assertFalse("The objects should not be the same.", publicKey == publicKey2);
+        assertEquals("The keys should be the same.", publicKey, publicKey2);
+    }
 
-		PublicKey otherKey = KeyPairGenerator.getInstance(KeyFileUtilities.keyAlgorithm).
-				generateKeyPair().getPublic();
+    @Test
+    public void testPublicKeyEncryption04() throws Throwable
+    {
+        PublicKey publicKey = KeyPairGenerator.getInstance(KeyFileUtilities.keyAlgorithm).
+                generateKeyPair().getPublic();
 
-		assertFalse("The keys should not be equal (1).", otherKey.equals(publicKey));
+        PublicKey otherKey = KeyPairGenerator.getInstance(KeyFileUtilities.keyAlgorithm).
+                generateKeyPair().getPublic();
 
-		byte[] publicKeyData = KeyFileUtilities.writeEncryptedPublicKey(publicKey,
-																		"yourTestPassword02".toCharArray());
+        assertFalse("The keys should not be equal (1).", otherKey.equals(publicKey));
 
-		assertNotNull("The key data should not be null.", publicKeyData);
-		assertTrue("The key data should have length.", publicKeyData.length > 0);
+        byte[] publicKeyData = KeyFileUtilities.writeEncryptedPublicKey(publicKey,
+                                                                        "yourTestPassword02".toCharArray());
 
-		PublicKey publicKey2 = KeyFileUtilities.readEncryptedPublicKey(publicKeyData,
-																	   "yourTestPassword02".toCharArray());
+        assertNotNull("The key data should not be null.", publicKeyData);
+        assertTrue("The key data should have length.", publicKeyData.length > 0);
 
-		assertNotNull("The key should not be null.", publicKey2);
-		assertFalse("The objects should not be the same.", publicKey == publicKey2);
-		assertEquals("The keys should be the same.", publicKey, publicKey2);
+        PublicKey publicKey2 = KeyFileUtilities.readEncryptedPublicKey(publicKeyData,
+                                                                       "yourTestPassword02".toCharArray());
 
-		assertFalse("The keys should not be equal (2).", otherKey.equals(publicKey2));
-	}
+        assertNotNull("The key should not be null.", publicKey2);
+        assertFalse("The objects should not be the same.", publicKey == publicKey2);
+        assertEquals("The keys should be the same.", publicKey, publicKey2);
+
+        assertFalse("The keys should not be equal (2).", otherKey.equals(publicKey2));
+    }
 }

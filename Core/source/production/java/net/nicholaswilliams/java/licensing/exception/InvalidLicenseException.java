@@ -29,25 +29,25 @@ package net.nicholaswilliams.java.licensing.exception;
 @SuppressWarnings("unused")
 public class InvalidLicenseException extends RuntimeException
 {
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-	public InvalidLicenseException()
-	{
-		super("The license is not valid.");
-	}
+    public InvalidLicenseException()
+    {
+        super("The license is not valid.");
+    }
 
-	public InvalidLicenseException(String message)
-	{
-		super(message);
-	}
+    public InvalidLicenseException(String message)
+    {
+        super(message);
+    }
 
-	public InvalidLicenseException(Throwable cause)
-	{
-		super("The license is not valid.", cause);
-	}
+    public InvalidLicenseException(Throwable cause)
+    {
+        super("The license is not valid.", cause);
+    }
 
-	public InvalidLicenseException(String message, Throwable cause)
-	{
-		super(message, cause);
-	}
+    public InvalidLicenseException(String message, Throwable cause)
+    {
+        super(message, cause);
+    }
 }

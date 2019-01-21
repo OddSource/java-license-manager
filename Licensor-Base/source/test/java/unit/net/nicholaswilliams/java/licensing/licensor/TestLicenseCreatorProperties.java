@@ -32,36 +32,36 @@ import static org.junit.Assert.*;
  */
 public class TestLicenseCreatorProperties
 {
-	@Before
-	public void setUp()
-	{
+    @Before
+    public void setUp()
+    {
 
-	}
+    }
 
-	@After
-	public void tearDown()
-	{
+    @After
+    public void tearDown()
+    {
 
-	}
+    }
 
-	@Test
-	public void testConstructionForbidden()
-			throws IllegalAccessException, InstantiationException, NoSuchMethodException
-	{
-		Constructor<LicenseCreatorProperties> constructor = LicenseCreatorProperties.class.getDeclaredConstructor();
-		constructor.setAccessible(true);
+    @Test
+    public void testConstructionForbidden()
+            throws IllegalAccessException, InstantiationException, NoSuchMethodException
+    {
+        Constructor<LicenseCreatorProperties> constructor = LicenseCreatorProperties.class.getDeclaredConstructor();
+        constructor.setAccessible(true);
 
-		try
-		{
-			constructor.newInstance();
-			fail("Expected exception java.lang.reflect.InvocationTargetException, but got no exception.");
-		}
-		catch(InvocationTargetException e)
-		{
-			Throwable cause = e.getCause();
-			assertNotNull("Expected cause for InvocationTargetException, but got no cause.", cause);
-			assertSame("Expected exception java.lang.RuntimeException, but got " + cause.getClass(), RuntimeException.class, cause.getClass());
-			assertEquals("The message was incorrect.", "This class cannot be instantiated.", cause.getMessage());
-		}
-	}
+        try
+        {
+            constructor.newInstance();
+            fail("Expected exception java.lang.reflect.InvocationTargetException, but got no exception.");
+        }
+        catch(InvocationTargetException e)
+        {
+            Throwable cause = e.getCause();
+            assertNotNull("Expected cause for InvocationTargetException, but got no cause.", cause);
+            assertSame("Expected exception java.lang.RuntimeException, but got " + cause.getClass(), RuntimeException.class, cause.getClass());
+            assertEquals("The message was incorrect.", "This class cannot be instantiated.", cause.getMessage());
+        }
+    }
 }

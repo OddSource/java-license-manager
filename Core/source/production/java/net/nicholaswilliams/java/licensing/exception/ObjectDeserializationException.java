@@ -30,25 +30,25 @@ package net.nicholaswilliams.java.licensing.exception;
 @SuppressWarnings("unused")
 public class ObjectDeserializationException extends RuntimeException
 {
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-	public ObjectDeserializationException()
-	{
-		super("An error occurred while reading the object from the byte array.");
-	}
+    public ObjectDeserializationException()
+    {
+        super("An error occurred while reading the object from the byte array.");
+    }
 
-	public ObjectDeserializationException(String message)
-	{
-		super(message);
-	}
+    public ObjectDeserializationException(String message)
+    {
+        super(message);
+    }
 
-	public ObjectDeserializationException(Throwable cause)
-	{
-		super("An error occurred while reading the object from the byte array.", cause);
-	}
+    public ObjectDeserializationException(Throwable cause)
+    {
+        super("An error occurred while reading the object from the byte array.", cause);
+    }
 
-	public ObjectDeserializationException(String message, Throwable cause)
-	{
-		super(message, cause);
-	}
+    public ObjectDeserializationException(String message, Throwable cause)
+    {
+        super(message, cause);
+    }
 }

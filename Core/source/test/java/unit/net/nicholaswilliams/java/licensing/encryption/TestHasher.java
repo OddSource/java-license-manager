@@ -32,73 +32,73 @@ import static org.junit.Assert.*;
  */
 public class TestHasher
 {
-	@Before
-	public void setUp()
-	{
+    @Before
+    public void setUp()
+    {
 
-	}
+    }
 
-	@After
-	public void tearDown()
-	{
+    @After
+    public void tearDown()
+    {
 
-	}
+    }
 
-	@Test
-	public void testConstructionForbidden()
-			throws IllegalAccessException, InstantiationException, NoSuchMethodException
-	{
-		Constructor<Hasher> constructor = Hasher.class.getDeclaredConstructor();
-		constructor.setAccessible(true);
+    @Test
+    public void testConstructionForbidden()
+            throws IllegalAccessException, InstantiationException, NoSuchMethodException
+    {
+        Constructor<Hasher> constructor = Hasher.class.getDeclaredConstructor();
+        constructor.setAccessible(true);
 
-		try
-		{
-			constructor.newInstance();
-			fail("Expected exception java.lang.reflect.InvocationTargetException, but got no exception.");
-		}
-		catch(InvocationTargetException e)
-		{
-			Throwable cause = e.getCause();
-			assertNotNull("Expected cause for InvocationTargetException, but got no cause.", cause);
-			assertSame("Expected exception java.lang.RuntimeException, but got " + cause.getClass(), RuntimeException.class, cause.getClass());
-			assertEquals("The message was incorrect.", "This class cannot be instantiated.", cause.getMessage());
-		}
-	}
+        try
+        {
+            constructor.newInstance();
+            fail("Expected exception java.lang.reflect.InvocationTargetException, but got no exception.");
+        }
+        catch(InvocationTargetException e)
+        {
+            Throwable cause = e.getCause();
+            assertNotNull("Expected cause for InvocationTargetException, but got no cause.", cause);
+            assertSame("Expected exception java.lang.RuntimeException, but got " + cause.getClass(), RuntimeException.class, cause.getClass());
+            assertEquals("The message was incorrect.", "This class cannot be instantiated.", cause.getMessage());
+        }
+    }
 
-	@Test
-	public void testHashSameStrings() throws Exception
-	{
-		String unhashed = "myteststring";
+    @Test
+    public void testHashSameStrings() throws Exception
+    {
+        String unhashed = "myteststring";
 
-		String enc1 = Hasher.hash(unhashed);
-		String enc2 = Hasher.hash(unhashed);
-		String enc3 = Hasher.hash(unhashed);
+        String enc1 = Hasher.hash(unhashed);
+        String enc2 = Hasher.hash(unhashed);
+        String enc3 = Hasher.hash(unhashed);
 
-		assertNotNull("The first encrypted string was null.", enc1);
-		assertNotNull("The second encrypted string was null.", enc2);
-		assertNotNull("The third encrypted string was null.", enc3);
+        assertNotNull("The first encrypted string was null.", enc1);
+        assertNotNull("The second encrypted string was null.", enc2);
+        assertNotNull("The third encrypted string was null.", enc3);
 
-		assertFalse("The first encrypted string was not encrypted properly.", enc1.equals(unhashed));
-		assertFalse("The second encrypted string was not encrypted properly.", enc2.equals(unhashed));
-		assertFalse("The third encrypted string was not encrypted properly.", enc3.equals(unhashed));
+        assertFalse("The first encrypted string was not encrypted properly.", enc1.equals(unhashed));
+        assertFalse("The second encrypted string was not encrypted properly.", enc2.equals(unhashed));
+        assertFalse("The third encrypted string was not encrypted properly.", enc3.equals(unhashed));
 
-		assertEquals("The first and second encrypted strings do not match.", enc1, enc2);
-		assertEquals("The first and third encrypted strings do not match.", enc1, enc3);
-		assertEquals("The second and third encrypted strings do not match.", enc2, enc3);
-	}
+        assertEquals("The first and second encrypted strings do not match.", enc1, enc2);
+        assertEquals("The first and third encrypted strings do not match.", enc1, enc3);
+        assertEquals("The second and third encrypted strings do not match.", enc2, enc3);
+    }
 
-	@Test
-	public void testHashDifferentString() throws Exception
-	{
-		String unhashed1 = "myteststring1";
-		String unhashed2 = "myteststring2";
+    @Test
+    public void testHashDifferentString() throws Exception
+    {
+        String unhashed1 = "myteststring1";
+        String unhashed2 = "myteststring2";
 
-		String encrypted1 = Hasher.hash(unhashed1);
-		String encrypted2 = Hasher.hash(unhashed2);
+        String encrypted1 = Hasher.hash(unhashed1);
+        String encrypted2 = Hasher.hash(unhashed2);
 
-		assertNotNull("The first encrypted string was null.", encrypted1);
-		assertNotNull("The second encrypted string was null.", encrypted2);
+        assertNotNull("The first encrypted string was null.", encrypted1);
+        assertNotNull("The second encrypted string was null.", encrypted2);
 
-		assertFalse("The first encrypted string matches the second encrypted string, and it shouldn't.", encrypted1.equals(encrypted2));
-	}
+        assertFalse("The first encrypted string matches the second encrypted string, and it shouldn't.", encrypted1.equals(encrypted2));
+    }
 }

@@ -35,26 +35,26 @@ import java.io.IOException;
 @SuppressWarnings("unused")
 public class SampleFilePrivateKeyDataProvider implements PrivateKeyDataProvider
 {
-	/**
-	 * This method returns the data from the file containing the encrypted
-	 * private key from the public/private key pair. The contract for this
-	 * method can be fulfilled by storing the data in a byte array literal
-	 * in the source code itself.
-	 *
-	 * @return the encrypted file contents from the private key file.
-	 * @throws KeyNotFoundException if the key data could not be retrieved; an acceptable message or chained cause must be provided.
-	 */
-	public byte[] getEncryptedPrivateKeyData() throws KeyNotFoundException
-	{
-		try
-		{
-			return IOUtils.toByteArray(
-					this.getClass().getResourceAsStream("sample.private.key")
-			);
-		}
-		catch(IOException e)
-		{
-			throw new KeyNotFoundException("The private key file was not found.", e);
-		}
-	}
+    /**
+     * This method returns the data from the file containing the encrypted
+     * private key from the public/private key pair. The contract for this
+     * method can be fulfilled by storing the data in a byte array literal
+     * in the source code itself.
+     *
+     * @return the encrypted file contents from the private key file.
+     * @throws KeyNotFoundException if the key data could not be retrieved; an acceptable message or chained cause must be provided.
+     */
+    public byte[] getEncryptedPrivateKeyData() throws KeyNotFoundException
+    {
+        try
+        {
+            return IOUtils.toByteArray(
+                    this.getClass().getResourceAsStream("sample.private.key")
+            );
+        }
+        catch(IOException e)
+        {
+            throw new KeyNotFoundException("The private key file was not found.", e);
+        }
+    }
 }

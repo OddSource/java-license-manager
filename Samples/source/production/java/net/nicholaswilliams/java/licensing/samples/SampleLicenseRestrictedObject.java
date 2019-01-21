@@ -29,20 +29,20 @@ import net.nicholaswilliams.java.licensing.FeatureRestrictionOperand;
 @SuppressWarnings("unused")
 public class SampleLicenseRestrictedObject
 {
-	public SampleLicenseRestrictedObject()
-	{
-		
-	}
+    public SampleLicenseRestrictedObject()
+    {
 
-	@FeatureRestriction({"FEATURE2", "FEATURE3"})
-	public void furtherRestrictedFeature()
-	{
+    }
 
-	}
+    @FeatureRestriction({"FEATURE2", "FEATURE3"})
+    public void furtherRestrictedFeature()
+    {
 
-	@FeatureRestriction(value={"FEATURE2", "FEATURE3"}, operand=FeatureRestrictionOperand.OR)
-	public void furtherLessRestrictedFeature()
-	{
+    }
 
-	}
+    @FeatureRestriction(value={"FEATURE2", "FEATURE3"}, operand=FeatureRestrictionOperand.OR)
+    public void furtherLessRestrictedFeature()
+    {
+
+    }
 }

@@ -29,46 +29,46 @@ import static org.junit.Assert.*;
  */
 public class TestSignedLicense
 {
-	private SignedLicense license;
+    private SignedLicense license;
 
-	@Before
-	public void setUp()
-	{
-		this.license = new SignedLicense(new byte[]{ 0x29, 0x7F, 0x3C }, new byte[]{ 0x01, 0x02, 0x77, 0x40, 0x0F });
-	}
+    @Before
+    public void setUp()
+    {
+        this.license = new SignedLicense(new byte[]{ 0x29, 0x7F, 0x3C }, new byte[]{ 0x01, 0x02, 0x77, 0x40, 0x0F });
+    }
 
-	@After
-	public void tearDown()
-	{
+    @After
+    public void tearDown()
+    {
 
-	}
+    }
 
-	@Test
-	public void testLicenseContent()
-	{
-		assertArrayEquals("The license content is not correct.", new byte[]{ 0x29, 0x7F, 0x3C },
-						  this.license.getLicenseContent());
-	}
+    @Test
+    public void testLicenseContent()
+    {
+        assertArrayEquals("The license content is not correct.", new byte[]{ 0x29, 0x7F, 0x3C },
+                          this.license.getLicenseContent());
+    }
 
-	@Test
-	public void testSignatureContent()
-	{
-		assertArrayEquals("The signature content is not correct.", new byte[]{ 0x01, 0x02, 0x77, 0x40, 0x0F },
-						  this.license.getSignatureContent());
-	}
+    @Test
+    public void testSignatureContent()
+    {
+        assertArrayEquals("The signature content is not correct.", new byte[]{ 0x01, 0x02, 0x77, 0x40, 0x0F },
+                          this.license.getSignatureContent());
+    }
 
-	@Test
-	public void testDeserialization() throws ClassNotFoundException
-	{
-		Class.forName("net.nicholaswilliams.java.licensing.LicenseSecurityManager");
+    @Test
+    public void testDeserialization() throws ClassNotFoundException
+    {
+        Class.forName("net.nicholaswilliams.java.licensing.LicenseSecurityManager");
 
-		byte[] data = new ObjectSerializer().writeObject(this.license);
+        byte[] data = new ObjectSerializer().writeObject(this.license);
 
-		SignedLicense signedLicense = new ObjectSerializer().readObject(SignedLicense.class, data);
+        SignedLicense signedLicense = new ObjectSerializer().readObject(SignedLicense.class, data);
 
-		assertArrayEquals("The license content is not correct.",
-						  this.license.getLicenseContent(), signedLicense.getLicenseContent());
-		assertArrayEquals("The signature content is not correct.",
-						  this.license.getSignatureContent(), signedLicense.getSignatureContent());
-	}
+        assertArrayEquals("The license content is not correct.",
+                          this.license.getLicenseContent(), signedLicense.getLicenseContent());
+        assertArrayEquals("The signature content is not correct.",
+                          this.license.getSignatureContent(), signedLicense.getSignatureContent());
+    }
 }

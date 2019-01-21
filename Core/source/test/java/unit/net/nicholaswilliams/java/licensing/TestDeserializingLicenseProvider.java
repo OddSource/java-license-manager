@@ -30,65 +30,65 @@ import static org.junit.Assert.*;
  */
 public class TestDeserializingLicenseProvider
 {
-	private DeserializingLicenseProvider provider;
+    private DeserializingLicenseProvider provider;
 
-	@Before
-	public void setUp()
-	{
-		this.provider = EasyMock.createMockBuilder(DeserializingLicenseProvider.class).
-				addMockedMethod("getLicenseData").createStrictMock();
-	}
+    @Before
+    public void setUp()
+    {
+        this.provider = EasyMock.createMockBuilder(DeserializingLicenseProvider.class).
+                addMockedMethod("getLicenseData").createStrictMock();
+    }
 
-	@After
-	public void tearDown()
-	{
-		EasyMock.verify(this.provider);
-	}
+    @After
+    public void tearDown()
+    {
+        EasyMock.verify(this.provider);
+    }
 
-	@Test
-	public void testGetLicense01()
-	{
-		EasyMock.expect(this.provider.getLicenseData("nullCustomer01")).andReturn(null);
-		EasyMock.replay(this.provider);
+    @Test
+    public void testGetLicense01()
+    {
+        EasyMock.expect(this.provider.getLicenseData("nullCustomer01")).andReturn(null);
+        EasyMock.replay(this.provider);
 
-		SignedLicense retrieved = this.provider.getLicense("nullCustomer01");
+        SignedLicense retrieved = this.provider.getLicense("nullCustomer01");
 
-		assertNull("The retrieved license should be null.", retrieved);
-	}
+        assertNull("The retrieved license should be null.", retrieved);
+    }
 
-	@Test
-	public void testGetLicense02()
-	{
-		byte[] licenseContent = new byte[] { 0x1F };
-		byte[] signatureContent = new byte[] { 0x2F };
-		SignedLicense license = new SignedLicense(licenseContent, signatureContent);
-		byte[] serialized = new ObjectSerializer().writeObject(license);
+    @Test
+    public void testGetLicense02()
+    {
+        byte[] licenseContent = new byte[] { 0x1F };
+        byte[] signatureContent = new byte[] { 0x2F };
+        SignedLicense license = new SignedLicense(licenseContent, signatureContent);
+        byte[] serialized = new ObjectSerializer().writeObject(license);
 
-		EasyMock.expect(this.provider.getLicenseData("testCustomer02")).andReturn(serialized);
-		EasyMock.replay(this.provider);
+        EasyMock.expect(this.provider.getLicenseData("testCustomer02")).andReturn(serialized);
+        EasyMock.replay(this.provider);
 
-		SignedLicense retrieved = this.provider.getLicense("testCustomer02");
+        SignedLicense retrieved = this.provider.getLicense("testCustomer02");
 
-		assertNotNull("The retrieved license should not be null.", retrieved);
-		assertArrayEquals("The license is not correct.", licenseContent, retrieved.getLicenseContent());
-		assertArrayEquals("The signature is not correct.", signatureContent, retrieved.getSignatureContent());
-	}
+        assertNotNull("The retrieved license should not be null.", retrieved);
+        assertArrayEquals("The license is not correct.", licenseContent, retrieved.getLicenseContent());
+        assertArrayEquals("The signature is not correct.", signatureContent, retrieved.getSignatureContent());
+    }
 
-	@Test
-	public void testGetLicense03()
-	{
-		byte[] licenseContent = new byte[] { 0x3F };
-		byte[] signatureContent = new byte[] { 0x4F };
-		SignedLicense license = new SignedLicense(licenseContent, signatureContent);
-		byte[] serialized = new ObjectSerializer().writeObject(license);
+    @Test
+    public void testGetLicense03()
+    {
+        byte[] licenseContent = new byte[] { 0x3F };
+        byte[] signatureContent = new byte[] { 0x4F };
+        SignedLicense license = new SignedLicense(licenseContent, signatureContent);
+        byte[] serialized = new ObjectSerializer().writeObject(license);
 
-		EasyMock.expect(this.provider.getLicenseData("anotherCustomer03")).andReturn(serialized);
-		EasyMock.replay(this.provider);
+        EasyMock.expect(this.provider.getLicenseData("anotherCustomer03")).andReturn(serialized);
+        EasyMock.replay(this.provider);
 
-		SignedLicense retrieved = this.provider.getLicense("anotherCustomer03");
+        SignedLicense retrieved = this.provider.getLicense("anotherCustomer03");
 
-		assertNotNull("The retrieved license should not be null.", retrieved);
-		assertArrayEquals("The license is not correct.", licenseContent, retrieved.getLicenseContent());
-		assertArrayEquals("The signature is not correct.", signatureContent, retrieved.getSignatureContent());
-	}
+        assertNotNull("The retrieved license should not be null.", retrieved);
+        assertArrayEquals("The license is not correct.", licenseContent, retrieved.getLicenseContent());
+        assertArrayEquals("The signature is not correct.", signatureContent, retrieved.getSignatureContent());
+    }
 }

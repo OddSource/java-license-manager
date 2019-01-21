@@ -31,131 +31,131 @@ import net.nicholaswilliams.java.licensing.encryption.PublicKeyDataProvider;
  */
 public final class LicenseManagerProperties
 {
-	private static PublicKeyDataProvider publicKeyDataProvider;
+    private static PublicKeyDataProvider publicKeyDataProvider;
 
-	private static PasswordProvider publicKeyPasswordProvider;
+    private static PasswordProvider publicKeyPasswordProvider;
 
-	private static LicenseProvider licenseProvider;
+    private static LicenseProvider licenseProvider;
 
-	private static PasswordProvider licensePasswordProvider;
+    private static PasswordProvider licensePasswordProvider;
 
-	private static LicenseValidator licenseValidator;
+    private static LicenseValidator licenseValidator;
 
-	private static int cacheTimeInMinutes;
+    private static int cacheTimeInMinutes;
 
-	/**
-	 * Sets the provider of the data for the public key companion to the private key used to sign the license
-	 * object.<br />
-	 * <br />
-	 * This field is <b>required</b>.
-	 *
-	 * @param publicKeyDataProvider The provider of the data for the public key companion to the private key used to sign the license object
-	 */
-	public static void setPublicKeyDataProvider(PublicKeyDataProvider publicKeyDataProvider)
-	{
-		LicenseManagerProperties.publicKeyDataProvider = publicKeyDataProvider;
-	}
+    /**
+     * Sets the provider of the data for the public key companion to the private key used to sign the license
+     * object.<br />
+     * <br />
+     * This field is <b>required</b>.
+     *
+     * @param publicKeyDataProvider The provider of the data for the public key companion to the private key used to sign the license object
+     */
+    public static void setPublicKeyDataProvider(PublicKeyDataProvider publicKeyDataProvider)
+    {
+        LicenseManagerProperties.publicKeyDataProvider = publicKeyDataProvider;
+    }
 
-	static PublicKeyDataProvider getPublicKeyDataProvider()
-	{
-		return LicenseManagerProperties.publicKeyDataProvider;
-	}
+    static PublicKeyDataProvider getPublicKeyDataProvider()
+    {
+        return LicenseManagerProperties.publicKeyDataProvider;
+    }
 
-	/**
-	 * Sets the provider of the password for decrypting the public key.<br />
-	 * <br />
-	 * This field is <b>required</b>.
-	 *
-	 * @param publicKeyPasswordProvider The provider of the password for decrypting the public key
-	 */
-	public static void setPublicKeyPasswordProvider(PasswordProvider publicKeyPasswordProvider)
-	{
-		LicenseManagerProperties.publicKeyPasswordProvider = publicKeyPasswordProvider;
-	}
+    /**
+     * Sets the provider of the password for decrypting the public key.<br />
+     * <br />
+     * This field is <b>required</b>.
+     *
+     * @param publicKeyPasswordProvider The provider of the password for decrypting the public key
+     */
+    public static void setPublicKeyPasswordProvider(PasswordProvider publicKeyPasswordProvider)
+    {
+        LicenseManagerProperties.publicKeyPasswordProvider = publicKeyPasswordProvider;
+    }
 
-	static PasswordProvider getPublicKeyPasswordProvider()
-	{
-		return LicenseManagerProperties.publicKeyPasswordProvider;
-	}
+    static PasswordProvider getPublicKeyPasswordProvider()
+    {
+        return LicenseManagerProperties.publicKeyPasswordProvider;
+    }
 
-	/**
-	 * Sets the provider of the persisted license data.<br />
-	 * <br />
-	 * This field is <b>required</b>.
-	 *
-	 * @param licenseProvider The provider of the persisted license data
-	 */
-	public static void setLicenseProvider(LicenseProvider licenseProvider)
-	{
-		LicenseManagerProperties.licenseProvider = licenseProvider;
-	}
+    /**
+     * Sets the provider of the persisted license data.<br />
+     * <br />
+     * This field is <b>required</b>.
+     *
+     * @param licenseProvider The provider of the persisted license data
+     */
+    public static void setLicenseProvider(LicenseProvider licenseProvider)
+    {
+        LicenseManagerProperties.licenseProvider = licenseProvider;
+    }
 
-	static LicenseProvider getLicenseProvider()
-	{
-		return LicenseManagerProperties.licenseProvider;
-	}
+    static LicenseProvider getLicenseProvider()
+    {
+        return LicenseManagerProperties.licenseProvider;
+    }
 
-	/**
-	 * Sets the provider of the password for the persisted license data.<br />
-	 * <br />
-	 * This field is <b>optional</b>. If not provided, the
-	 * {@link #setPublicKeyPasswordProvider(PasswordProvider) publicKeyPasswordProvider} will be used to decrypt
-	 * licenses.
-	 *
-	 * @param licensePasswordProvider The provider of the password for decrypting license data
-	 */
-	public static void setLicensePasswordProvider(PasswordProvider licensePasswordProvider)
-	{
-		LicenseManagerProperties.licensePasswordProvider = licensePasswordProvider;
-	}
+    /**
+     * Sets the provider of the password for the persisted license data.<br />
+     * <br />
+     * This field is <b>optional</b>. If not provided, the
+     * {@link #setPublicKeyPasswordProvider(PasswordProvider) publicKeyPasswordProvider} will be used to decrypt
+     * licenses.
+     *
+     * @param licensePasswordProvider The provider of the password for decrypting license data
+     */
+    public static void setLicensePasswordProvider(PasswordProvider licensePasswordProvider)
+    {
+        LicenseManagerProperties.licensePasswordProvider = licensePasswordProvider;
+    }
 
-	static PasswordProvider getLicensePasswordProvider()
-	{
-		return LicenseManagerProperties.licensePasswordProvider;
-	}
+    static PasswordProvider getLicensePasswordProvider()
+    {
+        return LicenseManagerProperties.licensePasswordProvider;
+    }
 
-	/**
-	 * Sets the validator implementation that validates all licenses; if null, licenses are assumed to always be valid.
-	 * If you do not want to validate licenses automatically, you do not need to provide a validator, or you may set
-	 * it to null.<br />
-	 * <br />
-	 * This field is <b>optional</b> and defaults to no validation.
-	 * 
-	 * @param licenseValidator The validator implementation that validates all licenses; if null, licenses are assumed to always be valid
-	 */
-	public static void setLicenseValidator(LicenseValidator licenseValidator)
-	{
-		LicenseManagerProperties.licenseValidator = licenseValidator;
-	}
+    /**
+     * Sets the validator implementation that validates all licenses; if null, licenses are assumed to always be valid.
+     * If you do not want to validate licenses automatically, you do not need to provide a validator, or you may set
+     * it to null.<br />
+     * <br />
+     * This field is <b>optional</b> and defaults to no validation.
+     *
+     * @param licenseValidator The validator implementation that validates all licenses; if null, licenses are assumed to always be valid
+     */
+    public static void setLicenseValidator(LicenseValidator licenseValidator)
+    {
+        LicenseManagerProperties.licenseValidator = licenseValidator;
+    }
 
-	static LicenseValidator getLicenseValidator()
-	{
-		return LicenseManagerProperties.licenseValidator;
-	}
+    static LicenseValidator getLicenseValidator()
+    {
+        return LicenseManagerProperties.licenseValidator;
+    }
 
-	/**
-	 * Sets the length of time in minutes to cache license information (for performance reasons, anything less than 1
-	 * minute results in a 10-second cache life; the cache cannot be disabled completely).<br />
-	 * <br />
-	 * This field is <b>optional</b> and defaults to 10 seconds.
-	 *
-	 * @param cacheTimeInMinutes The length of time in minutes to cache license information
-	 */
-	public static void setCacheTimeInMinutes(int cacheTimeInMinutes)
-	{
-		LicenseManagerProperties.cacheTimeInMinutes = cacheTimeInMinutes;
-	}
+    /**
+     * Sets the length of time in minutes to cache license information (for performance reasons, anything less than 1
+     * minute results in a 10-second cache life; the cache cannot be disabled completely).<br />
+     * <br />
+     * This field is <b>optional</b> and defaults to 10 seconds.
+     *
+     * @param cacheTimeInMinutes The length of time in minutes to cache license information
+     */
+    public static void setCacheTimeInMinutes(int cacheTimeInMinutes)
+    {
+        LicenseManagerProperties.cacheTimeInMinutes = cacheTimeInMinutes;
+    }
 
-	static int getCacheTimeInMinutes()
-	{
-		return cacheTimeInMinutes;
-	}
+    static int getCacheTimeInMinutes()
+    {
+        return cacheTimeInMinutes;
+    }
 
-	/**
-	 * This class cannot be instantiated.
-	 */
-	private LicenseManagerProperties()
-	{
-		throw new RuntimeException("This class cannot be instantiated.");
-	}
+    /**
+     * This class cannot be instantiated.
+     */
+    private LicenseManagerProperties()
+    {
+        throw new RuntimeException("This class cannot be instantiated.");
+    }
 }

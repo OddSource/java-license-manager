@@ -29,39 +29,39 @@ import java.util.Iterator;
  */
 public final class ImmutableIterator<E> implements Immutable, Iterator<E>
 {
-	private final Iterator<E> internal;
+    private final Iterator<E> internal;
 
-	private final ValidObject validObject;
+    private final ValidObject validObject;
 
-	ImmutableIterator(Iterator<E> iterator, ValidObject validObject)
-	{
-		this.internal = iterator;
-		this.validObject = validObject;
-	}
+    ImmutableIterator(Iterator<E> iterator, ValidObject validObject)
+    {
+        this.internal = iterator;
+        this.validObject = validObject;
+    }
 
-	@Override
-	public boolean hasNext()
-	{
-		synchronized(this.validObject)
-		{
-			this.validObject.checkValidity();
-			return this.internal.hasNext();
-		}
-	}
+    @Override
+    public boolean hasNext()
+    {
+        synchronized(this.validObject)
+        {
+            this.validObject.checkValidity();
+            return this.internal.hasNext();
+        }
+    }
 
-	@Override
-	public E next()
-	{
-		synchronized(this.validObject)
-		{
-			this.validObject.checkValidity();
-			return this.internal.next();
-		}
-	}
+    @Override
+    public E next()
+    {
+        synchronized(this.validObject)
+        {
+            this.validObject.checkValidity();
+            return this.internal.next();
+        }
+    }
 
-	@Override
-	public void remove()
-	{
-		throw new UnsupportedOperationException("This iterator cannot be modified.");
-	}
+    @Override
+    public void remove()
+    {
+        throw new UnsupportedOperationException("This iterator cannot be modified.");
+    }
 }

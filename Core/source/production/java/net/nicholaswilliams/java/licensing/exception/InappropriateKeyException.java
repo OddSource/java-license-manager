@@ -29,25 +29,25 @@ package net.nicholaswilliams.java.licensing.exception;
 @SuppressWarnings("unused")
 public class InappropriateKeyException extends RuntimeException
 {
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-	public InappropriateKeyException()
-	{
-		super("The specified key is inappropriate for the cipher.");
-	}
+    public InappropriateKeyException()
+    {
+        super("The specified key is inappropriate for the cipher.");
+    }
 
-	public InappropriateKeyException(String message)
-	{
-		super(message);
-	}
+    public InappropriateKeyException(String message)
+    {
+        super(message);
+    }
 
-	public InappropriateKeyException(Throwable cause)
-	{
-		super("The specified key is inappropriate for the cipher.", cause);
-	}
+    public InappropriateKeyException(Throwable cause)
+    {
+        super("The specified key is inappropriate for the cipher.", cause);
+    }
 
-	public InappropriateKeyException(String message, Throwable cause)
-	{
-		super(message, cause);
-	}
+    public InappropriateKeyException(String message, Throwable cause)
+    {
+        super(message, cause);
+    }
 }

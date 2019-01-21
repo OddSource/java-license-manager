@@ -33,195 +33,195 @@ import static org.junit.Assert.*;
  */
 public class TestImmutableListIterator
 {
-	private ImmutableListIterator<String> iterator;
+    private ImmutableListIterator<String> iterator;
 
-	private MockValidObject valid;
+    private MockValidObject valid;
 
-	public TestImmutableListIterator()
-	{
-		ArrayList<String> temp = new ArrayList<String>();
-		temp.add("MyString1");
-		temp.add("YourString2");
-		temp.add("HisString3");
-		temp.add("HerString4");
+    public TestImmutableListIterator()
+    {
+        ArrayList<String> temp = new ArrayList<String>();
+        temp.add("MyString1");
+        temp.add("YourString2");
+        temp.add("HisString3");
+        temp.add("HerString4");
 
-		this.valid = new MockValidObject();
+        this.valid = new MockValidObject();
 
-		this.iterator = new ImmutableListIterator<String>(temp.listIterator(), this.valid);
-	}
+        this.iterator = new ImmutableListIterator<String>(temp.listIterator(), this.valid);
+    }
 
-	@BeforeClass
-	public static void setUpClass() throws Exception
-	{
-	}
+    @BeforeClass
+    public static void setUpClass() throws Exception
+    {
+    }
 
-	@AfterClass
-	public static void tearDownClass() throws Exception
-	{
-	}
+    @AfterClass
+    public static void tearDownClass() throws Exception
+    {
+    }
 
-	@Before
-	public void setUp()
-	{
-		
-	}
+    @Before
+    public void setUp()
+    {
 
-	@After
-	public void tearDown()
-	{
-		
-	}
+    }
 
-	@Test(expected=UnsupportedOperationException.class)
-	public void testAddNotAllowed()
-	{
-		this.iterator.add("Test");
-	}
+    @After
+    public void tearDown()
+    {
 
-	@Test(expected=UnsupportedOperationException.class)
-	public void testRemoveNotAllowed()
-	{
-		this.iterator.remove();
-	}
+    }
 
-	@Test(expected=UnsupportedOperationException.class)
-	public void testSetNotAllowed()
-	{
-		this.iterator.set("Test");
-	}
+    @Test(expected=UnsupportedOperationException.class)
+    public void testAddNotAllowed()
+    {
+        this.iterator.add("Test");
+    }
 
-	@Test
-	public void testNext01()
-	{
-		this.valid.valid = true;
+    @Test(expected=UnsupportedOperationException.class)
+    public void testRemoveNotAllowed()
+    {
+        this.iterator.remove();
+    }
 
-		String[] array = new String[] { "MyString1", "YourString2", "HisString3", "HerString4" };
-		int i = 0;
+    @Test(expected=UnsupportedOperationException.class)
+    public void testSetNotAllowed()
+    {
+        this.iterator.set("Test");
+    }
 
-		while(this.iterator.hasNext())
-		{
-			assertEquals("The index is not correct.", i, this.iterator.nextIndex());
-			
-			String string = this.iterator.next();
+    @Test
+    public void testNext01()
+    {
+        this.valid.valid = true;
 
-			assertNotNull("This string should not be null " + i, string);
-			assertEquals("This string is not correct " + i, array[i++], string);
-		}
-	}
+        String[] array = new String[] { "MyString1", "YourString2", "HisString3", "HerString4" };
+        int i = 0;
 
-	@Test(expected=ImmutableModifiedThroughReflectionException.class)
-	public void testNext02()
-	{
-		this.valid.valid = false;
-		this.iterator.hasNext();
-	}
+        while(this.iterator.hasNext())
+        {
+            assertEquals("The index is not correct.", i, this.iterator.nextIndex());
 
-	@Test(expected=ImmutableModifiedThroughReflectionException.class)
-	public void testNext03()
-	{
-		this.valid.valid = false;
-		this.iterator.hasNext();
-	}
+            String string = this.iterator.next();
 
-	@Test(expected=ImmutableModifiedThroughReflectionException.class)
-	public void testNext04()
-	{
-		try {
-			this.valid.valid = true;
-			this.iterator.hasNext();
-		} catch(Throwable t) {
-			t.printStackTrace();
-			fail(t.toString());
-		}
-		this.valid.valid = false;
-		this.iterator.next();
-	}
+            assertNotNull("This string should not be null " + i, string);
+            assertEquals("This string is not correct " + i, array[i++], string);
+        }
+    }
 
-	@Test(expected=ImmutableModifiedThroughReflectionException.class)
-	public void testNext05()
-	{
-		try {
-			this.valid.valid = true;
-			this.iterator.hasNext();
-			this.iterator.next();
-			this.iterator.hasNext();
-			this.iterator.next();
-			this.iterator.hasNext();
-		} catch(Throwable t) {
-			t.printStackTrace();
-			fail(t.toString());
-		}
-		this.valid.valid = false;
-		this.iterator.next();
-	}
+    @Test(expected=ImmutableModifiedThroughReflectionException.class)
+    public void testNext02()
+    {
+        this.valid.valid = false;
+        this.iterator.hasNext();
+    }
 
-	@Test
-	public void testPrevious01()
-	{
-		this.valid.valid = true;
+    @Test(expected=ImmutableModifiedThroughReflectionException.class)
+    public void testNext03()
+    {
+        this.valid.valid = false;
+        this.iterator.hasNext();
+    }
 
-		String[] array = new String[] { "MyString1", "YourString2", "HisString3", "HerString4" };
-		int i = 4;
+    @Test(expected=ImmutableModifiedThroughReflectionException.class)
+    public void testNext04()
+    {
+        try {
+            this.valid.valid = true;
+            this.iterator.hasNext();
+        } catch(Throwable t) {
+            t.printStackTrace();
+            fail(t.toString());
+        }
+        this.valid.valid = false;
+        this.iterator.next();
+    }
 
-		while(this.iterator.hasPrevious())
-		{
-			assertEquals("The index is not correct.", i, this.iterator.previousIndex());
+    @Test(expected=ImmutableModifiedThroughReflectionException.class)
+    public void testNext05()
+    {
+        try {
+            this.valid.valid = true;
+            this.iterator.hasNext();
+            this.iterator.next();
+            this.iterator.hasNext();
+            this.iterator.next();
+            this.iterator.hasNext();
+        } catch(Throwable t) {
+            t.printStackTrace();
+            fail(t.toString());
+        }
+        this.valid.valid = false;
+        this.iterator.next();
+    }
 
-			String string = this.iterator.previous();
+    @Test
+    public void testPrevious01()
+    {
+        this.valid.valid = true;
 
-			assertNotNull("This string should not be null " + i, string);
-			assertEquals("This string is not correct " + i, array[i--], string);
-		}
-	}
+        String[] array = new String[] { "MyString1", "YourString2", "HisString3", "HerString4" };
+        int i = 4;
 
-	@Test(expected=ImmutableModifiedThroughReflectionException.class)
-	public void testPrevious02()
-	{
-		this.valid.valid = false;
-		this.iterator.hasPrevious();
-	}
+        while(this.iterator.hasPrevious())
+        {
+            assertEquals("The index is not correct.", i, this.iterator.previousIndex());
 
-	@Test(expected=ImmutableModifiedThroughReflectionException.class)
-	public void testPrevious03()
-	{
-		this.valid.valid = false;
-		this.iterator.previous();
-	}
+            String string = this.iterator.previous();
 
-	@Test(expected=ImmutableModifiedThroughReflectionException.class)
-	public void testPrevious04()
-	{
-		try {
-			this.valid.valid = true;
-			this.iterator.hasPrevious();
-		} catch(Throwable t) {
-			t.printStackTrace();
-			fail(t.toString());
-		}
-		this.valid.valid = false;
-		this.iterator.previous();
-	}
+            assertNotNull("This string should not be null " + i, string);
+            assertEquals("This string is not correct " + i, array[i--], string);
+        }
+    }
 
-	@Test(expected=ImmutableModifiedThroughReflectionException.class)
-	public void testPrevious05()
-	{
-		try {
-			this.valid.valid = true;
-			this.iterator.next();
-			this.iterator.next();
-			this.iterator.next();
-			this.iterator.next();
-			this.iterator.hasPrevious();
-			this.iterator.previous();
-			this.iterator.hasPrevious();
-			this.iterator.previous();
-			this.iterator.hasPrevious();
-			this.iterator.previous();
-		} catch(Throwable t) {
-			t.printStackTrace();
-			fail(t.toString());
-		}
-		this.valid.valid = false;
-		this.iterator.previous();
-	}
+    @Test(expected=ImmutableModifiedThroughReflectionException.class)
+    public void testPrevious02()
+    {
+        this.valid.valid = false;
+        this.iterator.hasPrevious();
+    }
+
+    @Test(expected=ImmutableModifiedThroughReflectionException.class)
+    public void testPrevious03()
+    {
+        this.valid.valid = false;
+        this.iterator.previous();
+    }
+
+    @Test(expected=ImmutableModifiedThroughReflectionException.class)
+    public void testPrevious04()
+    {
+        try {
+            this.valid.valid = true;
+            this.iterator.hasPrevious();
+        } catch(Throwable t) {
+            t.printStackTrace();
+            fail(t.toString());
+        }
+        this.valid.valid = false;
+        this.iterator.previous();
+    }
+
+    @Test(expected=ImmutableModifiedThroughReflectionException.class)
+    public void testPrevious05()
+    {
+        try {
+            this.valid.valid = true;
+            this.iterator.next();
+            this.iterator.next();
+            this.iterator.next();
+            this.iterator.next();
+            this.iterator.hasPrevious();
+            this.iterator.previous();
+            this.iterator.hasPrevious();
+            this.iterator.previous();
+            this.iterator.hasPrevious();
+            this.iterator.previous();
+        } catch(Throwable t) {
+            t.printStackTrace();
+            fail(t.toString());
+        }
+        this.valid.valid = false;
+        this.iterator.previous();
+    }
 }

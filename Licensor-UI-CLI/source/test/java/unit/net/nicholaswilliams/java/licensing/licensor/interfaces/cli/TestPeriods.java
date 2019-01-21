@@ -33,69 +33,69 @@ import static org.junit.Assert.*;
  */
 public class TestPeriods
 {
-	private Periods periods;
+    private Periods periods;
 
-	private ByteArrayOutputStream outputStream;
+    private ByteArrayOutputStream outputStream;
 
-	@Before
-	public void setUp()
-	{
-		this.outputStream = new ByteArrayOutputStream();
+    @Before
+    public void setUp()
+    {
+        this.outputStream = new ByteArrayOutputStream();
 
-		PrintStream printStream = new PrintStream(outputStream);
+        PrintStream printStream = new PrintStream(outputStream);
 
-		this.periods = new Periods(25, printStream);
-	}
+        this.periods = new Periods(25, printStream);
+    }
 
-	@After
-	public void tearDown()
-	{
+    @After
+    public void tearDown()
+    {
 
-	}
+    }
 
-	@Test
-	public void testRun01() throws InterruptedException
-	{
-		new Thread(this.periods).start();
+    @Test
+    public void testRun01() throws InterruptedException
+    {
+        new Thread(this.periods).start();
 
-		Thread.sleep(100);
+        Thread.sleep(100);
 
-		this.periods.stop();
+        this.periods.stop();
 
-		byte[] bytes = this.outputStream.toByteArray();
-		assertTrue("The length is not correct.", bytes.length >= 3);
-		assertArrayEquals("The arrays are not correct.", Arrays.copyOf(bytes, 3), new byte[] {'.', '.', '.'});
-	}
+        byte[] bytes = this.outputStream.toByteArray();
+        assertTrue("The length is not correct.", bytes.length >= 3);
+        assertArrayEquals("The arrays are not correct.", Arrays.copyOf(bytes, 3), new byte[] {'.', '.', '.'});
+    }
 
-	@Test
-	public void testRun02() throws InterruptedException
-	{
-		Thread thread = new Thread(this.periods);
-		thread.start();
+    @Test
+    public void testRun02() throws InterruptedException
+    {
+        Thread thread = new Thread(this.periods);
+        thread.start();
 
-		Thread.sleep(200);
+        Thread.sleep(200);
 
-		thread.interrupt();
+        thread.interrupt();
 
-		byte[] bytes = this.outputStream.toByteArray();
-		assertTrue("The length is not correct.", bytes.length >= 6);
-		assertArrayEquals("The arrays are not correct.", Arrays.copyOf(bytes, 6), new byte[] {'.', '.', '.', '.', '.', '.'});
-	}
+        byte[] bytes = this.outputStream.toByteArray();
+        assertTrue("The length is not correct.", bytes.length >= 6);
+        assertArrayEquals("The arrays are not correct.", Arrays.copyOf(bytes, 6), new byte[] {'.', '.', '.', '.', '.', '.'});
+    }
 
-	@Test
-	public void testRun03() throws InterruptedException
-	{
-		PrintStream printStream = new PrintStream(outputStream);
-		this.periods = new Periods(50, printStream);
+    @Test
+    public void testRun03() throws InterruptedException
+    {
+        PrintStream printStream = new PrintStream(outputStream);
+        this.periods = new Periods(50, printStream);
 
-		new Thread(this.periods).start();
+        new Thread(this.periods).start();
 
-		Thread.sleep(400);
+        Thread.sleep(400);
 
-		this.periods.stop();
+        this.periods.stop();
 
-		byte[] bytes = this.outputStream.toByteArray();
-		assertTrue("The length is not correct.", bytes.length >= 6);
-		assertArrayEquals("The arrays are not correct.", Arrays.copyOf(bytes, 6), new byte[] {'.', '.', '.', '.', '.', '.'});
-	}
+        byte[] bytes = this.outputStream.toByteArray();
+        assertTrue("The length is not correct.", bytes.length >= 6);
+        assertArrayEquals("The arrays are not correct.", Arrays.copyOf(bytes, 6), new byte[] {'.', '.', '.', '.', '.', '.'});
+    }
 }

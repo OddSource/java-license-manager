@@ -30,38 +30,38 @@ import java.io.PrintStream;
  */
 class Periods implements Runnable
 {
-	private boolean run;
+    private boolean run;
 
-	private final long timeBetweenPeriods;
+    private final long timeBetweenPeriods;
 
-	private final PrintStream outputStream;
+    private final PrintStream outputStream;
 
-	public Periods(long timeBetweenPeriods, PrintStream outputStream)
-	{
-		this.run = true;
-		this.timeBetweenPeriods = timeBetweenPeriods;
-		this.outputStream = outputStream;
-	}
+    public Periods(long timeBetweenPeriods, PrintStream outputStream)
+    {
+        this.run = true;
+        this.timeBetweenPeriods = timeBetweenPeriods;
+        this.outputStream = outputStream;
+    }
 
-	@Override
-	public void run()
-	{
-		while(this.run)
-		{
-			this.outputStream.print('.');
-			try
-			{
-				Thread.sleep(this.timeBetweenPeriods);
-			}
-			catch(InterruptedException e)
-			{
-				break;
-			}
-		}
-	}
+    @Override
+    public void run()
+    {
+        while(this.run)
+        {
+            this.outputStream.print('.');
+            try
+            {
+                Thread.sleep(this.timeBetweenPeriods);
+            }
+            catch(InterruptedException e)
+            {
+                break;
+            }
+        }
+    }
 
-	public void stop()
-	{
-		this.run = false;
-	}
+    public void stop()
+    {
+        this.run = false;
+    }
 }

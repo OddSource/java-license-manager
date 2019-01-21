@@ -35,482 +35,482 @@ import static org.junit.Assert.*;
  */
 public class TestAbstractTextInterfaceDevice
 {
-	private AbstractTextInterfaceDevice device;
-
-	private InputStream inputStream;
-
-	private PrintStream outputStream;
-
-	private PrintStream errorStream;
+    private AbstractTextInterfaceDevice device;
+
+    private InputStream inputStream;
+
+    private PrintStream outputStream;
+
+    private PrintStream errorStream;
 
-	@Before
-	public void setUp() throws FileNotFoundException
-	{
-		this.inputStream = EasyMock.createStrictMock(InputStream.class);
-		this.outputStream = EasyMock.createStrictMock(PrintStream.class);
-		this.errorStream = EasyMock.createStrictMock(PrintStream.class);
+    @Before
+    public void setUp() throws FileNotFoundException
+    {
+        this.inputStream = EasyMock.createStrictMock(InputStream.class);
+        this.outputStream = EasyMock.createStrictMock(PrintStream.class);
+        this.errorStream = EasyMock.createStrictMock(PrintStream.class);
 
-		this.device = EasyMock.createMockBuilder(AbstractTextInterfaceDevice.class).
-				withConstructor(InputStream.class, PrintStream.class, PrintStream.class).
-				withArgs(this.inputStream, this.outputStream, this.errorStream).
-				createStrictMock();
-	}
+        this.device = EasyMock.createMockBuilder(AbstractTextInterfaceDevice.class).
+                withConstructor(InputStream.class, PrintStream.class, PrintStream.class).
+                withArgs(this.inputStream, this.outputStream, this.errorStream).
+                createStrictMock();
+    }
 
-	@After
-	public void tearDown()
-	{
-		EasyMock.verify(this.device, this.inputStream, this.outputStream, this.errorStream);
-	}
+    @After
+    public void tearDown()
+    {
+        EasyMock.verify(this.device, this.inputStream, this.outputStream, this.errorStream);
+    }
 
-	@Test
-	public void testIn()
-	{
-		EasyMock.replay(this.device, this.inputStream, this.outputStream, this.errorStream);
+    @Test
+    public void testIn()
+    {
+        EasyMock.replay(this.device, this.inputStream, this.outputStream, this.errorStream);
 
-		assertSame("The input stream is not correct (1).", this.inputStream, this.device.in);
-		assertSame("The input stream is not correct (2).", this.inputStream, this.device.in());
-	}
+        assertSame("The input stream is not correct (1).", this.inputStream, this.device.in);
+        assertSame("The input stream is not correct (2).", this.inputStream, this.device.in());
+    }
 
-	@Test
-	public void testOut()
-	{
-		EasyMock.replay(this.device, this.inputStream, this.outputStream, this.errorStream);
+    @Test
+    public void testOut()
+    {
+        EasyMock.replay(this.device, this.inputStream, this.outputStream, this.errorStream);
 
-		assertSame("The output stream is not correct (1).", this.outputStream, this.device.out);
-		assertSame("The output stream is not correct (2).", this.outputStream, this.device.out());
-	}
+        assertSame("The output stream is not correct (1).", this.outputStream, this.device.out);
+        assertSame("The output stream is not correct (2).", this.outputStream, this.device.out());
+    }
 
-	@Test
-	public void testErr()
-	{
-		EasyMock.replay(this.device, this.inputStream, this.outputStream, this.errorStream);
+    @Test
+    public void testErr()
+    {
+        EasyMock.replay(this.device, this.inputStream, this.outputStream, this.errorStream);
 
-		assertSame("The error output stream is not correct (1).", this.errorStream, this.device.err);
-		assertSame("The error output stream is not correct (2).", this.errorStream, this.device.err());
-	}
+        assertSame("The error output stream is not correct (1).", this.errorStream, this.device.err);
+        assertSame("The error output stream is not correct (2).", this.errorStream, this.device.err());
+    }
 
-	@Test
-	public void testExit()
-	{
-		this.device.exit(0);
-		EasyMock.expectLastCall();
+    @Test
+    public void testExit()
+    {
+        this.device.exit(0);
+        EasyMock.expectLastCall();
 
-		EasyMock.replay(this.device, this.inputStream, this.outputStream, this.errorStream);
+        EasyMock.replay(this.device, this.inputStream, this.outputStream, this.errorStream);
 
-		this.device.exit();
-	}
+        this.device.exit();
+    }
 
-	@Test
-	public void testPrintOut01()
-	{
-		this.outputStream.print('c');
-		EasyMock.expectLastCall();
+    @Test
+    public void testPrintOut01()
+    {
+        this.outputStream.print('c');
+        EasyMock.expectLastCall();
 
-		EasyMock.replay(this.device, this.inputStream, this.outputStream, this.errorStream);
+        EasyMock.replay(this.device, this.inputStream, this.outputStream, this.errorStream);
 
-		this.device.printOut('c');
-	}
+        this.device.printOut('c');
+    }
 
-	@Test
-	public void testPrintOut02()
-	{
-		this.outputStream.print('z');
-		EasyMock.expectLastCall();
+    @Test
+    public void testPrintOut02()
+    {
+        this.outputStream.print('z');
+        EasyMock.expectLastCall();
 
-		EasyMock.replay(this.device, this.inputStream, this.outputStream, this.errorStream);
+        EasyMock.replay(this.device, this.inputStream, this.outputStream, this.errorStream);
 
-		this.device.printOut('z');
-	}
+        this.device.printOut('z');
+    }
 
-	@Test
-	public void testPrintOut03()
-	{
-		this.outputStream.print("hello");
-		EasyMock.expectLastCall();
+    @Test
+    public void testPrintOut03()
+    {
+        this.outputStream.print("hello");
+        EasyMock.expectLastCall();
 
-		EasyMock.replay(this.device, this.inputStream, this.outputStream, this.errorStream);
+        EasyMock.replay(this.device, this.inputStream, this.outputStream, this.errorStream);
 
-		this.device.printOut("hello");
-	}
+        this.device.printOut("hello");
+    }
 
-	@Test
-	public void testPrintOut04()
-	{
-		this.outputStream.print("world");
-		EasyMock.expectLastCall();
+    @Test
+    public void testPrintOut04()
+    {
+        this.outputStream.print("world");
+        EasyMock.expectLastCall();
 
-		EasyMock.replay(this.device, this.inputStream, this.outputStream, this.errorStream);
+        EasyMock.replay(this.device, this.inputStream, this.outputStream, this.errorStream);
 
-		this.device.printOut("world");
-	}
+        this.device.printOut("world");
+    }
 
-	@Test
-	public void testPrintOut05()
-	{
-		Object object = new Object();
+    @Test
+    public void testPrintOut05()
+    {
+        Object object = new Object();
 
-		this.outputStream.print(object);
-		EasyMock.expectLastCall();
+        this.outputStream.print(object);
+        EasyMock.expectLastCall();
 
-		EasyMock.replay(this.device, this.inputStream, this.outputStream, this.errorStream);
+        EasyMock.replay(this.device, this.inputStream, this.outputStream, this.errorStream);
 
-		this.device.printOut(object);
-	}
+        this.device.printOut(object);
+    }
 
-	@Test
-	public void testPrintOutLn01()
-	{
-		this.outputStream.println('c');
-		EasyMock.expectLastCall();
+    @Test
+    public void testPrintOutLn01()
+    {
+        this.outputStream.println('c');
+        EasyMock.expectLastCall();
 
-		EasyMock.replay(this.device, this.inputStream, this.outputStream, this.errorStream);
+        EasyMock.replay(this.device, this.inputStream, this.outputStream, this.errorStream);
 
-		this.device.printOutLn('c');
-	}
+        this.device.printOutLn('c');
+    }
 
-	@Test
-	public void testPrintOutLn02()
-	{
-		this.outputStream.println('z');
-		EasyMock.expectLastCall();
+    @Test
+    public void testPrintOutLn02()
+    {
+        this.outputStream.println('z');
+        EasyMock.expectLastCall();
 
-		EasyMock.replay(this.device, this.inputStream, this.outputStream, this.errorStream);
+        EasyMock.replay(this.device, this.inputStream, this.outputStream, this.errorStream);
 
-		this.device.printOutLn('z');
-	}
+        this.device.printOutLn('z');
+    }
 
-	@Test
-	public void testPrintOutLn03()
-	{
-		this.outputStream.println("hello");
-		EasyMock.expectLastCall();
+    @Test
+    public void testPrintOutLn03()
+    {
+        this.outputStream.println("hello");
+        EasyMock.expectLastCall();
 
-		EasyMock.replay(this.device, this.inputStream, this.outputStream, this.errorStream);
+        EasyMock.replay(this.device, this.inputStream, this.outputStream, this.errorStream);
 
-		this.device.printOutLn("hello");
-	}
+        this.device.printOutLn("hello");
+    }
 
-	@Test
-	public void testPrintOutLn04()
-	{
-		this.outputStream.println("world");
-		EasyMock.expectLastCall();
+    @Test
+    public void testPrintOutLn04()
+    {
+        this.outputStream.println("world");
+        EasyMock.expectLastCall();
 
-		EasyMock.replay(this.device, this.inputStream, this.outputStream, this.errorStream);
+        EasyMock.replay(this.device, this.inputStream, this.outputStream, this.errorStream);
 
-		this.device.printOutLn("world");
-	}
+        this.device.printOutLn("world");
+    }
 
-	@Test
-	public void testOutputMessage01()
-	{
-		this.outputStream.println("hello");
-		EasyMock.expectLastCall();
+    @Test
+    public void testOutputMessage01()
+    {
+        this.outputStream.println("hello");
+        EasyMock.expectLastCall();
 
-		EasyMock.replay(this.device, this.inputStream, this.outputStream, this.errorStream);
+        EasyMock.replay(this.device, this.inputStream, this.outputStream, this.errorStream);
 
-		this.device.outputMessage("hello");
-	}
+        this.device.outputMessage("hello");
+    }
 
-	@Test
-	public void testOutputMessage02()
-	{
-		this.outputStream.println("world");
-		EasyMock.expectLastCall();
+    @Test
+    public void testOutputMessage02()
+    {
+        this.outputStream.println("world");
+        EasyMock.expectLastCall();
 
-		EasyMock.replay(this.device, this.inputStream, this.outputStream, this.errorStream);
+        EasyMock.replay(this.device, this.inputStream, this.outputStream, this.errorStream);
 
-		this.device.outputMessage("world");
-	}
+        this.device.outputMessage("world");
+    }
 
-	@Test
-	public void testPrintOutLn05()
-	{
-		Object object = new Object();
+    @Test
+    public void testPrintOutLn05()
+    {
+        Object object = new Object();
 
-		this.outputStream.println(object);
-		EasyMock.expectLastCall();
+        this.outputStream.println(object);
+        EasyMock.expectLastCall();
 
-		EasyMock.replay(this.device, this.inputStream, this.outputStream, this.errorStream);
+        EasyMock.replay(this.device, this.inputStream, this.outputStream, this.errorStream);
 
-		this.device.printOutLn(object);
-	}
+        this.device.printOutLn(object);
+    }
 
-	@Test
-	public void testPrintOutLn06()
-	{
-		this.outputStream.println();
-		EasyMock.expectLastCall();
+    @Test
+    public void testPrintOutLn06()
+    {
+        this.outputStream.println();
+        EasyMock.expectLastCall();
 
-		EasyMock.replay(this.device, this.inputStream, this.outputStream, this.errorStream);
+        EasyMock.replay(this.device, this.inputStream, this.outputStream, this.errorStream);
 
-		this.device.printOutLn();
-	}
+        this.device.printOutLn();
+    }
 
-	@Test
-	public void testPrintErr01()
-	{
-		this.errorStream.print('c');
-		EasyMock.expectLastCall();
+    @Test
+    public void testPrintErr01()
+    {
+        this.errorStream.print('c');
+        EasyMock.expectLastCall();
 
-		EasyMock.replay(this.device, this.inputStream, this.outputStream, this.errorStream);
+        EasyMock.replay(this.device, this.inputStream, this.outputStream, this.errorStream);
 
-		this.device.printErr('c');
-	}
+        this.device.printErr('c');
+    }
 
-	@Test
-	public void testPrintErr02()
-	{
-		this.errorStream.print('z');
-		EasyMock.expectLastCall();
+    @Test
+    public void testPrintErr02()
+    {
+        this.errorStream.print('z');
+        EasyMock.expectLastCall();
 
-		EasyMock.replay(this.device, this.inputStream, this.outputStream, this.errorStream);
+        EasyMock.replay(this.device, this.inputStream, this.outputStream, this.errorStream);
 
-		this.device.printErr('z');
-	}
+        this.device.printErr('z');
+    }
 
-	@Test
-	public void testPrintErr03()
-	{
-		this.errorStream.print("hello");
-		EasyMock.expectLastCall();
+    @Test
+    public void testPrintErr03()
+    {
+        this.errorStream.print("hello");
+        EasyMock.expectLastCall();
 
-		EasyMock.replay(this.device, this.inputStream, this.outputStream, this.errorStream);
+        EasyMock.replay(this.device, this.inputStream, this.outputStream, this.errorStream);
 
-		this.device.printErr("hello");
-	}
+        this.device.printErr("hello");
+    }
 
-	@Test
-	public void testPrintErr04()
-	{
-		this.errorStream.print("world");
-		EasyMock.expectLastCall();
+    @Test
+    public void testPrintErr04()
+    {
+        this.errorStream.print("world");
+        EasyMock.expectLastCall();
 
-		EasyMock.replay(this.device, this.inputStream, this.outputStream, this.errorStream);
+        EasyMock.replay(this.device, this.inputStream, this.outputStream, this.errorStream);
 
-		this.device.printErr("world");
-	}
+        this.device.printErr("world");
+    }
 
-	@Test
-	public void testPrintErr05()
-	{
-		Object object = new Object();
+    @Test
+    public void testPrintErr05()
+    {
+        Object object = new Object();
 
-		this.errorStream.print(object);
-		EasyMock.expectLastCall();
+        this.errorStream.print(object);
+        EasyMock.expectLastCall();
 
-		EasyMock.replay(this.device, this.inputStream, this.outputStream, this.errorStream);
+        EasyMock.replay(this.device, this.inputStream, this.outputStream, this.errorStream);
 
-		this.device.printErr(object);
-	}
+        this.device.printErr(object);
+    }
 
-	@Test
-	public void testPrintErrLn01()
-	{
-		this.errorStream.println('c');
-		EasyMock.expectLastCall();
+    @Test
+    public void testPrintErrLn01()
+    {
+        this.errorStream.println('c');
+        EasyMock.expectLastCall();
 
-		EasyMock.replay(this.device, this.inputStream, this.outputStream, this.errorStream);
+        EasyMock.replay(this.device, this.inputStream, this.outputStream, this.errorStream);
 
-		this.device.printErrLn('c');
-	}
+        this.device.printErrLn('c');
+    }
 
-	@Test
-	public void testPrintErrLn02()
-	{
-		this.errorStream.println('z');
-		EasyMock.expectLastCall();
+    @Test
+    public void testPrintErrLn02()
+    {
+        this.errorStream.println('z');
+        EasyMock.expectLastCall();
 
-		EasyMock.replay(this.device, this.inputStream, this.outputStream, this.errorStream);
+        EasyMock.replay(this.device, this.inputStream, this.outputStream, this.errorStream);
 
-		this.device.printErrLn('z');
-	}
+        this.device.printErrLn('z');
+    }
 
-	@Test
-	public void testPrintErrLn03()
-	{
-		this.errorStream.println("hello");
-		EasyMock.expectLastCall();
+    @Test
+    public void testPrintErrLn03()
+    {
+        this.errorStream.println("hello");
+        EasyMock.expectLastCall();
 
-		EasyMock.replay(this.device, this.inputStream, this.outputStream, this.errorStream);
+        EasyMock.replay(this.device, this.inputStream, this.outputStream, this.errorStream);
 
-		this.device.printErrLn("hello");
-	}
+        this.device.printErrLn("hello");
+    }
 
-	@Test
-	public void testPrintErrLn04()
-	{
-		this.errorStream.println("world");
-		EasyMock.expectLastCall();
+    @Test
+    public void testPrintErrLn04()
+    {
+        this.errorStream.println("world");
+        EasyMock.expectLastCall();
 
-		EasyMock.replay(this.device, this.inputStream, this.outputStream, this.errorStream);
+        EasyMock.replay(this.device, this.inputStream, this.outputStream, this.errorStream);
 
-		this.device.printErrLn("world");
-	}
+        this.device.printErrLn("world");
+    }
 
-	@Test
-	public void testOutputErrorMessage01()
-	{
-		this.errorStream.println("hello");
-		EasyMock.expectLastCall();
+    @Test
+    public void testOutputErrorMessage01()
+    {
+        this.errorStream.println("hello");
+        EasyMock.expectLastCall();
 
-		EasyMock.replay(this.device, this.inputStream, this.outputStream, this.errorStream);
+        EasyMock.replay(this.device, this.inputStream, this.outputStream, this.errorStream);
 
-		this.device.outputErrorMessage("hello");
-	}
+        this.device.outputErrorMessage("hello");
+    }
 
-	@Test
-	public void testOutputErrorMessage02()
-	{
-		this.errorStream.println("world");
-		EasyMock.expectLastCall();
+    @Test
+    public void testOutputErrorMessage02()
+    {
+        this.errorStream.println("world");
+        EasyMock.expectLastCall();
 
-		EasyMock.replay(this.device, this.inputStream, this.outputStream, this.errorStream);
+        EasyMock.replay(this.device, this.inputStream, this.outputStream, this.errorStream);
 
-		this.device.outputErrorMessage("world");
-	}
+        this.device.outputErrorMessage("world");
+    }
 
-	@Test
-	public void testPrintErrLn05()
-	{
-		Object object = new Object();
+    @Test
+    public void testPrintErrLn05()
+    {
+        Object object = new Object();
 
-		this.errorStream.println(object);
-		EasyMock.expectLastCall();
+        this.errorStream.println(object);
+        EasyMock.expectLastCall();
 
-		EasyMock.replay(this.device, this.inputStream, this.outputStream, this.errorStream);
+        EasyMock.replay(this.device, this.inputStream, this.outputStream, this.errorStream);
 
-		this.device.printErrLn(object);
-	}
+        this.device.printErrLn(object);
+    }
 
-	@Test
-	public void testPrintErrLn06()
-	{
-		this.errorStream.println();
-		EasyMock.expectLastCall();
+    @Test
+    public void testPrintErrLn06()
+    {
+        this.errorStream.println();
+        EasyMock.expectLastCall();
 
-		EasyMock.replay(this.device, this.inputStream, this.outputStream, this.errorStream);
+        EasyMock.replay(this.device, this.inputStream, this.outputStream, this.errorStream);
 
-		this.device.printErrLn();
-	}
+        this.device.printErrLn();
+    }
 
-	@Test
-	public void testPromptForValidPasswordSimple01()
-	{
-		this.device = EasyMock.createMockBuilder(AbstractTextInterfaceDevice.class).
-				withConstructor(InputStream.class, PrintStream.class, PrintStream.class).
-				withArgs(this.inputStream, this.outputStream, this.errorStream).
-				addMockedMethod("promptForValidPassword", int.class, int.class, String.class, String.class,
-								String.class, String.class, OutputDevice.class).
-				createStrictMock();
+    @Test
+    public void testPromptForValidPasswordSimple01()
+    {
+        this.device = EasyMock.createMockBuilder(AbstractTextInterfaceDevice.class).
+                withConstructor(InputStream.class, PrintStream.class, PrintStream.class).
+                withArgs(this.inputStream, this.outputStream, this.errorStream).
+                addMockedMethod("promptForValidPassword", int.class, int.class, String.class, String.class,
+                                String.class, String.class, OutputDevice.class).
+                createStrictMock();
 
-		char[] password = "testPassword01".toCharArray();
+        char[] password = "testPassword01".toCharArray();
 
-		EasyMock.expect(
-				this.device.promptForValidPassword(6, 32,
-												   "Enter pass phrase to encrypt coolness: ",
-												   "Verifying - Reenter pass phrase to encrypt coolness: ",
-												   "The password must be at least six characters and no more than 32 characters long.",
-												   "ERROR: Passwords do not match. Please try again, or press Ctrl+C to cancel.",
-												   this.device)
-		).andReturn(password);
+        EasyMock.expect(
+                this.device.promptForValidPassword(6, 32,
+                                                   "Enter pass phrase to encrypt coolness: ",
+                                                   "Verifying - Reenter pass phrase to encrypt coolness: ",
+                                                   "The password must be at least six characters and no more than 32 characters long.",
+                                                   "ERROR: Passwords do not match. Please try again, or press Ctrl+C to cancel.",
+                                                   this.device)
+        ).andReturn(password);
 
-		EasyMock.replay(this.device, this.inputStream, this.outputStream, this.errorStream);
+        EasyMock.replay(this.device, this.inputStream, this.outputStream, this.errorStream);
 
-		char[] returned = this.device.promptForValidPassword(6, 32, "coolness");
+        char[] returned = this.device.promptForValidPassword(6, 32, "coolness");
 
-		assertNotNull("The returned value should not be null.", returned);
-		assertSame("The returned value is not correct.", password, returned);
-		assertArrayEquals("The returned value should match.", "testPassword01".toCharArray(), returned);
-	}
+        assertNotNull("The returned value should not be null.", returned);
+        assertSame("The returned value is not correct.", password, returned);
+        assertArrayEquals("The returned value should match.", "testPassword01".toCharArray(), returned);
+    }
 
-	@Test
-	public void testPromptForValidPasswordSimple02()
-	{
-		this.device = EasyMock.createMockBuilder(AbstractTextInterfaceDevice.class).
-				withConstructor(InputStream.class, PrintStream.class, PrintStream.class).
-				withArgs(this.inputStream, this.outputStream, this.errorStream).
-				addMockedMethod("promptForValidPassword", int.class, int.class, String.class, String.class,
-								String.class, String.class, OutputDevice.class).
-				createStrictMock();
+    @Test
+    public void testPromptForValidPasswordSimple02()
+    {
+        this.device = EasyMock.createMockBuilder(AbstractTextInterfaceDevice.class).
+                withConstructor(InputStream.class, PrintStream.class, PrintStream.class).
+                withArgs(this.inputStream, this.outputStream, this.errorStream).
+                addMockedMethod("promptForValidPassword", int.class, int.class, String.class, String.class,
+                                String.class, String.class, OutputDevice.class).
+                createStrictMock();
 
-		char[] password = "anotherPassword02".toCharArray();
+        char[] password = "anotherPassword02".toCharArray();
 
-		EasyMock.expect(
-				this.device.promptForValidPassword(10, 11,
-												   "Enter pass phrase to encrypt flying monkeys: ",
-												   "Verifying - Reenter pass phrase to encrypt flying monkeys: ",
-												   "The password must be at least ten characters and no more than 11 characters long.",
-												   "ERROR: Passwords do not match. Please try again, or press Ctrl+C to cancel.",
-												   this.device)
-		).andReturn(password);
+        EasyMock.expect(
+                this.device.promptForValidPassword(10, 11,
+                                                   "Enter pass phrase to encrypt flying monkeys: ",
+                                                   "Verifying - Reenter pass phrase to encrypt flying monkeys: ",
+                                                   "The password must be at least ten characters and no more than 11 characters long.",
+                                                   "ERROR: Passwords do not match. Please try again, or press Ctrl+C to cancel.",
+                                                   this.device)
+        ).andReturn(password);
 
-		EasyMock.replay(this.device, this.inputStream, this.outputStream, this.errorStream);
+        EasyMock.replay(this.device, this.inputStream, this.outputStream, this.errorStream);
 
-		char[] returned = this.device.promptForValidPassword(10, 11, "flying monkeys");
+        char[] returned = this.device.promptForValidPassword(10, 11, "flying monkeys");
 
-		assertNotNull("The returned value should not be null.", returned);
-		assertSame("The returned value is not correct.", password, returned);
-		assertArrayEquals("The returned value should match.", "anotherPassword02".toCharArray(), returned);
-	}
+        assertNotNull("The returned value should not be null.", returned);
+        assertSame("The returned value is not correct.", password, returned);
+        assertArrayEquals("The returned value should match.", "anotherPassword02".toCharArray(), returned);
+    }
 
-	@Test
-	public void testPromptForValidPasswordSimple03()
-	{
-		this.device = EasyMock.createMockBuilder(AbstractTextInterfaceDevice.class).
-				withConstructor(InputStream.class, PrintStream.class, PrintStream.class).
-				withArgs(this.inputStream, this.outputStream, this.errorStream).
-				addMockedMethod("promptForValidPassword", int.class, int.class, String.class, String.class,
-								String.class, String.class, OutputDevice.class).
-				createStrictMock();
+    @Test
+    public void testPromptForValidPasswordSimple03()
+    {
+        this.device = EasyMock.createMockBuilder(AbstractTextInterfaceDevice.class).
+                withConstructor(InputStream.class, PrintStream.class, PrintStream.class).
+                withArgs(this.inputStream, this.outputStream, this.errorStream).
+                addMockedMethod("promptForValidPassword", int.class, int.class, String.class, String.class,
+                                String.class, String.class, OutputDevice.class).
+                createStrictMock();
 
-		char[] password = "closingPassword03".toCharArray();
+        char[] password = "closingPassword03".toCharArray();
 
-		EasyMock.expect(
-				this.device.promptForValidPassword(-1, 0,
-												   "Enter pass phrase to encrypt warmness: ",
-												   "Verifying - Reenter pass phrase to encrypt warmness: ",
-												   "The password must be at least -1 characters and no more than zero characters long.",
-												   "ERROR: Passwords do not match. Please try again, or press Ctrl+C to cancel.",
-												   this.device)
-		).andReturn(password);
+        EasyMock.expect(
+                this.device.promptForValidPassword(-1, 0,
+                                                   "Enter pass phrase to encrypt warmness: ",
+                                                   "Verifying - Reenter pass phrase to encrypt warmness: ",
+                                                   "The password must be at least -1 characters and no more than zero characters long.",
+                                                   "ERROR: Passwords do not match. Please try again, or press Ctrl+C to cancel.",
+                                                   this.device)
+        ).andReturn(password);
 
-		EasyMock.replay(this.device, this.inputStream, this.outputStream, this.errorStream);
+        EasyMock.replay(this.device, this.inputStream, this.outputStream, this.errorStream);
 
-		char[] returned = this.device.promptForValidPassword(-1, 0, "warmness");
+        char[] returned = this.device.promptForValidPassword(-1, 0, "warmness");
 
-		assertNotNull("The returned value should not be null.", returned);
-		assertSame("The returned value is not correct.", password, returned);
-		assertArrayEquals("The returned value should match.", "closingPassword03".toCharArray(), returned);
-	}
+        assertNotNull("The returned value should not be null.", returned);
+        assertSame("The returned value is not correct.", password, returned);
+        assertArrayEquals("The returned value should match.", "closingPassword03".toCharArray(), returned);
+    }
 
-	@Test
-	public void testPromptForValidPasswordSimple04()
-	{
-		this.device = EasyMock.createMockBuilder(AbstractTextInterfaceDevice.class).
-				withConstructor(InputStream.class, PrintStream.class, PrintStream.class).
-				withArgs(this.inputStream, this.outputStream, this.errorStream).
-				addMockedMethod("promptForValidPassword", int.class, int.class, String.class, String.class,
-								String.class, String.class, OutputDevice.class).
-				createStrictMock();
+    @Test
+    public void testPromptForValidPasswordSimple04()
+    {
+        this.device = EasyMock.createMockBuilder(AbstractTextInterfaceDevice.class).
+                withConstructor(InputStream.class, PrintStream.class, PrintStream.class).
+                withArgs(this.inputStream, this.outputStream, this.errorStream).
+                addMockedMethod("promptForValidPassword", int.class, int.class, String.class, String.class,
+                                String.class, String.class, OutputDevice.class).
+                createStrictMock();
 
-		char[] password = "finalPassword04".toCharArray();
+        char[] password = "finalPassword04".toCharArray();
 
-		EasyMock.expect(
-				this.device.promptForValidPassword(5, 10,
-												   "Enter pass phrase to encrypt the movie: ",
-												   "Verifying - Reenter pass phrase to encrypt the movie: ",
-												   "The password must be at least five characters and no more than ten characters long.",
-												   "ERROR: Passwords do not match. Please try again, or press Ctrl+C to cancel.",
-												   this.device)
-		).andReturn(password);
+        EasyMock.expect(
+                this.device.promptForValidPassword(5, 10,
+                                                   "Enter pass phrase to encrypt the movie: ",
+                                                   "Verifying - Reenter pass phrase to encrypt the movie: ",
+                                                   "The password must be at least five characters and no more than ten characters long.",
+                                                   "ERROR: Passwords do not match. Please try again, or press Ctrl+C to cancel.",
+                                                   this.device)
+        ).andReturn(password);
 
-		EasyMock.replay(this.device, this.inputStream, this.outputStream, this.errorStream);
+        EasyMock.replay(this.device, this.inputStream, this.outputStream, this.errorStream);
 
-		char[] returned = this.device.promptForValidPassword(5, 10, "the movie");
+        char[] returned = this.device.promptForValidPassword(5, 10, "the movie");
 
-		assertNotNull("The returned value should not be null.", returned);
-		assertSame("The returned value is not correct.", password, returned);
-		assertArrayEquals("The returned value should match.", "finalPassword04".toCharArray(), returned);
-	}
+        assertNotNull("The returned value should not be null.", returned);
+        assertSame("The returned value is not correct.", password, returned);
+        assertArrayEquals("The returned value should match.", "finalPassword04".toCharArray(), returned);
+    }
 }

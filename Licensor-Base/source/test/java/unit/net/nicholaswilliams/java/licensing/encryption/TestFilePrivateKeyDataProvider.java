@@ -35,167 +35,167 @@ import static org.junit.Assert.*;
  */
 public class TestFilePrivateKeyDataProvider
 {
-	@Before
-	public void setUp()
-	{
+    @Before
+    public void setUp()
+    {
 
-	}
+    }
 
-	@After
-	public void tearDown()
-	{
+    @After
+    public void tearDown()
+    {
 
-	}
+    }
 
-	@Test
-	public void testKeyFile01() throws IOException
-	{
-		final String fileName = "testKeyFile01.key";
-		File file = new File(fileName);
+    @Test
+    public void testKeyFile01() throws IOException
+    {
+        final String fileName = "testKeyFile01.key";
+        File file = new File(fileName);
 
-		if(file.exists())
-			FileUtils.forceDelete(file);
+        if(file.exists())
+            FileUtils.forceDelete(file);
 
-		FilePrivateKeyDataProvider provider = new FilePrivateKeyDataProvider(fileName);
+        FilePrivateKeyDataProvider provider = new FilePrivateKeyDataProvider(fileName);
 
-		assertNotNull("The key file should not be null.", provider.getPrivateKeyFile());
-		assertEquals("The key file is not correct.", file.getAbsoluteFile(), provider.getPrivateKeyFile());
-		assertFalse("The paths should not be the same.", fileName.equals(provider.getPrivateKeyFile().getPath()));
-		assertTrue("The paths should end the same.", provider.getPrivateKeyFile().getPath().endsWith(fileName));
-	}
+        assertNotNull("The key file should not be null.", provider.getPrivateKeyFile());
+        assertEquals("The key file is not correct.", file.getAbsoluteFile(), provider.getPrivateKeyFile());
+        assertFalse("The paths should not be the same.", fileName.equals(provider.getPrivateKeyFile().getPath()));
+        assertTrue("The paths should end the same.", provider.getPrivateKeyFile().getPath().endsWith(fileName));
+    }
 
-	@Test
-	public void testKeyFile02() throws IOException
-	{
-		final String fileName = "testKeyFile02.key";
-		File file = new File(fileName);
+    @Test
+    public void testKeyFile02() throws IOException
+    {
+        final String fileName = "testKeyFile02.key";
+        File file = new File(fileName);
 
-		if(file.exists())
-			FileUtils.forceDelete(file);
+        if(file.exists())
+            FileUtils.forceDelete(file);
 
-		FilePrivateKeyDataProvider provider = new FilePrivateKeyDataProvider(file);
+        FilePrivateKeyDataProvider provider = new FilePrivateKeyDataProvider(file);
 
-		assertNotNull("The key file should not be null.", provider.getPrivateKeyFile());
-		assertNotSame("The objects should not be the same.", file, provider.getPrivateKeyFile());
-		assertEquals("The key file is not correct.", file.getAbsoluteFile(), provider.getPrivateKeyFile());
-		assertFalse("The paths should not be the same.", fileName.equals(provider.getPrivateKeyFile().getPath()));
-		assertTrue("The paths should end the same.", provider.getPrivateKeyFile().getPath().endsWith(fileName));
-	}
+        assertNotNull("The key file should not be null.", provider.getPrivateKeyFile());
+        assertNotSame("The objects should not be the same.", file, provider.getPrivateKeyFile());
+        assertEquals("The key file is not correct.", file.getAbsoluteFile(), provider.getPrivateKeyFile());
+        assertFalse("The paths should not be the same.", fileName.equals(provider.getPrivateKeyFile().getPath()));
+        assertTrue("The paths should end the same.", provider.getPrivateKeyFile().getPath().endsWith(fileName));
+    }
 
-	@Test
-	public void testGetEncryptedPrivateKeyData01() throws IOException
-	{
-		final String fileName = "testGetEncryptedPrivateKeyData01.key";
-		File file = new File(fileName);
+    @Test
+    public void testGetEncryptedPrivateKeyData01() throws IOException
+    {
+        final String fileName = "testGetEncryptedPrivateKeyData01.key";
+        File file = new File(fileName);
 
-		if(file.exists())
-			FileUtils.forceDelete(file);
+        if(file.exists())
+            FileUtils.forceDelete(file);
 
-		FilePrivateKeyDataProvider provider = new FilePrivateKeyDataProvider(file);
+        FilePrivateKeyDataProvider provider = new FilePrivateKeyDataProvider(file);
 
-		try
-		{
-			provider.getEncryptedPrivateKeyData();
-			fail("Expected exception KeyNotFoundException.");
-		}
-		catch(KeyNotFoundException e)
-		{
-			assertNull("The cause should be null.", e.getCause());
-		}
-	}
+        try
+        {
+            provider.getEncryptedPrivateKeyData();
+            fail("Expected exception KeyNotFoundException.");
+        }
+        catch(KeyNotFoundException e)
+        {
+            assertNull("The cause should be null.", e.getCause());
+        }
+    }
 
-	@Test
-	@Ignore("canRead()/canWrite() do not work on Win; setReadable()/setWritable() do not work on some Macs.")
-	public void testGetEncryptedPrivateKeyData02() throws IOException
-	{
-		final String fileName = "testGetEncryptedPrivateKeyData02.key";
-		File file = new File(fileName);
-		file = file.getCanonicalFile();
+    @Test
+    @Ignore("canRead()/canWrite() do not work on Win; setReadable()/setWritable() do not work on some Macs.")
+    public void testGetEncryptedPrivateKeyData02() throws IOException
+    {
+        final String fileName = "testGetEncryptedPrivateKeyData02.key";
+        File file = new File(fileName);
+        file = file.getCanonicalFile();
 
-		if(file.exists())
-			FileUtils.forceDelete(file);
+        if(file.exists())
+            FileUtils.forceDelete(file);
 
-		byte[] data = new byte[] { 0x01, 0x71, 0x33 };
+        byte[] data = new byte[] { 0x01, 0x71, 0x33 };
 
-		FileUtils.writeByteArrayToFile(file, data);
+        FileUtils.writeByteArrayToFile(file, data);
 
-		try
-		{
-			assertTrue("Setting the file to not-readable should have succeeded.", file.setReadable(false, false));
-			assertFalse("The file should not be readable.", file.canRead());
-			assertTrue("The file should still be writable.", file.canWrite());
+        try
+        {
+            assertTrue("Setting the file to not-readable should have succeeded.", file.setReadable(false, false));
+            assertFalse("The file should not be readable.", file.canRead());
+            assertTrue("The file should still be writable.", file.canWrite());
 
-			FilePrivateKeyDataProvider provider = new FilePrivateKeyDataProvider(file);
+            FilePrivateKeyDataProvider provider = new FilePrivateKeyDataProvider(file);
 
-			try
-			{
-				provider.getEncryptedPrivateKeyData();
-				fail("Expected exception KeyNotFoundException.");
-			}
-			catch(KeyNotFoundException e)
-			{
-				assertNotNull("The cause should not be null.", e.getCause());
-			}
-		}
-		finally
-		{
-			FileUtils.forceDelete(file);
-		}
-	}
+            try
+            {
+                provider.getEncryptedPrivateKeyData();
+                fail("Expected exception KeyNotFoundException.");
+            }
+            catch(KeyNotFoundException e)
+            {
+                assertNotNull("The cause should not be null.", e.getCause());
+            }
+        }
+        finally
+        {
+            FileUtils.forceDelete(file);
+        }
+    }
 
-	@Test
-	public void testGetEncryptedPrivateKeyData03() throws IOException
-	{
-		final String fileName = "testGetEncryptedPrivateKeyData03.key";
-		File file = new File(fileName);
+    @Test
+    public void testGetEncryptedPrivateKeyData03() throws IOException
+    {
+        final String fileName = "testGetEncryptedPrivateKeyData03.key";
+        File file = new File(fileName);
 
-		if(file.exists())
-			FileUtils.forceDelete(file);
+        if(file.exists())
+            FileUtils.forceDelete(file);
 
-		byte[] data = new byte[] { 0x01, 0x71, 0x33 };
+        byte[] data = new byte[] { 0x01, 0x71, 0x33 };
 
-		FileUtils.writeByteArrayToFile(file, data);
+        FileUtils.writeByteArrayToFile(file, data);
 
-		try
-		{
-			FilePrivateKeyDataProvider provider = new FilePrivateKeyDataProvider(file);
+        try
+        {
+            FilePrivateKeyDataProvider provider = new FilePrivateKeyDataProvider(file);
 
-			byte[] returnedData = provider.getEncryptedPrivateKeyData();
+            byte[] returnedData = provider.getEncryptedPrivateKeyData();
 
-			assertNotNull("The data should not be null.", returnedData);
-			assertArrayEquals("The data is not correct.", data, returnedData);
-		}
-		finally
-		{
-			FileUtils.forceDelete(file);
-		}
-	}
+            assertNotNull("The data should not be null.", returnedData);
+            assertArrayEquals("The data is not correct.", data, returnedData);
+        }
+        finally
+        {
+            FileUtils.forceDelete(file);
+        }
+    }
 
-	@Test
-	public void testGetEncryptedPrivateKeyData04() throws IOException
-	{
-		final String fileName = "testGetEncryptedPrivateKeyData04.key";
-		File file = new File(fileName);
+    @Test
+    public void testGetEncryptedPrivateKeyData04() throws IOException
+    {
+        final String fileName = "testGetEncryptedPrivateKeyData04.key";
+        File file = new File(fileName);
 
-		if(file.exists())
-			FileUtils.forceDelete(file);
+        if(file.exists())
+            FileUtils.forceDelete(file);
 
-		byte[] data = new byte[] { 0x51, 0x12, 0x23 };
+        byte[] data = new byte[] { 0x51, 0x12, 0x23 };
 
-		FileUtils.writeByteArrayToFile(file, data);
+        FileUtils.writeByteArrayToFile(file, data);
 
-		try
-		{
-			FilePrivateKeyDataProvider provider = new FilePrivateKeyDataProvider(file);
+        try
+        {
+            FilePrivateKeyDataProvider provider = new FilePrivateKeyDataProvider(file);
 
-			byte[] returnedData = provider.getEncryptedPrivateKeyData();
+            byte[] returnedData = provider.getEncryptedPrivateKeyData();
 
-			assertNotNull("The data should not be null.", returnedData);
-			assertArrayEquals("The data is not correct.", data, returnedData);
-		}
-		finally
-		{
-			FileUtils.forceDelete(file);
-		}
-	}
+            assertNotNull("The data should not be null.", returnedData);
+            assertArrayEquals("The data is not correct.", data, returnedData);
+        }
+        finally
+        {
+            FileUtils.forceDelete(file);
+        }
+    }
 }

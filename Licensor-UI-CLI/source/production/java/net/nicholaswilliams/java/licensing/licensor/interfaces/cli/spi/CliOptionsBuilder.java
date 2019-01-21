@@ -31,120 +31,120 @@ import org.apache.commons.cli.OptionBuilder;
 @SuppressWarnings("unused")
 public class CliOptionsBuilder
 {
-	private static CliOptionsBuilder instance = new CliOptionsBuilder();
+    private static CliOptionsBuilder instance = new CliOptionsBuilder();
 
-	private CliOptionsBuilder()
-	{
+    private CliOptionsBuilder()
+    {
 
-	}
+    }
 
-	public static CliOptionsBuilder get()
-	{
-		return CliOptionsBuilder.instance;
-	}
+    public static CliOptionsBuilder get()
+    {
+        return CliOptionsBuilder.instance;
+    }
 
-	public Option create()
-	{
-		return OptionBuilder.create();
-	}
+    public Option create()
+    {
+        return OptionBuilder.create();
+    }
 
-	public Option create(char opt)
-	{
-		return OptionBuilder.create(opt);
-	}
+    public Option create(char opt)
+    {
+        return OptionBuilder.create(opt);
+    }
 
-	public Option create(String opt)
-	{
-		return OptionBuilder.create(opt);
-	}
+    public Option create(String opt)
+    {
+        return OptionBuilder.create(opt);
+    }
 
-	public CliOptionsBuilder hasArg()
-	{
-		OptionBuilder.hasArg();
-		return this;
-	}
+    public CliOptionsBuilder hasArg()
+    {
+        OptionBuilder.hasArg();
+        return this;
+    }
 
-	public CliOptionsBuilder hasArg(boolean hasArg)
-	{
-		OptionBuilder.hasArg(hasArg);
-		return this;
-	}
+    public CliOptionsBuilder hasArg(boolean hasArg)
+    {
+        OptionBuilder.hasArg(hasArg);
+        return this;
+    }
 
-	public CliOptionsBuilder hasArgs()
-	{
-		OptionBuilder.hasArgs();
-		return this;
-	}
+    public CliOptionsBuilder hasArgs()
+    {
+        OptionBuilder.hasArgs();
+        return this;
+    }
 
-	public CliOptionsBuilder hasArgs(int num)
-	{
-		OptionBuilder.hasArgs(num);
-		return this;
-	}
+    public CliOptionsBuilder hasArgs(int num)
+    {
+        OptionBuilder.hasArgs(num);
+        return this;
+    }
 
-	public CliOptionsBuilder hasOptionalArg()
-	{
-		OptionBuilder.hasOptionalArg();
-		return this;
-	}
+    public CliOptionsBuilder hasOptionalArg()
+    {
+        OptionBuilder.hasOptionalArg();
+        return this;
+    }
 
-	public CliOptionsBuilder hasOptionalArgs()
-	{
-		OptionBuilder.hasOptionalArgs();
-		return this;
-	}
+    public CliOptionsBuilder hasOptionalArgs()
+    {
+        OptionBuilder.hasOptionalArgs();
+        return this;
+    }
 
-	public CliOptionsBuilder hasOptionalArgs(int numArgs)
-	{
-		OptionBuilder.hasOptionalArgs(numArgs);
-		return this;
-	}
+    public CliOptionsBuilder hasOptionalArgs(int numArgs)
+    {
+        OptionBuilder.hasOptionalArgs(numArgs);
+        return this;
+    }
 
-	public CliOptionsBuilder isRequired()
-	{
-		OptionBuilder.isRequired();
-		return this;
-	}
+    public CliOptionsBuilder isRequired()
+    {
+        OptionBuilder.isRequired();
+        return this;
+    }
 
-	public CliOptionsBuilder isRequired(boolean newRequired)
-	{
-		OptionBuilder.isRequired(newRequired);
-		return this;
-	}
+    public CliOptionsBuilder isRequired(boolean newRequired)
+    {
+        OptionBuilder.isRequired(newRequired);
+        return this;
+    }
 
-	public CliOptionsBuilder withArgName(String name)
-	{
-		OptionBuilder.withArgName(name);
-		return this;
-	}
+    public CliOptionsBuilder withArgName(String name)
+    {
+        OptionBuilder.withArgName(name);
+        return this;
+    }
 
-	public CliOptionsBuilder withDescription(String newDescription)
-	{
-		OptionBuilder.withDescription(newDescription);
-		return this;
-	}
+    public CliOptionsBuilder withDescription(String newDescription)
+    {
+        OptionBuilder.withDescription(newDescription);
+        return this;
+    }
 
-	public CliOptionsBuilder withLongOpt(String newLongopt)
-	{
-		OptionBuilder.withLongOpt(newLongopt);
-		return this;
-	}
+    public CliOptionsBuilder withLongOpt(String newLongopt)
+    {
+        OptionBuilder.withLongOpt(newLongopt);
+        return this;
+    }
 
-	public CliOptionsBuilder withType(Object newType)
-	{
-		OptionBuilder.withType(newType);
-		return this;
-	}
+    public CliOptionsBuilder withType(Object newType)
+    {
+        OptionBuilder.withType(newType);
+        return this;
+    }
 
-	public CliOptionsBuilder withValueSeparator()
-	{
-		OptionBuilder.withValueSeparator();
-		return this;
-	}
+    public CliOptionsBuilder withValueSeparator()
+    {
+        OptionBuilder.withValueSeparator();
+        return this;
+    }
 
-	public CliOptionsBuilder withValueSeparator(char sep)
-	{
-		OptionBuilder.withValueSeparator(sep);
-		return this;
-	}
+    public CliOptionsBuilder withValueSeparator(char sep)
+    {
+        OptionBuilder.withValueSeparator(sep);
+        return this;
+    }
 }

@@ -32,55 +32,55 @@ import static org.junit.Assert.*;
  */
 public class TestConsoleUtilities
 {
-	@Before
-	public void setUp()
-	{
+    @Before
+    public void setUp()
+    {
 
-	}
+    }
 
-	@After
-	public void tearDown()
-	{
+    @After
+    public void tearDown()
+    {
 
-	}
+    }
 
-	@Test
-	public void testConstruction()
-	{
-		new ConsoleUtilities();
-	}
+    @Test
+    public void testConstruction()
+    {
+        new ConsoleUtilities();
+    }
 
-	@Test
-	public void testConfigureInterfaceDevice() throws InterruptedException
-	{
-		TextInterfaceDevice textInterfaceDevice = EasyMock.createStrictMock(TextInterfaceDevice.class);
+    @Test
+    public void testConfigureInterfaceDevice() throws InterruptedException
+    {
+        TextInterfaceDevice textInterfaceDevice = EasyMock.createStrictMock(TextInterfaceDevice.class);
 
-		Capture<Thread> threadCapture = new Capture<Thread>();
+        Capture<Thread> threadCapture = new Capture<Thread>();
 
-		textInterfaceDevice.registerShutdownHook(EasyMock.capture(threadCapture));
-		EasyMock.expectLastCall();
-		textInterfaceDevice.printOutLn();
-		EasyMock.expectLastCall();
+        textInterfaceDevice.registerShutdownHook(EasyMock.capture(threadCapture));
+        EasyMock.expectLastCall();
+        textInterfaceDevice.printOutLn();
+        EasyMock.expectLastCall();
 
-		EasyMock.replay(textInterfaceDevice);
+        EasyMock.replay(textInterfaceDevice);
 
-		ConsoleUtilities.configureInterfaceDevice(textInterfaceDevice);
+        ConsoleUtilities.configureInterfaceDevice(textInterfaceDevice);
 
-		Thread captured = threadCapture.getValue();
+        Thread captured = threadCapture.getValue();
 
-		assertNotNull("The thread should not be null.", captured);
+        assertNotNull("The thread should not be null.", captured);
 
-		captured.start();
+        captured.start();
 
-		int i = 0;
-		while(captured.getState() != Thread.State.TERMINATED && i < 10)
-		{
-			Thread.sleep(100);
-			i++;
-		}
+        int i = 0;
+        while(captured.getState() != Thread.State.TERMINATED && i < 10)
+        {
+            Thread.sleep(100);
+            i++;
+        }
 
-		assertTrue("The thread took too long to complete.", i < 10);
+        assertTrue("The thread took too long to complete.", i < 10);
 
-		EasyMock.verify(textInterfaceDevice);
-	}
+        EasyMock.verify(textInterfaceDevice);
+    }
 }

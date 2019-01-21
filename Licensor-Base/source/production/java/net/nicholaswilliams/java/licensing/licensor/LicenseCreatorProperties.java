@@ -31,49 +31,49 @@ import net.nicholaswilliams.java.licensing.encryption.PrivateKeyDataProvider;
  */
 public final class LicenseCreatorProperties
 {
-	private static PrivateKeyDataProvider privateKeyDataProvider;
+    private static PrivateKeyDataProvider privateKeyDataProvider;
 
-	private static PasswordProvider privateKeyPasswordProvider;
+    private static PasswordProvider privateKeyPasswordProvider;
 
-	/**
-	 * Sets the provider of the data for the private key used to sign the license object.<br />
-	 * <br />
-	 * This field is <b>required</b>.
-	 *
-	 * @param privateKeyDataProvider The provider of the data for the private key used to sign the license object
-	 */
-	public static void setPrivateKeyDataProvider(PrivateKeyDataProvider privateKeyDataProvider)
-	{
-		LicenseCreatorProperties.privateKeyDataProvider = privateKeyDataProvider;
-	}
+    /**
+     * Sets the provider of the data for the private key used to sign the license object.<br />
+     * <br />
+     * This field is <b>required</b>.
+     *
+     * @param privateKeyDataProvider The provider of the data for the private key used to sign the license object
+     */
+    public static void setPrivateKeyDataProvider(PrivateKeyDataProvider privateKeyDataProvider)
+    {
+        LicenseCreatorProperties.privateKeyDataProvider = privateKeyDataProvider;
+    }
 
-	static PrivateKeyDataProvider getPrivateKeyDataProvider()
-	{
-		return LicenseCreatorProperties.privateKeyDataProvider;
-	}
+    static PrivateKeyDataProvider getPrivateKeyDataProvider()
+    {
+        return LicenseCreatorProperties.privateKeyDataProvider;
+    }
 
-	/**
-	 * Sets the provider of the password for decrypting the private key.<br />
-	 * <br />
-	 * This field is <b>required</b>.
-	 *
-	 * @param privateKeyPasswordProvider The provider of the password for decrypting the private key
-	 */
-	public static void setPrivateKeyPasswordProvider(PasswordProvider privateKeyPasswordProvider)
-	{
-		LicenseCreatorProperties.privateKeyPasswordProvider = privateKeyPasswordProvider;
-	}
+    /**
+     * Sets the provider of the password for decrypting the private key.<br />
+     * <br />
+     * This field is <b>required</b>.
+     *
+     * @param privateKeyPasswordProvider The provider of the password for decrypting the private key
+     */
+    public static void setPrivateKeyPasswordProvider(PasswordProvider privateKeyPasswordProvider)
+    {
+        LicenseCreatorProperties.privateKeyPasswordProvider = privateKeyPasswordProvider;
+    }
 
-	static PasswordProvider getPrivateKeyPasswordProvider()
-	{
-		return LicenseCreatorProperties.privateKeyPasswordProvider;
-	}
+    static PasswordProvider getPrivateKeyPasswordProvider()
+    {
+        return LicenseCreatorProperties.privateKeyPasswordProvider;
+    }
 
-	/**
-	 * This class cannot be instantiated.
-	 */
-	private LicenseCreatorProperties()
-	{
-		throw new RuntimeException("This class cannot be instantiated.");
-	}
+    /**
+     * This class cannot be instantiated.
+     */
+    private LicenseCreatorProperties()
+    {
+        throw new RuntimeException("This class cannot be instantiated.");
+    }
 }

@@ -36,68 +36,68 @@ import java.io.IOException;
  */
 public class FilePrivateKeyDataProvider implements PrivateKeyDataProvider
 {
-	private final File privateKeyFile;
+    private final File privateKeyFile;
 
-	/**
-	 * Create a new provider, specifying the file from which the private key can be read.
-	 *
-	 * @param privateKeyFile the private key file
-	 */
-	public FilePrivateKeyDataProvider(File privateKeyFile)
-	{
-		this.privateKeyFile = privateKeyFile.getAbsoluteFile();
-	}
+    /**
+     * Create a new provider, specifying the file from which the private key can be read.
+     *
+     * @param privateKeyFile the private key file
+     */
+    public FilePrivateKeyDataProvider(File privateKeyFile)
+    {
+        this.privateKeyFile = privateKeyFile.getAbsoluteFile();
+    }
 
-	/**
-	 * Create a new provider, specifying the name of the file from which the private key can be read.
-	 *
-	 * @param privateKeyFileName The private key file name
-	 */
-	public FilePrivateKeyDataProvider(String privateKeyFileName)
-	{
-		this.privateKeyFile = new File(privateKeyFileName).getAbsoluteFile();
-	}
+    /**
+     * Create a new provider, specifying the name of the file from which the private key can be read.
+     *
+     * @param privateKeyFileName The private key file name
+     */
+    public FilePrivateKeyDataProvider(String privateKeyFileName)
+    {
+        this.privateKeyFile = new File(privateKeyFileName).getAbsoluteFile();
+    }
 
-	/**
-	 * This method returns the data from the file containing the encrypted
-	 * private key from the public/private key pair. The contract for this
-	 * method can be fulfilled by storing the data in a byte array literal
-	 * in the source code itself.<br/>
-	 * <br/>
-	 * It is <em>imperative</em> that you obfuscate the bytecode for the
-	 * implementation of this class. It is also imperative that the byte
-	 * array exist only for the life of this method (i.e., DO NOT store it as
-	 * an instance or class field).
-	 *
-	 * @return the encrypted file contents from the private key file.
-	 * @throws net.nicholaswilliams.java.licensing.exception.KeyNotFoundException if the key data could not be retrieved; an acceptable message or chained cause must be provided.
-	 */
-	@Override
-	public byte[] getEncryptedPrivateKeyData() throws KeyNotFoundException
-	{
-		try
-		{
-			return FileUtils.readFileToByteArray(this.privateKeyFile);
-		}
-		catch(FileNotFoundException e)
-		{
-			throw new KeyNotFoundException("The private key file [" + this.privateKeyFile.getPath() +
-										   "] does not exist.");
-		}
-		catch(IOException e)
-		{
-			throw new KeyNotFoundException("Could not read from the private key file [" +
-										   this.privateKeyFile.getPath() + "].", e);
-		}
-	}
+    /**
+     * This method returns the data from the file containing the encrypted
+     * private key from the public/private key pair. The contract for this
+     * method can be fulfilled by storing the data in a byte array literal
+     * in the source code itself.<br/>
+     * <br/>
+     * It is <em>imperative</em> that you obfuscate the bytecode for the
+     * implementation of this class. It is also imperative that the byte
+     * array exist only for the life of this method (i.e., DO NOT store it as
+     * an instance or class field).
+     *
+     * @return the encrypted file contents from the private key file.
+     * @throws net.nicholaswilliams.java.licensing.exception.KeyNotFoundException if the key data could not be retrieved; an acceptable message or chained cause must be provided.
+     */
+    @Override
+    public byte[] getEncryptedPrivateKeyData() throws KeyNotFoundException
+    {
+        try
+        {
+            return FileUtils.readFileToByteArray(this.privateKeyFile);
+        }
+        catch(FileNotFoundException e)
+        {
+            throw new KeyNotFoundException("The private key file [" + this.privateKeyFile.getPath() +
+                                           "] does not exist.");
+        }
+        catch(IOException e)
+        {
+            throw new KeyNotFoundException("Could not read from the private key file [" +
+                                           this.privateKeyFile.getPath() + "].", e);
+        }
+    }
 
-	/**
-	 * Gets the file that the private key is located at.
-	 *
-	 * @return the file.
-	 */
-	public File getPrivateKeyFile()
-	{
-		return this.privateKeyFile;
-	}
+    /**
+     * Gets the file that the private key is located at.
+     *
+     * @return the file.
+     */
+    public File getPrivateKeyFile()
+    {
+        return this.privateKeyFile;
+    }
 }

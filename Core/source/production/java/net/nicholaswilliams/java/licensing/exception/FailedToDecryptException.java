@@ -30,25 +30,25 @@ package net.nicholaswilliams.java.licensing.exception;
 @SuppressWarnings("unused")
 public class FailedToDecryptException extends RuntimeException
 {
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-	public FailedToDecryptException()
-	{
-		super("Failed to decrypt the data. Either the password was incorrect or the data was corrupt.");
-	}
+    public FailedToDecryptException()
+    {
+        super("Failed to decrypt the data. Either the password was incorrect or the data was corrupt.");
+    }
 
-	public FailedToDecryptException(String message)
-	{
-		super(message);
-	}
+    public FailedToDecryptException(String message)
+    {
+        super(message);
+    }
 
-	public FailedToDecryptException(Throwable cause)
-	{
-		super("Failed to decrypt the data. Either the password was incorrect or the data was corrupt.", cause);
-	}
+    public FailedToDecryptException(Throwable cause)
+    {
+        super("Failed to decrypt the data. Either the password was incorrect or the data was corrupt.", cause);
+    }
 
-	public FailedToDecryptException(String message, Throwable cause)
-	{
-		super(message, cause);
-	}
+    public FailedToDecryptException(String message, Throwable cause)
+    {
+        super(message, cause);
+    }
 }

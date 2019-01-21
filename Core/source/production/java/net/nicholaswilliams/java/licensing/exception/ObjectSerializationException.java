@@ -29,25 +29,25 @@ package net.nicholaswilliams.java.licensing.exception;
 @SuppressWarnings("unused")
 public class ObjectSerializationException extends RuntimeException
 {
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-	public ObjectSerializationException()
-	{
-		super("An I/O error occurred while writing the object to the byte array.");
-	}
+    public ObjectSerializationException()
+    {
+        super("An I/O error occurred while writing the object to the byte array.");
+    }
 
-	public ObjectSerializationException(String message)
-	{
-		super(message);
-	}
+    public ObjectSerializationException(String message)
+    {
+        super(message);
+    }
 
-	public ObjectSerializationException(Throwable cause)
-	{
-		super("An I/O error occurred while writing the object to the byte array.", cause);
-	}
+    public ObjectSerializationException(Throwable cause)
+    {
+        super("An I/O error occurred while writing the object to the byte array.", cause);
+    }
 
-	public ObjectSerializationException(String message, Throwable cause)
-	{
-		super(message, cause);
-	}
+    public ObjectSerializationException(String message, Throwable cause)
+    {
+        super(message, cause);
+    }
 }

@@ -29,25 +29,25 @@ package net.nicholaswilliams.java.licensing.exception;
 @SuppressWarnings("unused")
 public class InappropriateKeySpecificationException extends RuntimeException
 {
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-	public InappropriateKeySpecificationException()
-	{
-		super("The specified key specification is inappropriate for the factory.");
-	}
+    public InappropriateKeySpecificationException()
+    {
+        super("The specified key specification is inappropriate for the factory.");
+    }
 
-	public InappropriateKeySpecificationException(String message)
-	{
-		super(message);
-	}
+    public InappropriateKeySpecificationException(String message)
+    {
+        super(message);
+    }
 
-	public InappropriateKeySpecificationException(Throwable cause)
-	{
-		super("The specified key specification is inappropriate for the factory.", cause);
-	}
+    public InappropriateKeySpecificationException(Throwable cause)
+    {
+        super("The specified key specification is inappropriate for the factory.", cause);
+    }
 
-	public InappropriateKeySpecificationException(String message, Throwable cause)
-	{
-		super(message, cause);
-	}
+    public InappropriateKeySpecificationException(String message, Throwable cause)
+    {
+        super(message, cause);
+    }
 }

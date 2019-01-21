@@ -28,25 +28,25 @@ package net.nicholaswilliams.java.licensing.exception;
 @SuppressWarnings("unused")
 public class CorruptSignatureException extends RuntimeException
 {
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-	public CorruptSignatureException()
-	{
-		super("The signature provided is corrupt or not a signature.");
-	}
+    public CorruptSignatureException()
+    {
+        super("The signature provided is corrupt or not a signature.");
+    }
 
-	public CorruptSignatureException(String message)
-	{
-		super(message);
-	}
+    public CorruptSignatureException(String message)
+    {
+        super(message);
+    }
 
-	public CorruptSignatureException(Throwable cause)
-	{
-		super("The signature provided is corrupt or not a signature.", cause);
-	}
+    public CorruptSignatureException(Throwable cause)
+    {
+        super("The signature provided is corrupt or not a signature.", cause);
+    }
 
-	public CorruptSignatureException(String message, Throwable cause)
-	{
-		super(message, cause);
-	}
+    public CorruptSignatureException(String message, Throwable cause)
+    {
+        super(message, cause);
+    }
 }

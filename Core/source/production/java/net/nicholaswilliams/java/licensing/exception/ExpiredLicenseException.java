@@ -29,25 +29,25 @@ package net.nicholaswilliams.java.licensing.exception;
 @SuppressWarnings("unused")
 public class ExpiredLicenseException extends InvalidLicenseException
 {
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-	public ExpiredLicenseException()
-	{
-		super("The license has expired.");
-	}
+    public ExpiredLicenseException()
+    {
+        super("The license has expired.");
+    }
 
-	public ExpiredLicenseException(String message)
-	{
-		super(message);
-	}
+    public ExpiredLicenseException(String message)
+    {
+        super(message);
+    }
 
-	public ExpiredLicenseException(Throwable cause)
-	{
-		super("The license has expired.", cause);
-	}
+    public ExpiredLicenseException(Throwable cause)
+    {
+        super("The license has expired.", cause);
+    }
 
-	public ExpiredLicenseException(String message, Throwable cause)
-	{
-		super(message, cause);
-	}
+    public ExpiredLicenseException(String message, Throwable cause)
+    {
+        super(message, cause);
+    }
 }

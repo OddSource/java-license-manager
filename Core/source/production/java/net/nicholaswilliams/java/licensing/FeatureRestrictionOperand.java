@@ -27,7 +27,7 @@ package net.nicholaswilliams.java.licensing;
  */
 public enum FeatureRestrictionOperand
 {
-	AND,
+    AND,
 
-	OR
+    OR
 }

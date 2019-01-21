@@ -34,58 +34,58 @@ import java.util.Set;
  * @since 1.0.0
  */
 public final class ImmutableLinkedHashSet<E> extends ImmutableAbstractCollection<E>
-		implements Set<E>, Serializable, Cloneable
+        implements Set<E>, Serializable, Cloneable
 {
-	private final static long serialVersionUID = 2284350955829958161L;
+    private final static long serialVersionUID = 2284350955829958161L;
 
-	private final LinkedHashSet<E> internalSet;
+    private final LinkedHashSet<E> internalSet;
 
-	private final ArrayList<E> internalList;
+    private final ArrayList<E> internalList;
 
-	/**
-	 * Constructor that copies.
-	 *
-	 * @param list the set to decorate, must not be null
-	 * @throws IllegalArgumentException if list is null
-	 */
-	public ImmutableLinkedHashSet(Set<E> list)
-	{
-		super(new LinkedHashSet<E>(list));
+    /**
+     * Constructor that copies.
+     *
+     * @param list the set to decorate, must not be null
+     * @throws IllegalArgumentException if list is null
+     */
+    public ImmutableLinkedHashSet(Set<E> list)
+    {
+        super(new LinkedHashSet<E>(list));
 
-		this.internalSet = (LinkedHashSet<E>)this.internalCollection;
-		this.internalList = new ArrayList<E>(list);
-	}
+        this.internalSet = (LinkedHashSet<E>)this.internalCollection;
+        this.internalList = new ArrayList<E>(list);
+    }
 
-	@Override
-	@SuppressWarnings({"unchecked", "CloneDoesntCallSuperClone"})
-	public final ImmutableLinkedHashSet<E> clone()
-	{
-		synchronized(this.internalSet)
-		{
-			this.checkValidity();
-			return new ImmutableLinkedHashSet<E>((Set<E>)this.internalSet.clone());
-		}
-	}
+    @Override
+    @SuppressWarnings({"unchecked", "CloneDoesntCallSuperClone"})
+    public final ImmutableLinkedHashSet<E> clone()
+    {
+        synchronized(this.internalSet)
+        {
+            this.checkValidity();
+            return new ImmutableLinkedHashSet<E>((Set<E>)this.internalSet.clone());
+        }
+    }
 
-	/**
-	 * Retrieves the indexed element specified.
-	 *
-	 * @param index The element to retrieve.
-	 * @return The element requested.
-	 */
-	public E get(int index)
-	{
-		return index < 0 ? null : this.internalList.get(index);
-	}
+    /**
+     * Retrieves the indexed element specified.
+     *
+     * @param index The element to retrieve.
+     * @return The element requested.
+     */
+    public E get(int index)
+    {
+        return index < 0 ? null : this.internalList.get(index);
+    }
 
-	/**
-	 * Retrieves the matching element specified.
-	 *
-	 * @param object The element to match.
-	 * @return The element requested.
-	 */
-	public E get(E object)
-	{
-		return this.get(this.internalList.indexOf(object));
-	}
+    /**
+     * Retrieves the matching element specified.
+     *
+     * @param object The element to match.
+     * @return The element requested.
+     */
+    public E get(E object)
+    {
+        return this.get(this.internalList.indexOf(object));
+    }
 }

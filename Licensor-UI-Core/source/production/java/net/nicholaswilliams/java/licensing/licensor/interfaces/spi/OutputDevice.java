@@ -29,7 +29,7 @@ import java.io.IOError;
  */
 public interface OutputDevice
 {
-	public void outputMessage(String message) throws IOError;
+    public void outputMessage(String message) throws IOError;
 
-	public void outputErrorMessage(String message) throws IOError;
+    public void outputErrorMessage(String message) throws IOError;
 }

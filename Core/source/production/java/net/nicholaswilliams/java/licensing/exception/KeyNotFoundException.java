@@ -28,25 +28,25 @@ package net.nicholaswilliams.java.licensing.exception;
 @SuppressWarnings("unused")
 public class KeyNotFoundException extends RuntimeException
 {
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-	public KeyNotFoundException()
-	{
-		super("The key file could not be found.");
-	}
+    public KeyNotFoundException()
+    {
+        super("The key file could not be found.");
+    }
 
-	public KeyNotFoundException(String message)
-	{
-		super(message);
-	}
+    public KeyNotFoundException(String message)
+    {
+        super(message);
+    }
 
-	public KeyNotFoundException(Throwable cause)
-	{
-		super("The key file could not be found.", cause);
-	}
+    public KeyNotFoundException(Throwable cause)
+    {
+        super("The key file could not be found.", cause);
+    }
 
-	public KeyNotFoundException(String message, Throwable cause)
-	{
-		super(message, cause);
-	}
+    public KeyNotFoundException(String message, Throwable cause)
+    {
+        super(message, cause);
+    }
 }

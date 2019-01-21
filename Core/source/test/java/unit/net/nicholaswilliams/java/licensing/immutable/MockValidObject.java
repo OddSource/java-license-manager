@@ -27,12 +27,12 @@ package net.nicholaswilliams.java.licensing.immutable;
  */
 final class MockValidObject extends ValidObject
 {
-	protected boolean valid = true;
-	
-	@Override
-	protected final void checkValidity()
-	{
-		if(!this.valid)
-			throw new ImmutableModifiedThroughReflectionException();
-	}
+    protected boolean valid = true;
+
+    @Override
+    protected final void checkValidity()
+    {
+        if(!this.valid)
+            throw new ImmutableModifiedThroughReflectionException();
+    }
 }

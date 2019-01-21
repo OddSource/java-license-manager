@@ -34,32 +34,32 @@ import java.util.Date;
  */
 public class DefaultLicenseValidator implements LicenseValidator
 {
-	/**
-	 * Ensures the current date is between the license's good-after and good-before dates (the license
-	 * has taken effect and hasn't expired).
-	 *
-	 * @param license The license to validate
-	 * @throws net.nicholaswilliams.java.licensing.exception.InvalidLicenseException when the license is invalid for any reason; the implementer is required to provide adequate description in this exception to indicate why the license is invalid; extending the exception is encouraged
-	 * @see InvalidLicenseException
-	 * @see ExpiredLicenseException
-	 */
-	@Override
-	public void validateLicense(License license) throws InvalidLicenseException
-	{
-		long time = Calendar.getInstance().getTimeInMillis();
-		if(license.getGoodAfterDate() > time)
-			throw new InvalidLicenseException("The " + this.getLicenseDescription(license) + " does not take effect until " + this.getFormattedDate(license.getGoodAfterDate()) + ".");
-		if(license.getGoodBeforeDate() < time)
-			throw new ExpiredLicenseException("The " + this.getLicenseDescription(license) + " expired on " + this.getFormattedDate(license.getGoodAfterDate()) + ".");
-	}
+    /**
+     * Ensures the current date is between the license's good-after and good-before dates (the license
+     * has taken effect and hasn't expired).
+     *
+     * @param license The license to validate
+     * @throws net.nicholaswilliams.java.licensing.exception.InvalidLicenseException when the license is invalid for any reason; the implementer is required to provide adequate description in this exception to indicate why the license is invalid; extending the exception is encouraged
+     * @see InvalidLicenseException
+     * @see ExpiredLicenseException
+     */
+    @Override
+    public void validateLicense(License license) throws InvalidLicenseException
+    {
+        long time = Calendar.getInstance().getTimeInMillis();
+        if(license.getGoodAfterDate() > time)
+            throw new InvalidLicenseException("The " + this.getLicenseDescription(license) + " does not take effect until " + this.getFormattedDate(license.getGoodAfterDate()) + ".");
+        if(license.getGoodBeforeDate() < time)
+            throw new ExpiredLicenseException("The " + this.getLicenseDescription(license) + " expired on " + this.getFormattedDate(license.getGoodAfterDate()) + ".");
+    }
 
-	public String getLicenseDescription(License license)
-	{
-		return license.getSubject() + " license for " + license.getHolder();
-	}
+    public String getLicenseDescription(License license)
+    {
+        return license.getSubject() + " license for " + license.getHolder();
+    }
 
-	public String getFormattedDate(long time)
-	{
-		return new SimpleDateFormat("EEE, d MMM yyyy HH:mm:ss z (Z)").format(new Date(time));
-	}
+    public String getFormattedDate(long time)
+    {
+        return new SimpleDateFormat("EEE, d MMM yyyy HH:mm:ss z (Z)").format(new Date(time));
+    }
 }

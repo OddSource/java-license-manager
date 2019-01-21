@@ -34,49 +34,49 @@ import java.security.NoSuchAlgorithmException;
  */
 public class Hasher
 {
-	/**
-	 * The algorithm we use to hash strings.
-	 */
-	private static final String algorithm = "SHA-512";
+    /**
+     * The algorithm we use to hash strings.
+     */
+    private static final String algorithm = "SHA-512";
 
-	/**
-	 * The salt that we use to hash strings.
-	 */
-	private static final String salt =
-			"j4KgU305PZp't.\"%ordAY7q*?z9%8]amNL(0Wx5eG49b1sRj(^;8Kg2w0EoM";
+    /**
+     * The salt that we use to hash strings.
+     */
+    private static final String salt =
+            "j4KgU305PZp't.\"%ordAY7q*?z9%8]amNL(0Wx5eG49b1sRj(^;8Kg2w0EoM";
 
-	/**
-	 * Calculate the SHA-512 message digest hash of the
-	 * provided string and return it with its binary
-	 * data Base64 encoded.
-	 *
-	 * @param string The string to hash
-	 * @return the hashed string Base64 encoded.
-	 */
-	public static String hash(String string)
-	{
-		try
-		{
-			return new String(
-					Base64.encodeBase64(
-							MessageDigest.getInstance(Hasher.algorithm).digest(
-									(string + Hasher.salt).getBytes(LicensingCharsets.UTF_8)
-							)
-					),
-					LicensingCharsets.UTF_8
-			);
-		}
-		catch(NoSuchAlgorithmException e)
-		{
-			throw new AlgorithmNotSupportedException(Hasher.algorithm, e);
-		}
-	}
+    /**
+     * Calculate the SHA-512 message digest hash of the
+     * provided string and return it with its binary
+     * data Base64 encoded.
+     *
+     * @param string The string to hash
+     * @return the hashed string Base64 encoded.
+     */
+    public static String hash(String string)
+    {
+        try
+        {
+            return new String(
+                    Base64.encodeBase64(
+                            MessageDigest.getInstance(Hasher.algorithm).digest(
+                                    (string + Hasher.salt).getBytes(LicensingCharsets.UTF_8)
+                            )
+                    ),
+                    LicensingCharsets.UTF_8
+            );
+        }
+        catch(NoSuchAlgorithmException e)
+        {
+            throw new AlgorithmNotSupportedException(Hasher.algorithm, e);
+        }
+    }
 
-	/**
-	 * This class cannot be instantiated.
-	 */
-	private Hasher()
-	{
-		throw new RuntimeException("This class cannot be instantiated.");
-	}
+    /**
+     * This class cannot be instantiated.
+     */
+    private Hasher()
+    {
+        throw new RuntimeException("This class cannot be instantiated.");
+    }
 }

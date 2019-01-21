@@ -29,25 +29,25 @@ package net.nicholaswilliams.java.licensing.exception;
 @SuppressWarnings("unused")
 public class RSA2048NotSupportedException extends RuntimeException
 {
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-	public RSA2048NotSupportedException()
-	{
-		super("2048-bit RSA Security is not supported on this system.");
-	}
+    public RSA2048NotSupportedException()
+    {
+        super("2048-bit RSA Security is not supported on this system.");
+    }
 
-	public RSA2048NotSupportedException(String message)
-	{
-		super(message);
-	}
+    public RSA2048NotSupportedException(String message)
+    {
+        super(message);
+    }
 
-	public RSA2048NotSupportedException(Throwable cause)
-	{
-		super("2048-bit RSA Security is not supported on this system.", cause);
-	}
+    public RSA2048NotSupportedException(Throwable cause)
+    {
+        super("2048-bit RSA Security is not supported on this system.", cause);
+    }
 
-	public RSA2048NotSupportedException(String message, Throwable cause)
-	{
-		super(message, cause);
-	}
+    public RSA2048NotSupportedException(String message, Throwable cause)
+    {
+        super(message, cause);
+    }
 }

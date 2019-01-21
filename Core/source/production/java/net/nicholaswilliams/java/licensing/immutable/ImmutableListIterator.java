@@ -29,91 +29,91 @@ import java.util.ListIterator;
  */
 public final class ImmutableListIterator<E> implements Immutable, ListIterator<E>
 {
-	private final ListIterator<E> internal;
+    private final ListIterator<E> internal;
 
-	private final ValidObject validObject;
+    private final ValidObject validObject;
 
-	ImmutableListIterator(ListIterator<E> iterator, ValidObject validObject)
-	{
-		this.internal = iterator;
-		this.validObject = validObject;
-	}
+    ImmutableListIterator(ListIterator<E> iterator, ValidObject validObject)
+    {
+        this.internal = iterator;
+        this.validObject = validObject;
+    }
 
-	@Override
-	public boolean hasNext()
-	{
-		synchronized(this.validObject)
-		{
-			this.validObject.checkValidity();
-			return this.internal.hasNext();
-		}
-	}
+    @Override
+    public boolean hasNext()
+    {
+        synchronized(this.validObject)
+        {
+            this.validObject.checkValidity();
+            return this.internal.hasNext();
+        }
+    }
 
-	@Override
-	public boolean hasPrevious()
-	{
-		synchronized(this.validObject)
-		{
-			this.validObject.checkValidity();
-			return this.internal.hasPrevious();
-		}
-	}
+    @Override
+    public boolean hasPrevious()
+    {
+        synchronized(this.validObject)
+        {
+            this.validObject.checkValidity();
+            return this.internal.hasPrevious();
+        }
+    }
 
-	@Override
-	public E next()
-	{
-		synchronized(this.validObject)
-		{
-			this.validObject.checkValidity();
-			return this.internal.next();
-		}
-	}
+    @Override
+    public E next()
+    {
+        synchronized(this.validObject)
+        {
+            this.validObject.checkValidity();
+            return this.internal.next();
+        }
+    }
 
-	@Override
-	public int nextIndex()
-	{
-		synchronized(this.validObject)
-		{
-			this.validObject.checkValidity();
-			return this.internal.nextIndex();
-		}
-	}
+    @Override
+    public int nextIndex()
+    {
+        synchronized(this.validObject)
+        {
+            this.validObject.checkValidity();
+            return this.internal.nextIndex();
+        }
+    }
 
-	@Override
-	public E previous()
-	{
-		synchronized(this.validObject)
-		{
-			this.validObject.checkValidity();
-			return this.internal.previous();
-		}
-	}
+    @Override
+    public E previous()
+    {
+        synchronized(this.validObject)
+        {
+            this.validObject.checkValidity();
+            return this.internal.previous();
+        }
+    }
 
-	@Override
-	public int previousIndex()
-	{
-		synchronized(this.validObject)
-		{
-			this.validObject.checkValidity();
-			return this.internal.previousIndex();
-		}
-	}
+    @Override
+    public int previousIndex()
+    {
+        synchronized(this.validObject)
+        {
+            this.validObject.checkValidity();
+            return this.internal.previousIndex();
+        }
+    }
 
-	@Override
-	public void add(E e)
-	{
-		throw new UnsupportedOperationException("This iterator cannot be modified.");
-	}
+    @Override
+    public void add(E e)
+    {
+        throw new UnsupportedOperationException("This iterator cannot be modified.");
+    }
 
-	@Override
-	public void remove()
-	{
-		throw new UnsupportedOperationException("This iterator cannot be modified.");
-	}
+    @Override
+    public void remove()
+    {
+        throw new UnsupportedOperationException("This iterator cannot be modified.");
+    }
 
-	@Override
-	public void set(E e)
-	{
-		throw new UnsupportedOperationException("This iterator cannot be modified.");
-	}
+    @Override
+    public void set(E e)
+    {
+        throw new UnsupportedOperationException("This iterator cannot be modified.");
+    }
 }

@@ -29,25 +29,25 @@ package net.nicholaswilliams.java.licensing.immutable;
 @SuppressWarnings("unused")
 public class ImmutableModifiedThroughReflectionException extends Error
 {
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-	public ImmutableModifiedThroughReflectionException()
-	{
-		super("This immutable object appears to have been modified through reflection.");
-	}
+    public ImmutableModifiedThroughReflectionException()
+    {
+        super("This immutable object appears to have been modified through reflection.");
+    }
 
-	public ImmutableModifiedThroughReflectionException(String message)
-	{
-		super(message);
-	}
+    public ImmutableModifiedThroughReflectionException(String message)
+    {
+        super(message);
+    }
 
-	public ImmutableModifiedThroughReflectionException(Throwable cause)
-	{
-		super("This immutable object appears to have been modified through reflection.", cause);
-	}
+    public ImmutableModifiedThroughReflectionException(Throwable cause)
+    {
+        super("This immutable object appears to have been modified through reflection.", cause);
+    }
 
-	public ImmutableModifiedThroughReflectionException(String message, Throwable cause)
-	{
-		super(message, cause);
-	}
+    public ImmutableModifiedThroughReflectionException(String message, Throwable cause)
+    {
+        super(message, cause);
+    }
 }

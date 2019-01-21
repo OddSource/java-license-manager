@@ -34,13 +34,13 @@ import net.nicholaswilliams.java.licensing.exception.InvalidLicenseException;
  */
 public interface LicenseValidator
 {
-	/**
-	 * Validates the license provided and throws an exception if the license is invalid for any reason
-	 * (expired, not who it belongs to, etc.).
-	 *
-	 * @param license The license to validate
-	 * @throws InvalidLicenseException when the license is invalid for any reason; the implementer is required to provide adequate description in this exception to indicate why the license is invalid; extending the exception is encouraged.
-	 * @throws net.nicholaswilliams.java.licensing.exception.ExpiredLicenseException when the license is expired.
-	 */
-	public void validateLicense(License license) throws InvalidLicenseException;
+    /**
+     * Validates the license provided and throws an exception if the license is invalid for any reason
+     * (expired, not who it belongs to, etc.).
+     *
+     * @param license The license to validate
+     * @throws InvalidLicenseException when the license is invalid for any reason; the implementer is required to provide adequate description in this exception to indicate why the license is invalid; extending the exception is encouraged.
+     * @throws net.nicholaswilliams.java.licensing.exception.ExpiredLicenseException when the license is expired.
+     */
+    public void validateLicense(License license) throws InvalidLicenseException;
 }

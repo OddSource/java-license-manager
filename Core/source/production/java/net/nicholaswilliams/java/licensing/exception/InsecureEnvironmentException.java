@@ -30,17 +30,17 @@ package net.nicholaswilliams.java.licensing.exception;
 @SuppressWarnings("unused")
 public class InsecureEnvironmentException extends Error
 {
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-	public InsecureEnvironmentException(String message, Throwable cause)
-	{
-		super("The license manager was activated in an insecure environment. " + message, cause);
-	}
+    public InsecureEnvironmentException(String message, Throwable cause)
+    {
+        super("The license manager was activated in an insecure environment. " + message, cause);
+    }
 
-	public InsecureEnvironmentException(SecurityException cause)
-	{
-		super("The license manager was activated in an insecure environment. A security manager has already been " +
-				  "installed, but it allows reflection access to the license cache and doesn't allow a new security " +
-				  "manager to be installed.", cause);
-	}
+    public InsecureEnvironmentException(SecurityException cause)
+    {
+        super("The license manager was activated in an insecure environment. A security manager has already been " +
+                  "installed, but it allows reflection access to the license cache and doesn't allow a new security " +
+                  "manager to be installed.", cause);
+    }
 }

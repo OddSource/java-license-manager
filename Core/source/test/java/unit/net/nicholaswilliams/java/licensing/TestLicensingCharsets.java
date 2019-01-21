@@ -29,42 +29,42 @@ import static org.junit.Assert.*;
 
 public class TestLicensingCharsets
 {
-	@Before
-	public void setUp()
-	{
+    @Before
+    public void setUp()
+    {
 
-	}
+    }
 
-	@After
-	public void tearDown()
-	{
+    @After
+    public void tearDown()
+    {
 
-	}
+    }
 
-	@Test
-	public void testConstructionForbidden()
-			throws IllegalAccessException, InstantiationException, NoSuchMethodException
-	{
-		Constructor<LicensingCharsets> constructor = LicensingCharsets.class.getDeclaredConstructor();
-		constructor.setAccessible(true);
+    @Test
+    public void testConstructionForbidden()
+            throws IllegalAccessException, InstantiationException, NoSuchMethodException
+    {
+        Constructor<LicensingCharsets> constructor = LicensingCharsets.class.getDeclaredConstructor();
+        constructor.setAccessible(true);
 
-		try
-		{
-			constructor.newInstance();
-			fail("Expected exception java.lang.reflect.InvocationTargetException, but got no exception.");
-		}
-		catch(InvocationTargetException e)
-		{
-			Throwable cause = e.getCause();
-			assertNotNull("Expected cause for InvocationTargetException, but got no cause.", cause);
-			assertSame("Expected exception java.lang.RuntimeException, but got " + cause.getClass(), RuntimeException.class, cause.getClass());
-			assertEquals("The message was incorrect.", "This class cannot be instantiated.", cause.getMessage());
-		}
-	}
+        try
+        {
+            constructor.newInstance();
+            fail("Expected exception java.lang.reflect.InvocationTargetException, but got no exception.");
+        }
+        catch(InvocationTargetException e)
+        {
+            Throwable cause = e.getCause();
+            assertNotNull("Expected cause for InvocationTargetException, but got no cause.", cause);
+            assertSame("Expected exception java.lang.RuntimeException, but got " + cause.getClass(), RuntimeException.class, cause.getClass());
+            assertEquals("The message was incorrect.", "This class cannot be instantiated.", cause.getMessage());
+        }
+    }
 
-	@Test
-	public void testUtf8()
-	{
-		assertEquals("The UTF-8 charset is not correct.", "UTF-8", LicensingCharsets.UTF_8.name());
-	}
+    @Test
+    public void testUtf8()
+    {
+        assertEquals("The UTF-8 charset is not correct.", "UTF-8", LicensingCharsets.UTF_8.name());
+    }
 }

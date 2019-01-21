@@ -31,49 +31,49 @@ import java.util.Arrays;
  */
 public final class SignedLicense implements Serializable
 {
-	private final static long serialVersionUID = -8465360339059185020L;
-	
-	private final byte[] licenseContent;
+    private final static long serialVersionUID = -8465360339059185020L;
 
-	private final byte[] signatureContent;
+    private final byte[] licenseContent;
 
-	public SignedLicense(byte[] licenseContent, byte[] signatureContent)
-	{
-		this.licenseContent = Arrays.copyOf(licenseContent, licenseContent.length);
-		this.signatureContent = Arrays.copyOf(signatureContent, signatureContent.length);
-	}
+    private final byte[] signatureContent;
 
-	/**
-	 * Get the content of the actual license object. This is encrypted and
-	 * corresponds to {@link License}. For security reasons, only a copy of
-	 * the content is returned.
-	 *
-	 * @return the encrypted license content.
-	 */
-	public final byte[] getLicenseContent()
-	{
-		return Arrays.copyOf(this.licenseContent, this.licenseContent.length);
-	}
+    public SignedLicense(byte[] licenseContent, byte[] signatureContent)
+    {
+        this.licenseContent = Arrays.copyOf(licenseContent, licenseContent.length);
+        this.signatureContent = Arrays.copyOf(signatureContent, signatureContent.length);
+    }
 
-	/**
-	 * Get the signature for the license content. For security reasons, only a
-	 * copy of the signature is returned.
-	 *
-	 * @return the license signature.
-	 */
-	public final byte[] getSignatureContent()
-	{
-		return Arrays.copyOf(this.signatureContent, this.signatureContent.length);
-	}
+    /**
+     * Get the content of the actual license object. This is encrypted and
+     * corresponds to {@link License}. For security reasons, only a copy of
+     * the content is returned.
+     *
+     * @return the encrypted license content.
+     */
+    public final byte[] getLicenseContent()
+    {
+        return Arrays.copyOf(this.licenseContent, this.licenseContent.length);
+    }
 
-	/**
-	 * Erase the contents of this object. This is a security feature to write
-	 * zeroes to the license and signature data so that it doesn't hang around
-	 * in memory where it might be reverse engineered.
-	 */
-	protected final void erase()
-	{
-		Arrays.fill(this.licenseContent, (byte)0);
-		Arrays.fill(this.signatureContent, (byte)0);
-	}
+    /**
+     * Get the signature for the license content. For security reasons, only a
+     * copy of the signature is returned.
+     *
+     * @return the license signature.
+     */
+    public final byte[] getSignatureContent()
+    {
+        return Arrays.copyOf(this.signatureContent, this.signatureContent.length);
+    }
+
+    /**
+     * Erase the contents of this object. This is a security feature to write
+     * zeroes to the license and signature data so that it doesn't hang around
+     * in memory where it might be reverse engineered.
+     */
+    protected final void erase()
+    {
+        Arrays.fill(this.licenseContent, (byte)0);
+        Arrays.fill(this.signatureContent, (byte)0);
+    }
 }

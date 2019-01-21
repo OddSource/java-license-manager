@@ -27,23 +27,23 @@ import org.junit.Test;
  */
 public class TestImmutableAbstractCollection
 {
-	@Before
-	public void setUp()
-	{
+    @Before
+    public void setUp()
+    {
 
-	}
+    }
 
-	@After
-	public void tearDown()
-	{
+    @After
+    public void tearDown()
+    {
 
-	}
+    }
 
-	@Test(expected=IllegalArgumentException.class)
-	public void testConstruct01()
-	{
-		new ImmutableAbstractCollection<String>(null) {
-			private static final long serialVersionUID = 1L;
-		};
-	}
+    @Test(expected=IllegalArgumentException.class)
+    public void testConstruct01()
+    {
+        new ImmutableAbstractCollection<String>(null) {
+            private static final long serialVersionUID = 1L;
+        };
+    }
 }

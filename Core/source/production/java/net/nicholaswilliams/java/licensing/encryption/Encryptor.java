@@ -54,455 +54,455 @@ import java.security.spec.InvalidKeySpecException;
  */
 public final class Encryptor
 {
-	private static final int minimumPaddedLength = 20;
-	
-	/**
-	 * Encrypt the plain-text string using the default passphrase.
-	 * For encrypting, the data will first be padded to a safe number of
-	 * bytes with randomized data.
-	 *
-	 * @param unencrypted The plain-text string to encrypt
-	 * @return the encrypted string Base64-encoded.
-	 * @see Encryptor#pad(byte[], int)
-	 */
-	public static String encrypt(String unencrypted)
-	{
-		return Encryptor.encrypt(unencrypted.getBytes(LicensingCharsets.UTF_8));
-	}
+    private static final int minimumPaddedLength = 20;
 
-	/**
-	 * Encrypt the plain-text string. For encrypting, the
-	 * string will first be padded to a safe number of
-	 * characters with randomized data.
-	 *
-	 * @param unencrypted The plain-text string to encrypt
-	 * @param passphrase The passphrase to encrypt the data with
-	 * @return the encrypted string Base64-encoded.
-	 */
-	public static String encrypt(String unencrypted, char[] passphrase)
-	{
-		return Encryptor.encrypt(unencrypted.getBytes(LicensingCharsets.UTF_8), passphrase);
-	}
+    /**
+     * Encrypt the plain-text string using the default passphrase.
+     * For encrypting, the data will first be padded to a safe number of
+     * bytes with randomized data.
+     *
+     * @param unencrypted The plain-text string to encrypt
+     * @return the encrypted string Base64-encoded.
+     * @see Encryptor#pad(byte[], int)
+     */
+    public static String encrypt(String unencrypted)
+    {
+        return Encryptor.encrypt(unencrypted.getBytes(LicensingCharsets.UTF_8));
+    }
 
-	/**
-	 * Encrypt the binary data using the default passphrase.
-	 * For encrypting, the data will first be padded to a safe number of
-	 * bytes with randomized data.
-	 *
-	 * @param unencrypted The binary data to encrypt
-	 * @return the encrypted string Base64-encoded.
-	 * @see Encryptor#pad(byte[], int)
-	 */
-	public static String encrypt(byte[] unencrypted)
-	{
-		return new String(
-				Base64.encodeBase64URLSafe(Encryptor.encryptRaw(unencrypted)), LicensingCharsets.UTF_8
-		);
-	}
+    /**
+     * Encrypt the plain-text string. For encrypting, the
+     * string will first be padded to a safe number of
+     * characters with randomized data.
+     *
+     * @param unencrypted The plain-text string to encrypt
+     * @param passphrase The passphrase to encrypt the data with
+     * @return the encrypted string Base64-encoded.
+     */
+    public static String encrypt(String unencrypted, char[] passphrase)
+    {
+        return Encryptor.encrypt(unencrypted.getBytes(LicensingCharsets.UTF_8), passphrase);
+    }
 
-	/**
-	 * Encrypt the binary data. For encrypting, the
-	 * data will first be padded to a safe number of
-	 * bytes with randomized data.
-	 *
-	 * @param unencrypted The binary data to encrypt
-	 * @param passphrase The passphrase to encrypt the data with
-	 * @return the encrypted string Base64-encoded.
-	 * @see Encryptor#pad(byte[], int)
-	 */
-	public static String encrypt(byte[] unencrypted, char[] passphrase)
-	{
-		return new String(
-				Base64.encodeBase64URLSafe(Encryptor.encryptRaw(
-						unencrypted, passphrase
-				)),
-				LicensingCharsets.UTF_8
-		);
-	}
+    /**
+     * Encrypt the binary data using the default passphrase.
+     * For encrypting, the data will first be padded to a safe number of
+     * bytes with randomized data.
+     *
+     * @param unencrypted The binary data to encrypt
+     * @return the encrypted string Base64-encoded.
+     * @see Encryptor#pad(byte[], int)
+     */
+    public static String encrypt(byte[] unencrypted)
+    {
+        return new String(
+                Base64.encodeBase64URLSafe(Encryptor.encryptRaw(unencrypted)), LicensingCharsets.UTF_8
+        );
+    }
 
-	/**
-	 * Encrypt the binary data using the default passphrase.
-	 * For encrypting, the data will first be padded to a safe number of
-	 * bytes with randomized data.
-	 *
-	 * @param unencrypted The binary data to encrypt
-	 * @return the encrypted data.
-	 * @see Encryptor#pad(byte[], int)
-	 */
-	public static byte[] encryptRaw(byte[] unencrypted)
-	{
-		try
-		{
-			return Encryptor.getDefaultEncryptionCipher().doFinal(
-					Encryptor.pad(unencrypted, Encryptor.minimumPaddedLength)
-			);
-		}
-		catch(IllegalBlockSizeException e)
-		{
-			throw new RuntimeException("While encrypting the data...", e);
-		}
-		catch(BadPaddingException e)
-		{
-			throw new RuntimeException("While encrypting the data...", e);
-		}
-	}
+    /**
+     * Encrypt the binary data. For encrypting, the
+     * data will first be padded to a safe number of
+     * bytes with randomized data.
+     *
+     * @param unencrypted The binary data to encrypt
+     * @param passphrase The passphrase to encrypt the data with
+     * @return the encrypted string Base64-encoded.
+     * @see Encryptor#pad(byte[], int)
+     */
+    public static String encrypt(byte[] unencrypted, char[] passphrase)
+    {
+        return new String(
+                Base64.encodeBase64URLSafe(Encryptor.encryptRaw(
+                        unencrypted, passphrase
+                )),
+                LicensingCharsets.UTF_8
+        );
+    }
 
-	/**
-	 * Encrypt the binary data. For encrypting, the
-	 * data will first be padded to a safe number of
-	 * bytes with randomized data.
-	 *
-	 * @param unencrypted The binary data to encrypt
-	 * @param passphrase The passphrase to encrypt the data with
-	 * @return the encrypted data.
-	 * @see Encryptor#pad(byte[], int)
-	 */
-	public static byte[] encryptRaw(byte[] unencrypted, char[] passphrase)
-	{
-		try
-		{
-			return Encryptor.getEncryptionCipher(passphrase).doFinal(
-					Encryptor.pad(unencrypted, Encryptor.minimumPaddedLength)
-			);
-		}
-		catch(IllegalBlockSizeException e)
-		{
-			throw new RuntimeException("While encrypting the data...", e);
-		}
-		catch(BadPaddingException e)
-		{
-			throw new RuntimeException("While encrypting the data...", e);
-		}
-	}
+    /**
+     * Encrypt the binary data using the default passphrase.
+     * For encrypting, the data will first be padded to a safe number of
+     * bytes with randomized data.
+     *
+     * @param unencrypted The binary data to encrypt
+     * @return the encrypted data.
+     * @see Encryptor#pad(byte[], int)
+     */
+    public static byte[] encryptRaw(byte[] unencrypted)
+    {
+        try
+        {
+            return Encryptor.getDefaultEncryptionCipher().doFinal(
+                    Encryptor.pad(unencrypted, Encryptor.minimumPaddedLength)
+            );
+        }
+        catch(IllegalBlockSizeException e)
+        {
+            throw new RuntimeException("While encrypting the data...", e);
+        }
+        catch(BadPaddingException e)
+        {
+            throw new RuntimeException("While encrypting the data...", e);
+        }
+    }
 
-	/**
-	 * Decrypt an encrypted string using the default passphrase.
-	 * Any padded data will be removed from the string prior to its return.
-	 *
-	 * @param encrypted The encrypted string to decrypt
-	 * @return the decrypted string.
-	 * @throws FailedToDecryptException when the data was corrupt and undecryptable or when the provided decryption password was incorrect. It is impossible to know which is the actual cause.
-	 * @see Encryptor#unPad(byte[])
-	 */
-	public static String decrypt(String encrypted)
-	{
-		return Encryptor.decrypt(Base64.decodeBase64(encrypted));
-	}
+    /**
+     * Encrypt the binary data. For encrypting, the
+     * data will first be padded to a safe number of
+     * bytes with randomized data.
+     *
+     * @param unencrypted The binary data to encrypt
+     * @param passphrase The passphrase to encrypt the data with
+     * @return the encrypted data.
+     * @see Encryptor#pad(byte[], int)
+     */
+    public static byte[] encryptRaw(byte[] unencrypted, char[] passphrase)
+    {
+        try
+        {
+            return Encryptor.getEncryptionCipher(passphrase).doFinal(
+                    Encryptor.pad(unencrypted, Encryptor.minimumPaddedLength)
+            );
+        }
+        catch(IllegalBlockSizeException e)
+        {
+            throw new RuntimeException("While encrypting the data...", e);
+        }
+        catch(BadPaddingException e)
+        {
+            throw new RuntimeException("While encrypting the data...", e);
+        }
+    }
 
-	/**
-	 * Decrypt an encrypted string. Any padded data will
-	 * be removed from the string prior to its return.
-	 *
-	 * @param encrypted The encrypted string to decrypt
-	 * @param passphrase The passphrase to decrypt the string with
-	 * @return the decrypted string.
-	 * @throws FailedToDecryptException when the data was corrupt and undecryptable or when the provided decryption password was incorrect. It is impossible to know which is the actual cause.
-	 * @see Encryptor#unPad(byte[])
-	 */
-	public static String decrypt(String encrypted, char[] passphrase)
-	{
-		return Encryptor.decrypt(Base64.decodeBase64(encrypted), passphrase);
-	}
+    /**
+     * Decrypt an encrypted string using the default passphrase.
+     * Any padded data will be removed from the string prior to its return.
+     *
+     * @param encrypted The encrypted string to decrypt
+     * @return the decrypted string.
+     * @throws FailedToDecryptException when the data was corrupt and undecryptable or when the provided decryption password was incorrect. It is impossible to know which is the actual cause.
+     * @see Encryptor#unPad(byte[])
+     */
+    public static String decrypt(String encrypted)
+    {
+        return Encryptor.decrypt(Base64.decodeBase64(encrypted));
+    }
 
-	/**
-	 * Decrypt encrypted data using the default passphrase.
-	 * Any padded data will be removed from the string prior to its return.
-	 *
-	 * @param encrypted The encrypted data to decrypt
-	 * @return the decrypted string.
-	 * @throws FailedToDecryptException when the data was corrupt and undecryptable or when the provided decryption password was incorrect. It is impossible to know which is the actual cause.
-	 * @see Encryptor#unPad(byte[])
-	 */
-	public static String decrypt(byte[] encrypted)
-	{
-		return new String(Encryptor.decryptRaw(encrypted), LicensingCharsets.UTF_8);
-	}
+    /**
+     * Decrypt an encrypted string. Any padded data will
+     * be removed from the string prior to its return.
+     *
+     * @param encrypted The encrypted string to decrypt
+     * @param passphrase The passphrase to decrypt the string with
+     * @return the decrypted string.
+     * @throws FailedToDecryptException when the data was corrupt and undecryptable or when the provided decryption password was incorrect. It is impossible to know which is the actual cause.
+     * @see Encryptor#unPad(byte[])
+     */
+    public static String decrypt(String encrypted, char[] passphrase)
+    {
+        return Encryptor.decrypt(Base64.decodeBase64(encrypted), passphrase);
+    }
 
-	/**
-	 * Decrypt an encrypted data. Any padded data will
-	 * be removed from the string prior to its return.
-	 *
-	 * @param encrypted The encrypted data to decrypt
-	 * @param passphrase The passphrase to decrypt the data with
-	 * @return the decrypted string.
-	 * @throws FailedToDecryptException when the data was corrupt and undecryptable or when the provided decryption password was incorrect. It is impossible to know which is the actual cause.
-	 * @see Encryptor#unPad(byte[])
-	 */
-	public static String decrypt(byte[] encrypted, char[] passphrase)
-	{
-		return new String(
-				Encryptor.decryptRaw(encrypted, passphrase), LicensingCharsets.UTF_8
-		);
-	}
+    /**
+     * Decrypt encrypted data using the default passphrase.
+     * Any padded data will be removed from the string prior to its return.
+     *
+     * @param encrypted The encrypted data to decrypt
+     * @return the decrypted string.
+     * @throws FailedToDecryptException when the data was corrupt and undecryptable or when the provided decryption password was incorrect. It is impossible to know which is the actual cause.
+     * @see Encryptor#unPad(byte[])
+     */
+    public static String decrypt(byte[] encrypted)
+    {
+        return new String(Encryptor.decryptRaw(encrypted), LicensingCharsets.UTF_8);
+    }
 
-	/**
-	 * Decrypt encrypted data using the default passphrase.
-	 * Any padded data will be removed from the string prior to its return.
-	 *
-	 * @param encrypted The encrypted data to decrypt
-	 * @return the decrypted binary data.
-	 * @throws FailedToDecryptException when the data was corrupt and undecryptable or when the provided decryption password was incorrect. It is impossible to know which is the actual cause.
-	 * @see Encryptor#unPad(byte[])
-	 */
-	public static byte[] decryptRaw(byte[] encrypted)
-	{
-		try
-		{
-			return Encryptor.unPad(
-					Encryptor.getDefaultDecryptionCipher().doFinal(encrypted)
-			);
-		}
-		catch(IllegalBlockSizeException e)
-		{
-			throw new FailedToDecryptException(e);
-		}
-		catch(BadPaddingException e)
-		{
-			throw new FailedToDecryptException(e);
-		}
-	}
+    /**
+     * Decrypt an encrypted data. Any padded data will
+     * be removed from the string prior to its return.
+     *
+     * @param encrypted The encrypted data to decrypt
+     * @param passphrase The passphrase to decrypt the data with
+     * @return the decrypted string.
+     * @throws FailedToDecryptException when the data was corrupt and undecryptable or when the provided decryption password was incorrect. It is impossible to know which is the actual cause.
+     * @see Encryptor#unPad(byte[])
+     */
+    public static String decrypt(byte[] encrypted, char[] passphrase)
+    {
+        return new String(
+                Encryptor.decryptRaw(encrypted, passphrase), LicensingCharsets.UTF_8
+        );
+    }
 
-	/**
-	 * Decrypt encrypted data. Any padded data will
-	 * be removed from the string prior to its return.
-	 *
-	 * @param encrypted The encrypted data to decrypt
-	 * @param passphrase The passphrase to decrypt the data with
-	 * @return the decrypted binary data.
-	 * @throws FailedToDecryptException when the data was corrupt and undecryptable or when the provided decryption password was incorrect. It is impossible to know which is the actual cause.
-	 * @see Encryptor#unPad(byte[])
-	 */
-	public static byte[] decryptRaw(byte[] encrypted, char[] passphrase)
-	{
-		try
-		{
-			return Encryptor.unPad(
-					Encryptor.getDecryptionCipher(passphrase).doFinal(encrypted)
-			);
-		}
-		catch(IllegalBlockSizeException e)
-		{
-			throw new FailedToDecryptException(e);
-		}
-		catch(BadPaddingException e)
-		{
-			throw new FailedToDecryptException(e);
-		}
-	}
+    /**
+     * Decrypt encrypted data using the default passphrase.
+     * Any padded data will be removed from the string prior to its return.
+     *
+     * @param encrypted The encrypted data to decrypt
+     * @return the decrypted binary data.
+     * @throws FailedToDecryptException when the data was corrupt and undecryptable or when the provided decryption password was incorrect. It is impossible to know which is the actual cause.
+     * @see Encryptor#unPad(byte[])
+     */
+    public static byte[] decryptRaw(byte[] encrypted)
+    {
+        try
+        {
+            return Encryptor.unPad(
+                    Encryptor.getDefaultDecryptionCipher().doFinal(encrypted)
+            );
+        }
+        catch(IllegalBlockSizeException e)
+        {
+            throw new FailedToDecryptException(e);
+        }
+        catch(BadPaddingException e)
+        {
+            throw new FailedToDecryptException(e);
+        }
+    }
 
-	private static final SecureRandom random = new SecureRandom();
+    /**
+     * Decrypt encrypted data. Any padded data will
+     * be removed from the string prior to its return.
+     *
+     * @param encrypted The encrypted data to decrypt
+     * @param passphrase The passphrase to decrypt the data with
+     * @return the decrypted binary data.
+     * @throws FailedToDecryptException when the data was corrupt and undecryptable or when the provided decryption password was incorrect. It is impossible to know which is the actual cause.
+     * @see Encryptor#unPad(byte[])
+     */
+    public static byte[] decryptRaw(byte[] encrypted, char[] passphrase)
+    {
+        try
+        {
+            return Encryptor.unPad(
+                    Encryptor.getDecryptionCipher(passphrase).doFinal(encrypted)
+            );
+        }
+        catch(IllegalBlockSizeException e)
+        {
+            throw new FailedToDecryptException(e);
+        }
+        catch(BadPaddingException e)
+        {
+            throw new FailedToDecryptException(e);
+        }
+    }
 
-	/**
-	 * Pads a {@code byte} array to the specified length.
-	 * The output is pretty simple. The begin {@code byte}s
-	 * are the values from {@code bytes}. The last
-	 * {@code byte}, when cast to an integer, indicates the
-	 * number of end {@code byte}s (including itself) that
-	 * make up the padding. The returned array will always
-	 * be at least one element longer than the input.<br/>
-	 * <br/>
-	 * For example, if passed an array of 5 {@code byte}s and
-	 * the length 10, the first five {@code byte}s will be the
-	 * values from {@code bytes}. {@code byte}s 6-10 (indexes
-	 * 5-9) will be randomized data and {@code byte} 11
-	 * (index 10) will be the integer 6 cast as a byte. The
-	 * actual returned array will be 11 {@code byte}s long.<br/>
-	 * <br/>
-	 * If passed an array of 10 {@code byte}s and the length
-	 * of 10, the first 10 {@code byte}s will be the input
-	 * and {@code byte} 11 will be 1.
-	 *
-	 * @param bytes The array of {@code byte}s to pad
-	 * @param length The length to pad the array of {@code byte}s to
-	 * @return the padded {@code byte} array.
-	 * @see Encryptor#unPad(byte[])
-	 */
-	private static byte[] pad(byte[] bytes, int length)
-	{
-		if(bytes.length >= length)
-		{
-			byte[] out = new byte[bytes.length + 1];
-			System.arraycopy(bytes, 0, out, 0, bytes.length);
-			out[bytes.length] = (byte)1;
-			return out;
-		}
+    private static final SecureRandom random = new SecureRandom();
 
-		byte[] out = new byte[length + 1];
+    /**
+     * Pads a {@code byte} array to the specified length.
+     * The output is pretty simple. The begin {@code byte}s
+     * are the values from {@code bytes}. The last
+     * {@code byte}, when cast to an integer, indicates the
+     * number of end {@code byte}s (including itself) that
+     * make up the padding. The returned array will always
+     * be at least one element longer than the input.<br/>
+     * <br/>
+     * For example, if passed an array of 5 {@code byte}s and
+     * the length 10, the first five {@code byte}s will be the
+     * values from {@code bytes}. {@code byte}s 6-10 (indexes
+     * 5-9) will be randomized data and {@code byte} 11
+     * (index 10) will be the integer 6 cast as a byte. The
+     * actual returned array will be 11 {@code byte}s long.<br/>
+     * <br/>
+     * If passed an array of 10 {@code byte}s and the length
+     * of 10, the first 10 {@code byte}s will be the input
+     * and {@code byte} 11 will be 1.
+     *
+     * @param bytes The array of {@code byte}s to pad
+     * @param length The length to pad the array of {@code byte}s to
+     * @return the padded {@code byte} array.
+     * @see Encryptor#unPad(byte[])
+     */
+    private static byte[] pad(byte[] bytes, int length)
+    {
+        if(bytes.length >= length)
+        {
+            byte[] out = new byte[bytes.length + 1];
+            System.arraycopy(bytes, 0, out, 0, bytes.length);
+            out[bytes.length] = (byte)1;
+            return out;
+        }
 
-		int i = 0;
-		for(; i < bytes.length; i++)
-			out[i] = bytes[i];
+        byte[] out = new byte[length + 1];
 
-		int padded = length - i;
+        int i = 0;
+        for(; i < bytes.length; i++)
+            out[i] = bytes[i];
 
-		// fill the rest with random bytes
-		byte[] fill = new byte[padded - 1];
-		Encryptor.random.nextBytes(fill);
-		System.arraycopy(fill, 0, out, i, padded - 1);
+        int padded = length - i;
 
-		out[length] = (byte)(padded + 1);
+        // fill the rest with random bytes
+        byte[] fill = new byte[padded - 1];
+        Encryptor.random.nextBytes(fill);
+        System.arraycopy(fill, 0, out, i, padded - 1);
 
-		return out;
-	}
+        out[length] = (byte)(padded + 1);
 
-	/**
-	 * Un-pads the specified array of {@code byte}s. Expects
-	 * an input that was padded with
-	 * {@link Encryptor#pad(byte[], int)}. Its behavior is
-	 * unspecified if passed an input that was not the
-	 * result of {@link Encryptor#pad(byte[], int)}.<br/>
-	 * <br/>
-	 * The returned array will be the {@code byte}s with all
-	 * the padding removed and the original {@code byte}s
-	 * left intact.
-	 *
-	 * @param bytes The array of {@code byte}s to un-pad
-	 * @return the un-padded {@code byte} array.
-	 * @see Encryptor#pad(byte[], int)
-	 */
-	private static byte[] unPad(byte[] bytes)
-	{
-		int padded = (int)bytes[bytes.length - 1];
-		int targetLength = bytes.length - padded;
+        return out;
+    }
 
-		byte[] out = new byte[targetLength];
+    /**
+     * Un-pads the specified array of {@code byte}s. Expects
+     * an input that was padded with
+     * {@link Encryptor#pad(byte[], int)}. Its behavior is
+     * unspecified if passed an input that was not the
+     * result of {@link Encryptor#pad(byte[], int)}.<br/>
+     * <br/>
+     * The returned array will be the {@code byte}s with all
+     * the padding removed and the original {@code byte}s
+     * left intact.
+     *
+     * @param bytes The array of {@code byte}s to un-pad
+     * @return the un-padded {@code byte} array.
+     * @see Encryptor#pad(byte[], int)
+     */
+    private static byte[] unPad(byte[] bytes)
+    {
+        int padded = (int)bytes[bytes.length - 1];
+        int targetLength = bytes.length - padded;
 
-		System.arraycopy(bytes, 0, out, 0, targetLength);
+        byte[] out = new byte[targetLength];
 
-		return out;
-	}
+        System.arraycopy(bytes, 0, out, 0, targetLength);
 
-	private static Cipher defaultEncryptionCipher;
+        return out;
+    }
 
-	private static Cipher defaultDecryptionCipher;
+    private static Cipher defaultEncryptionCipher;
 
-	private static final char[] defaultPassphrase = {
-			'j', '4', 'K', 'g', 'U', '3', '0', '5', 'P', 'Z', 'p', '\'', 't',
-			'.', '"', '%', 'o', 'r', 'd', 'A', 'Y', '7', 'q', '*', '?', 'z',
-			'9', '%', '8', ']', 'a', 'm', 'N', 'L', '(', '0', 'W', 'x', '5',
-			'e', 'G', '4', '9', 'b', '1', 's', 'R', 'j', '(', '^', ';', '8',
-			'K', 'g', '2', 'w', '0', 'E', 'o', 'M'
-	};
+    private static Cipher defaultDecryptionCipher;
 
-	private static final byte[] salt = {
-			(byte)0xA9, (byte)0xA2, (byte)0xB5, (byte)0xDE,
-			(byte)0x2A, (byte)0x8A, (byte)0x9A, (byte)0xE6
-	};
+    private static final char[] defaultPassphrase = {
+            'j', '4', 'K', 'g', 'U', '3', '0', '5', 'P', 'Z', 'p', '\'', 't',
+            '.', '"', '%', 'o', 'r', 'd', 'A', 'Y', '7', 'q', '*', '?', 'z',
+            '9', '%', '8', ']', 'a', 'm', 'N', 'L', '(', '0', 'W', 'x', '5',
+            'e', 'G', '4', '9', 'b', '1', 's', 'R', 'j', '(', '^', ';', '8',
+            'K', 'g', '2', 'w', '0', 'E', 'o', 'M'
+    };
 
-	private static final int iterationCount = 1024;
+    private static final byte[] salt = {
+            (byte)0xA9, (byte)0xA2, (byte)0xB5, (byte)0xDE,
+            (byte)0x2A, (byte)0x8A, (byte)0x9A, (byte)0xE6
+    };
 
-	// must be 128, 192, 256; 128 is maximum without "unlimited strength" JCE policy files
-	private static final int aesKeyLength = 128;
+    private static final int iterationCount = 1024;
 
-	private static SecretKey getSecretKey(char[] passphrase)
-	{
-		try
-		{
-			PBEKeySpec keySpec = new PBEKeySpec(
-					passphrase,
-					Encryptor.salt,
-					Encryptor.iterationCount,
-					Encryptor.aesKeyLength
-			);
+    // must be 128, 192, 256; 128 is maximum without "unlimited strength" JCE policy files
+    private static final int aesKeyLength = 128;
 
-			byte[] shortKey = SecretKeyFactory.getInstance("PBEWithMD5AndDES").
-					generateSecret(keySpec).getEncoded();
+    private static SecretKey getSecretKey(char[] passphrase)
+    {
+        try
+        {
+            PBEKeySpec keySpec = new PBEKeySpec(
+                    passphrase,
+                    Encryptor.salt,
+                    Encryptor.iterationCount,
+                    Encryptor.aesKeyLength
+            );
 
-			byte[] intermediaryKey = new byte[Encryptor.aesKeyLength / 8];
-			for(int i = 0, j = 0; i < Encryptor.aesKeyLength / 8; i++)
-			{
-				intermediaryKey[i] = shortKey[j];
-				if(++j == shortKey.length)
-					j = 0;
-			}
+            byte[] shortKey = SecretKeyFactory.getInstance("PBEWithMD5AndDES").
+                    generateSecret(keySpec).getEncoded();
 
-			return new SecretKeySpec(intermediaryKey, "AES");
-		}
-		catch(NoSuchAlgorithmException e)
-		{
-			throw new AlgorithmNotSupportedException("DES with an MD5 Digest", e);
-		}
-		catch(InvalidKeySpecException e)
-		{
-			throw new InappropriateKeySpecificationException(e);
-		}
-	}
+            byte[] intermediaryKey = new byte[Encryptor.aesKeyLength / 8];
+            for(int i = 0, j = 0; i < Encryptor.aesKeyLength / 8; i++)
+            {
+                intermediaryKey[i] = shortKey[j];
+                if(++j == shortKey.length)
+                    j = 0;
+            }
 
-	private static Cipher getDefaultEncryptionCipher()
-	{
-		if(Encryptor.defaultEncryptionCipher == null)
-			Encryptor.defaultEncryptionCipher = Encryptor.getEncryptionCipher(Encryptor.defaultPassphrase);
+            return new SecretKeySpec(intermediaryKey, "AES");
+        }
+        catch(NoSuchAlgorithmException e)
+        {
+            throw new AlgorithmNotSupportedException("DES with an MD5 Digest", e);
+        }
+        catch(InvalidKeySpecException e)
+        {
+            throw new InappropriateKeySpecificationException(e);
+        }
+    }
 
-		return Encryptor.defaultEncryptionCipher;
-	}
+    private static Cipher getDefaultEncryptionCipher()
+    {
+        if(Encryptor.defaultEncryptionCipher == null)
+            Encryptor.defaultEncryptionCipher = Encryptor.getEncryptionCipher(Encryptor.defaultPassphrase);
 
-	private static Cipher getEncryptionCipher(char[] passphrase)
-	{
-		return Encryptor.getEncryptionCipher(Encryptor.getSecretKey(passphrase));
-	}
+        return Encryptor.defaultEncryptionCipher;
+    }
 
-	private static Cipher getEncryptionCipher(SecretKey secretKey)
-	{
-		try
-		{
-			Cipher cipher = Cipher.getInstance(secretKey.getAlgorithm());
-			cipher.init(Cipher.ENCRYPT_MODE, secretKey, Encryptor.random);
-			return cipher;
-		}
-		catch(NoSuchAlgorithmException e)
-		{
-			throw new AlgorithmNotSupportedException("AES With SHA-1 digest", e);
-		}
-		catch(NoSuchPaddingException e)
-		{
-			throw new RuntimeException(e.getMessage(), e);
-		}
-		catch(InvalidKeyException e)
-		{
-			throw new InappropriateKeyException(e.getMessage(), e);
-		}
-	}
+    private static Cipher getEncryptionCipher(char[] passphrase)
+    {
+        return Encryptor.getEncryptionCipher(Encryptor.getSecretKey(passphrase));
+    }
 
-	private static Cipher getDefaultDecryptionCipher()
-	{
-		if(Encryptor.defaultDecryptionCipher == null)
-			Encryptor.defaultDecryptionCipher = Encryptor.getDecryptionCipher(Encryptor.defaultPassphrase);
+    private static Cipher getEncryptionCipher(SecretKey secretKey)
+    {
+        try
+        {
+            Cipher cipher = Cipher.getInstance(secretKey.getAlgorithm());
+            cipher.init(Cipher.ENCRYPT_MODE, secretKey, Encryptor.random);
+            return cipher;
+        }
+        catch(NoSuchAlgorithmException e)
+        {
+            throw new AlgorithmNotSupportedException("AES With SHA-1 digest", e);
+        }
+        catch(NoSuchPaddingException e)
+        {
+            throw new RuntimeException(e.getMessage(), e);
+        }
+        catch(InvalidKeyException e)
+        {
+            throw new InappropriateKeyException(e.getMessage(), e);
+        }
+    }
 
-		return Encryptor.defaultDecryptionCipher;
-	}
+    private static Cipher getDefaultDecryptionCipher()
+    {
+        if(Encryptor.defaultDecryptionCipher == null)
+            Encryptor.defaultDecryptionCipher = Encryptor.getDecryptionCipher(Encryptor.defaultPassphrase);
 
-	private static Cipher getDecryptionCipher(char[] passphrase)
-	{
-		return Encryptor.getDecryptionCipher(Encryptor.getSecretKey(passphrase));
-	}
+        return Encryptor.defaultDecryptionCipher;
+    }
 
-	private static Cipher getDecryptionCipher(SecretKey secretKey)
-	{
-		try
-		{
-			Cipher cipher = Cipher.getInstance(secretKey.getAlgorithm());
-			cipher.init(Cipher.DECRYPT_MODE, secretKey, Encryptor.random);
-			return cipher;
-		}
-		catch(NoSuchAlgorithmException e)
-		{
-			throw new AlgorithmNotSupportedException("AES With SHA-1 digest", e);
-		}
-		catch(NoSuchPaddingException e)
-		{
-			throw new RuntimeException(e.getMessage(), e);
-		}
-		catch(InvalidKeyException e)
-		{
-			throw new InappropriateKeyException(e.getMessage(), e);
-		}
-	}
+    private static Cipher getDecryptionCipher(char[] passphrase)
+    {
+        return Encryptor.getDecryptionCipher(Encryptor.getSecretKey(passphrase));
+    }
 
-	/**
-	 * This class cannot be instantiated.
-	 */
-	private Encryptor()
-	{
-		throw new RuntimeException("This class cannot be instantiated.");
-	}
+    private static Cipher getDecryptionCipher(SecretKey secretKey)
+    {
+        try
+        {
+            Cipher cipher = Cipher.getInstance(secretKey.getAlgorithm());
+            cipher.init(Cipher.DECRYPT_MODE, secretKey, Encryptor.random);
+            return cipher;
+        }
+        catch(NoSuchAlgorithmException e)
+        {
+            throw new AlgorithmNotSupportedException("AES With SHA-1 digest", e);
+        }
+        catch(NoSuchPaddingException e)
+        {
+            throw new RuntimeException(e.getMessage(), e);
+        }
+        catch(InvalidKeyException e)
+        {
+            throw new InappropriateKeyException(e.getMessage(), e);
+        }
+    }
+
+    /**
+     * This class cannot be instantiated.
+     */
+    private Encryptor()
+    {
+        throw new RuntimeException("This class cannot be instantiated.");
+    }
 }

@@ -22,16 +22,16 @@ import net.nicholaswilliams.java.licensing.FeatureObject;
 
 public class MockFeatureObject implements FeatureObject
 {
-	private String name;
+    private String name;
 
-	public MockFeatureObject(String name)
-	{
-		this.name = name;
-	}
+    public MockFeatureObject(String name)
+    {
+        this.name = name;
+    }
 
-	@Override
-	public String getName()
-	{
-		return this.name;
-	}
+    @Override
+    public String getName()
+    {
+        return this.name;
+    }
 }

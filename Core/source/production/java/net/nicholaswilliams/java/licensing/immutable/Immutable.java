@@ -27,5 +27,5 @@ package net.nicholaswilliams.java.licensing.immutable;
  */
 public interface Immutable
 {
-	
+
 }

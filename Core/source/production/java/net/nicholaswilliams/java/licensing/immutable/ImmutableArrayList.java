@@ -34,121 +34,121 @@ import java.util.List;
  * @since 1.0.0
  */
 public final class ImmutableArrayList<E> extends ImmutableAbstractCollection<E>
-		implements List<E>, Serializable, Cloneable
+        implements List<E>, Serializable, Cloneable
 {
-	private final static long serialVersionUID = -6912407141647481417L;
+    private final static long serialVersionUID = -6912407141647481417L;
 
-	private final ArrayList<E> internalList;
+    private final ArrayList<E> internalList;
 
-	/**
-	 * Constructor that copies.
-	 *
-	 * @param list the list to decorate, must not be null
-	 * @throws IllegalArgumentException if list is null
-	 */
-	public ImmutableArrayList(List<E> list)
-	{
-		super(new ArrayList<E>(list));
+    /**
+     * Constructor that copies.
+     *
+     * @param list the list to decorate, must not be null
+     * @throws IllegalArgumentException if list is null
+     */
+    public ImmutableArrayList(List<E> list)
+    {
+        super(new ArrayList<E>(list));
 
-		this.internalList = (ArrayList<E>)this.internalCollection;
-		this.internalList.trimToSize();
-	}
+        this.internalList = (ArrayList<E>)this.internalCollection;
+        this.internalList.trimToSize();
+    }
 
-	@Override
-	@SuppressWarnings({"unchecked", "CloneDoesntCallSuperClone"})
-	public final ImmutableArrayList<E> clone()
-	{
-		synchronized(this.internalList)
-		{
-			this.checkValidity();
-			return new ImmutableArrayList<E>((List<E>)this.internalList.clone());
-		}
-	}
+    @Override
+    @SuppressWarnings({"unchecked", "CloneDoesntCallSuperClone"})
+    public final ImmutableArrayList<E> clone()
+    {
+        synchronized(this.internalList)
+        {
+            this.checkValidity();
+            return new ImmutableArrayList<E>((List<E>)this.internalList.clone());
+        }
+    }
 
-	@Override
-	public final E get(int index)
-	{
-		synchronized(this.internalList)
-		{
-			this.checkValidity();
-			return this.internalList.get(index);
-		}
-	}
+    @Override
+    public final E get(int index)
+    {
+        synchronized(this.internalList)
+        {
+            this.checkValidity();
+            return this.internalList.get(index);
+        }
+    }
 
-	@Override
-	public final int indexOf(Object o)
-	{
-		synchronized(this.internalList)
-		{
-			this.checkValidity();
-			return this.internalList.indexOf(o);
-		}
-	}
+    @Override
+    public final int indexOf(Object o)
+    {
+        synchronized(this.internalList)
+        {
+            this.checkValidity();
+            return this.internalList.indexOf(o);
+        }
+    }
 
-	@Override
-	public final int lastIndexOf(Object o)
-	{
-		synchronized(this.internalList)
-		{
-			this.checkValidity();
-			return this.internalList.lastIndexOf(o);
-		}
-	}
+    @Override
+    public final int lastIndexOf(Object o)
+    {
+        synchronized(this.internalList)
+        {
+            this.checkValidity();
+            return this.internalList.lastIndexOf(o);
+        }
+    }
 
-	@Override
-	@SuppressWarnings("unchecked")
-	public final ImmutableListIterator<E> listIterator()
-	{
-		synchronized(this.internalList)
-		{
-			this.checkValidity();
-			return new ImmutableListIterator<E>(this.internalList.listIterator(), this);
-		}
-	}
+    @Override
+    @SuppressWarnings("unchecked")
+    public final ImmutableListIterator<E> listIterator()
+    {
+        synchronized(this.internalList)
+        {
+            this.checkValidity();
+            return new ImmutableListIterator<E>(this.internalList.listIterator(), this);
+        }
+    }
 
-	@Override
-	@SuppressWarnings("unchecked")
-	public final ImmutableListIterator<E> listIterator(int index)
-	{
-		synchronized(this.internalList)
-		{
-			this.checkValidity();
-			return new ImmutableListIterator<E>(this.internalList.listIterator(index), this);
-		}
-	}
+    @Override
+    @SuppressWarnings("unchecked")
+    public final ImmutableListIterator<E> listIterator(int index)
+    {
+        synchronized(this.internalList)
+        {
+            this.checkValidity();
+            return new ImmutableListIterator<E>(this.internalList.listIterator(index), this);
+        }
+    }
 
-	@Override
-	public final ImmutableArrayList<E> subList(int fromIndex, int toIndex)
-	{
-		synchronized(this.internalList)
-		{
-			this.checkValidity();
-			List<E> subList = this.internalList.subList(fromIndex, toIndex);
-			return new ImmutableArrayList<E>(subList);
-		}
-	}
-	
-	@Override
-	public final void add(int index, E e)
-	{
-		throw new UnsupportedOperationException("This list cannot be modified.");
-	}
+    @Override
+    public final ImmutableArrayList<E> subList(int fromIndex, int toIndex)
+    {
+        synchronized(this.internalList)
+        {
+            this.checkValidity();
+            List<E> subList = this.internalList.subList(fromIndex, toIndex);
+            return new ImmutableArrayList<E>(subList);
+        }
+    }
 
-	@Override
-	public final boolean addAll(int index, Collection<? extends E> c)
-	{
-		throw new UnsupportedOperationException("This list cannot be modified.");
-	}
+    @Override
+    public final void add(int index, E e)
+    {
+        throw new UnsupportedOperationException("This list cannot be modified.");
+    }
 
-	@Override
-	public final E remove(int index)
-	{
-		throw new UnsupportedOperationException("This list cannot be modified.");
-	}
+    @Override
+    public final boolean addAll(int index, Collection<? extends E> c)
+    {
+        throw new UnsupportedOperationException("This list cannot be modified.");
+    }
 
-	@Override
-	public final E set(int index, E e)
-	{
-		throw new UnsupportedOperationException("This list cannot be modified.");
-	}
+    @Override
+    public final E remove(int index)
+    {
+        throw new UnsupportedOperationException("This list cannot be modified.");
+    }
+
+    @Override
+    public final E set(int index, E e)
+    {
+        throw new UnsupportedOperationException("This list cannot be modified.");
+    }
 }

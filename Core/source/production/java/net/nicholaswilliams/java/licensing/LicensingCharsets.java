@@ -29,16 +29,16 @@ import java.nio.charset.Charset;
  */
 public final class LicensingCharsets
 {
-	/**
-	 * All operations in License Manager use the universal UTF-8 character set.
-	 */
-	public static final Charset UTF_8 = Charset.forName("UTF-8");
+    /**
+     * All operations in License Manager use the universal UTF-8 character set.
+     */
+    public static final Charset UTF_8 = Charset.forName("UTF-8");
 
-	/**
-	 * This class cannot be instantiated.
-	 */
-	private LicensingCharsets()
-	{
-		throw new RuntimeException("This class cannot be instantiated.");
-	}
+    /**
+     * This class cannot be instantiated.
+     */
+    private LicensingCharsets()
+    {
+        throw new RuntimeException("This class cannot be instantiated.");
+    }
 }

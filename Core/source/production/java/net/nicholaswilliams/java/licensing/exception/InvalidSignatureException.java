@@ -28,25 +28,25 @@ package net.nicholaswilliams.java.licensing.exception;
 @SuppressWarnings("unused")
 public class InvalidSignatureException extends RuntimeException
 {
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-	public InvalidSignatureException()
-	{
-		super("The signature provided is invalid and cannot be verified.");
-	}
+    public InvalidSignatureException()
+    {
+        super("The signature provided is invalid and cannot be verified.");
+    }
 
-	public InvalidSignatureException(String message)
-	{
-		super(message);
-	}
+    public InvalidSignatureException(String message)
+    {
+        super(message);
+    }
 
-	public InvalidSignatureException(Throwable cause)
-	{
-		super("The signature provided is invalid and cannot be verified.", cause);
-	}
+    public InvalidSignatureException(Throwable cause)
+    {
+        super("The signature provided is invalid and cannot be verified.", cause);
+    }
 
-	public InvalidSignatureException(String message, Throwable cause)
-	{
-		super(message, cause);
-	}
+    public InvalidSignatureException(String message, Throwable cause)
+    {
+        super(message, cause);
+    }
 }

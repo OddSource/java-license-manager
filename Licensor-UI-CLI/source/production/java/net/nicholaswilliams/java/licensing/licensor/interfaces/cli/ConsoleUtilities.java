@@ -29,19 +29,19 @@ import net.nicholaswilliams.java.licensing.licensor.interfaces.cli.spi.TextInter
  */
 class ConsoleUtilities
 {
-	/**
-	 * Sets up a shutdown hook to ensure that the text device always exits to a newline.
-	 *
-	 * @param interfaceDevice The interface device to configure
-	 */
-	public static void configureInterfaceDevice(final TextInterfaceDevice interfaceDevice)
-	{
-		interfaceDevice.registerShutdownHook(new Thread(new Runnable() {
-			@Override
-			public void run()
-			{
-				interfaceDevice.printOutLn();
-			}
-		}));
-	}
+    /**
+     * Sets up a shutdown hook to ensure that the text device always exits to a newline.
+     *
+     * @param interfaceDevice The interface device to configure
+     */
+    public static void configureInterfaceDevice(final TextInterfaceDevice interfaceDevice)
+    {
+        interfaceDevice.registerShutdownHook(new Thread(new Runnable() {
+            @Override
+            public void run()
+            {
+                interfaceDevice.printOutLn();
+            }
+        }));
+    }
 }

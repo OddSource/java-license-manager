@@ -26,26 +26,26 @@ import java.io.IOException;
 
 public class MockFilePrivateKeyDataProvider implements PrivateKeyDataProvider
 {
-	/**
-	 * This method returns the data from the file containing the encrypted
-	 * private key from the public/private key pair. The contract for this
-	 * method can be fulfilled by storing the data in a byte array literal
-	 * in the source code itself.
-	 *
-	 * @return the encrypted file contents from the private key file.
-	 * @throws net.nicholaswilliams.java.licensing.exception.KeyNotFoundException if the key data could not be retrieved; an acceptable message or chained cause must be provided.
-	 */
-	public byte[] getEncryptedPrivateKeyData() throws KeyNotFoundException
-	{
-		try
-		{
-			return IOUtils.toByteArray(
-					this.getClass().getResourceAsStream("mock.private.key")
-			);
-		}
-		catch(IOException e)
-		{
-			throw new KeyNotFoundException("The private key file was not found.", e);
-		}
-	}
+    /**
+     * This method returns the data from the file containing the encrypted
+     * private key from the public/private key pair. The contract for this
+     * method can be fulfilled by storing the data in a byte array literal
+     * in the source code itself.
+     *
+     * @return the encrypted file contents from the private key file.
+     * @throws net.nicholaswilliams.java.licensing.exception.KeyNotFoundException if the key data could not be retrieved; an acceptable message or chained cause must be provided.
+     */
+    public byte[] getEncryptedPrivateKeyData() throws KeyNotFoundException
+    {
+        try
+        {
+            return IOUtils.toByteArray(
+                    this.getClass().getResourceAsStream("mock.private.key")
+            );
+        }
+        catch(IOException e)
+        {
+            throw new KeyNotFoundException("The private key file was not found.", e);
+        }
+    }
 }

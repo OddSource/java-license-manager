@@ -36,68 +36,68 @@ import java.io.IOException;
  */
 public class FilePublicKeyDataProvider implements PublicKeyDataProvider
 {
-	private final File publicKeyFile;
+    private final File publicKeyFile;
 
-	/**
-	 * Create a new provider, specifying the file from which the public key can be read.
-	 *
-	 * @param publicKeyFile the public key file
-	 */
-	public FilePublicKeyDataProvider(File publicKeyFile)
-	{
-		this.publicKeyFile = publicKeyFile.getAbsoluteFile();
-	}
+    /**
+     * Create a new provider, specifying the file from which the public key can be read.
+     *
+     * @param publicKeyFile the public key file
+     */
+    public FilePublicKeyDataProvider(File publicKeyFile)
+    {
+        this.publicKeyFile = publicKeyFile.getAbsoluteFile();
+    }
 
-	/**
-	 * Create a new provider, specifying the name of the file from which the public key can be read.
-	 *
-	 * @param publicKeyFileName The public key file name
-	 */
-	public FilePublicKeyDataProvider(String publicKeyFileName)
-	{
-		this.publicKeyFile = new File(publicKeyFileName).getAbsoluteFile();
-	}
+    /**
+     * Create a new provider, specifying the name of the file from which the public key can be read.
+     *
+     * @param publicKeyFileName The public key file name
+     */
+    public FilePublicKeyDataProvider(String publicKeyFileName)
+    {
+        this.publicKeyFile = new File(publicKeyFileName).getAbsoluteFile();
+    }
 
-	/**
-	 * This method returns the data from the file containing the encrypted
-	 * public key from the public/private key pair. The contract for this
-	 * method can be fulfilled by storing the data in a byte array literal
-	 * in the source code itself.<br/>
-	 * <br/>
-	 * It is <em>imperative</em> that you obfuscate the bytecode for the
-	 * implementation of this class. It is also imperative that the byte
-	 * array exist only for the life of this method (i.e., DO NOT store it as
-	 * an instance or class field).
-	 *
-	 * @return the encrypted file contents from the public key file.
-	 * @throws KeyNotFoundException if the key data could not be retrieved; an acceptable message or chained cause must be provided.
-	 */
-	@Override
-	public byte[] getEncryptedPublicKeyData() throws KeyNotFoundException
-	{
-		try
-		{
-			return FileUtils.readFileToByteArray(this.publicKeyFile);
-		}
-		catch(FileNotFoundException e)
-		{
-			throw new KeyNotFoundException("The public key file [" + this.publicKeyFile.getPath() +
-										   "] does not exist.");
-		}
-		catch(IOException e)
-		{
-			throw new KeyNotFoundException("Could not read from the public key file [" +
-										   this.publicKeyFile.getPath() + "].", e);
-		}
-	}
+    /**
+     * This method returns the data from the file containing the encrypted
+     * public key from the public/private key pair. The contract for this
+     * method can be fulfilled by storing the data in a byte array literal
+     * in the source code itself.<br/>
+     * <br/>
+     * It is <em>imperative</em> that you obfuscate the bytecode for the
+     * implementation of this class. It is also imperative that the byte
+     * array exist only for the life of this method (i.e., DO NOT store it as
+     * an instance or class field).
+     *
+     * @return the encrypted file contents from the public key file.
+     * @throws KeyNotFoundException if the key data could not be retrieved; an acceptable message or chained cause must be provided.
+     */
+    @Override
+    public byte[] getEncryptedPublicKeyData() throws KeyNotFoundException
+    {
+        try
+        {
+            return FileUtils.readFileToByteArray(this.publicKeyFile);
+        }
+        catch(FileNotFoundException e)
+        {
+            throw new KeyNotFoundException("The public key file [" + this.publicKeyFile.getPath() +
+                                           "] does not exist.");
+        }
+        catch(IOException e)
+        {
+            throw new KeyNotFoundException("Could not read from the public key file [" +
+                                           this.publicKeyFile.getPath() + "].", e);
+        }
+    }
 
-	/**
-	 * Gets the file that the public key is located at.
-	 *
-	 * @return the file.
-	 */
-	public File getPublicKeyFile()
-	{
-		return this.publicKeyFile;
-	}
+    /**
+     * Gets the file that the public key is located at.
+     *
+     * @return the file.
+     */
+    public File getPublicKeyFile()
+    {
+        return this.publicKeyFile;
+    }
 }

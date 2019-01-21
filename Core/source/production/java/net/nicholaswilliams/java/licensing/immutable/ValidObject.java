@@ -29,11 +29,11 @@ package net.nicholaswilliams.java.licensing.immutable;
  */
 abstract class ValidObject
 {
-	/**
-	 * Checks the validity of this object, and throws an
-	 * {@link ImmutableModifiedThroughReflectionException} if that check fails.
-	 *
-	 * @throws ImmutableModifiedThroughReflectionException if the validity check fails.
-	 */
-	protected abstract void checkValidity();
+    /**
+     * Checks the validity of this object, and throws an
+     * {@link ImmutableModifiedThroughReflectionException} if that check fails.
+     *
+     * @throws ImmutableModifiedThroughReflectionException if the validity check fails.
+     */
+    protected abstract void checkValidity();
 }

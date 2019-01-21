@@ -28,5 +28,5 @@ package net.nicholaswilliams.java.licensing;
  */
 public interface FeatureObject
 {
-	public String getName();
+    public String getName();
 }

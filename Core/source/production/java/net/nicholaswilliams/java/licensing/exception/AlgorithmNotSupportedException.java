@@ -29,25 +29,25 @@ package net.nicholaswilliams.java.licensing.exception;
 @SuppressWarnings("unused")
 public class AlgorithmNotSupportedException extends RuntimeException
 {
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-	public AlgorithmNotSupportedException()
-	{
-		super("The specified algorithm is not supported on this system.");
-	}
+    public AlgorithmNotSupportedException()
+    {
+        super("The specified algorithm is not supported on this system.");
+    }
 
-	public AlgorithmNotSupportedException(String algorithm)
-	{
-		super("The algorithm \"" + algorithm + "\" is not supported on this system.");
-	}
+    public AlgorithmNotSupportedException(String algorithm)
+    {
+        super("The algorithm \"" + algorithm + "\" is not supported on this system.");
+    }
 
-	public AlgorithmNotSupportedException(Throwable cause)
-	{
-		super(cause);
-	}
+    public AlgorithmNotSupportedException(Throwable cause)
+    {
+        super(cause);
+    }
 
-	public AlgorithmNotSupportedException(String algorithm, Throwable cause)
-	{
-		super("The algorithm \"" + algorithm + "\" is not supported on this system.", cause);
-	}
+    public AlgorithmNotSupportedException(String algorithm, Throwable cause)
+    {
+        super("The algorithm \"" + algorithm + "\" is not supported on this system.", cause);
+    }
 }

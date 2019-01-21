@@ -20,11 +20,11 @@ package net.nicholaswilliams.java.licensing.mock;
 
 public class StateFlag
 {
-	public boolean state = false;
+    public boolean state = false;
 
-	@Override
-	public String toString()
-	{
-		return Boolean.toString(this.state);
-	}
+    @Override
+    public String toString()
+    {
+        return Boolean.toString(this.state);
+    }
 }

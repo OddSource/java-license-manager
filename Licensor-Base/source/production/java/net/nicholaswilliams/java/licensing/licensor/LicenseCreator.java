@@ -54,130 +54,130 @@ import java.util.Arrays;
  */
 public final class LicenseCreator
 {
-	private static LicenseCreator instance;
+    private static LicenseCreator instance;
 
-	private final PrivateKeyDataProvider privateKeyDataProvider;
+    private final PrivateKeyDataProvider privateKeyDataProvider;
 
-	private final PasswordProvider privateKeyPasswordProvider;
+    private final PasswordProvider privateKeyPasswordProvider;
 
-	private LicenseCreator()
-	{
-		if(LicenseCreatorProperties.getPrivateKeyDataProvider() == null)
-			throw new IllegalArgumentException("Parameter privateKeyDataProvider must not be null.");
+    private LicenseCreator()
+    {
+        if(LicenseCreatorProperties.getPrivateKeyDataProvider() == null)
+            throw new IllegalArgumentException("Parameter privateKeyDataProvider must not be null.");
 
-		if(LicenseCreatorProperties.getPrivateKeyPasswordProvider() == null)
-			throw new IllegalArgumentException("Parameter privateKeyPasswordProvider must not be null.");
+        if(LicenseCreatorProperties.getPrivateKeyPasswordProvider() == null)
+            throw new IllegalArgumentException("Parameter privateKeyPasswordProvider must not be null.");
 
-		this.privateKeyPasswordProvider = LicenseCreatorProperties.getPrivateKeyPasswordProvider();
-		this.privateKeyDataProvider = LicenseCreatorProperties.getPrivateKeyDataProvider();
-	}
+        this.privateKeyPasswordProvider = LicenseCreatorProperties.getPrivateKeyPasswordProvider();
+        this.privateKeyDataProvider = LicenseCreatorProperties.getPrivateKeyDataProvider();
+    }
 
-	/**
-	 * Returns the license creator instance. Before this method can be called the first time, all of the parameters must
-	 * bet set in {@link LicenseCreatorProperties}. See the documentation for that class for more details.
-	 *
-	 * @return the license creator instance.
-	 * @throws IllegalArgumentException if {@link LicenseCreatorProperties#setPrivateKeyDataProvider(PrivateKeyDataProvider) privateKeyDataProvider} or {@link LicenseCreatorProperties#setPrivateKeyPasswordProvider(PasswordProvider) privateKeyPasswordProvider} are null
-	 */
-	public static synchronized LicenseCreator getInstance()
-	{
-		if(LicenseCreator.instance == null)
-		{
-			LicenseCreator.instance = new LicenseCreator();
-		}
-		
-		return LicenseCreator.instance;
-	}
+    /**
+     * Returns the license creator instance. Before this method can be called the first time, all of the parameters must
+     * bet set in {@link LicenseCreatorProperties}. See the documentation for that class for more details.
+     *
+     * @return the license creator instance.
+     * @throws IllegalArgumentException if {@link LicenseCreatorProperties#setPrivateKeyDataProvider(PrivateKeyDataProvider) privateKeyDataProvider} or {@link LicenseCreatorProperties#setPrivateKeyPasswordProvider(PasswordProvider) privateKeyPasswordProvider} are null
+     */
+    public static synchronized LicenseCreator getInstance()
+    {
+        if(LicenseCreator.instance == null)
+        {
+            LicenseCreator.instance = new LicenseCreator();
+        }
 
-	/**
-	 * Takes a license object and creates a secure version of it for serialization and delivery to the customer.
-	 *
-	 * @param license The license object to be signed
-	 * @param licensePassword The password to encrypt the license with
-	 * @return the signed license object.
-	 * @throws AlgorithmNotSupportedException if the encryption algorithm is not supported.
-	 * @throws KeyNotFoundException if the public key data could not be found.
-	 * @throws InappropriateKeySpecificationException if an inappropriate key specification is provided.
-	 * @throws InappropriateKeyException if the key type and cipher type do not match.
-	 */
-	public final SignedLicense signLicense(License license, char[] licensePassword)
-			throws AlgorithmNotSupportedException, KeyNotFoundException, InappropriateKeySpecificationException,
-				   InappropriateKeyException
-	{
-		PrivateKey key;
-		{
-			char[] password = this.privateKeyPasswordProvider.getPassword();
-			byte[] keyData = this.privateKeyDataProvider.getEncryptedPrivateKeyData();
+        return LicenseCreator.instance;
+    }
 
-			key = KeyFileUtilities.readEncryptedPrivateKey(keyData, password);
+    /**
+     * Takes a license object and creates a secure version of it for serialization and delivery to the customer.
+     *
+     * @param license The license object to be signed
+     * @param licensePassword The password to encrypt the license with
+     * @return the signed license object.
+     * @throws AlgorithmNotSupportedException if the encryption algorithm is not supported.
+     * @throws KeyNotFoundException if the public key data could not be found.
+     * @throws InappropriateKeySpecificationException if an inappropriate key specification is provided.
+     * @throws InappropriateKeyException if the key type and cipher type do not match.
+     */
+    public final SignedLicense signLicense(License license, char[] licensePassword)
+            throws AlgorithmNotSupportedException, KeyNotFoundException, InappropriateKeySpecificationException,
+                   InappropriateKeyException
+    {
+        PrivateKey key;
+        {
+            char[] password = this.privateKeyPasswordProvider.getPassword();
+            byte[] keyData = this.privateKeyDataProvider.getEncryptedPrivateKeyData();
 
-			Arrays.fill(password, '\u0000');
-			Arrays.fill(keyData, (byte)0);
-		}
+            key = KeyFileUtilities.readEncryptedPrivateKey(keyData, password);
 
-		byte[] encrypted = Encryptor.encryptRaw(license.serialize(), licensePassword);
+            Arrays.fill(password, '\u0000');
+            Arrays.fill(keyData, (byte)0);
+        }
 
-		byte[] signature = new DataSignatureManager().signData(key, encrypted);
+        byte[] encrypted = Encryptor.encryptRaw(license.serialize(), licensePassword);
 
-		SignedLicense signed = new SignedLicense(encrypted, signature);
+        byte[] signature = new DataSignatureManager().signData(key, encrypted);
 
-		Arrays.fill(encrypted, (byte)0);
-		Arrays.fill(signature, (byte)0);
+        SignedLicense signed = new SignedLicense(encrypted, signature);
 
-		return signed;
-	}
+        Arrays.fill(encrypted, (byte)0);
+        Arrays.fill(signature, (byte)0);
 
-	/**
-	 * Takes a license object and creates a secure version of it for serialization and delivery to the customer.
-	 *
-	 * @param license The license object to be signed
-	 * @return the signed license object.
-	 * @throws AlgorithmNotSupportedException if the encryption algorithm is not supported.
-	 * @throws KeyNotFoundException if the public key data could not be found.
-	 * @throws InappropriateKeySpecificationException if an inappropriate key specification is provided.
-	 * @throws InappropriateKeyException if the key type and cipher type do not match.
-	 */
-	public final SignedLicense signLicense(License license)
-			throws AlgorithmNotSupportedException, KeyNotFoundException, InappropriateKeySpecificationException,
-				   InappropriateKeyException
-	{
-		return this.signLicense(license, this.privateKeyPasswordProvider.getPassword());
-	}
+        return signed;
+    }
 
-	/**
-	 * Takes a license object and creates a secure and serialized version of it for delivery to the customer.
-	 *
-	 * @param license The license object to be signed and serialized
-	 * @return the signed and serialized license object.
-	 * @param licensePassword The password to encrypt the license with
-	 * @throws AlgorithmNotSupportedException if the encryption algorithm is not supported.
-	 * @throws KeyNotFoundException if the public key data could not be found.
-	 * @throws InappropriateKeySpecificationException if an inappropriate key specification is provided.
-	 * @throws InappropriateKeyException if the key type and cipher type do not match.
-	 * @throws ObjectSerializationException if an error is encountered while serializing the key.
-	 */
-	public final byte[] signAndSerializeLicense(License license, char[] licensePassword)
-			throws AlgorithmNotSupportedException, KeyNotFoundException, InappropriateKeySpecificationException,
-				   InappropriateKeyException, ObjectSerializationException
-	{
-		return new ObjectSerializer().writeObject(this.signLicense(license, licensePassword));
-	}
+    /**
+     * Takes a license object and creates a secure version of it for serialization and delivery to the customer.
+     *
+     * @param license The license object to be signed
+     * @return the signed license object.
+     * @throws AlgorithmNotSupportedException if the encryption algorithm is not supported.
+     * @throws KeyNotFoundException if the public key data could not be found.
+     * @throws InappropriateKeySpecificationException if an inappropriate key specification is provided.
+     * @throws InappropriateKeyException if the key type and cipher type do not match.
+     */
+    public final SignedLicense signLicense(License license)
+            throws AlgorithmNotSupportedException, KeyNotFoundException, InappropriateKeySpecificationException,
+                   InappropriateKeyException
+    {
+        return this.signLicense(license, this.privateKeyPasswordProvider.getPassword());
+    }
 
-	/**
-	 * Takes a license object and creates a secure and serialized version of it for delivery to the customer.
-	 *
-	 * @param license The license object to be signed and serialized
-	 * @return the signed and serialized license object.
-	 * @throws AlgorithmNotSupportedException if the encryption algorithm is not supported.
-	 * @throws KeyNotFoundException if the public key data could not be found.
-	 * @throws InappropriateKeySpecificationException if an inappropriate key specification is provided.
-	 * @throws InappropriateKeyException if the key type and cipher type do not match.
-	 * @throws ObjectSerializationException if an error is encountered while serializing the key.
-	 */
-	public final byte[] signAndSerializeLicense(License license)
-			throws AlgorithmNotSupportedException, KeyNotFoundException, InappropriateKeySpecificationException,
-				   InappropriateKeyException, ObjectSerializationException
-	{
-		return new ObjectSerializer().writeObject(this.signLicense(license));
-	}
+    /**
+     * Takes a license object and creates a secure and serialized version of it for delivery to the customer.
+     *
+     * @param license The license object to be signed and serialized
+     * @return the signed and serialized license object.
+     * @param licensePassword The password to encrypt the license with
+     * @throws AlgorithmNotSupportedException if the encryption algorithm is not supported.
+     * @throws KeyNotFoundException if the public key data could not be found.
+     * @throws InappropriateKeySpecificationException if an inappropriate key specification is provided.
+     * @throws InappropriateKeyException if the key type and cipher type do not match.
+     * @throws ObjectSerializationException if an error is encountered while serializing the key.
+     */
+    public final byte[] signAndSerializeLicense(License license, char[] licensePassword)
+            throws AlgorithmNotSupportedException, KeyNotFoundException, InappropriateKeySpecificationException,
+                   InappropriateKeyException, ObjectSerializationException
+    {
+        return new ObjectSerializer().writeObject(this.signLicense(license, licensePassword));
+    }
+
+    /**
+     * Takes a license object and creates a secure and serialized version of it for delivery to the customer.
+     *
+     * @param license The license object to be signed and serialized
+     * @return the signed and serialized license object.
+     * @throws AlgorithmNotSupportedException if the encryption algorithm is not supported.
+     * @throws KeyNotFoundException if the public key data could not be found.
+     * @throws InappropriateKeySpecificationException if an inappropriate key specification is provided.
+     * @throws InappropriateKeyException if the key type and cipher type do not match.
+     * @throws ObjectSerializationException if an error is encountered while serializing the key.
+     */
+    public final byte[] signAndSerializeLicense(License license)
+            throws AlgorithmNotSupportedException, KeyNotFoundException, InappropriateKeySpecificationException,
+                   InappropriateKeyException, ObjectSerializationException
+    {
+        return new ObjectSerializer().writeObject(this.signLicense(license));
+    }
 }

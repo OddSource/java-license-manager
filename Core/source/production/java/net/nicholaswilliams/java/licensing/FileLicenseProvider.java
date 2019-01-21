@@ -41,217 +41,217 @@ import java.net.URL;
  */
 public class FileLicenseProvider extends DeserializingLicenseProvider
 {
-	protected ClassLoader classLoader;
-	
-	private String filePrefix = "";
+    protected ClassLoader classLoader;
 
-	private String fileSuffix = "";
+    private String filePrefix = "";
 
-	private boolean fileOnClasspath = false;
+    private String fileSuffix = "";
 
-	private boolean base64Encoded = false;
+    private boolean fileOnClasspath = false;
 
-	/**
-	 * Constructs a file-based license provider with the same class loader as the loader of this class and
-	 * {@link #setFileOnClasspath(boolean) fileOnClasspath} set to {@code false}. The class loader is only used if
-	 * {@code fileOnClasspath} is subsequently changed to {@code true}.
-	 */
-	public FileLicenseProvider()
-	{
-		this.classLoader = this.getClass().getClassLoader();
-		this.fileOnClasspath = false;
-	}
+    private boolean base64Encoded = false;
 
-	/**
-	 * Constructs a file-based license provider with the provided class loader and
-	 * {@link #setFileOnClasspath(boolean) fileOnClasspath} set to {@code true}. The class loader will be used to
-	 * locate the file unless {@code fileOnClasspath} is subsequently changed to {@code false}.
-	 *
-	 * @param classLoader The class loader to use for finding the file
-	 */
-	public FileLicenseProvider(ClassLoader classLoader)
-	{
-		if(classLoader == null)
-			throw new IllegalArgumentException("Argument classLoader cannot be null.");
-		
-		this.classLoader = classLoader;
-		this.fileOnClasspath = true;
-	}
+    /**
+     * Constructs a file-based license provider with the same class loader as the loader of this class and
+     * {@link #setFileOnClasspath(boolean) fileOnClasspath} set to {@code false}. The class loader is only used if
+     * {@code fileOnClasspath} is subsequently changed to {@code true}.
+     */
+    public FileLicenseProvider()
+    {
+        this.classLoader = this.getClass().getClassLoader();
+        this.fileOnClasspath = false;
+    }
 
-	/**
-	 * Gets the stored, still-encrypted, still-serialized license content and signature from the persistence store.
-	 * Returns null (not an empty array) if no license is found.
-	 *
-	 * @param context The context for which to get the license
-	 * @return the signed license data.
-	 */
-	@Override
-	protected byte[] getLicenseData(Object context)
-	{
-		if(context == null)
-			throw new IllegalArgumentException("Argument context cannot be null.");
+    /**
+     * Constructs a file-based license provider with the provided class loader and
+     * {@link #setFileOnClasspath(boolean) fileOnClasspath} set to {@code true}. The class loader will be used to
+     * locate the file unless {@code fileOnClasspath} is subsequently changed to {@code false}.
+     *
+     * @param classLoader The class loader to use for finding the file
+     */
+    public FileLicenseProvider(ClassLoader classLoader)
+    {
+        if(classLoader == null)
+            throw new IllegalArgumentException("Argument classLoader cannot be null.");
 
-		File file = this.getLicenseFile(context);
-		if(file == null || !file.exists() || !file.canRead())
-			return null;
+        this.classLoader = classLoader;
+        this.fileOnClasspath = true;
+    }
 
-		try
-		{
-			byte[] data = FileUtils.readFileToByteArray(file);
+    /**
+     * Gets the stored, still-encrypted, still-serialized license content and signature from the persistence store.
+     * Returns null (not an empty array) if no license is found.
+     *
+     * @param context The context for which to get the license
+     * @return the signed license data.
+     */
+    @Override
+    protected byte[] getLicenseData(Object context)
+    {
+        if(context == null)
+            throw new IllegalArgumentException("Argument context cannot be null.");
 
-			if(this.isBase64Encoded())
-			{
-				data = Base64.decodeBase64(data);
-			}
+        File file = this.getLicenseFile(context);
+        if(file == null || !file.exists() || !file.canRead())
+            return null;
 
-			return data;
-		}
-		catch(IOException e)
-		{
-			return null;
-		}
-	}
+        try
+        {
+            byte[] data = FileUtils.readFileToByteArray(file);
 
-	/**
-	 * Gets the license file handle. Returns null if if no license is found, but if a license is found, this may
-	 * return a file handle to a non-existent file. So, the file should be checked for existence and readability.
-	 *
-	 * @param context The context for which to get the license
-	 * @return the license file handle.
-	 */
-	protected File getLicenseFile(Object context)
-	{
-		String fileName = this.getFilePrefix() + context.toString() + this.getFileSuffix();
+            if(this.isBase64Encoded())
+            {
+                data = Base64.decodeBase64(data);
+            }
 
-		if(this.isFileOnClasspath())
-		{
-			if(fileName.startsWith("/"))
-				fileName = fileName.substring(1);
+            return data;
+        }
+        catch(IOException e)
+        {
+            return null;
+        }
+    }
 
-			URL url = this.classLoader.getResource(fileName);
-			if(url == null)
-				fileName = null;
-			else
-			{
-				try
-				{
-					return new File(url.toURI());
-				}
-				catch(URISyntaxException e)
-				{
-					return new File(url.getPath());
-				}
-			}
-		}
+    /**
+     * Gets the license file handle. Returns null if if no license is found, but if a license is found, this may
+     * return a file handle to a non-existent file. So, the file should be checked for existence and readability.
+     *
+     * @param context The context for which to get the license
+     * @return the license file handle.
+     */
+    protected File getLicenseFile(Object context)
+    {
+        String fileName = this.getFilePrefix() + context.toString() + this.getFileSuffix();
 
-		return fileName == null ? null : new File(fileName);
-	}
+        if(this.isFileOnClasspath())
+        {
+            if(fileName.startsWith("/"))
+                fileName = fileName.substring(1);
 
-	/**
-	 * Gets the prefix that will be prepended to the file name before looking for it. For example, if a license
-	 * context was "customer01" and the file name was "C:\product\licenses\file-customer01.lic", then the prefix
-	 * would be "C:\product\licenses\file-" and the suffix would be ".lic".
-	 *
-	 * @return the file prefix.
-	 */
-	public String getFilePrefix()
-	{
-		return this.filePrefix;
-	}
+            URL url = this.classLoader.getResource(fileName);
+            if(url == null)
+                fileName = null;
+            else
+            {
+                try
+                {
+                    return new File(url.toURI());
+                }
+                catch(URISyntaxException e)
+                {
+                    return new File(url.getPath());
+                }
+            }
+        }
 
-	/**
-	 * Sets the prefix that will be prepended to the file name before looking for it. For example, if a license
-	 * context was "customer01" and the file name was "C:\product\licenses\file-customer01.lic", then the prefix
-	 * would be "C:\product\licenses\file-" and the suffix would be ".lic".
-	 *
-	 * @param filePrefix The file prefix
-	 */
-	public void setFilePrefix(String filePrefix)
-	{
-		if(filePrefix == null)
-			throw new IllegalArgumentException("Argument filePrefix cannot be null.");
+        return fileName == null ? null : new File(fileName);
+    }
 
-		this.filePrefix = filePrefix;
-	}
+    /**
+     * Gets the prefix that will be prepended to the file name before looking for it. For example, if a license
+     * context was "customer01" and the file name was "C:\product\licenses\file-customer01.lic", then the prefix
+     * would be "C:\product\licenses\file-" and the suffix would be ".lic".
+     *
+     * @return the file prefix.
+     */
+    public String getFilePrefix()
+    {
+        return this.filePrefix;
+    }
 
-	/**
-	 * Gets the file suffix that will be appended to the file name before looking for it. For example, if a license
-	 * context was "customer01" and the file name was "C:\product\licenses\file-customer01.lic", then the prefix
-	 * would be "C:\product\licenses\file-" and the suffix would be ".lic".
-	 *
-	 * @return the file suffix.
-	 */
-	public String getFileSuffix()
-	{
-		return this.fileSuffix;
-	}
+    /**
+     * Sets the prefix that will be prepended to the file name before looking for it. For example, if a license
+     * context was "customer01" and the file name was "C:\product\licenses\file-customer01.lic", then the prefix
+     * would be "C:\product\licenses\file-" and the suffix would be ".lic".
+     *
+     * @param filePrefix The file prefix
+     */
+    public void setFilePrefix(String filePrefix)
+    {
+        if(filePrefix == null)
+            throw new IllegalArgumentException("Argument filePrefix cannot be null.");
 
-	/**
-	 * Sets the file suffix that will be appended to the file name before looking for it. For example, if a license
-	 * context was "customer01" and the file name was "C:\product\licenses\file-customer01.lic", then the prefix
-	 * would be "C:\product\licenses\file-" and the suffix would be ".lic".
-	 *
-	 * @param fileSuffix The file suffix
-	 */
-	public void setFileSuffix(String fileSuffix)
-	{
-		if(fileSuffix == null)
-			throw new IllegalArgumentException("Argument fileSuffix cannot be null.");
+        this.filePrefix = filePrefix;
+    }
 
-		this.fileSuffix = fileSuffix;
-	}
+    /**
+     * Gets the file suffix that will be appended to the file name before looking for it. For example, if a license
+     * context was "customer01" and the file name was "C:\product\licenses\file-customer01.lic", then the prefix
+     * would be "C:\product\licenses\file-" and the suffix would be ".lic".
+     *
+     * @return the file suffix.
+     */
+    public String getFileSuffix()
+    {
+        return this.fileSuffix;
+    }
 
-	/**
-	 * Indicates whether the file should be found on the file system or on the classpath via a class loader. If
-	 * {@code false} it will be looked for on the file system; if {@code true} it will be looked for on the classpath.
-	 * If {@code true}, the file prefix should be the package-path and prefix and the suffix the suffix.<br />
-	 * <br />
-	 * For example, if a license context was "customer02" and the file name was "file-customer02.lic" and was located
-	 * in the package net.nicholaswilliams.java.licensing.licenses, then the prefix would be
-	 * "net/nicholaswilliams/java/licensing/licenses/file-" and the suffix should be ".lic".
-	 *
-	 * @return whether the file is on the classpath.
-	 */
-	public boolean isFileOnClasspath()
-	{
-		return this.fileOnClasspath;
-	}
+    /**
+     * Sets the file suffix that will be appended to the file name before looking for it. For example, if a license
+     * context was "customer01" and the file name was "C:\product\licenses\file-customer01.lic", then the prefix
+     * would be "C:\product\licenses\file-" and the suffix would be ".lic".
+     *
+     * @param fileSuffix The file suffix
+     */
+    public void setFileSuffix(String fileSuffix)
+    {
+        if(fileSuffix == null)
+            throw new IllegalArgumentException("Argument fileSuffix cannot be null.");
 
-	/**
-	 * Sets whether the file should be found on the file system or on the classpath via a class loader. If
-	 * {@code false} it will be looked for on the file system; if {@code true} it will be looked for on the classpath.
-	 * If {@code true}, the file prefix should be the package-path and prefix and the suffix the suffix.<br />
-	 * <br />
-	 * For example, if a license context was "customer02" and the file name was "file-customer02.lic" and was located
-	 * in the package net.nicholaswilliams.java.licensing.licenses, then the prefix would be
-	 * "net/nicholaswilliams/java/licensing/licenses/file-" and the suffix should be ".lic".
-	 *
-	 * @param fileOnClasspath Whether the file is on the classpath
-	 */
-	public void setFileOnClasspath(boolean fileOnClasspath)
-	{
-		this.fileOnClasspath = fileOnClasspath;
-	}
+        this.fileSuffix = fileSuffix;
+    }
 
-	/**
-	 * Indicates whether the file is Base64 encoded. If the file is Base64 encoded, its data will be decoded before
-	 * being returned by {@link #getLicenseData(Object)}.
-	 *
-	 * @return whether the file is Base64 encoded.
-	 */
-	public boolean isBase64Encoded()
-	{
-		return this.base64Encoded;
-	}
+    /**
+     * Indicates whether the file should be found on the file system or on the classpath via a class loader. If
+     * {@code false} it will be looked for on the file system; if {@code true} it will be looked for on the classpath.
+     * If {@code true}, the file prefix should be the package-path and prefix and the suffix the suffix.<br />
+     * <br />
+     * For example, if a license context was "customer02" and the file name was "file-customer02.lic" and was located
+     * in the package net.nicholaswilliams.java.licensing.licenses, then the prefix would be
+     * "net/nicholaswilliams/java/licensing/licenses/file-" and the suffix should be ".lic".
+     *
+     * @return whether the file is on the classpath.
+     */
+    public boolean isFileOnClasspath()
+    {
+        return this.fileOnClasspath;
+    }
 
-	/**
-	 * Sets whether the file is Base64 encoded. If the file is Base64 encoded, its data will be decoded before
-	 * being returned by {@link #getLicenseData(Object)}.
-	 *
-	 * @param base64Encoded Whether the file is Base64 encoded.
-	 */
-	public void setBase64Encoded(boolean base64Encoded)
-	{
-		this.base64Encoded = base64Encoded;
-	}
+    /**
+     * Sets whether the file should be found on the file system or on the classpath via a class loader. If
+     * {@code false} it will be looked for on the file system; if {@code true} it will be looked for on the classpath.
+     * If {@code true}, the file prefix should be the package-path and prefix and the suffix the suffix.<br />
+     * <br />
+     * For example, if a license context was "customer02" and the file name was "file-customer02.lic" and was located
+     * in the package net.nicholaswilliams.java.licensing.licenses, then the prefix would be
+     * "net/nicholaswilliams/java/licensing/licenses/file-" and the suffix should be ".lic".
+     *
+     * @param fileOnClasspath Whether the file is on the classpath
+     */
+    public void setFileOnClasspath(boolean fileOnClasspath)
+    {
+        this.fileOnClasspath = fileOnClasspath;
+    }
+
+    /**
+     * Indicates whether the file is Base64 encoded. If the file is Base64 encoded, its data will be decoded before
+     * being returned by {@link #getLicenseData(Object)}.
+     *
+     * @return whether the file is Base64 encoded.
+     */
+    public boolean isBase64Encoded()
+    {
+        return this.base64Encoded;
+    }
+
+    /**
+     * Sets whether the file is Base64 encoded. If the file is Base64 encoded, its data will be decoded before
+     * being returned by {@link #getLicenseData(Object)}.
+     *
+     * @param base64Encoded Whether the file is Base64 encoded.
+     */
+    public void setBase64Encoded(boolean base64Encoded)
+    {
+        this.base64Encoded = base64Encoded;
+    }
 }

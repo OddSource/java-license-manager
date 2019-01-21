@@ -20,7 +20,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
-        <groupId>net.nicholaswilliams.java.licensing</groupId>
+        <groupId>io.oddsource.java.licensing</groupId>
         <artifactId>licensing-parent</artifactId>
         <version>1.2.0-SNAPSHOT</version>
     </parent>
@@ -32,42 +32,42 @@
 
     <dependencies>
         <dependency>
-            <groupId>net.nicholaswilliams.java.licensing</groupId>
+            <groupId>io.oddsource.java.licensing</groupId>
             <artifactId>licensing-core</artifactId>
             <version>${project.version}</version>
             <scope>compile</scope>
         </dependency>
 
         <dependency>
-            <groupId>net.nicholaswilliams.java.licensing</groupId>
+            <groupId>io.oddsource.java.licensing</groupId>
             <artifactId>licensing-licensor-base</artifactId>
             <version>${project.version}</version>
             <scope>compile</scope>
         </dependency>
 
         <dependency>
-            <groupId>net.nicholaswilliams.java.licensing</groupId>
+            <groupId>io.oddsource.java.licensing</groupId>
             <artifactId>licensing-licensor-ui-core</artifactId>
             <version>${project.version}</version>
             <scope>compile</scope>
         </dependency>
 
         <dependency>
-            <groupId>net.nicholaswilliams.java.licensing</groupId>
+            <groupId>io.oddsource.java.licensing</groupId>
             <artifactId>licensing-licensor-ui-cli</artifactId>
             <version>${project.version}</version>
             <scope>compile</scope>
         </dependency>
 
         <dependency>
-            <groupId>net.nicholaswilliams.java.licensing</groupId>
+            <groupId>io.oddsource.java.licensing</groupId>
             <artifactId>licensing-licensor-ui-desktop</artifactId>
             <version>${project.version}</version>
             <scope>compile</scope>
         </dependency>
 
         <dependency>
-            <groupId>net.nicholaswilliams.java.licensing</groupId>
+            <groupId>io.oddsource.java.licensing</groupId>
             <artifactId>licensing-samples</artifactId>
             <version>${project.version}</version>
             <scope>compile</scope>
@@ -127,7 +127,6 @@
                             <Implementation-Version>${project.version}</Implementation-Version>
                             <Implementation-Vendor>${project.organization.name}</Implementation-Vendor>
                             <Implementation-Vendor-Id>${project.parent.parent.groupId}</Implementation-Vendor-Id>
-                            <Implementation-Build-Number>${nwts.build.number}</Implementation-Build-Number>
                             <Implementation-Build-Date>${maven.build.timestamp}</Implementation-Build-Date>
                             <Bundle-Vendor>${project.organization.name}</Bundle-Vendor>
                             <X-Compile-Source-JDK>${javac.source.version}</X-Compile-Source-JDK>

@@ -20,7 +20,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
-        <groupId>net.nicholaswilliams.java.licensing</groupId>
+        <groupId>io.oddsource.java.licensing</groupId>
         <artifactId>licensing-parent</artifactId>
         <version>1.2.0-SNAPSHOT</version>
     </parent>
@@ -80,13 +80,13 @@
                         <archive>
                             <manifestSections>
                                 <manifestSection>
-                                    <name>net/nicholaswilliams/java/licensing</name>
+                                    <name>io/oddsource/java/licensing</name>
                                     <manifestEntries>
                                         <Sealed>true</Sealed>
                                     </manifestEntries>
                                 </manifestSection>
                                 <manifestSection>
-                                    <name>net/nicholaswilliams/java/licensing/immutable</name>
+                                    <name>io/oddsource/java/licensing/immutable</name>
                                     <manifestEntries>
                                         <Sealed>true</Sealed>
                                     </manifestEntries>

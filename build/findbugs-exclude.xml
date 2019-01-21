@@ -18,25 +18,25 @@
   -->
 <FindBugsFilter>
     <Match>
-        <Class name="net.nicholaswilliams.java.licensing.immutable.ImmutableArrayList" />
+        <Class name="ImmutableArrayList" />
         <Bug pattern="BC_BAD_CAST_TO_CONCRETE_COLLECTION" />
     </Match>
 
     <Match>
-        <Class name="net.nicholaswilliams.java.licensing.immutable.ImmutableLinkedHashSet" />
+        <Class name="ImmutableLinkedHashSet" />
         <Bug pattern="BC_BAD_CAST_TO_CONCRETE_COLLECTION" />
     </Match>
 
     <Match>
         <Or>
-            <Class name="net.nicholaswilliams.java.licensing.exception.InsecureEnvironmentException" />
-            <Class name="net.nicholaswilliams.java.licensing.immutable.ImmutableModifiedThroughReflectionException" />
+            <Class name="InsecureEnvironmentException" />
+            <Class name="ImmutableModifiedThroughReflectionException" />
         </Or>
         <Bug pattern="NM_CLASS_NOT_EXCEPTION" />
     </Match>
 
     <Match>
-        <Class name="net.nicholaswilliams.java.licensing.ObjectSerializer" />
+        <Class name="ObjectSerializer" />
         <Method name="readObject" />
         <Bug pattern="DE_MIGHT_IGNORE" />
     </Match>

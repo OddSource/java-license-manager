@@ -28,8 +28,8 @@
     <includeSiteDirectory>false</includeSiteDirectory>
     <moduleSets>
         <moduleSet>
-            <includes><include>net.nicholaswilliams.java.licensing:*</include></includes>
-            <excludes><exclude>net.nicholaswilliams.java.licensing:licensing-assembly</exclude></excludes>
+            <includes><include>io.oddsource.java.licensing:*</include></includes>
+            <excludes><exclude>io.oddsource.java.licensing:licensing-assembly</exclude></excludes>
             <useAllReactorProjects>true</useAllReactorProjects>
             <binaries>
                 <outputDirectory>/dist</outputDirectory>

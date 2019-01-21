@@ -20,7 +20,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
-        <groupId>net.nicholaswilliams.java.licensing</groupId>
+        <groupId>io.oddsource.java.licensing</groupId>
         <artifactId>licensing-parent</artifactId>
         <version>1.2.0-SNAPSHOT</version>
     </parent>
@@ -32,21 +32,21 @@
 
     <dependencies>
         <dependency>
-            <groupId>net.nicholaswilliams.java.licensing</groupId>
+            <groupId>io.oddsource.java.licensing</groupId>
             <artifactId>licensing-core</artifactId>
             <version>${project.version}</version>
             <scope>compile</scope>
         </dependency>
 
         <dependency>
-            <groupId>net.nicholaswilliams.java.licensing</groupId>
+            <groupId>io.oddsource.java.licensing</groupId>
             <artifactId>licensing-licensor-base</artifactId>
             <version>${project.version}</version>
             <scope>compile</scope>
         </dependency>
 
         <dependency>
-            <groupId>net.nicholaswilliams.java.licensing</groupId>
+            <groupId>io.oddsource.java.licensing</groupId>
             <artifactId>licensing-core</artifactId>
             <version>${project.version}</version>
             <type>test-jar</type>

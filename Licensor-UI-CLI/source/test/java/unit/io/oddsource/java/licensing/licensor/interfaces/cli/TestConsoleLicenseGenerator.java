@@ -40,7 +40,7 @@ import io.oddsource.java.licensing.mock.MockPasswordProvider;
 import io.oddsource.java.mock.MockPermissiveSecurityManager;
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
-import org.apache.commons.cli.GnuParser;
+import org.apache.commons.cli.DefaultParser;
 import org.apache.commons.cli.ParseException;
 import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.io.FileUtils;
@@ -78,7 +78,7 @@ public class TestConsoleLicenseGenerator
     {
         this.device = EasyMock.createMock(TextInterfaceDevice.class);
 
-        this.console = new ConsoleLicenseGenerator(this.device, new GnuParser()) {
+        this.console = new ConsoleLicenseGenerator(this.device, new DefaultParser()) {
             @Override
             protected void finalize()
             {
@@ -111,24 +111,28 @@ public class TestConsoleLicenseGenerator
 
         assertNotNull("There should be output.", output);
         assertTrue("The output should have length.", output.length() > 0);
-        assertEquals("The output is not correct.",
-                     "usage:  ConsoleLicenseGenerator -help" + LF +
-                     "        ConsoleLicenseGenerator" + LF +
-                     "        ConsoleLicenseGenerator -config <file>" + LF +
-                     "        ConsoleLicenseGenerator -license <file>" + LF +
-                     "        ConsoleLicenseGenerator -config <file> -license <file>" + LF +
-                     "        The ConsoleLicenseGenerator expects to be passed the path to two properties files, or one of" + LF +
-                     "        them, or neither. The \"config\" properties file contains information necessary to generate all" + LF +
-                     "        licenses (key paths, passwords, etc.) and generally will not need to change. The \"license\"" + LF +
-                     "        properties file contains all of the information you need to generate this particular license. See" + LF +
-                     "        the Javadoc API documentation for information about the contents of these two files." + LF +
-                     "        If you do not specify the \"config\" properties file, you will be prompted to provide the values" + LF +
-                     "        that were expected in that file. Likewise, if you do not specify the \"license\" properties file," + LF +
-                     "        you will be prompted to provide the values that were expected in that file." + LF +
-                     " -config <file>    Specify the .properties file that configures this generator" + LF +
-                     " -help             Display this help message" + LF +
-                     " -license <file>   Specify the .properties file that contains the data for this license" + LF,
-                     output);
+        assertEquals(
+            "The output is not correct.",
+            "usage:  ConsoleLicenseGenerator -help" + LF +
+            " ConsoleLicenseGenerator" + LF +
+            " ConsoleLicenseGenerator -config <file>" + LF +
+            " ConsoleLicenseGenerator -license <file>" + LF +
+            " ConsoleLicenseGenerator -config <file> -license <file>" + LF +
+            LF +
+            " The ConsoleLicenseGenerator expects to be passed the path to two properties files, or one of them, or" + LF +
+            "        neither. The \"config\" properties file contains information necessary to generate all licenses" + LF +
+            "        (key paths, passwords, etc.) and generally will not need to change. The \"license\" properties file" + LF +
+            "        contains all of the information you need to generate this particular license. See the Javadoc API" + LF +
+            "        documentation for information about the contents of these two files." + LF +
+            LF +
+            " If you do not specify the \"config\" properties file, you will be prompted to provide the values that were" + LF +
+            "        expected in that file. Likewise, if you do not specify the \"license\" properties file, you will be" + LF +
+            "        prompted to provide the values that were expected in that file." + LF +
+            " -config <file>    Specify the .properties file that configures this generator" + LF +
+            " -help             Display this help message" + LF +
+            " -license <file>   Specify the .properties file that contains the data for this license" + LF,
+            output
+        );
     }
 
     @Test
@@ -151,24 +155,28 @@ public class TestConsoleLicenseGenerator
 
         assertNotNull("There should be output.", output);
         assertTrue("The output should have length.", output.length() > 0);
-        assertEquals("The output is not correct.",
-                     "usage:  ConsoleLicenseGenerator -help" + LF +
-                     "        ConsoleLicenseGenerator" + LF +
-                     "        ConsoleLicenseGenerator -config <file>" + LF +
-                     "        ConsoleLicenseGenerator -license <file>" + LF +
-                     "        ConsoleLicenseGenerator -config <file> -license <file>" + LF +
-                     "        The ConsoleLicenseGenerator expects to be passed the path to two properties files, or one of" + LF +
-                     "        them, or neither. The \"config\" properties file contains information necessary to generate all" + LF +
-                     "        licenses (key paths, passwords, etc.) and generally will not need to change. The \"license\"" + LF +
-                     "        properties file contains all of the information you need to generate this particular license. See" + LF +
-                     "        the Javadoc API documentation for information about the contents of these two files." + LF +
-                     "        If you do not specify the \"config\" properties file, you will be prompted to provide the values" + LF +
-                     "        that were expected in that file. Likewise, if you do not specify the \"license\" properties file," + LF +
-                     "        you will be prompted to provide the values that were expected in that file." + LF +
-                     " -config <file>    Specify the .properties file that configures this generator" + LF +
-                     " -help             Display this help message" + LF +
-                     " -license <file>   Specify the .properties file that contains the data for this license" + LF,
-                     output);
+        assertEquals(
+            "The output is not correct.",
+            "usage:  ConsoleLicenseGenerator -help" + LF +
+            " ConsoleLicenseGenerator" + LF +
+            " ConsoleLicenseGenerator -config <file>" + LF +
+            " ConsoleLicenseGenerator -license <file>" + LF +
+            " ConsoleLicenseGenerator -config <file> -license <file>" + LF +
+            LF +
+            " The ConsoleLicenseGenerator expects to be passed the path to two properties files, or one of them, or" + LF +
+            "        neither. The \"config\" properties file contains information necessary to generate all licenses" + LF +
+            "        (key paths, passwords, etc.) and generally will not need to change. The \"license\" properties file" + LF +
+            "        contains all of the information you need to generate this particular license. See the Javadoc API" + LF +
+            "        documentation for information about the contents of these two files." + LF +
+            LF +
+            " If you do not specify the \"config\" properties file, you will be prompted to provide the values that were" + LF +
+            "        expected in that file. Likewise, if you do not specify the \"license\" properties file, you will be" + LF +
+            "        prompted to provide the values that were expected in that file." + LF +
+            " -config <file>    Specify the .properties file that configures this generator" + LF +
+            " -help             Display this help message" + LF +
+            " -license <file>   Specify the .properties file that contains the data for this license" + LF,
+            output
+        );
     }
 
     @Test
@@ -191,24 +199,28 @@ public class TestConsoleLicenseGenerator
 
         assertNotNull("There should be output.", output);
         assertTrue("The output should have length.", output.length() > 0);
-        assertEquals("The output is not correct.",
-                     "usage:  ConsoleLicenseGenerator -help" + LF +
-                     "        ConsoleLicenseGenerator" + LF +
-                     "        ConsoleLicenseGenerator -config <file>" + LF +
-                     "        ConsoleLicenseGenerator -license <file>" + LF +
-                     "        ConsoleLicenseGenerator -config <file> -license <file>" + LF +
-                     "        The ConsoleLicenseGenerator expects to be passed the path to two properties files, or one of" + LF +
-                     "        them, or neither. The \"config\" properties file contains information necessary to generate all" + LF +
-                     "        licenses (key paths, passwords, etc.) and generally will not need to change. The \"license\"" + LF +
-                     "        properties file contains all of the information you need to generate this particular license. See" + LF +
-                     "        the Javadoc API documentation for information about the contents of these two files." + LF +
-                     "        If you do not specify the \"config\" properties file, you will be prompted to provide the values" + LF +
-                     "        that were expected in that file. Likewise, if you do not specify the \"license\" properties file," + LF +
-                     "        you will be prompted to provide the values that were expected in that file." + LF +
-                     " -config <file>    Specify the .properties file that configures this generator" + LF +
-                     " -help             Display this help message" + LF +
-                     " -license <file>   Specify the .properties file that contains the data for this license" + LF,
-                     output);
+        assertEquals(
+            "The output is not correct.",
+            "usage:  ConsoleLicenseGenerator -help" + LF +
+            " ConsoleLicenseGenerator" + LF +
+            " ConsoleLicenseGenerator -config <file>" + LF +
+            " ConsoleLicenseGenerator -license <file>" + LF +
+            " ConsoleLicenseGenerator -config <file> -license <file>" + LF +
+            LF +
+            " The ConsoleLicenseGenerator expects to be passed the path to two properties files, or one of them, or" + LF +
+            "        neither. The \"config\" properties file contains information necessary to generate all licenses" + LF +
+            "        (key paths, passwords, etc.) and generally will not need to change. The \"license\" properties file" + LF +
+            "        contains all of the information you need to generate this particular license. See the Javadoc API" + LF +
+            "        documentation for information about the contents of these two files." + LF +
+            LF +
+            " If you do not specify the \"config\" properties file, you will be prompted to provide the values that were" + LF +
+            "        expected in that file. Likewise, if you do not specify the \"license\" properties file, you will be" + LF +
+            "        prompted to provide the values that were expected in that file." + LF +
+            " -config <file>    Specify the .properties file that configures this generator" + LF +
+            " -help             Display this help message" + LF +
+            " -license <file>   Specify the .properties file that contains the data for this license" + LF,
+            output
+        );
     }
 
     @Test
@@ -231,24 +243,28 @@ public class TestConsoleLicenseGenerator
 
         assertNotNull("There should be output.", output);
         assertTrue("The output should have length.", output.length() > 0);
-        assertEquals("The output is not correct.",
-                     "usage:  ConsoleLicenseGenerator -help" + LF +
-                     "        ConsoleLicenseGenerator" + LF +
-                     "        ConsoleLicenseGenerator -config <file>" + LF +
-                     "        ConsoleLicenseGenerator -license <file>" + LF +
-                     "        ConsoleLicenseGenerator -config <file> -license <file>" + LF +
-                     "        The ConsoleLicenseGenerator expects to be passed the path to two properties files, or one of" + LF +
-                     "        them, or neither. The \"config\" properties file contains information necessary to generate all" + LF +
-                     "        licenses (key paths, passwords, etc.) and generally will not need to change. The \"license\"" + LF +
-                     "        properties file contains all of the information you need to generate this particular license. See" + LF +
-                     "        the Javadoc API documentation for information about the contents of these two files." + LF +
-                     "        If you do not specify the \"config\" properties file, you will be prompted to provide the values" + LF +
-                     "        that were expected in that file. Likewise, if you do not specify the \"license\" properties file," + LF +
-                     "        you will be prompted to provide the values that were expected in that file." + LF +
-                     " -config <file>    Specify the .properties file that configures this generator" + LF +
-                     " -help             Display this help message" + LF +
-                     " -license <file>   Specify the .properties file that contains the data for this license" + LF,
-                     output);
+        assertEquals(
+            "The output is not correct.",
+            "usage:  ConsoleLicenseGenerator -help" + LF +
+            " ConsoleLicenseGenerator" + LF +
+            " ConsoleLicenseGenerator -config <file>" + LF +
+            " ConsoleLicenseGenerator -license <file>" + LF +
+            " ConsoleLicenseGenerator -config <file> -license <file>" + LF +
+            LF +
+            " The ConsoleLicenseGenerator expects to be passed the path to two properties files, or one of them, or" + LF +
+            "        neither. The \"config\" properties file contains information necessary to generate all licenses" + LF +
+            "        (key paths, passwords, etc.) and generally will not need to change. The \"license\" properties file" + LF +
+            "        contains all of the information you need to generate this particular license. See the Javadoc API" + LF +
+            "        documentation for information about the contents of these two files." + LF +
+            LF +
+            " If you do not specify the \"config\" properties file, you will be prompted to provide the values that were" + LF +
+            "        expected in that file. Likewise, if you do not specify the \"license\" properties file, you will be" + LF +
+            "        prompted to provide the values that were expected in that file." + LF +
+            " -config <file>    Specify the .properties file that configures this generator" + LF +
+            " -help             Display this help message" + LF +
+            " -license <file>   Specify the .properties file that contains the data for this license" + LF,
+            output
+        );
     }
 
     @Test
@@ -371,7 +387,7 @@ public class TestConsoleLicenseGenerator
         if(file.exists())
             FileUtils.forceDelete(file);
 
-        FileUtils.writeStringToFile(file, "test");
+        FileUtils.writeStringToFile(file, "test", "UTF-8");
 
         assertTrue("Setting the file to not readable should have returned true.", file.setReadable(false, false));
         assertTrue("The file should be writable.", file.canWrite());
@@ -414,10 +430,11 @@ public class TestConsoleLicenseGenerator
             FileUtils.forceDelete(file);
 
         FileUtils.writeStringToFile(
-                file,
-                "io.oddsource.java.licensing.privateKeyFile=testInitializeLicenseCreator03.key\r\n" +
-                "io.oddsource.java.licensing.privateKeyPassword=testPassword03"
-                                   );
+            file,
+            "io.oddsource.java.licensing.privateKeyFile=testInitializeLicenseCreator03.key\r\n" +
+            "io.oddsource.java.licensing.privateKeyPassword=testPassword03",
+            "UTF-8"
+        );
 
         this.console.cli = EasyMock.createMockBuilder(CommandLine.class).withConstructor().
                 addMockedMethod("hasOption", String.class).
@@ -456,12 +473,13 @@ public class TestConsoleLicenseGenerator
             FileUtils.forceDelete(file);
 
         File keyFile = new File("testInitializeLicenseCreator04.key");
-        FileUtils.writeStringToFile(keyFile, "aKey");
+        FileUtils.writeStringToFile(keyFile, "aKey", "UTF-8");
 
         FileUtils.writeStringToFile(
-                file,
-                "io.oddsource.java.licensing.privateKeyFile=testInitializeLicenseCreator04.key\r\n" +
-                "io.oddsource.java.licensing.privateKeyPassword=testPassword04"
+            file,
+            "io.oddsource.java.licensing.privateKeyFile=testInitializeLicenseCreator04.key\r\n" +
+            "io.oddsource.java.licensing.privateKeyPassword=testPassword04",
+            "UTF-8"
         );
 
         this.console.cli = EasyMock.createMockBuilder(CommandLine.class).withConstructor().
@@ -513,11 +531,12 @@ public class TestConsoleLicenseGenerator
             FileUtils.forceDelete(file);
 
         File keyFile = new File("testInitializeLicenseCreator05.key");
-        FileUtils.writeStringToFile(keyFile, "aKey");
+        FileUtils.writeStringToFile(keyFile, "aKey", "UTF-8");
 
         FileUtils.writeStringToFile(
-                file,
-                "io.oddsource.java.licensing.privateKeyFile=testInitializeLicenseCreator05.key"
+            file,
+            "io.oddsource.java.licensing.privateKeyFile=testInitializeLicenseCreator05.key",
+            "UTF-8"
         );
 
         this.console.cli = EasyMock.createMockBuilder(CommandLine.class).withConstructor().
@@ -561,11 +580,12 @@ public class TestConsoleLicenseGenerator
             FileUtils.forceDelete(file);
 
         File keyFile = new File("testInitializeLicenseCreator06.key");
-        FileUtils.writeStringToFile(keyFile, "aKey");
+        FileUtils.writeStringToFile(keyFile, "aKey", "UTF-8");
 
         FileUtils.writeStringToFile(
-                file,
-                "io.oddsource.java.licensing.privateKeyPassword=testPassword06"
+            file,
+            "io.oddsource.java.licensing.privateKeyPassword=testPassword06",
+            "UTF-8"
         );
 
         this.console.cli = EasyMock.createMockBuilder(CommandLine.class).withConstructor().
@@ -609,9 +629,10 @@ public class TestConsoleLicenseGenerator
             FileUtils.forceDelete(file);
 
         FileUtils.writeStringToFile(
-                file,
-                "io.oddsource.java.licensing.privateKeyProvider=MockFilePrivateKeyDataProvider\r\n" +
-                "io.oddsource.java.licensing.privateKeyPasswordProvider=MockPasswordProvider"
+            file,
+            "io.oddsource.java.licensing.privateKeyProvider=io.oddsource.java.licensing.mock.MockFilePrivateKeyDataProvider\r\n" +
+            "io.oddsource.java.licensing.privateKeyPasswordProvider=io.oddsource.java.licensing.mock.MockPasswordProvider",
+            "UTF-8"
         );
 
         this.console.cli = EasyMock.createMockBuilder(CommandLine.class).withConstructor().
@@ -655,7 +676,7 @@ public class TestConsoleLicenseGenerator
         this.resetLicenseCreator();
 
         File keyFile = new File("testInitializeLicenseCreator08.key");
-        FileUtils.writeStringToFile(keyFile, "aKey");
+        FileUtils.writeStringToFile(keyFile, "aKey", "UTF-8");
 
         this.console.cli = EasyMock.createMockBuilder(CommandLine.class).withConstructor().
                 addMockedMethod("hasOption", String.class).
@@ -709,7 +730,7 @@ public class TestConsoleLicenseGenerator
         EasyMock.expectLastCall();
         EasyMock.expect(this.device.readLine("Please enter the fully-qualified class name for the " +
                                              "PasswordProvider implementation: ")).
-                andReturn("MockPasswordProvider");
+                andReturn("io.oddsource.java.licensing.mock.MockPasswordProvider");
         this.device.printOutLn();
         EasyMock.expectLastCall();
 
@@ -770,7 +791,7 @@ public class TestConsoleLicenseGenerator
         EasyMock.expectLastCall();
         EasyMock.expect(this.device.readLine("Please enter the fully-qualified class name for the " +
                                              "PrivateKeyDataProvider implementation: ")).
-                andReturn("MockEmbeddedPrivateKeyDataProvider");
+                andReturn("io.oddsource.java.licensing.mock.MockEmbeddedPrivateKeyDataProvider");
         this.device.printOutLn();
         EasyMock.expectLastCall();
 
@@ -859,7 +880,7 @@ public class TestConsoleLicenseGenerator
         if(file.exists())
             FileUtils.forceDelete(file);
 
-        FileUtils.writeStringToFile(file, "test");
+        FileUtils.writeStringToFile(file, "test", "UTF-8");
 
         assertTrue("Setting the file to not readable should have returned true.", file.setReadable(false, false));
         assertTrue("The file should be writable.", file.canWrite());
@@ -903,9 +924,9 @@ public class TestConsoleLicenseGenerator
         if(file.exists())
             FileUtils.forceDelete(file);
 
-        FileUtils.writeStringToFile(file, "");
+        FileUtils.writeStringToFile(file, "", "UTF-8");
 
-        Capture<String> capture = new Capture<String>();
+        Capture<String> capture = EasyMock.newCapture();
 
         this.console.cli = EasyMock.createMockBuilder(CommandLine.class).withConstructor().
                 addMockedMethod("hasOption", String.class).
@@ -976,11 +997,15 @@ public class TestConsoleLicenseGenerator
         if(file.exists())
             FileUtils.forceDelete(file);
 
-        FileUtils.writeStringToFile(file, "io.oddsource.java.licensing.password=somePassword04\r\n" +
-                                          "io.oddsource.java.licensing.issueDate=abcdefg\r\n" +
-                                          "io.oddsource.java.licensing.numberOfLicenses=gfedcba");
+        FileUtils.writeStringToFile(
+            file,
+            "io.oddsource.java.licensing.password=somePassword04\r\n" +
+            "io.oddsource.java.licensing.issueDate=abcdefg\r\n" +
+            "io.oddsource.java.licensing.numberOfLicenses=gfedcba",
+            "UTF-8"
+        );
 
-        Capture<String> capture = new Capture<String>();
+        Capture<String> capture = EasyMock.newCapture();
 
         this.console.cli = EasyMock.createMockBuilder(CommandLine.class).withConstructor().
                 addMockedMethod("hasOption", String.class).
@@ -1064,7 +1089,7 @@ public class TestConsoleLicenseGenerator
                                           "io.oddsource.java.licensing.features.MY_FEATURE_01=\r\n" +
                                           "io.oddsource.java.licensing.features.ANOTHER_FEATURE_02=2012-06-15 23:59:59\r\n");
 
-        Capture<String> capture = new Capture<String>();
+        Capture<String> capture = EasyMock.newCapture();
 
         this.console.cli = EasyMock.createMockBuilder(CommandLine.class).withConstructor().
                 addMockedMethod("hasOption", String.class).
@@ -1233,7 +1258,7 @@ public class TestConsoleLicenseGenerator
 
         MockPasswordProvider passwordProvider = new MockPasswordProvider();
 
-        Capture<String> capture = new Capture<String>();
+        Capture<String> capture = EasyMock.newCapture();
 
         this.console.cli = EasyMock.createMockBuilder(CommandLine.class).withConstructor().
                 addMockedMethod("hasOption", String.class).
@@ -1356,7 +1381,7 @@ public class TestConsoleLicenseGenerator
 
         MockPasswordProvider passwordProvider = new MockPasswordProvider();
 
-        Capture<String> capture = new Capture<String>();
+        Capture<String> capture = EasyMock.newCapture();
 
         this.console.cli = EasyMock.createMockBuilder(CommandLine.class).withConstructor().
                 addMockedMethod("hasOption", String.class).
@@ -1479,7 +1504,7 @@ public class TestConsoleLicenseGenerator
 
         MockPasswordProvider passwordProvider = new MockPasswordProvider();
 
-        Capture<String> capture = new Capture<String>();
+        Capture<String> capture = EasyMock.newCapture();
 
         this.console.cli = EasyMock.createMockBuilder(CommandLine.class).withConstructor().
                 addMockedMethod("hasOption", String.class).
@@ -1784,7 +1809,7 @@ public class TestConsoleLicenseGenerator
     {
         this.console = EasyMock.createMockBuilder(ConsoleLicenseGenerator.class).
                 withConstructor(TextInterfaceDevice.class, CommandLineParser.class).
-                withArgs(this.device, new GnuParser()).
+                withArgs(this.device, new DefaultParser()).
                 addMockedMethod("processCommandLineOptions").
                 addMockedMethod("initializeLicenseCreator").
                 addMockedMethod("generateLicense").
@@ -1819,7 +1844,7 @@ public class TestConsoleLicenseGenerator
     {
         this.console = EasyMock.createMockBuilder(ConsoleLicenseGenerator.class).
                 withConstructor(TextInterfaceDevice.class, CommandLineParser.class).
-                withArgs(this.device, new GnuParser()).
+                withArgs(this.device, new DefaultParser()).
                 addMockedMethod("processCommandLineOptions").
                 addMockedMethod("initializeLicenseCreator").
                 addMockedMethod("generateLicense").
@@ -1854,7 +1879,7 @@ public class TestConsoleLicenseGenerator
     {
         this.console = EasyMock.createMockBuilder(ConsoleLicenseGenerator.class).
                 withConstructor(TextInterfaceDevice.class, CommandLineParser.class).
-                withArgs(this.device, new GnuParser()).
+                withArgs(this.device, new DefaultParser()).
                 addMockedMethod("processCommandLineOptions").
                 addMockedMethod("initializeLicenseCreator").
                 addMockedMethod("generateLicense").
@@ -1890,7 +1915,7 @@ public class TestConsoleLicenseGenerator
     {
         this.console = EasyMock.createMockBuilder(ConsoleLicenseGenerator.class).
                 withConstructor(TextInterfaceDevice.class, CommandLineParser.class).
-                withArgs(this.device, new GnuParser()).
+                withArgs(this.device, new DefaultParser()).
                 addMockedMethod("processCommandLineOptions").
                 addMockedMethod("initializeLicenseCreator").
                 addMockedMethod("generateLicense").
@@ -1925,7 +1950,7 @@ public class TestConsoleLicenseGenerator
     {
         this.console = EasyMock.createMockBuilder(ConsoleLicenseGenerator.class).
                 withConstructor(TextInterfaceDevice.class, CommandLineParser.class).
-                withArgs(this.device, new GnuParser()).
+                withArgs(this.device, new DefaultParser()).
                 addMockedMethod("processCommandLineOptions").
                 addMockedMethod("initializeLicenseCreator").
                 addMockedMethod("generateLicense").
@@ -1960,7 +1985,7 @@ public class TestConsoleLicenseGenerator
     {
         this.console = EasyMock.createMockBuilder(ConsoleLicenseGenerator.class).
                 withConstructor(TextInterfaceDevice.class, CommandLineParser.class).
-                withArgs(this.device, new GnuParser()).
+                withArgs(this.device, new DefaultParser()).
                 addMockedMethod("processCommandLineOptions").
                 addMockedMethod("initializeLicenseCreator").
                 addMockedMethod("generateLicense").
@@ -1997,7 +2022,7 @@ public class TestConsoleLicenseGenerator
     {
         this.console = EasyMock.createMockBuilder(ConsoleLicenseGenerator.class).
                 withConstructor(TextInterfaceDevice.class, CommandLineParser.class).
-                withArgs(this.device, new GnuParser()).
+                withArgs(this.device, new DefaultParser()).
                 addMockedMethod("processCommandLineOptions").
                 addMockedMethod("initializeLicenseCreator").
                 addMockedMethod("generateLicense").
@@ -2037,7 +2062,7 @@ public class TestConsoleLicenseGenerator
     {
         this.console = EasyMock.createMockBuilder(ConsoleLicenseGenerator.class).
                 withConstructor(TextInterfaceDevice.class, CommandLineParser.class).
-                withArgs(this.device, new GnuParser()).
+                withArgs(this.device, new DefaultParser()).
                 addMockedMethod("processCommandLineOptions").
                 addMockedMethod("initializeLicenseCreator").
                 addMockedMethod("generateLicense").
@@ -2074,7 +2099,7 @@ public class TestConsoleLicenseGenerator
     {
         this.console = EasyMock.createMockBuilder(ConsoleLicenseGenerator.class).
                 withConstructor(TextInterfaceDevice.class, CommandLineParser.class).
-                withArgs(this.device, new GnuParser()).
+                withArgs(this.device, new DefaultParser()).
                 addMockedMethod("processCommandLineOptions").
                 addMockedMethod("initializeLicenseCreator").
                 addMockedMethod("generateLicense").

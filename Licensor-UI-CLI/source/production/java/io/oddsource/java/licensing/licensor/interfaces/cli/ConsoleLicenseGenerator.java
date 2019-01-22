@@ -30,11 +30,10 @@ import io.oddsource.java.licensing.exception.KeyNotFoundException;
 import io.oddsource.java.licensing.exception.ObjectSerializationException;
 import io.oddsource.java.licensing.licensor.LicenseCreator;
 import io.oddsource.java.licensing.licensor.LicenseCreatorProperties;
-import io.oddsource.java.licensing.licensor.interfaces.cli.spi.CliOptionsBuilder;
 import io.oddsource.java.licensing.licensor.interfaces.cli.spi.TextInterfaceDevice;
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
-import org.apache.commons.cli.GnuParser;
+import org.apache.commons.cli.DefaultParser;
 import org.apache.commons.cli.HelpFormatter;
 import org.apache.commons.cli.Option;
 import org.apache.commons.cli.Options;
@@ -168,16 +167,13 @@ public class ConsoleLicenseGenerator
                                         "not specify the \"license\" properties file, you will be prompted to " +
                                         "provide the values that were expected in that file.";
 
-    private static final Option HELP = CliOptionsBuilder.get().withDescription("Display this help message").
-            hasArg(false).create("help");
+    private static final Option HELP = Option.builder("help").desc("Display this help message").hasArg(false).build();
 
-    private static final Option CONFIG = CliOptionsBuilder.get().withArgName("file").
-            withDescription("Specify the .properties file that configures this generator").hasArg(true).
-            isRequired(false).create("config");
+    private static final Option CONFIG = Option.builder("config").argName("file").hasArg(true).
+            desc("Specify the .properties file that configures this generator").required(false).build();
 
-    private static final Option LICENSE = CliOptionsBuilder.get().withArgName("file").
-            withDescription("Specify the .properties file that contains the data for this license").hasArg(true).
-            isRequired(false).create("license");
+    private static final Option LICENSE = Option.builder("license").argName("file").hasArg(true).
+            desc("Specify the .properties file that contains the data for this license").required(false).build();
 
     private final SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
@@ -849,6 +845,6 @@ public class ConsoleLicenseGenerator
 
         ConsoleUtilities.configureInterfaceDevice(device);
 
-        new ConsoleLicenseGenerator(device, new GnuParser()).run(arguments);
+        new ConsoleLicenseGenerator(device, new DefaultParser()).run(arguments);
     }
 }

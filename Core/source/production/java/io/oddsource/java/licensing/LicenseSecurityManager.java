@@ -21,8 +21,12 @@ package io.oddsource.java.licensing;
 import io.oddsource.java.licensing.exception.InsecureEnvironmentException;
 
 import java.io.FileDescriptor;
+import java.lang.reflect.AccessibleObject;
 import java.lang.reflect.Member;
+import java.lang.reflect.Method;
 import java.net.InetAddress;
+import java.security.AccessControlException;
+import java.security.BasicPermission;
 import java.security.Permission;
 
 /**
@@ -50,7 +54,7 @@ import java.security.Permission;
  * that these security measures are not compromised.
  *
  * @author Nick Williams
- * @version 1.0.0
+ * @version 2.0.0
  * @since 1.0.0
  */
 final class LicenseSecurityManager extends SecurityManager
@@ -61,11 +65,12 @@ final class LicenseSecurityManager extends SecurityManager
 
     private static final String SIGNED_LICENSE = SignedLicense.class.getCanonicalName();
 
-    private static final RuntimePermission CHECK_MEMBER_ACCESS_PERMISSION =
-            new RuntimePermission("accessDeclaredMembers");
+    private static final String SET_SECURITY_MANAGER_PERMISSION_STRING = "setSecurityManager";
+
+    private static final String SUPPRESS_ACCESS_CHECKS_PERMISSION_STRING = "suppressAccessChecks";
 
     private static final RuntimePermission SET_SECURITY_MANAGER_PERMISSION =
-            new RuntimePermission("setSecurityManager");
+            new RuntimePermission(SET_SECURITY_MANAGER_PERMISSION_STRING);
 
     static
     {
@@ -85,27 +90,41 @@ final class LicenseSecurityManager extends SecurityManager
         }
     }
 
-    protected static boolean securityManagerIsSuitableReplacement(SecurityManager securityManager)
+    static boolean securityManagerIsSuitableReplacement(SecurityManager securityManager)
     {
         if(securityManager == null)
             throw new IllegalArgumentException("Parameter securityManager cannot be null!");
 
-        // Make sure we can't call java.lang.Class#getDeclared*() on License
+        // Make sure we can't call java.lang.reflect.AccessibleObject#setAccessible on License methods
         try
         {
-            securityManager.checkMemberAccess(License.class, Member.DECLARED);
+            securityManager.checkPermission(new ObjectReflectionPermission(
+                LicenseSecurityManager.SUPPRESS_ACCESS_CHECKS_PERMISSION_STRING,
+                new AccessibleObject[]{License.class.getDeclaredMethod("deserialize", byte[].class)}
+            ));
             return false;
+        }
+        catch(NoSuchMethodException e)
+        {
+            throw new InsecureEnvironmentException("Unexpected error", e);
         }
         catch(SecurityException ignore)
         {
             // this is a good thing
         }
 
-        // Make sure we can't call java.lang.Class#getDeclared*() on LicenseManager
+        // Make sure we can't call java.lang.reflect.AccessibleObject#setAccessible on LicenseManager methods
         try
         {
-            securityManager.checkMemberAccess(LicenseManager.class, Member.DECLARED);
+            securityManager.checkPermission(new ObjectReflectionPermission(
+                LicenseSecurityManager.SUPPRESS_ACCESS_CHECKS_PERMISSION_STRING,
+                new AccessibleObject[]{LicenseManager.class.getMethod("validateLicense", License.class)}
+            ));
             return false;
+        }
+        catch(NoSuchMethodException e)
+        {
+            throw new InsecureEnvironmentException("Unexpected error", e);
         }
         catch(SecurityException ignore)
         {
@@ -151,100 +170,72 @@ final class LicenseSecurityManager extends SecurityManager
     }
 
     @Override
-    @SuppressWarnings("deprecation")
+    @Deprecated
     public void checkMemberAccess(Class<?> reflectionClass, int memberAccessType)
     {
-        if(reflectionClass == null)
-            throw new IllegalArgumentException("Parameter reflectionClass cannot be null.");
-
-        if(memberAccessType != Member.PUBLIC)
-        {
-            /*
-             * We check class canonical name, not class object, for equivalency. This is because
-             * (SomeClass.class == SomeClass.class) evaluates to false when the classes are loaded by two different
-             * ClassLoaders and (SomeClass.class.equals(SomeClass.class)) evaluates to false when the classes are
-             * loaded by two different ClassLoaders. Only their class canonical names are guaranteed to be the same.
-             */
-            Package packageObject = reflectionClass.getPackage();
-            if(
-                    packageObject != null &&
-                    packageObject.getName().startsWith("io.oddsource.java.licensing") &&
-                    !reflectionClass.getCanonicalName().equals(LicenseSecurityManager.FEATURE_RESTRICTION) &&
-                    !reflectionClass.getCanonicalName().equals(LicenseSecurityManager.SIGNED_LICENSE)
-            )
-            {
-                throw new SecurityException("Reflection access to non-public members of LicenseManager class [" +
-                                            reflectionClass.getSimpleName() + "] prohibited.");
-            }
-
-            if(reflectionClass == java.lang.Class.class || reflectionClass == java.lang.System.class)
-            {
-                Class[] stack = getClassContext();
-                if(stack.length < 4 || !stack[3].getPackage().getName().startsWith("java."))
-                    throw new SecurityException("Reflection access to non-public members of java.lang.Class and " +
-                                                "java.lang.System prohibited.");
-            }
-
-            if(this.next != null)
-            {
-                /*
-                 * Per Java SE 6 documentation for java.lang.SecurityManager#checkMemberAccess: If this method is
-                 * overridden, then a call to super.checkMemberAccess cannot be made, as the default implementation
-                 * of checkMemberAccess relies on the code being checked being at a stack depth of 4. So, we
-                 * copy-and-paste the implementation from Java SE 6.
-                 *
-                 * this.next.checkMemberAccess(reflectionClass, memberAccessType);
-                 *
-                 * Copyright 1994-2007 Sun Microsystems, Inc.  All Rights Reserved.
-                 * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-                 *
-                 * This code is free software; you can redistribute it and/or modify it
-                 * under the terms of the GNU General Public License version 2 only, as
-                 * published by the Free Software Foundation.  Sun designates this
-                 * particular file as subject to the "Classpath" exception as provided
-                 * by Sun in the LICENSE file that accompanied this code.
-                 *
-                 * This code is distributed in the hope that it will be useful, but WITHOUT
-                 * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
-                 * FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License
-                 * version 2 for more details (a copy is included in the LICENSE file that
-                 * accompanied this code).
-                 *
-                 * You should have received a copy of the GNU General Public License version
-                 * 2 along with this work; if not, write to the Free Software Foundation,
-                 * Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
-                 *
-                 * Please contact Sun Microsystems, Inc., 4150 Network Circle, Santa Clara,
-                 * CA 95054 USA or visit www.sun.com if you need additional information or
-                 * have any questions.
-                 */
-
-                Class[] stack = getClassContext();
-                /*
-                 * stack depth of 4 should be the caller of one of the
-                 * methods in java.lang.Class that invoke checkMember
-                 * access. The stack should look like:
-                 *
-                 * someCaller                        [3]
-                 * java.lang.Class.someReflectionAPI [2]
-                 * java.lang.Class.checkMemberAccess [1]
-                 * SecurityManager.checkMemberAccess [0]
-                 *
-                 */
-                if((stack.length < 4) || (stack[3].getClassLoader() != reflectionClass.getClassLoader()))
-                {
-                    this.checkPermission(LicenseSecurityManager.CHECK_MEMBER_ACCESS_PERMISSION);
-                }
-            }
-        }
+        if(this.next != null)
+            this.next.checkMemberAccess(reflectionClass, memberAccessType);
     }
 
     @Override
-    @SuppressWarnings("deprecation")
     public void checkPermission(Permission permission)
     {
-        if(permission.getName().equals("setSecurityManager"))
+        if(permission.getName().equals(LicenseSecurityManager.SET_SECURITY_MANAGER_PERMISSION_STRING))
             throw new SecurityException("Setting a SecurityManager other than the LicenseSecurityManager is prohibited.");
+
+        if(permission.getName().equals(LicenseSecurityManager.SUPPRESS_ACCESS_CHECKS_PERMISSION_STRING))
+        {
+            if(permission instanceof LicenseSecurityManager.ObjectReflectionPermission)
+            {
+                for(AccessibleObject target : ((LicenseSecurityManager.ObjectReflectionPermission)permission).targets)
+                {
+                    if(!(target instanceof Member))
+                    {
+                        continue;
+                    }
+
+                    Class<?> targetClass = ((Member) target).getDeclaringClass();
+                    if(targetClass != null)
+                    {
+                        if (
+                            targetClass == Class.class || targetClass == String.class || targetClass == System.class ||
+                            AccessibleObject.class.isAssignableFrom(targetClass)
+                        )
+                        {
+                            Class<?>[] stack = getClassContext();
+                            if(stack.length < 4 || !stack[3].getPackage().getName().startsWith("java."))
+                                throw new AccessControlException(
+                                    "Reflection access to non-public members of java.lang.Class, java.lang.String, " +
+                                    "java.lang.System, and java.lang.reflect.AccessibleObject prohibited."
+                                );
+                        }
+
+                        Package targetPackage = targetClass.getPackage();
+                        if(
+                            targetPackage != null &&
+                            targetPackage.getName().startsWith("io.oddsource.java.licensing") &&
+                            !targetClass.getCanonicalName().equals(LicenseSecurityManager.FEATURE_RESTRICTION)
+                        )
+                        {
+                            throw new AccessControlException(
+                                "Reflection access to non-public members of LicenseManager class [" +
+                                    targetClass.getSimpleName() + "] prohibited.",
+                                permission
+                            );
+                        }
+                    }
+                }
+            }
+            else
+            {
+                // TODO Integrate ByteBuddy to be able to uncomment this (OddSource/java-license-manager#5)
+                // TODO https://stackoverflow.com/questions/2315066/is-there-a-way-for-a-securitymanager
+                // throw new DefaultReflectionAccessControlException(
+                //     "All member access elevation prohibited.",
+                //     permission
+                // );
+            }
+        }
 
         if(this.next != null)
             this.next.checkPermission(permission);
@@ -384,7 +375,7 @@ final class LicenseSecurityManager extends SecurityManager
     }
 
     @Override
-    @SuppressWarnings("deprecation")
+    @Deprecated
     public void checkMulticast(InetAddress inetAddress, byte b)
     {
         if(this.next != null)
@@ -413,6 +404,7 @@ final class LicenseSecurityManager extends SecurityManager
     }
 
     @Override
+    @Deprecated
     public void checkSystemClipboardAccess()
     {
         if(this.next != null)
@@ -420,6 +412,7 @@ final class LicenseSecurityManager extends SecurityManager
     }
 
     @Override
+    @Deprecated
     public void checkAwtEventQueueAccess()
     {
         if(this.next != null)
@@ -448,6 +441,7 @@ final class LicenseSecurityManager extends SecurityManager
     }
 
     @Override
+    @Deprecated
     public boolean checkTopLevelWindow(Object window)
     {
         return this.next == null || this.next.checkTopLevelWindow(window);
@@ -468,5 +462,28 @@ final class LicenseSecurityManager extends SecurityManager
     protected static LicenseSecurityManager getInstance()
     {
         return LicenseSecurityManager.instance;
+    }
+
+    static final class ObjectReflectionPermission extends BasicPermission
+    {
+        private static final long serialVersionUID = 8319947110221501285L;
+
+        final AccessibleObject[] targets;
+
+        ObjectReflectionPermission(String name, AccessibleObject[] targets)
+        {
+            super(name);
+            this.targets = targets;
+        }
+    }
+
+    static final class DefaultReflectionAccessControlException extends AccessControlException
+    {
+        private static final long serialVersionUID = 8137740110221501582L;
+
+        DefaultReflectionAccessControlException(String s, Permission p)
+        {
+            super(s, p);
+        }
     }
 }

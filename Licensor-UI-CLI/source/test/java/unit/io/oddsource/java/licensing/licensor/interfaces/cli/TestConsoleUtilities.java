@@ -55,7 +55,7 @@ public class TestConsoleUtilities
     {
         TextInterfaceDevice textInterfaceDevice = EasyMock.createStrictMock(TextInterfaceDevice.class);
 
-        Capture<Thread> threadCapture = new Capture<Thread>();
+        Capture<Thread> threadCapture = EasyMock.newCapture();
 
         textInterfaceDevice.registerShutdownHook(EasyMock.capture(threadCapture));
         EasyMock.expectLastCall();

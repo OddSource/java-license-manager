@@ -183,7 +183,7 @@ public class TestFileLicenseProvider
 
         temp = new File(temp, "io/oddsource/java/licensing/testGetLicenseFile03.lic");
 
-        FileUtils.writeStringToFile(temp, "temp");
+        FileUtils.writeStringToFile(temp, "temp", "UTF-8");
 
         this.provider.setFilePrefix("io/oddsource/java/licensing/");
         this.provider.setFileSuffix(".lic");
@@ -214,7 +214,7 @@ public class TestFileLicenseProvider
 
         temp = new File(temp, "io/oddsource/java/licensing/licensor/testGetLicenseFile04.prop");
 
-        FileUtils.writeStringToFile(temp, "temp");
+        FileUtils.writeStringToFile(temp, "temp", "UTF-8");
 
         this.provider.setFilePrefix("/io/oddsource/java/licensing/licensor/");
         this.provider.setFileSuffix(".prop");
@@ -265,7 +265,7 @@ public class TestFileLicenseProvider
     public void testGetLicenseData04() throws IOException
     {
         File temp = new File("testGetLicenseData04.lic");
-        FileUtils.writeStringToFile(temp, "test get 04");
+        FileUtils.writeStringToFile(temp, "test get 04", "UTF-8");
 
         this.provider = EasyMock.createMockBuilder(FileLicenseProvider.class).
                 addMockedMethod("getLicenseFile").createStrictMock();

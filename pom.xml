@@ -62,13 +62,13 @@
         <version.dependency.commons.codec>1.11</version.dependency.commons.codec>
         <version.dependency.commons.io>2.6</version.dependency.commons.io>
         <version.dependence.test.asm>4.2</version.dependence.test.asm>
-        <version.dependence.test.easymock>3.6</version.dependence.test.easymock>
+        <version.dependence.test.easymock>4.0.2</version.dependence.test.easymock>
         <version.dependency.test.junit>4.11</version.dependency.test.junit>
         <version.plugin.compiler>3.8.0</version.plugin.compiler>
         <version.plugin.jar>3.1.1</version.plugin.jar>
         <version.plugin.javadoc>3.0.1</version.plugin.javadoc>
         <version.plugin.source>3.0.1</version.plugin.source>
-        <version.plugin.surefire>3.22.1</version.plugin.surefire>
+        <version.plugin.surefire>2.22.1</version.plugin.surefire>
     </properties>
 
     <dependencyManagement>
@@ -177,7 +177,8 @@
                     <version>${version.plugin.surefire}</version>
                     <inherited>true</inherited>
                     <configuration>
-                        <forkMode>always</forkMode>
+                        <forkCount>1</forkCount>
+                        <reuseForks>false</reuseForks>
                     </configuration>
                 </plugin>
                 <plugin>

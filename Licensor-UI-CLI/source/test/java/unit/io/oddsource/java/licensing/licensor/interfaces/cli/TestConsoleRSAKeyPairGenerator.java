@@ -27,7 +27,7 @@ import io.oddsource.java.licensing.licensor.interfaces.cli.spi.TextInterfaceDevi
 import io.oddsource.java.mock.MockPermissiveSecurityManager;
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
-import org.apache.commons.cli.GnuParser;
+import org.apache.commons.cli.DefaultParser;
 import org.apache.commons.cli.ParseException;
 import org.apache.commons.io.FileUtils;
 import org.easymock.Capture;
@@ -69,7 +69,7 @@ public class TestConsoleRSAKeyPairGenerator
         this.generator = EasyMock.createMock(RSAKeyPairGeneratorInterface.class);
         this.device = EasyMock.createMock(TextInterfaceDevice.class);
 
-        this.console = new ConsoleRSAKeyPairGenerator(this.generator, this.device, new GnuParser()) {
+        this.console = new ConsoleRSAKeyPairGenerator(this.generator, this.device, new DefaultParser()) {
             @Override
             protected void finalize()
             {
@@ -102,36 +102,38 @@ public class TestConsoleRSAKeyPairGenerator
 
         assertNotNull("There should be output.", output);
         assertTrue("The output should have length.", output.length() > 0);
-        assertEquals("The output is not correct.",
-                     "usage:  ConsoleRSAKeyPairGenerator -help" + LF +
-                     "        ConsoleRSAKeyPairGenerator -interactive" + LF +
-                     "        ConsoleRSAKeyPairGenerator -password <password> -private <file|class name> -public <file|class" + LF +
-                     "        name> [-privatePassword <password>] [-classes -passwordClass <class name> -privatePasswordClass" + LF +
-                     "        <class name> [-privatePackage <package>] [-publicPackage <package>] [-passwordPackage <package>]" + LF +
-                     "        [-privatePasswordPackage <package>]]" + LF +
-                     " -classes                             Specify to generate compilable Java classes instead of key files" + LF +
-                     " -help                                Display this help message" + LF +
-                     " -interactive                         Specify to use interactive mode and ignore command-line options" + LF +
-                     " -password <password>                 The password to use to encrypt the public and private keys" + LF +
-                     "                                      (required unless in interactive mode)" + LF +
-                     " -passwordClass <class name>          The name of the password storage class to generate (optional," + LF +
-                     "                                      ignored unless generating classes)" + LF +
-                     " -passwordPackage <package>           The name of the package to use for the password storage class" + LF +
-                     "                                      (optional, ignored unless generating classes)" + LF +
-                     " -private <file|class name>           The name of the private key file or class to generate (required" + LF +
-                     "                                      unless in interactive mode)" + LF +
-                     " -privatePackage <package>            The name of the package to use for the private key class (optional," + LF +
-                     "                                      ignored unless generating classes)" + LF +
-                     " -privatePassword <password>          A different password to use to encrypt the private key (optional)" + LF +
-                     " -privatePasswordClass <class name>   The name of the private key password storage class to generate" + LF +
-                     "                                      (optional, ignored unless generating classes)" + LF +
-                     " -privatePasswordPackage <package>    The name of the package to use for the private key password storage" + LF +
-                     "                                      class (optional, ignored unless generating classes)" + LF +
-                     " -public <file|class name>            The name of the public key file or class to generate (required" + LF +
-                     "                                      unless in interactive mode)" + LF +
-                     " -publicPackage <package>             The name of the package to use for the public key class (optional," + LF +
-                     "                                      ignored unless generating classes)" + LF,
-                     output);
+        assertEquals(
+            "The output is not correct.",
+            "usage:  ConsoleRSAKeyPairGenerator -help" + LF +
+            " ConsoleRSAKeyPairGenerator -interactive" + LF +
+            " ConsoleRSAKeyPairGenerator -password <password> -private <file|class name> -public <file|class name>\n" +
+            "        [-privatePassword <password>] [-classes -passwordClass <class name> -privatePasswordClass <class\n" +
+            "        name> [-privatePackage <package>] [-publicPackage <package>] [-passwordPackage <package>]" + LF +
+            "        [-privatePasswordPackage <package>]]" + LF +
+            " -classes                             Specify to generate compilable Java classes instead of key files" + LF +
+            " -help                                Display this help message" + LF +
+            " -interactive                         Specify to use interactive mode and ignore command-line options" + LF +
+            " -password <password>                 The password to use to encrypt the public and private keys" + LF +
+            "                                      (required unless in interactive mode)" + LF +
+            " -passwordClass <class name>          The name of the password storage class to generate (optional," + LF +
+            "                                      ignored unless generating classes)" + LF +
+            " -passwordPackage <package>           The name of the package to use for the password storage class" + LF +
+            "                                      (optional, ignored unless generating classes)" + LF +
+            " -private <file|class name>           The name of the private key file or class to generate (required" + LF +
+            "                                      unless in interactive mode)" + LF +
+            " -privatePackage <package>            The name of the package to use for the private key class (optional," + LF +
+            "                                      ignored unless generating classes)" + LF +
+            " -privatePassword <password>          A different password to use to encrypt the private key (optional)" + LF +
+            " -privatePasswordClass <class name>   The name of the private key password storage class to generate" + LF +
+            "                                      (optional, ignored unless generating classes)" + LF +
+            " -privatePasswordPackage <package>    The name of the package to use for the private key password storage" + LF +
+            "                                      class (optional, ignored unless generating classes)" + LF +
+            " -public <file|class name>            The name of the public key file or class to generate (required" + LF +
+            "                                      unless in interactive mode)" + LF +
+            " -publicPackage <package>             The name of the package to use for the public key class (optional," + LF +
+            "                                      ignored unless generating classes)" + LF,
+            output
+        );
     }
 
     @Test
@@ -154,51 +156,38 @@ public class TestConsoleRSAKeyPairGenerator
 
         assertNotNull("There should be output.", output);
         assertTrue("The output should have length.", output.length() > 0);
-        assertEquals("The output is not correct.",
-                     "usage:  ConsoleRSAKeyPairGenerator -help" + LF +
-                     "        ConsoleRSAKeyPairGenerator -interactive" + LF +
-                     "        ConsoleRSAKeyPairGenerator -password <password> -private <file|class name> -public <file|class" +
-                     LF +
-                     "        name> [-privatePassword <password>] [-classes -passwordClass <class name> -privatePasswordClass" +
-                     LF +
-                     "        <class name> [-privatePackage <package>] [-publicPackage <package>] [-passwordPackage <package>]" +
-                     LF +
-                     "        [-privatePasswordPackage <package>]]" + LF +
-                     " -classes                             Specify to generate compilable Java classes instead of key files" +
-                     LF +
-                     " -help                                Display this help message" + LF +
-                     " -interactive                         Specify to use interactive mode and ignore command-line options" +
-                     LF +
-                     " -password <password>                 The password to use to encrypt the public and private keys" +
-                     LF +
-                     "                                      (required unless in interactive mode)" + LF +
-                     " -passwordClass <class name>          The name of the password storage class to generate (optional," +
-                     LF +
-                     "                                      ignored unless generating classes)" + LF +
-                     " -passwordPackage <package>           The name of the package to use for the password storage class" +
-                     LF +
-                     "                                      (optional, ignored unless generating classes)" + LF +
-                     " -private <file|class name>           The name of the private key file or class to generate (required" +
-                     LF +
-                     "                                      unless in interactive mode)" + LF +
-                     " -privatePackage <package>            The name of the package to use for the private key class (optional," +
-                     LF +
-                     "                                      ignored unless generating classes)" + LF +
-                     " -privatePassword <password>          A different password to use to encrypt the private key (optional)" +
-                     LF +
-                     " -privatePasswordClass <class name>   The name of the private key password storage class to generate" +
-                     LF +
-                     "                                      (optional, ignored unless generating classes)" + LF +
-                     " -privatePasswordPackage <package>    The name of the package to use for the private key password storage" +
-                     LF +
-                     "                                      class (optional, ignored unless generating classes)" + LF +
-                     " -public <file|class name>            The name of the public key file or class to generate (required" +
-                     LF +
-                     "                                      unless in interactive mode)" + LF +
-                     " -publicPackage <package>             The name of the package to use for the public key class (optional," +
-                     LF +
-                     "                                      ignored unless generating classes)" + LF,
-                     output);
+        assertEquals(
+            "The output is not correct.",
+            "usage:  ConsoleRSAKeyPairGenerator -help" + LF +
+            " ConsoleRSAKeyPairGenerator -interactive" + LF +
+            " ConsoleRSAKeyPairGenerator -password <password> -private <file|class name> -public <file|class name>" + LF +
+            "        [-privatePassword <password>] [-classes -passwordClass <class name> -privatePasswordClass <class" + LF +
+            "        name> [-privatePackage <package>] [-publicPackage <package>] [-passwordPackage <package>]" + LF +
+            "        [-privatePasswordPackage <package>]]" + LF +
+            " -classes                             Specify to generate compilable Java classes instead of key files" + LF +
+            " -help                                Display this help message" + LF +
+            " -interactive                         Specify to use interactive mode and ignore command-line options" + LF +
+            " -password <password>                 The password to use to encrypt the public and private keys" + LF +
+            "                                      (required unless in interactive mode)" + LF +
+            " -passwordClass <class name>          The name of the password storage class to generate (optional," + LF +
+            "                                      ignored unless generating classes)" + LF +
+            " -passwordPackage <package>           The name of the package to use for the password storage class" + LF +
+            "                                      (optional, ignored unless generating classes)" + LF +
+            " -private <file|class name>           The name of the private key file or class to generate (required" + LF +
+            "                                      unless in interactive mode)" + LF +
+            " -privatePackage <package>            The name of the package to use for the private key class (optional," + LF +
+            "                                      ignored unless generating classes)" + LF +
+            " -privatePassword <password>          A different password to use to encrypt the private key (optional)" + LF +
+            " -privatePasswordClass <class name>   The name of the private key password storage class to generate" + LF +
+            "                                      (optional, ignored unless generating classes)" + LF +
+            " -privatePasswordPackage <package>    The name of the package to use for the private key password storage" + LF +
+            "                                      class (optional, ignored unless generating classes)" + LF +
+            " -public <file|class name>            The name of the public key file or class to generate (required" + LF +
+            "                                      unless in interactive mode)" + LF +
+            " -publicPackage <package>             The name of the package to use for the public key class (optional," + LF +
+            "                                      ignored unless generating classes)" + LF,
+            output
+        );
     }
 
     @Test
@@ -430,7 +419,7 @@ public class TestConsoleRSAKeyPairGenerator
     public void testCheckAndPromptToOverwriteFile02() throws IOException
     {
         File file = new File("testCheckAndPromptToOverwriteFile02");
-        FileUtils.writeStringToFile(file, "test string");
+        FileUtils.writeStringToFile(file, "test string", "UTF-8");
 
         try
         {
@@ -452,7 +441,7 @@ public class TestConsoleRSAKeyPairGenerator
     public void testCheckAndPromptToOverwriteFile03() throws IOException
     {
         File file = new File("testCheckAndPromptToOverwriteFile03");
-        FileUtils.writeStringToFile(file, "test string");
+        FileUtils.writeStringToFile(file, "test string", "UTF-8");
 
         try
         {
@@ -474,7 +463,7 @@ public class TestConsoleRSAKeyPairGenerator
     public void testCheckAndPromptToOverwriteFile04() throws IOException
     {
         File file = new File("testCheckAndPromptToOverwriteFile04");
-        FileUtils.writeStringToFile(file, "test string");
+        FileUtils.writeStringToFile(file, "test string", "UTF-8");
 
         try
         {
@@ -496,7 +485,7 @@ public class TestConsoleRSAKeyPairGenerator
     public void testCheckAndPromptToOverwriteFile05() throws IOException
     {
         File file = new File("testCheckAndPromptToOverwriteFile05");
-        FileUtils.writeStringToFile(file, "test string");
+        FileUtils.writeStringToFile(file, "test string", "UTF-8");
 
         try
         {
@@ -518,7 +507,7 @@ public class TestConsoleRSAKeyPairGenerator
     public void testCheckAndPromptToOverwriteFile06() throws IOException
     {
         File file = new File("testCheckAndPromptToOverwriteFile06");
-        FileUtils.writeStringToFile(file, "test string");
+        FileUtils.writeStringToFile(file, "test string", "UTF-8");
 
         try
         {
@@ -542,7 +531,7 @@ public class TestConsoleRSAKeyPairGenerator
     {
         File file = new File("testCheckAndPromptToOverwriteFile07");
         file = file.getCanonicalFile();
-        FileUtils.writeStringToFile(file, "test string");
+        FileUtils.writeStringToFile(file, "test string", "UTF-8");
 
         assertTrue("Setting the file readable flag to false should have succeeded.", file.setReadable(false, false));
         assertTrue("The file should still be writable.", file.canWrite());
@@ -570,7 +559,7 @@ public class TestConsoleRSAKeyPairGenerator
     {
         File file = new File("testCheckAndPromptToOverwriteFile08");
         file = file.getCanonicalFile();
-        FileUtils.writeStringToFile(file, "test string");
+        FileUtils.writeStringToFile(file, "test string", "UTF-8");
 
         assertTrue("Setting the file readable flag to false should have succeeded.", file.setWritable(false, false));
         assertTrue("The file should still be readable.", file.canRead());
@@ -659,7 +648,7 @@ public class TestConsoleRSAKeyPairGenerator
         EasyMock.expectLastCall();
         EasyMock.expect(this.device.out()).andReturn(new PrintStream(stream));
 
-        final Capture<char[]> capture1 = new Capture<char[]>();
+        final Capture<char[]> capture1 = EasyMock.newCapture();
 
         this.generator.saveKeyPairToFiles(
                 EasyMock.eq(keyPair), EasyMock.eq(privateFileName), EasyMock.eq(publicFileName),
@@ -775,8 +764,8 @@ public class TestConsoleRSAKeyPairGenerator
         EasyMock.expectLastCall();
         EasyMock.expect(this.device.out()).andReturn(new PrintStream(stream));
 
-        final Capture<char[]> capture1 = new Capture<char[]>();
-        final Capture<char[]> capture2 = new Capture<char[]>();
+        final Capture<char[]> capture1 = EasyMock.newCapture();
+        final Capture<char[]> capture2 = EasyMock.newCapture();
 
         this.generator.saveKeyPairToFiles(
                 EasyMock.eq(keyPair), EasyMock.eq(privateFileName), EasyMock.eq(publicFileName),
@@ -906,12 +895,12 @@ public class TestConsoleRSAKeyPairGenerator
         EasyMock.expectLastCall();
         EasyMock.expect(this.device.out()).andReturn(new PrintStream(stream));
 
-        final Capture<GeneratedClassDescriptor> descriptorA01 = new Capture<GeneratedClassDescriptor>();
-        final Capture<GeneratedClassDescriptor> descriptorA02 = new Capture<GeneratedClassDescriptor>();
-        final Capture<GeneratedClassDescriptor> descriptorB01 = new Capture<GeneratedClassDescriptor>();
+        final Capture<GeneratedClassDescriptor> descriptorA01 = EasyMock.newCapture();
+        final Capture<GeneratedClassDescriptor> descriptorA02 = EasyMock.newCapture();
+        final Capture<GeneratedClassDescriptor> descriptorB01 = EasyMock.newCapture();
 
-        final Capture<char[]> passwordA01 = new Capture<char[]>();
-        final Capture<char[]> passwordB01 = new Capture<char[]>();
+        final Capture<char[]> passwordA01 = EasyMock.newCapture();
+        final Capture<char[]> passwordB01 = EasyMock.newCapture();
 
         this.generator.saveKeyPairToProviders(
                 EasyMock.eq(keyPair), EasyMock.capture(descriptorA01), EasyMock.capture(descriptorA02),
@@ -1097,15 +1086,15 @@ public class TestConsoleRSAKeyPairGenerator
         EasyMock.expectLastCall();
         EasyMock.expect(this.device.out()).andReturn(new PrintStream(stream));
 
-        final Capture<GeneratedClassDescriptor> descriptorA01 = new Capture<GeneratedClassDescriptor>();
-        final Capture<GeneratedClassDescriptor> descriptorA02 = new Capture<GeneratedClassDescriptor>();
-        final Capture<GeneratedClassDescriptor> descriptorB01 = new Capture<GeneratedClassDescriptor>();
-        final Capture<GeneratedClassDescriptor> descriptorB02 = new Capture<GeneratedClassDescriptor>();
+        final Capture<GeneratedClassDescriptor> descriptorA01 = EasyMock.newCapture();
+        final Capture<GeneratedClassDescriptor> descriptorA02 = EasyMock.newCapture();
+        final Capture<GeneratedClassDescriptor> descriptorB01 = EasyMock.newCapture();
+        final Capture<GeneratedClassDescriptor> descriptorB02 = EasyMock.newCapture();
 
-        final Capture<char[]> passwordA01 = new Capture<char[]>();
-        final Capture<char[]> passwordA02 = new Capture<char[]>();
-        final Capture<char[]> passwordB01 = new Capture<char[]>();
-        final Capture<char[]> passwordB02 = new Capture<char[]>();
+        final Capture<char[]> passwordA01 = EasyMock.newCapture();
+        final Capture<char[]> passwordA02 = EasyMock.newCapture();
+        final Capture<char[]> passwordB01 = EasyMock.newCapture();
+        final Capture<char[]> passwordB02 = EasyMock.newCapture();
 
         this.generator.saveKeyPairToProviders(
                 EasyMock.eq(keyPair), EasyMock.capture(descriptorA01), EasyMock.capture(descriptorA02),
@@ -1261,7 +1250,7 @@ public class TestConsoleRSAKeyPairGenerator
         EasyMock.expectLastCall();
         EasyMock.expect(this.device.out()).andReturn(new PrintStream(stream));
 
-        final Capture<char[]> capture1 = new Capture<char[]>();
+        final Capture<char[]> capture1 = EasyMock.newCapture();
 
         this.generator.saveKeyPairToFiles(
                 EasyMock.eq(keyPair), EasyMock.eq(privateFileName), EasyMock.eq(publicFileName),
@@ -1343,8 +1332,8 @@ public class TestConsoleRSAKeyPairGenerator
         EasyMock.expectLastCall();
         EasyMock.expect(this.device.out()).andReturn(new PrintStream(stream));
 
-        final Capture<char[]> capture1 = new Capture<char[]>();
-        final Capture<char[]> capture2 = new Capture<char[]>();
+        final Capture<char[]> capture1 = EasyMock.newCapture();
+        final Capture<char[]> capture2 = EasyMock.newCapture();
 
         this.generator.saveKeyPairToFiles(
                 EasyMock.eq(keyPair), EasyMock.eq(privateFileName), EasyMock.eq(publicFileName),
@@ -1430,12 +1419,12 @@ public class TestConsoleRSAKeyPairGenerator
         EasyMock.expectLastCall();
         EasyMock.expect(this.device.out()).andReturn(new PrintStream(stream));
 
-        final Capture<GeneratedClassDescriptor> descriptorA01 = new Capture<GeneratedClassDescriptor>();
-        final Capture<GeneratedClassDescriptor> descriptorA02 = new Capture<GeneratedClassDescriptor>();
-        final Capture<GeneratedClassDescriptor> descriptorB01 = new Capture<GeneratedClassDescriptor>();
+        final Capture<GeneratedClassDescriptor> descriptorA01 = EasyMock.newCapture();
+        final Capture<GeneratedClassDescriptor> descriptorA02 = EasyMock.newCapture();
+        final Capture<GeneratedClassDescriptor> descriptorB01 = EasyMock.newCapture();
 
-        final Capture<char[]> passwordA01 = new Capture<char[]>();
-        final Capture<char[]> passwordB01 = new Capture<char[]>();
+        final Capture<char[]> passwordA01 = EasyMock.newCapture();
+        final Capture<char[]> passwordB01 = EasyMock.newCapture();
 
         this.generator.saveKeyPairToProviders(
                 EasyMock.eq(keyPair), EasyMock.capture(descriptorA01), EasyMock.capture(descriptorA02),
@@ -1561,15 +1550,15 @@ public class TestConsoleRSAKeyPairGenerator
         EasyMock.expectLastCall();
         EasyMock.expect(this.device.out()).andReturn(new PrintStream(stream));
 
-        final Capture<GeneratedClassDescriptor> descriptorA01 = new Capture<GeneratedClassDescriptor>();
-        final Capture<GeneratedClassDescriptor> descriptorA02 = new Capture<GeneratedClassDescriptor>();
-        final Capture<GeneratedClassDescriptor> descriptorB01 = new Capture<GeneratedClassDescriptor>();
-        final Capture<GeneratedClassDescriptor> descriptorB02 = new Capture<GeneratedClassDescriptor>();
+        final Capture<GeneratedClassDescriptor> descriptorA01 = EasyMock.newCapture();
+        final Capture<GeneratedClassDescriptor> descriptorA02 = EasyMock.newCapture();
+        final Capture<GeneratedClassDescriptor> descriptorB01 = EasyMock.newCapture();
+        final Capture<GeneratedClassDescriptor> descriptorB02 = EasyMock.newCapture();
 
-        final Capture<char[]> passwordA01 = new Capture<char[]>();
-        final Capture<char[]> passwordA02 = new Capture<char[]>();
-        final Capture<char[]> passwordB01 = new Capture<char[]>();
-        final Capture<char[]> passwordB02 = new Capture<char[]>();
+        final Capture<char[]> passwordA01 = EasyMock.newCapture();
+        final Capture<char[]> passwordA02 = EasyMock.newCapture();
+        final Capture<char[]> passwordB01 = EasyMock.newCapture();
+        final Capture<char[]> passwordB02 = EasyMock.newCapture();
 
         this.generator.saveKeyPairToProviders(
                 EasyMock.eq(keyPair), EasyMock.capture(descriptorA01), EasyMock.capture(descriptorA02),
@@ -1691,7 +1680,7 @@ public class TestConsoleRSAKeyPairGenerator
     {
         this.console = EasyMock.createMockBuilder(ConsoleRSAKeyPairGenerator.class).
                 withConstructor(RSAKeyPairGeneratorInterface.class, TextInterfaceDevice.class, CommandLineParser.class).
-                withArgs(this.generator, this.device, new GnuParser()).
+                withArgs(this.generator, this.device, new DefaultParser()).
                 addMockedMethod("processCommandLineOptions", String[].class).
                 addMockedMethod("doInteractive").addMockedMethod("doCommandLine").createStrictMock();
 
@@ -1726,7 +1715,7 @@ public class TestConsoleRSAKeyPairGenerator
     {
         this.console = EasyMock.createMockBuilder(ConsoleRSAKeyPairGenerator.class).
                 withConstructor(RSAKeyPairGeneratorInterface.class, TextInterfaceDevice.class, CommandLineParser.class).
-                withArgs(this.generator, this.device, new GnuParser()).
+                withArgs(this.generator, this.device, new DefaultParser()).
                 addMockedMethod("processCommandLineOptions", String[].class).
                 addMockedMethod("doInteractive").addMockedMethod("doCommandLine").createStrictMock();
 
@@ -1756,7 +1745,7 @@ public class TestConsoleRSAKeyPairGenerator
     {
         this.console = EasyMock.createMockBuilder(ConsoleRSAKeyPairGenerator.class).
                 withConstructor(RSAKeyPairGeneratorInterface.class, TextInterfaceDevice.class, CommandLineParser.class).
-                withArgs(this.generator, this.device, new GnuParser()).
+                withArgs(this.generator, this.device, new DefaultParser()).
                 addMockedMethod("processCommandLineOptions", String[].class).
                 addMockedMethod("doInteractive").addMockedMethod("doCommandLine").createStrictMock();
 
@@ -1789,7 +1778,7 @@ public class TestConsoleRSAKeyPairGenerator
     {
         this.console = EasyMock.createMockBuilder(ConsoleRSAKeyPairGenerator.class).
                 withConstructor(RSAKeyPairGeneratorInterface.class, TextInterfaceDevice.class, CommandLineParser.class).
-                withArgs(this.generator, this.device, new GnuParser()).
+                withArgs(this.generator, this.device, new DefaultParser()).
                 addMockedMethod("processCommandLineOptions", String[].class).
                 addMockedMethod("doInteractive").addMockedMethod("doCommandLine").createStrictMock();
 
@@ -1821,7 +1810,7 @@ public class TestConsoleRSAKeyPairGenerator
     {
         this.console = EasyMock.createMockBuilder(ConsoleRSAKeyPairGenerator.class).
                 withConstructor(RSAKeyPairGeneratorInterface.class, TextInterfaceDevice.class, CommandLineParser.class).
-                withArgs(this.generator, this.device, new GnuParser()).
+                withArgs(this.generator, this.device, new DefaultParser()).
                 addMockedMethod("processCommandLineOptions", String[].class).
                 addMockedMethod("doInteractive").addMockedMethod("doCommandLine").createStrictMock();
 
@@ -1853,7 +1842,7 @@ public class TestConsoleRSAKeyPairGenerator
     {
         this.console = EasyMock.createMockBuilder(ConsoleRSAKeyPairGenerator.class).
                 withConstructor(RSAKeyPairGeneratorInterface.class, TextInterfaceDevice.class, CommandLineParser.class).
-                withArgs(this.generator, this.device, new GnuParser()).
+                withArgs(this.generator, this.device, new DefaultParser()).
                 addMockedMethod("processCommandLineOptions", String[].class).
                 addMockedMethod("doInteractive").addMockedMethod("doCommandLine").createStrictMock();
 
@@ -1885,7 +1874,7 @@ public class TestConsoleRSAKeyPairGenerator
     {
         this.console = EasyMock.createMockBuilder(ConsoleRSAKeyPairGenerator.class).
                 withConstructor(RSAKeyPairGeneratorInterface.class, TextInterfaceDevice.class, CommandLineParser.class).
-                withArgs(this.generator, this.device, new GnuParser()).
+                withArgs(this.generator, this.device, new DefaultParser()).
                 addMockedMethod("processCommandLineOptions", String[].class).
                 addMockedMethod("doInteractive").addMockedMethod("doCommandLine").createStrictMock();
 
@@ -1917,7 +1906,7 @@ public class TestConsoleRSAKeyPairGenerator
     {
         this.console = EasyMock.createMockBuilder(ConsoleRSAKeyPairGenerator.class).
                 withConstructor(RSAKeyPairGeneratorInterface.class, TextInterfaceDevice.class, CommandLineParser.class).
-                withArgs(this.generator, this.device, new GnuParser()).
+                withArgs(this.generator, this.device, new DefaultParser()).
                 addMockedMethod("processCommandLineOptions", String[].class).
                 addMockedMethod("doInteractive").addMockedMethod("doCommandLine").createStrictMock();
 
@@ -1949,7 +1938,7 @@ public class TestConsoleRSAKeyPairGenerator
     {
         this.console = EasyMock.createMockBuilder(ConsoleRSAKeyPairGenerator.class).
                 withConstructor(RSAKeyPairGeneratorInterface.class, TextInterfaceDevice.class, CommandLineParser.class).
-                withArgs(this.generator, this.device, new GnuParser()).
+                withArgs(this.generator, this.device, new DefaultParser()).
                 addMockedMethod("processCommandLineOptions", String[].class).
                 addMockedMethod("doInteractive").addMockedMethod("doCommandLine").createStrictMock();
 
@@ -1984,7 +1973,7 @@ public class TestConsoleRSAKeyPairGenerator
     {
         this.console = EasyMock.createMockBuilder(ConsoleRSAKeyPairGenerator.class).
                 withConstructor(RSAKeyPairGeneratorInterface.class, TextInterfaceDevice.class, CommandLineParser.class).
-                withArgs(this.generator, this.device, new GnuParser()).
+                withArgs(this.generator, this.device, new DefaultParser()).
                 addMockedMethod("processCommandLineOptions", String[].class).
                 addMockedMethod("doInteractive").addMockedMethod("doCommandLine").createStrictMock();
 

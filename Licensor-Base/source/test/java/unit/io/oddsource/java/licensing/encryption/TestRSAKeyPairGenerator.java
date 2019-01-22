@@ -332,7 +332,7 @@ public class TestRSAKeyPairGenerator
                 "com.nicholaswilliams.java.mock",
                 "TestGenerateJavaCode02",
                 "TestRSAKeyPairGenerator.TestDynamicCompileInterface",
-                new String[] { "TestRSAKeyPairGenerator" },
+                new String[] { "io.oddsource.java.licensing.encryption.TestRSAKeyPairGenerator" },
                 "public long getSystemTimeInSeconds()",
                 "System.currentTimeMillis() / 1000L"
         );
@@ -342,7 +342,7 @@ public class TestRSAKeyPairGenerator
         assertEquals("The code is not correct.",
                      "package com.nicholaswilliams.java.mock;\r\n" +
                      "\r\n" +
-                     "import TestRSAKeyPairGenerator;\r\n" +
+                     "import io.oddsource.java.licensing.encryption.TestRSAKeyPairGenerator;\r\n" +
                      "\r\n" +
                      "public final class TestGenerateJavaCode02 implements TestRSAKeyPairGenerator.TestDynamicCompileInterface\r\n" +
                      "{\r\n" +

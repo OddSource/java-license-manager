@@ -130,6 +130,7 @@ public class MockPermissiveSecurityManager extends SecurityManager
     }
 
     @Override
+    @SuppressWarnings("deprecation")
     public boolean checkTopLevelWindow(Object o)
     {
         return true;
@@ -141,11 +142,13 @@ public class MockPermissiveSecurityManager extends SecurityManager
     }
 
     @Override
+    @SuppressWarnings("deprecation")
     public void checkSystemClipboardAccess()
     {
     }
 
     @Override
+    @SuppressWarnings("deprecation")
     public void checkAwtEventQueueAccess()
     {
     }
@@ -166,6 +169,7 @@ public class MockPermissiveSecurityManager extends SecurityManager
     }
 
     @Override
+    @SuppressWarnings("deprecation")
     public void checkMemberAccess(Class<?> aClass, int i)
     {
     }

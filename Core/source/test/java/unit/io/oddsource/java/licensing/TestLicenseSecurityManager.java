@@ -26,9 +26,16 @@ import io.oddsource.java.licensing.immutable.ImmutableListIterator;
 import io.oddsource.java.licensing.mock.StateFlag;
 import org.junit.After;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 
+import java.io.Serializable;
+import java.lang.reflect.AccessibleObject;
+import java.lang.reflect.Constructor;
+import java.lang.reflect.Executable;
+import java.lang.reflect.Field;
 import java.lang.reflect.Member;
+import java.lang.reflect.Method;
 import java.lang.reflect.ReflectPermission;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
@@ -64,143 +71,187 @@ public class TestLicenseSecurityManager
     @Test
     public void testSecurityManagerIsSuitableReplacement02()
     {
-        final StateFlag checkMemberAccess1 = new StateFlag();
+        final StateFlag checkPermission = new StateFlag();
 
         assertFalse("The security manager should not be suitable.",
-                    LicenseSecurityManager.securityManagerIsSuitableReplacement(new SecurityManager() {
-                        @Override
-                        public void checkMemberAccess(Class<?> reflectionClass, int memberAccessType)
-                        {
-                            if(checkMemberAccess1.state)
-                                fail("checkMemberAccess should not have been called twice.");
-                            checkMemberAccess1.state = true;
-
-                            assertSame("The class is not correct.", License.class, reflectionClass);
-                            assertEquals("The access type is not correct.", Member.DECLARED, memberAccessType);
-                        }
-                        @Override
-                        public void checkPermission(Permission permission)
-                        {
-                            fail("checkPermission should not have been called.");
-                        }
-                    })
+            LicenseSecurityManager.securityManagerIsSuitableReplacement(new SecurityManager() {
+                @Override
+                @SuppressWarnings("deprecation")
+                public void checkMemberAccess(Class<?> reflectionClass, int memberAccessType)
+                {
+                    fail("checkMemberAccess should not have been called.");
+                }
+                @Override
+                public void checkPermission(Permission permission)
+                {
+                    if(checkPermission.state)
+                    {
+                        fail("checkPermission should not have been called twice.");
+                    }
+                    checkPermission.state = true;
+                    assertTrue(
+                        "The permission is not correct",
+                        permission instanceof LicenseSecurityManager.ObjectReflectionPermission
+                    );
+                    AccessibleObject target = (
+                        (LicenseSecurityManager.ObjectReflectionPermission) permission
+                    ).targets[0];
+                    assertSame("The class is not correct.", License.class, ((Member) target).getDeclaringClass());
+                }
+            })
         );
 
-        assertTrue("checkMemberAccess should have been called.", checkMemberAccess1.state);
+        assertTrue("checkPermission should have been called.", checkPermission.state);
     }
 
     @Test
     public void testSecurityManagerIsSuitableReplacement03()
     {
-        final StateFlag checkMemberAccess1 = new StateFlag();
-        final StateFlag checkMemberAccess2 = new StateFlag();
+        final StateFlag checkPermission1 = new StateFlag();
+        final StateFlag checkPermission2 = new StateFlag();
 
         assertFalse("The security manager should not be suitable.",
-                    LicenseSecurityManager.securityManagerIsSuitableReplacement(new SecurityManager() {
-                        @Override
-                        public void checkMemberAccess(Class<?> reflectionClass, int memberAccessType)
-                        {
-                            assertSame("The class is not correct.", checkMemberAccess1.state ? LicenseManager.class : License.class, reflectionClass);
-                            assertEquals("The access type is not correct.", Member.DECLARED, memberAccessType);
+            LicenseSecurityManager.securityManagerIsSuitableReplacement(new SecurityManager() {
+                @Override
+                @SuppressWarnings("deprecation")
+                public void checkMemberAccess(Class<?> reflectionClass, int memberAccessType)
+                {
+                    fail("checkMemberAccess should not have been called.");
+                }
+                @Override
+                public void checkPermission(Permission permission)
+                {
+                    assertTrue(
+                        "The permission is not correct",
+                        permission instanceof LicenseSecurityManager.ObjectReflectionPermission
+                    );
+                    AccessibleObject target = (
+                        (LicenseSecurityManager.ObjectReflectionPermission) permission
+                    ).targets[0];
+                    assertSame(
+                        "The class is not correct.",
+                        checkPermission1.state ? LicenseManager.class : License.class,
+                        ((Member) target).getDeclaringClass()
+                    );
 
-                            if(checkMemberAccess1.state)
-                                checkMemberAccess2.state = true;
-                            checkMemberAccess1.state = true;
+                    if(checkPermission1.state)
+                        checkPermission2.state = true;
+                    checkPermission1.state = true;
 
-                            if(reflectionClass == License.class)
-                                throw new SecurityException();
-                        }
-                        @Override
-                        public void checkPermission(Permission permission)
-                        {
-                            fail("checkPermission should not have been called.");
-                        }
-                    })
+                    if(((Member) target).getDeclaringClass() == License.class)
+                        throw new SecurityException();
+                }
+            })
         );
 
-        assertTrue("checkMemberAccess should have been called.", checkMemberAccess1.state);
-        assertTrue("checkMemberAccess should have been called twice.", checkMemberAccess2.state);
+        assertTrue("checkPermission should have been called.", checkPermission1.state);
+        assertTrue("checkPermission should have been called twice.", checkPermission2.state);
     }
 
     @Test
     public void testSecurityManagerIsSuitableReplacement04()
     {
-        final StateFlag checkMemberAccess1 = new StateFlag();
-        final StateFlag checkMemberAccess2 = new StateFlag();
-        final StateFlag checkPermission = new StateFlag();
+        final StateFlag checkPermission1 = new StateFlag();
+        final StateFlag checkPermission2 = new StateFlag();
+        final StateFlag checkPermission3 = new StateFlag();
 
         assertFalse("The security manager should not be suitable.",
-                    LicenseSecurityManager.securityManagerIsSuitableReplacement(new SecurityManager() {
-                        @Override
-                        public void checkMemberAccess(Class<?> reflectionClass, int memberAccessType)
-                        {
-                            assertSame("The class is not correct.", checkMemberAccess1.state ? LicenseManager.class : License.class, reflectionClass);
-                            assertEquals("The access type is not correct.", Member.DECLARED, memberAccessType);
+            LicenseSecurityManager.securityManagerIsSuitableReplacement(new SecurityManager() {
+                @Override
+                @SuppressWarnings("deprecation")
+                public void checkMemberAccess(Class<?> reflectionClass, int memberAccessType)
+                {
+                    fail("checkMemberAccess should not have been called.");
+                }
+                @Override
+                public void checkPermission(Permission permission)
+                {
+                    if(permission instanceof LicenseSecurityManager.ObjectReflectionPermission)
+                    {
+                        AccessibleObject target = (
+                            (LicenseSecurityManager.ObjectReflectionPermission) permission
+                        ).targets[0];
+                        Class<?> reflectionClass = ((Member) target).getDeclaringClass();
+                        assertSame(
+                            "The class is not correct.",
+                            checkPermission1.state ? LicenseManager.class : License.class,
+                            reflectionClass
+                        );
 
-                            if(checkMemberAccess1.state)
-                                checkMemberAccess2.state = true;
-                            checkMemberAccess1.state = true;
+                        if (checkPermission1.state)
+                            checkPermission2.state = true;
+                        checkPermission1.state = true;
 
+                        if (reflectionClass == License.class || reflectionClass == LicenseManager.class)
                             throw new SecurityException();
-                        }
-                        @Override
-                        public void checkPermission(Permission permission)
-                        {
-                            assertEquals("The permission object is not correct.", RuntimePermission.class, permission.getClass());
-                            assertEquals("The checked permission is not correct.", "setSecurityManager", permission.getName());
+                    }
 
-                            checkPermission.state = true;
-                        }
-                    })
+                    assertTrue("The permission object is not correct.", permission instanceof RuntimePermission);
+                    assertEquals("The checked permission is not correct.", "setSecurityManager", permission.getName());
+
+                    checkPermission3.state = true;
+                }
+            })
         );
 
-        assertTrue("checkMemberAccess should have been called.", checkMemberAccess1.state);
-        assertTrue("checkMemberAccess should have been called twice.", checkMemberAccess2.state);
-        assertTrue("checkPermission should have been called.", checkPermission.state);
+        assertTrue("checkPermission should have been called.", checkPermission1.state);
+        assertTrue("checkPermission should have been called twice.", checkPermission2.state);
+        assertTrue("checkPermission should have been called thrice.", checkPermission3.state);
     }
 
     @Test
     public void testSecurityManagerIsSuitableReplacement05()
     {
-        final StateFlag checkMemberAccess1 = new StateFlag();
-        final StateFlag checkMemberAccess2 = new StateFlag();
-        final StateFlag checkPermission = new StateFlag();
+        final StateFlag checkPermission1 = new StateFlag();
+        final StateFlag checkPermission2 = new StateFlag();
+        final StateFlag checkPermission3 = new StateFlag();
 
         assertTrue("The security manager should be suitable.",
-                   LicenseSecurityManager.securityManagerIsSuitableReplacement(new SecurityManager()
-                   {
-                       @Override
-                       public void checkMemberAccess(Class<?> reflectionClass, int memberAccessType)
-                       {
-                           assertSame("The class is not correct.",
-                                      checkMemberAccess1.state ? LicenseManager.class : License.class, reflectionClass);
-                           assertEquals("The access type is not correct.", Member.DECLARED, memberAccessType);
+            LicenseSecurityManager.securityManagerIsSuitableReplacement(new SecurityManager()
+            {
+                @Override
+                @SuppressWarnings("deprecation")
+                public void checkMemberAccess(Class<?> reflectionClass, int memberAccessType)
+                {
+                    fail("checkMemberAccess should not have been called.");
+                }
 
-                           if(checkMemberAccess1.state)
-                               checkMemberAccess2.state = true;
-                           checkMemberAccess1.state = true;
+                @Override
+                public void checkPermission(Permission permission)
+                {
+                    if(permission instanceof LicenseSecurityManager.ObjectReflectionPermission)
+                    {
+                        AccessibleObject target = (
+                            (LicenseSecurityManager.ObjectReflectionPermission) permission
+                        ).targets[0];
+                        Class<?> reflectionClass = ((Member) target).getDeclaringClass();
+                        assertSame(
+                            "The class is not correct.",
+                            checkPermission1.state ? LicenseManager.class : License.class,
+                            reflectionClass
+                        );
 
-                           throw new SecurityException();
-                       }
+                        if (checkPermission1.state)
+                            checkPermission2.state = true;
+                        checkPermission1.state = true;
 
-                       @Override
-                       public void checkPermission(Permission permission)
-                       {
-                           assertEquals("The permission object is not correct.", RuntimePermission.class,
-                                        permission.getClass());
-                           assertEquals("The checked permission is not correct.", "setSecurityManager",
-                                        permission.getName());
+                        if (reflectionClass == License.class || reflectionClass == LicenseManager.class)
+                            throw new SecurityException();
+                    }
 
-                           checkPermission.state = true;
+                    assertTrue("The permission object is not correct.", permission instanceof RuntimePermission);
+                    assertEquals("The checked permission is not correct.", "setSecurityManager", permission.getName());
 
-                           throw new SecurityException();
-                       }
-                   })
-                  );
+                    checkPermission3.state = true;
 
-        assertTrue("checkMemberAccess should have been called.", checkMemberAccess1.state);
-        assertTrue("checkMemberAccess should have been called twice.", checkMemberAccess2.state);
-        assertTrue("checkPermission should have been called.", checkPermission.state);
+                    throw new SecurityException();
+                }
+            })
+        );
+
+        assertTrue("checkPermission should have been called.", checkPermission1.state);
+        assertTrue("checkPermission should have been called twice.", checkPermission2.state);
+        assertTrue("checkPermission should have been called thrice.", checkPermission3.state);
     }
 
     @Test(expected=SecurityException.class)
@@ -215,196 +266,173 @@ public class TestLicenseSecurityManager
         this.manager.checkPermission(new ReflectPermission("suppressAccessChecks"));
     }
 
-    @Test(expected=SecurityException.class)
-    public void testCheckMemberAccess01()
+    private void checkMemberAccess(Class<?> targetClass, String methodName, Class<?>... parameterTypes)
+        throws NoSuchMethodException
     {
-        this.manager.checkMemberAccess(DataSignatureManager.class, Member.DECLARED);
+        this.manager.checkPermission(
+            new LicenseSecurityManager.ObjectReflectionPermission(
+                "suppressAccessChecks",
+                new AccessibleObject[]{targetClass.getDeclaredMethod(methodName, parameterTypes)}
+            )
+        );
     }
 
     @Test(expected=SecurityException.class)
-    public void testCheckMemberAccess02()
+    public void testCheckMemberAccess01() throws NoSuchMethodException
     {
-        this.manager.checkMemberAccess(License.class, Member.DECLARED);
+        this.checkMemberAccess(DataSignatureManager.class, "getSignature");
     }
 
     @Test(expected=SecurityException.class)
-    public void testCheckMemberAccess03()
+    public void testCheckMemberAccess02() throws NoSuchMethodException
     {
-        this.manager.checkMemberAccess(LicenseManager.class, Member.DECLARED);
+        this.checkMemberAccess(License.class, "deserialize", byte[].class);
     }
 
     @Test(expected=SecurityException.class)
-    public void testCheckMemberAccess04()
+    public void testCheckMemberAccess03() throws NoSuchMethodException
     {
-        this.manager.checkMemberAccess(LicenseSecurityManager.class, Member.DECLARED);
+        this.checkMemberAccess(LicenseManager.class, "validateLicense", License.class);
     }
 
     @Test(expected=SecurityException.class)
-    public void testCheckMemberAccess05()
+    public void testCheckMemberAccess04() throws NoSuchMethodException
     {
-        this.manager.checkMemberAccess(ObjectSerializer.class, Member.DECLARED);
-    }
-
-    @Test
-    public void testCheckMemberAccess06()
-    {
-        this.manager.checkMemberAccess(SignedLicense.class, Member.DECLARED);
+        this.checkMemberAccess(LicenseSecurityManager.class, "getSecurityContext");
     }
 
     @Test(expected=SecurityException.class)
-    public void testCheckMemberAccess07()
+    public void testCheckMemberAccess05() throws NoSuchMethodException
     {
-        this.manager.checkMemberAccess(ImmutableAbstractCollection.class, Member.DECLARED);
+        this.checkMemberAccess(ObjectSerializer.class, "writeObject", Serializable.class);
     }
 
     @Test(expected=SecurityException.class)
-    public void testCheckMemberAccess08()
+    public void testCheckMemberAccess06() throws NoSuchMethodException
     {
-        this.manager.checkMemberAccess(ImmutableArrayList.class, Member.DECLARED);
+        this.checkMemberAccess(SignedLicense.class, "getSignatureContent");
     }
 
     @Test(expected=SecurityException.class)
-    public void testCheckMemberAccess09()
+    public void testCheckMemberAccess07() throws NoSuchMethodException
     {
-        this.manager.checkMemberAccess(ImmutableIterator.class, Member.DECLARED);
+        this.checkMemberAccess(ImmutableAbstractCollection.class, "checkValidity");
     }
 
     @Test(expected=SecurityException.class)
-    public void testCheckMemberAccess10()
+    public void testCheckMemberAccess08() throws NoSuchMethodException
     {
-        this.manager.checkMemberAccess(ImmutableLinkedHashSet.class, Member.DECLARED);
+        this.checkMemberAccess(ImmutableArrayList.class, "indexOf", Object.class);
     }
 
     @Test(expected=SecurityException.class)
-    public void testCheckMemberAccess11()
+    public void testCheckMemberAccess09() throws NoSuchMethodException
     {
-        this.manager.checkMemberAccess(ImmutableListIterator.class, Member.DECLARED);
-    }
-
-    @Test
-    public void testCheckMemberAccess12()
-    {
-        this.manager.checkMemberAccess(DataSignatureManager.class, Member.PUBLIC);
-    }
-
-    @Test
-    public void testCheckMemberAccess13()
-    {
-        this.manager.checkMemberAccess(License.class, Member.PUBLIC);
-    }
-
-    @Test
-    public void testCheckMemberAccess14()
-    {
-        this.manager.checkMemberAccess(LicenseManager.class, Member.PUBLIC);
-    }
-
-    @Test
-    public void testCheckMemberAccess15()
-    {
-        this.manager.checkMemberAccess(LicenseSecurityManager.class, Member.PUBLIC);
-    }
-
-    @Test
-    public void testCheckMemberAccess16()
-    {
-        this.manager.checkMemberAccess(ObjectSerializer.class, Member.PUBLIC);
-    }
-
-    @Test
-    public void testCheckMemberAccess17()
-    {
-        this.manager.checkMemberAccess(SignedLicense.class, Member.PUBLIC);
-    }
-
-    @Test
-    public void testCheckMemberAccess18()
-    {
-        this.manager.checkMemberAccess(ImmutableAbstractCollection.class, Member.PUBLIC);
-    }
-
-    @Test
-    public void testCheckMemberAccess19()
-    {
-        this.manager.checkMemberAccess(ImmutableArrayList.class, Member.PUBLIC);
-    }
-
-    @Test
-    public void testCheckMemberAccess20()
-    {
-        this.manager.checkMemberAccess(ImmutableIterator.class, Member.PUBLIC);
-    }
-
-    @Test
-    public void testCheckMemberAccess21()
-    {
-        this.manager.checkMemberAccess(ImmutableLinkedHashSet.class, Member.PUBLIC);
-    }
-
-    @Test
-    public void testCheckMemberAccess22()
-    {
-        this.manager.checkMemberAccess(ImmutableListIterator.class, Member.PUBLIC);
-    }
-
-    @Test
-    public void testCheckMemberAccess23()
-    {
-        this.manager.checkMemberAccess(FeatureRestriction.class, Member.PUBLIC);
-    }
-
-    @Test
-    public void testCheckMemberAccess24()
-    {
-        this.manager.checkMemberAccess(FeatureRestriction.class, Member.DECLARED);
-    }
-
-    @Test
-    public void testCheckMemberAccess25()
-    {
-        this.manager.checkMemberAccess(String.class, Member.DECLARED);
-    }
-
-    @Test
-    public void testCheckMemberAccess26()
-    {
-        this.manager.checkMemberAccess(Test.class, Member.DECLARED);
-    }
-
-    @Test
-    public void testCheckMemberAccess27()
-    {
-        this.manager.checkMemberAccess(Member.class, Member.DECLARED);
-    }
-
-    @Test
-    public void testCheckMemberAccess28()
-    {
-        this.manager.checkMemberAccess(Object.class, Member.DECLARED);
-    }
-
-    @Test
-    public void testCheckMemberAccess29()
-    {
-        this.manager.checkMemberAccess(java.util.ArrayList.class, Member.DECLARED);
+        this.checkMemberAccess(ImmutableIterator.class, "hasNext");
     }
 
     @Test(expected=SecurityException.class)
+    public void testCheckMemberAccess10() throws NoSuchMethodException
+    {
+        this.checkMemberAccess(ImmutableLinkedHashSet.class, "get", int.class);
+    }
+
+    @Test(expected=SecurityException.class)
+    public void testCheckMemberAccess11() throws NoSuchMethodException
+    {
+        this.checkMemberAccess(ImmutableListIterator.class, "hasNext");
+    }
+
+    @Test(expected=SecurityException.class)
+    public void testCheckMemberAccess12() throws NoSuchMethodException
+    {
+        this.checkMemberAccess(String.class, "checkBounds", byte[].class, int.class, int.class);
+    }
+
+    @Test(expected=SecurityException.class)
+    public void testCheckMemberAccess13() throws NoSuchMethodException
+    {
+        this.checkMemberAccess(System.class, "checkIO");
+    }
+
+    @Test(expected=SecurityException.class)
+    public void testCheckMemberAccess14() throws NoSuchMethodException
+    {
+        this.checkMemberAccess(Class.class, "getInterfaces0");
+    }
+
+    @Test
+    public void testCheckMemberAccess15() throws NoSuchMethodException
+    {
+        this.checkMemberAccess(FeatureRestriction.class, "operand");
+    }
+
+    @Test
+    public void testCheckMemberAccess16() throws NoSuchMethodException
+    {
+        this.checkMemberAccess(Test.class, "timeout");
+    }
+
+    @Test
+    public void testCheckMemberAccess17() throws NoSuchMethodException
+    {
+        this.checkMemberAccess(Integer.class, "toString");
+    }
+
+    @Test(expected=SecurityException.class)
+    public void testCheckMemberAccess18() throws NoSuchMethodException
+    {
+        this.checkMemberAccess(AccessibleObject.class, "setAccessible", boolean.class);
+    }
+
+    @Test(expected=SecurityException.class)
+    public void testCheckMemberAccess19() throws NoSuchMethodException
+    {
+        this.checkMemberAccess(Constructor.class, "acquireConstructorAccessor");
+    }
+
+    @Test(expected=SecurityException.class)
+    public void testCheckMemberAccess20() throws NoSuchMethodException
+    {
+        this.checkMemberAccess(Executable.class, "synthesizeAllParams");
+    }
+
+    @Test(expected=SecurityException.class)
+    public void testCheckMemberAccess21() throws NoSuchMethodException
+    {
+        this.checkMemberAccess(Field.class, "getGenericInfo");
+    }
+
+    @Test(expected=SecurityException.class)
+    public void testCheckMemberAccess22() throws NoSuchMethodException
+    {
+        this.checkMemberAccess(Method.class, "getFactory");
+    }
+
+    @Test
+    public void testCheckMemberAccess23() throws NoSuchMethodException
+    {
+        this.checkMemberAccess(Object.class, "hashCode");
+    }
+
+    @Test
+    public void testCheckMemberAccess24() throws NoSuchMethodException
+    {
+        this.checkMemberAccess(java.util.ArrayList.class, "ensureCapacityInternal", int.class);
+    }
+
+    @Test(expected=SecurityException.class)
+    @Ignore("Un-skip after OddSource/java-license-manager#5 is fixed.")
     public void testPrivateReflection01() throws NoSuchFieldException
     {
-        License.class.getDeclaredField("goodAfterDate");
+        License.class.getDeclaredField("goodAfterDate").setAccessible(true);
     }
 
     @Test(expected=SecurityException.class)
+    @Ignore("Un-skip after OddSource/java-license-manager#5 is fixed.")
     public void testPrivateReflection02() throws NoSuchFieldException
     {
-        LicenseManager.class.getDeclaredField("licenseCache");
-    }
-
-    @Test(expected=SecurityException.class)
-    public void testPrivateReflection03() throws NoSuchFieldException
-    {
-        LicenseManager.class.getDeclaredClasses();
+        LicenseManager.class.getDeclaredField("licenseCache").setAccessible(true);
     }
 
     @Test
@@ -426,15 +454,25 @@ public class TestLicenseSecurityManager
     }
 
     @Test(expected=SecurityException.class)
+    @Ignore("Un-skip after OddSource/java-license-manager#5 is fixed.")
     public void testReflectionOnClassClassBlocked() throws NoSuchMethodException
     {
-        java.lang.Class.class.getDeclaredMethod("privateGetDeclaredMethods", boolean.class);
+        java.lang.Class.class.getDeclaredMethod("privateGetDeclaredMethods", boolean.class).setAccessible(true);
+    }
+
+    @Test(expected=NoSuchFieldException.class)
+    public void testReflectionOnSecurityManagerBlocked() throws NoSuchFieldException
+    {
+        // This used to get all the way to SecurityException, but now it's NoSuchFieldException because built-in Java
+        // security prevents reflective access to the security manager
+        java.lang.System.class.getDeclaredField("security").setAccessible(true);
     }
 
     @Test(expected=SecurityException.class)
-    public void testReflectionOnSecurityManagerBlocked() throws NoSuchFieldException
+    @Ignore("Un-skip after OddSource/java-license-manager#5 is fixed.")
+    public void testReflectionOnSecurityManagerSetterBlocked() throws NoSuchMethodException
     {
-        java.lang.System.class.getDeclaredField("security");
+        java.lang.System.class.getDeclaredMethod("setSecurityManager0", SecurityManager.class).setAccessible(true);
     }
 
     @Test
@@ -491,8 +529,8 @@ public class TestLicenseSecurityManager
         this.manager.checkMulticast(InetAddress.getByName("127.0.0.1"));
     }
 
-    @SuppressWarnings("deprecation")
     @Test
+    @SuppressWarnings("deprecation")
     public void testCheckMulticastWithByte() throws UnknownHostException
     {
         this.manager.checkMulticast(InetAddress.getByName("127.0.0.1"), (byte)0x00);
@@ -511,12 +549,14 @@ public class TestLicenseSecurityManager
     }
 
     @Test
+    @SuppressWarnings("deprecation")
     public void testCheckSystemClipBoardAccess()
     {
         this.manager.checkSystemClipboardAccess();
     }
 
     @Test
+    @SuppressWarnings("deprecation")
     public void testCheckAwtEventQueueAccess()
     {
         this.manager.checkAwtEventQueueAccess();

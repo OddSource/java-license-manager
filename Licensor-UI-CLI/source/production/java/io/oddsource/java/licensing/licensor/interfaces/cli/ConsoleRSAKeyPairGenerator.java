@@ -28,11 +28,10 @@ import io.oddsource.java.licensing.exception.AlgorithmNotSupportedException;
 import io.oddsource.java.licensing.exception.InappropriateKeyException;
 import io.oddsource.java.licensing.exception.InappropriateKeySpecificationException;
 import io.oddsource.java.licensing.exception.RSA2048NotSupportedException;
-import io.oddsource.java.licensing.licensor.interfaces.cli.spi.CliOptionsBuilder;
 import io.oddsource.java.licensing.licensor.interfaces.cli.spi.TextInterfaceDevice;
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
-import org.apache.commons.cli.GnuParser;
+import org.apache.commons.cli.DefaultParser;
 import org.apache.commons.cli.HelpFormatter;
 import org.apache.commons.cli.Option;
 import org.apache.commons.cli.Options;
@@ -80,65 +79,61 @@ public class ConsoleRSAKeyPairGenerator
                                             "[-privatePackage <package>] [-publicPackage <package>] " +
                                             "[-passwordPackage <package>] [-privatePasswordPackage <package>]]";
 
-    private static final Option HELP = CliOptionsBuilder.get().withDescription("Display this help message").
-            hasArg(false).create("help");
+    private static final Option HELP = Option.builder("help").desc("Display this help message").hasArg(false).build();
 
-    private static final Option INTERACTIVE = CliOptionsBuilder.get().
-            withDescription("Specify to use interactive mode and ignore command-line options").
-            isRequired(false).hasArg(false).create("interactive");
+    private static final Option INTERACTIVE = Option.builder("interactive").
+            desc("Specify to use interactive mode and ignore command-line options").
+            required(false).hasArg(false).build();
 
-    private static final Option GENERATE_CLASSES = CliOptionsBuilder.get().
-            withDescription("Specify to generate compilable Java classes instead of key files").
-            isRequired(false).hasArg(false).create("classes");
+    private static final Option GENERATE_CLASSES = Option.builder("classes").
+            desc("Specify to generate compilable Java classes instead of key files").
+            required(false).hasArg(false).build();
 
-    private static final Option PRIVATE_FILE = CliOptionsBuilder.get().withArgName("file|class name").
-            withDescription("The name of the private key file or class to generate (required unless in " +
-                            "interactive mode)").
-            isRequired(true).hasArg(true).create("private");
+    private static final Option PRIVATE_FILE = Option.builder("private").argName("file|class name").
+            desc("The name of the private key file or class to generate (required unless in interactive mode)").
+            required(true).hasArg(true).build();
 
-    private static final Option PRIVATE_PACKAGE = CliOptionsBuilder.get().withArgName("package").
-            withDescription("The name of the package to use for the private key class (optional, ignored unless " +
-                            "generating classes)").
-            isRequired(false).hasArg(true).create("privatePackage");
+    private static final Option PRIVATE_PACKAGE = Option.builder("privatePackage").argName("package").
+            desc("The name of the package to use for the private key class (optional, ignored unless " +
+                 "generating classes)").
+            required(false).hasArg(true).build();
 
-    private static final Option PUBLIC_FILE = CliOptionsBuilder.get().withArgName("file|class name").
-            withDescription("The name of the public key file or class to generate (required unless in " +
-                            "interactive mode)").
-            isRequired(true).hasArg(true).create("public");
+    private static final Option PUBLIC_FILE = Option.builder("public").argName("file|class name").
+            desc("The name of the public key file or class to generate (required unless in interactive mode)").
+            required(true).hasArg(true).build();
 
-    private static final Option PUBLIC_PACKAGE = CliOptionsBuilder.get().withArgName("package").
-            withDescription("The name of the package to use for the public key class (optional, ignored unless " +
-                            "generating classes)").
-            isRequired(false).hasArg(true).create("publicPackage");
+    private static final Option PUBLIC_PACKAGE = Option.builder("publicPackage").argName("package").
+            desc("The name of the package to use for the public key class (optional, ignored unless " +
+                 "generating classes)").
+            required(false).hasArg(true).build();
 
-    private static final Option PASSWORD = CliOptionsBuilder.get().withArgName("password").
-            withDescription("The password to use to encrypt the public and private keys (required unless in " +
-                            "interactive mode)").
-            isRequired(true).hasArg(true).create("password");
+    private static final Option PASSWORD = Option.builder("password").argName("password").
+            desc("The password to use to encrypt the public and private keys (required unless in interactive mode)").
+            required(true).hasArg(true).build();
 
-    private static final Option PASSWORD_CLASS = CliOptionsBuilder.get().withArgName("class name").
-            withDescription("The name of the password storage class to generate (optional, ignored unless " +
-                            "generating classes)").
-            isRequired(false).hasArg(true).create("passwordClass");
+    private static final Option PASSWORD_CLASS = Option.builder("passwordClass").argName("class name").
+            desc("The name of the password storage class to generate (optional, ignored unless " +
+                 "generating classes)").
+            required(false).hasArg(true).build();
 
-    private static final Option PASSWORD_PACKAGE = CliOptionsBuilder.get().withArgName("package").
-            withDescription("The name of the package to use for the password storage class (optional, ignored " +
-                            "unless generating classes)").
-            isRequired(false).hasArg(true).create("passwordPackage");
+    private static final Option PASSWORD_PACKAGE = Option.builder("passwordPackage").argName("package").
+            desc("The name of the package to use for the password storage class (optional, ignored " +
+                 "unless generating classes)").
+            required(false).hasArg(true).build();
 
-    private static final Option PRIVATE_PASSWORD = CliOptionsBuilder.get().withArgName("password").
-            withDescription("A different password to use to encrypt the private key (optional)").
-            isRequired(false).hasArg(true).create("privatePassword");
+    private static final Option PRIVATE_PASSWORD = Option.builder("privatePassword").argName("password").
+            desc("A different password to use to encrypt the private key (optional)").
+            required(false).hasArg(true).build();
 
-    private static final Option PRIVATE_PASSWORD_CLASS = CliOptionsBuilder.get().withArgName("class name").
-            withDescription("The name of the private key password storage class to generate (optional, ignored " +
-                            "unless generating classes)").
-            isRequired(false).hasArg(true).create("privatePasswordClass");
+    private static final Option PRIVATE_PASSWORD_CLASS = Option.builder("privatePasswordClass").argName("class name").
+            desc("The name of the private key password storage class to generate (optional, ignored " +
+                 "unless generating classes)").
+            required(false).hasArg(true).build();
 
-    private static final Option PRIVATE_PASSWORD_PACKAGE = CliOptionsBuilder.get().withArgName("package").
-            withDescription("The name of the package to use for the private key password storage class (optional, " +
-                            "ignored unless generating classes)").
-            isRequired(false).hasArg(true).create("privatePasswordPackage");
+    private static final Option PRIVATE_PASSWORD_PACKAGE = Option.builder("privatePasswordPackage").argName("package").
+            desc("The name of the package to use for the private key password storage class (optional, " +
+                 "ignored unless generating classes)").
+            required(false).hasArg(true).build();
 
     private final RSAKeyPairGeneratorInterface generator;
 
@@ -595,6 +590,6 @@ public class ConsoleRSAKeyPairGenerator
 
         ConsoleUtilities.configureInterfaceDevice(device);
 
-        new ConsoleRSAKeyPairGenerator(new RSAKeyPairGenerator(), device, new GnuParser()).run(arguments);
+        new ConsoleRSAKeyPairGenerator(new RSAKeyPairGenerator(), device, new DefaultParser()).run(arguments);
     }
 }

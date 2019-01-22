@@ -357,6 +357,12 @@ class MockTestObject1 implements Serializable
         MockTestObject1 test = (MockTestObject1)o;
         return test.coolTest == this.coolTest && Arrays.equals(test.myArray, this.myArray);
     }
+
+    @Override
+    public int hashCode()
+    {
+        return super.hashCode();
+    }
 }
 
 class MockTestObject2 implements Serializable
@@ -377,5 +383,11 @@ class MockTestObject2 implements Serializable
                 (this.aString == null && test.aString == null) ||
                 (this.aString != null && this.aString.equals(test.aString))
         );
+    }
+
+    @Override
+    public int hashCode()
+    {
+        return super.hashCode();
     }
 }

@@ -196,8 +196,8 @@ public final class RSAKeyPairGenerator implements RSAKeyPairGeneratorInterface
                 privateKeyProvider.getClassName(),
                 "PrivateKeyDataProvider",
                 new String[] {
-                        "PrivateKeyDataProvider",
-                        "KeyNotFoundException"
+                        "io.oddsource.java.licensing.encryption.PrivateKeyDataProvider",
+                        "io.oddsource.java.licensing.exception.KeyNotFoundException"
                 },
                 "public byte[] getEncryptedPrivateKeyData() throws KeyNotFoundException",
                 privateKeyCode
@@ -208,8 +208,8 @@ public final class RSAKeyPairGenerator implements RSAKeyPairGeneratorInterface
                 publicKeyProvider.getClassName(),
                 "PublicKeyDataProvider",
                 new String[] {
-                        "PublicKeyDataProvider",
-                        "KeyNotFoundException"
+                        "io.oddsource.java.licensing.encryption.PublicKeyDataProvider",
+                        "io.oddsource.java.licensing.exception.KeyNotFoundException"
                 },
                 "public byte[] getEncryptedPublicKeyData() throws KeyNotFoundException",
                 publicKeyCode
@@ -239,7 +239,7 @@ public final class RSAKeyPairGenerator implements RSAKeyPairGeneratorInterface
                 passwordProvider.getPackageName(),
                 passwordProvider.getClassName(),
                 "PasswordProvider",
-                new String[] { "PasswordProvider" },
+                new String[] { "io.oddsource.java.licensing.encryption.PasswordProvider" },
                 "public char[] getPassword()",
                 passwordCode
         ));

@@ -1,5 +1,5 @@
 /*
- * ImmutableModifiedThroughReflectionException.java from LicenseManager modified Friday, September 21, 2012 07:46:54 CDT (-0500).
+ * ImmutableModifiedThroughReflectionError.java from LicenseManager modified Friday, September 21, 2012 07:46:54 CDT (-0500).
  *
  * Copyright 2010-2013 the original author or authors.
  *
@@ -27,26 +27,26 @@ package io.oddsource.java.licensing.immutable;
  * @since 1.0.0
  */
 @SuppressWarnings("unused")
-public class ImmutableModifiedThroughReflectionException extends Error
+public class ImmutableModifiedThroughReflectionError extends Error
 {
     private static final long serialVersionUID = 1L;
 
-    public ImmutableModifiedThroughReflectionException()
+    public ImmutableModifiedThroughReflectionError()
     {
         super("This immutable object appears to have been modified through reflection.");
     }
 
-    public ImmutableModifiedThroughReflectionException(String message)
+    public ImmutableModifiedThroughReflectionError(String message)
     {
         super(message);
     }
 
-    public ImmutableModifiedThroughReflectionException(Throwable cause)
+    public ImmutableModifiedThroughReflectionError(Throwable cause)
     {
         super("This immutable object appears to have been modified through reflection.", cause);
     }
 
-    public ImmutableModifiedThroughReflectionException(String message, Throwable cause)
+    public ImmutableModifiedThroughReflectionError(String message, Throwable cause)
     {
         super(message, cause);
     }

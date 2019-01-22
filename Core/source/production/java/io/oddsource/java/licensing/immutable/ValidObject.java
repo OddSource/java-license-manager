@@ -31,9 +31,9 @@ abstract class ValidObject
 {
     /**
      * Checks the validity of this object, and throws an
-     * {@link ImmutableModifiedThroughReflectionException} if that check fails.
+     * {@link ImmutableModifiedThroughReflectionError} if that check fails.
      *
-     * @throws ImmutableModifiedThroughReflectionException if the validity check fails.
+     * @throws ImmutableModifiedThroughReflectionError if the validity check fails.
      */
     protected abstract void checkValidity();
 }

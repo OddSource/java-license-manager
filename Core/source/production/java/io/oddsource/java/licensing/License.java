@@ -496,8 +496,7 @@ public final class License implements Serializable, Cloneable
     @Override
     public final String toString()
     {
-        StringBuilder builder = new StringBuilder();
-        builder.append('[')
+        return new StringBuilder().append('[')
                .append(this.productKey == null ? "" : this.productKey).append("][")
                .append(this.holder == null ? "" : this.holder).append("][")
                .append(this.issuer == null ? "" : this.issuer).append("][")
@@ -507,7 +506,6 @@ public final class License implements Serializable, Cloneable
                .append(this.goodBeforeDate).append("][")
                .append(this.numberOfLicenses).append(']')
                .append(this.features).toString();
-        return builder.toString();
     }
 
     /**
@@ -591,7 +589,7 @@ public final class License implements Serializable, Cloneable
                 throw new IllegalArgumentException("The input argument did not contain exactly two parts.");
 
             String[] parts = input.split("" + (char)0x1F);
-            if(parts == null || parts.length != 2)
+            if(parts.length != 2)
                 throw new IllegalArgumentException("The input argument did not contain exactly two parts.");
 
             return new License.Feature(parts[0], Long.parseLong(parts[1]));

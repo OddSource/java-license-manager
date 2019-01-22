@@ -35,17 +35,17 @@ public class InvalidSignatureException extends RuntimeException
         super("The signature provided is invalid and cannot be verified.");
     }
 
-    public InvalidSignatureException(String message)
+    public InvalidSignatureException(final String message)
     {
         super(message);
     }
 
-    public InvalidSignatureException(Throwable cause)
+    public InvalidSignatureException(final Throwable cause)
     {
         super("The signature provided is invalid and cannot be verified.", cause);
     }
 
-    public InvalidSignatureException(String message, Throwable cause)
+    public InvalidSignatureException(final String message, final Throwable cause)
     {
         super(message, cause);
     }

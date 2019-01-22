@@ -18,13 +18,10 @@
 
 package io.oddsource.java.licensing.encryption;
 
-import io.oddsource.java.licensing.LicensingCharsets;
-import io.oddsource.java.licensing.exception.AlgorithmNotSupportedException;
-import io.oddsource.java.licensing.exception.FailedToDecryptException;
-import io.oddsource.java.licensing.exception.InappropriateKeyException;
-import io.oddsource.java.licensing.exception.InappropriateKeySpecificationException;
-import org.apache.commons.codec.binary.Base64;
-
+import java.security.InvalidKeyException;
+import java.security.NoSuchAlgorithmException;
+import java.security.SecureRandom;
+import java.security.spec.InvalidKeySpecException;
 import javax.crypto.BadPaddingException;
 import javax.crypto.Cipher;
 import javax.crypto.IllegalBlockSizeException;
@@ -33,10 +30,15 @@ import javax.crypto.SecretKey;
 import javax.crypto.SecretKeyFactory;
 import javax.crypto.spec.PBEKeySpec;
 import javax.crypto.spec.SecretKeySpec;
-import java.security.InvalidKeyException;
-import java.security.NoSuchAlgorithmException;
-import java.security.SecureRandom;
-import java.security.spec.InvalidKeySpecException;
+
+import org.apache.commons.codec.binary.Base64;
+
+import io.oddsource.java.licensing.LicensingCharsets;
+import io.oddsource.java.licensing.exception.AlgorithmNotSupportedException;
+import io.oddsource.java.licensing.exception.FailedToDecryptException;
+import io.oddsource.java.licensing.exception.FailedToEncryptException;
+import io.oddsource.java.licensing.exception.InappropriateKeyException;
+import io.oddsource.java.licensing.exception.InappropriateKeySpecificationException;
 
 /**
  * A class for easy, strong, two-way encryption/decryption of strings. Versions prior to 0.9.1-beta used 256-bit AES
@@ -47,14 +49,50 @@ import java.security.spec.InvalidKeySpecException;
  * This encryptor still uses a combination of MD5+DES and SHA-1+AES encryption.<br />
  * <br />
  * Data encrypted with this class prior to version 0.9.1-beta cannot be decrypted anymore.
- * 
+ *
  * @author Nick Williams
- * @since 1.0.0
  * @version 1.5.0
+ * @since 1.0.0
  */
 public final class Encryptor
 {
     private static final int minimumPaddedLength = 20;
+
+    private static final SecureRandom random = new SecureRandom();
+
+    private static final char[] defaultPassphrase = {
+        'j', '4', 'K', 'g', 'U', '3', '0', '5', 'P', 'Z', 'p', '\'', 't',
+        '.', '"', '%', 'o', 'r', 'd', 'A', 'Y', '7', 'q', '*', '?', 'z',
+        '9', '%', '8', ']', 'a', 'm', 'N', 'L', '(', '0', 'W', 'x', '5',
+        'e', 'G', '4', '9', 'b', '1', 's', 'R', 'j', '(', '^', ';', '8',
+        'K', 'g', '2', 'w', '0', 'E', 'o', 'M',
+    };
+
+    private static final byte[] salt = {
+        (byte) 0xA9, (byte) 0xA2, (byte) 0xB5, (byte) 0xDE,
+        (byte) 0x2A, (byte) 0x8A, (byte) 0x9A, (byte) 0xE6,
+    };
+
+    private static final int iterationCount = 1024;
+
+    // must be 128, 192, 256; 128 is maximum without "unlimited strength" JCE policy files
+    private static final int aesKeyLength = 128;
+
+    private static final int intermediateKeyLength = aesKeyLength / 8;
+
+    private static final String aesWithSha1 = "AES With SHA-1 digest";
+
+    private static Cipher defaultEncryptionCipher;
+
+    private static Cipher defaultDecryptionCipher;
+
+    /**
+     * This class cannot be instantiated.
+     */
+    private Encryptor()
+    {
+        throw new AssertionError("This class cannot be instantiated.");
+    }
 
     /**
      * Encrypt the plain-text string using the default passphrase.
@@ -62,10 +100,12 @@ public final class Encryptor
      * bytes with randomized data.
      *
      * @param unencrypted The plain-text string to encrypt
+     *
      * @return the encrypted string Base64-encoded.
+     *
      * @see Encryptor#pad(byte[], int)
      */
-    public static String encrypt(String unencrypted)
+    public static String encrypt(final String unencrypted)
     {
         return Encryptor.encrypt(unencrypted.getBytes(LicensingCharsets.UTF_8));
     }
@@ -77,9 +117,10 @@ public final class Encryptor
      *
      * @param unencrypted The plain-text string to encrypt
      * @param passphrase The passphrase to encrypt the data with
+     *
      * @return the encrypted string Base64-encoded.
      */
-    public static String encrypt(String unencrypted, char[] passphrase)
+    public static String encrypt(final String unencrypted, final char[] passphrase)
     {
         return Encryptor.encrypt(unencrypted.getBytes(LicensingCharsets.UTF_8), passphrase);
     }
@@ -90,13 +131,15 @@ public final class Encryptor
      * bytes with randomized data.
      *
      * @param unencrypted The binary data to encrypt
+     *
      * @return the encrypted string Base64-encoded.
+     *
      * @see Encryptor#pad(byte[], int)
      */
-    public static String encrypt(byte[] unencrypted)
+    public static String encrypt(final byte[] unencrypted)
     {
         return new String(
-                Base64.encodeBase64URLSafe(Encryptor.encryptRaw(unencrypted)), LicensingCharsets.UTF_8
+            Base64.encodeBase64URLSafe(Encryptor.encryptRaw(unencrypted)), LicensingCharsets.UTF_8
         );
     }
 
@@ -107,16 +150,18 @@ public final class Encryptor
      *
      * @param unencrypted The binary data to encrypt
      * @param passphrase The passphrase to encrypt the data with
+     *
      * @return the encrypted string Base64-encoded.
+     *
      * @see Encryptor#pad(byte[], int)
      */
-    public static String encrypt(byte[] unencrypted, char[] passphrase)
+    public static String encrypt(final byte[] unencrypted, final char[] passphrase)
     {
         return new String(
-                Base64.encodeBase64URLSafe(Encryptor.encryptRaw(
-                        unencrypted, passphrase
-                )),
-                LicensingCharsets.UTF_8
+            Base64.encodeBase64URLSafe(Encryptor.encryptRaw(
+                unencrypted, passphrase
+            )),
+            LicensingCharsets.UTF_8
         );
     }
 
@@ -126,24 +171,22 @@ public final class Encryptor
      * bytes with randomized data.
      *
      * @param unencrypted The binary data to encrypt
+     *
      * @return the encrypted data.
+     *
      * @see Encryptor#pad(byte[], int)
      */
-    public static byte[] encryptRaw(byte[] unencrypted)
+    public static byte[] encryptRaw(final byte[] unencrypted)
     {
         try
         {
             return Encryptor.getDefaultEncryptionCipher().doFinal(
-                    Encryptor.pad(unencrypted, Encryptor.minimumPaddedLength)
+                Encryptor.pad(unencrypted, Encryptor.minimumPaddedLength)
             );
         }
-        catch(IllegalBlockSizeException e)
+        catch(final IllegalBlockSizeException | BadPaddingException e)
         {
-            throw new RuntimeException("While encrypting the data...", e);
-        }
-        catch(BadPaddingException e)
-        {
-            throw new RuntimeException("While encrypting the data...", e);
+            throw new FailedToEncryptException(e);
         }
     }
 
@@ -154,24 +197,22 @@ public final class Encryptor
      *
      * @param unencrypted The binary data to encrypt
      * @param passphrase The passphrase to encrypt the data with
+     *
      * @return the encrypted data.
+     *
      * @see Encryptor#pad(byte[], int)
      */
-    public static byte[] encryptRaw(byte[] unencrypted, char[] passphrase)
+    public static byte[] encryptRaw(final byte[] unencrypted, final char[] passphrase)
     {
         try
         {
             return Encryptor.getEncryptionCipher(passphrase).doFinal(
-                    Encryptor.pad(unencrypted, Encryptor.minimumPaddedLength)
+                Encryptor.pad(unencrypted, Encryptor.minimumPaddedLength)
             );
         }
-        catch(IllegalBlockSizeException e)
+        catch(final IllegalBlockSizeException | BadPaddingException e)
         {
-            throw new RuntimeException("While encrypting the data...", e);
-        }
-        catch(BadPaddingException e)
-        {
-            throw new RuntimeException("While encrypting the data...", e);
+            throw new FailedToEncryptException(e);
         }
     }
 
@@ -180,11 +221,14 @@ public final class Encryptor
      * Any padded data will be removed from the string prior to its return.
      *
      * @param encrypted The encrypted string to decrypt
+     *
      * @return the decrypted string.
-     * @throws FailedToDecryptException when the data was corrupt and undecryptable or when the provided decryption password was incorrect. It is impossible to know which is the actual cause.
+     *
+     * @throws FailedToDecryptException when the data was corrupt and undecryptable or when the provided decryption
+     *     password was incorrect. It is impossible to know which is the actual cause.
      * @see Encryptor#unPad(byte[])
      */
-    public static String decrypt(String encrypted)
+    public static String decrypt(final String encrypted)
     {
         return Encryptor.decrypt(Base64.decodeBase64(encrypted));
     }
@@ -195,11 +239,14 @@ public final class Encryptor
      *
      * @param encrypted The encrypted string to decrypt
      * @param passphrase The passphrase to decrypt the string with
+     *
      * @return the decrypted string.
-     * @throws FailedToDecryptException when the data was corrupt and undecryptable or when the provided decryption password was incorrect. It is impossible to know which is the actual cause.
+     *
+     * @throws FailedToDecryptException when the data was corrupt and undecryptable or when the provided decryption
+     *     password was incorrect. It is impossible to know which is the actual cause.
      * @see Encryptor#unPad(byte[])
      */
-    public static String decrypt(String encrypted, char[] passphrase)
+    public static String decrypt(final String encrypted, final char[] passphrase)
     {
         return Encryptor.decrypt(Base64.decodeBase64(encrypted), passphrase);
     }
@@ -209,11 +256,14 @@ public final class Encryptor
      * Any padded data will be removed from the string prior to its return.
      *
      * @param encrypted The encrypted data to decrypt
+     *
      * @return the decrypted string.
-     * @throws FailedToDecryptException when the data was corrupt and undecryptable or when the provided decryption password was incorrect. It is impossible to know which is the actual cause.
+     *
+     * @throws FailedToDecryptException when the data was corrupt and undecryptable or when the provided decryption
+     *     password was incorrect. It is impossible to know which is the actual cause.
      * @see Encryptor#unPad(byte[])
      */
-    public static String decrypt(byte[] encrypted)
+    public static String decrypt(final byte[] encrypted)
     {
         return new String(Encryptor.decryptRaw(encrypted), LicensingCharsets.UTF_8);
     }
@@ -224,14 +274,17 @@ public final class Encryptor
      *
      * @param encrypted The encrypted data to decrypt
      * @param passphrase The passphrase to decrypt the data with
+     *
      * @return the decrypted string.
-     * @throws FailedToDecryptException when the data was corrupt and undecryptable or when the provided decryption password was incorrect. It is impossible to know which is the actual cause.
+     *
+     * @throws FailedToDecryptException when the data was corrupt and undecryptable or when the provided decryption
+     *     password was incorrect. It is impossible to know which is the actual cause.
      * @see Encryptor#unPad(byte[])
      */
-    public static String decrypt(byte[] encrypted, char[] passphrase)
+    public static String decrypt(final byte[] encrypted, final char[] passphrase)
     {
         return new String(
-                Encryptor.decryptRaw(encrypted, passphrase), LicensingCharsets.UTF_8
+            Encryptor.decryptRaw(encrypted, passphrase), LicensingCharsets.UTF_8
         );
     }
 
@@ -240,23 +293,22 @@ public final class Encryptor
      * Any padded data will be removed from the string prior to its return.
      *
      * @param encrypted The encrypted data to decrypt
+     *
      * @return the decrypted binary data.
-     * @throws FailedToDecryptException when the data was corrupt and undecryptable or when the provided decryption password was incorrect. It is impossible to know which is the actual cause.
+     *
+     * @throws FailedToDecryptException when the data was corrupt and undecryptable or when the provided decryption
+     *     password was incorrect. It is impossible to know which is the actual cause.
      * @see Encryptor#unPad(byte[])
      */
-    public static byte[] decryptRaw(byte[] encrypted)
+    public static byte[] decryptRaw(final byte[] encrypted)
     {
         try
         {
             return Encryptor.unPad(
-                    Encryptor.getDefaultDecryptionCipher().doFinal(encrypted)
+                Encryptor.getDefaultDecryptionCipher().doFinal(encrypted)
             );
         }
-        catch(IllegalBlockSizeException e)
-        {
-            throw new FailedToDecryptException(e);
-        }
-        catch(BadPaddingException e)
+        catch(final IllegalBlockSizeException | BadPaddingException e)
         {
             throw new FailedToDecryptException(e);
         }
@@ -268,29 +320,26 @@ public final class Encryptor
      *
      * @param encrypted The encrypted data to decrypt
      * @param passphrase The passphrase to decrypt the data with
+     *
      * @return the decrypted binary data.
-     * @throws FailedToDecryptException when the data was corrupt and undecryptable or when the provided decryption password was incorrect. It is impossible to know which is the actual cause.
+     *
+     * @throws FailedToDecryptException when the data was corrupt and undecryptable or when the provided decryption
+     *     password was incorrect. It is impossible to know which is the actual cause.
      * @see Encryptor#unPad(byte[])
      */
-    public static byte[] decryptRaw(byte[] encrypted, char[] passphrase)
+    public static byte[] decryptRaw(final byte[] encrypted, final char[] passphrase)
     {
         try
         {
             return Encryptor.unPad(
-                    Encryptor.getDecryptionCipher(passphrase).doFinal(encrypted)
+                Encryptor.getDecryptionCipher(passphrase).doFinal(encrypted)
             );
         }
-        catch(IllegalBlockSizeException e)
-        {
-            throw new FailedToDecryptException(e);
-        }
-        catch(BadPaddingException e)
+        catch(final IllegalBlockSizeException | BadPaddingException e)
         {
             throw new FailedToDecryptException(e);
         }
     }
-
-    private static final SecureRandom random = new SecureRandom();
 
     /**
      * Pads a {@code byte} array to the specified length.
@@ -314,33 +363,37 @@ public final class Encryptor
      *
      * @param bytes The array of {@code byte}s to pad
      * @param length The length to pad the array of {@code byte}s to
+     *
      * @return the padded {@code byte} array.
+     *
      * @see Encryptor#unPad(byte[])
      */
-    private static byte[] pad(byte[] bytes, int length)
+    private static byte[] pad(final byte[] bytes, final int length)
     {
         if(bytes.length >= length)
         {
-            byte[] out = new byte[bytes.length + 1];
+            final byte[] out = new byte[bytes.length + 1];
             System.arraycopy(bytes, 0, out, 0, bytes.length);
-            out[bytes.length] = (byte)1;
+            out[bytes.length] = (byte) 1;
             return out;
         }
 
-        byte[] out = new byte[length + 1];
+        final byte[] out = new byte[length + 1];
 
         int i = 0;
         for(; i < bytes.length; i++)
+        {
             out[i] = bytes[i];
+        }
 
-        int padded = length - i;
+        final int padded = length - i;
 
         // fill the rest with random bytes
-        byte[] fill = new byte[padded - 1];
+        final byte[] fill = new byte[padded - 1];
         Encryptor.random.nextBytes(fill);
         System.arraycopy(fill, 0, out, i, padded - 1);
 
-        out[length] = (byte)(padded + 1);
+        out[length] = (byte) (padded + 1);
 
         return out;
     }
@@ -357,72 +410,54 @@ public final class Encryptor
      * left intact.
      *
      * @param bytes The array of {@code byte}s to un-pad
+     *
      * @return the un-padded {@code byte} array.
+     *
      * @see Encryptor#pad(byte[], int)
      */
-    private static byte[] unPad(byte[] bytes)
+    private static byte[] unPad(final byte[] bytes)
     {
-        int padded = (int)bytes[bytes.length - 1];
-        int targetLength = bytes.length - padded;
+        final int padded = (int) bytes[bytes.length - 1];
+        final int targetLength = bytes.length - padded;
 
-        byte[] out = new byte[targetLength];
+        final byte[] out = new byte[targetLength];
 
         System.arraycopy(bytes, 0, out, 0, targetLength);
 
         return out;
     }
 
-    private static Cipher defaultEncryptionCipher;
-
-    private static Cipher defaultDecryptionCipher;
-
-    private static final char[] defaultPassphrase = {
-            'j', '4', 'K', 'g', 'U', '3', '0', '5', 'P', 'Z', 'p', '\'', 't',
-            '.', '"', '%', 'o', 'r', 'd', 'A', 'Y', '7', 'q', '*', '?', 'z',
-            '9', '%', '8', ']', 'a', 'm', 'N', 'L', '(', '0', 'W', 'x', '5',
-            'e', 'G', '4', '9', 'b', '1', 's', 'R', 'j', '(', '^', ';', '8',
-            'K', 'g', '2', 'w', '0', 'E', 'o', 'M'
-    };
-
-    private static final byte[] salt = {
-            (byte)0xA9, (byte)0xA2, (byte)0xB5, (byte)0xDE,
-            (byte)0x2A, (byte)0x8A, (byte)0x9A, (byte)0xE6
-    };
-
-    private static final int iterationCount = 1024;
-
-    // must be 128, 192, 256; 128 is maximum without "unlimited strength" JCE policy files
-    private static final int aesKeyLength = 128;
-
-    private static SecretKey getSecretKey(char[] passphrase)
+    private static SecretKey getSecretKey(final char[] passphrase)
     {
         try
         {
-            PBEKeySpec keySpec = new PBEKeySpec(
-                    passphrase,
-                    Encryptor.salt,
-                    Encryptor.iterationCount,
-                    Encryptor.aesKeyLength
+            final PBEKeySpec keySpec = new PBEKeySpec(
+                passphrase,
+                Encryptor.salt,
+                Encryptor.iterationCount,
+                Encryptor.aesKeyLength
             );
 
-            byte[] shortKey = SecretKeyFactory.getInstance("PBEWithMD5AndDES").
-                    generateSecret(keySpec).getEncoded();
+            final byte[] shortKey = SecretKeyFactory.getInstance("PBEWithMD5AndDES").
+                generateSecret(keySpec).getEncoded();
 
-            byte[] intermediaryKey = new byte[Encryptor.aesKeyLength / 8];
-            for(int i = 0, j = 0; i < Encryptor.aesKeyLength / 8; i++)
+            final byte[] intermediaryKey = new byte[Encryptor.intermediateKeyLength];
+            for(int i = 0, j = 0; i < Encryptor.intermediateKeyLength; i++)
             {
                 intermediaryKey[i] = shortKey[j];
                 if(++j == shortKey.length)
+                {
                     j = 0;
+                }
             }
 
             return new SecretKeySpec(intermediaryKey, "AES");
         }
-        catch(NoSuchAlgorithmException e)
+        catch(final NoSuchAlgorithmException e)
         {
             throw new AlgorithmNotSupportedException("DES with an MD5 Digest", e);
         }
-        catch(InvalidKeySpecException e)
+        catch(final InvalidKeySpecException e)
         {
             throw new InappropriateKeySpecificationException(e);
         }
@@ -431,33 +466,35 @@ public final class Encryptor
     private static Cipher getDefaultEncryptionCipher()
     {
         if(Encryptor.defaultEncryptionCipher == null)
+        {
             Encryptor.defaultEncryptionCipher = Encryptor.getEncryptionCipher(Encryptor.defaultPassphrase);
+        }
 
         return Encryptor.defaultEncryptionCipher;
     }
 
-    private static Cipher getEncryptionCipher(char[] passphrase)
+    private static Cipher getEncryptionCipher(final char[] passphrase)
     {
         return Encryptor.getEncryptionCipher(Encryptor.getSecretKey(passphrase));
     }
 
-    private static Cipher getEncryptionCipher(SecretKey secretKey)
+    private static Cipher getEncryptionCipher(final SecretKey secretKey)
     {
         try
         {
-            Cipher cipher = Cipher.getInstance(secretKey.getAlgorithm());
+            final Cipher cipher = Cipher.getInstance(secretKey.getAlgorithm());
             cipher.init(Cipher.ENCRYPT_MODE, secretKey, Encryptor.random);
             return cipher;
         }
-        catch(NoSuchAlgorithmException e)
+        catch(final NoSuchAlgorithmException e)
         {
-            throw new AlgorithmNotSupportedException("AES With SHA-1 digest", e);
+            throw new AlgorithmNotSupportedException(Encryptor.aesWithSha1, e);
         }
-        catch(NoSuchPaddingException e)
+        catch(final NoSuchPaddingException e)
         {
-            throw new RuntimeException(e.getMessage(), e);
+            throw new FailedToEncryptException(e.getMessage(), e);
         }
-        catch(InvalidKeyException e)
+        catch(final InvalidKeyException e)
         {
             throw new InappropriateKeyException(e.getMessage(), e);
         }
@@ -466,43 +503,37 @@ public final class Encryptor
     private static Cipher getDefaultDecryptionCipher()
     {
         if(Encryptor.defaultDecryptionCipher == null)
+        {
             Encryptor.defaultDecryptionCipher = Encryptor.getDecryptionCipher(Encryptor.defaultPassphrase);
+        }
 
         return Encryptor.defaultDecryptionCipher;
     }
 
-    private static Cipher getDecryptionCipher(char[] passphrase)
+    private static Cipher getDecryptionCipher(final char[] passphrase)
     {
         return Encryptor.getDecryptionCipher(Encryptor.getSecretKey(passphrase));
     }
 
-    private static Cipher getDecryptionCipher(SecretKey secretKey)
+    private static Cipher getDecryptionCipher(final SecretKey secretKey)
     {
         try
         {
-            Cipher cipher = Cipher.getInstance(secretKey.getAlgorithm());
+            final Cipher cipher = Cipher.getInstance(secretKey.getAlgorithm());
             cipher.init(Cipher.DECRYPT_MODE, secretKey, Encryptor.random);
             return cipher;
         }
-        catch(NoSuchAlgorithmException e)
+        catch(final NoSuchAlgorithmException e)
         {
-            throw new AlgorithmNotSupportedException("AES With SHA-1 digest", e);
+            throw new AlgorithmNotSupportedException(Encryptor.aesWithSha1, e);
         }
-        catch(NoSuchPaddingException e)
+        catch(final NoSuchPaddingException e)
         {
-            throw new RuntimeException(e.getMessage(), e);
+            throw new FailedToDecryptException(e.getMessage(), e);
         }
-        catch(InvalidKeyException e)
+        catch(final InvalidKeyException e)
         {
             throw new InappropriateKeyException(e.getMessage(), e);
         }
-    }
-
-    /**
-     * This class cannot be instantiated.
-     */
-    private Encryptor()
-    {
-        throw new RuntimeException("This class cannot be instantiated.");
     }
 }

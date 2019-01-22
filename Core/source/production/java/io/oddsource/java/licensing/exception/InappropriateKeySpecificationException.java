@@ -1,5 +1,6 @@
 /*
- * InappropriateKeySpecificationException.java from LicenseManager modified Friday, September 21, 2012 07:46:54 CDT (-0500).
+ * InappropriateKeySpecificationException.java from LicenseManager modified Friday, September 21, 2012 07:46:54 CDT
+ * (-0500).
  *
  * Copyright 2010-2013 the original author or authors.
  *
@@ -23,8 +24,8 @@ package io.oddsource.java.licensing.exception;
  * for the key factory.
  *
  * @author Nick Williams
- * @since 1.0.0
  * @version 1.0.0
+ * @since 1.0.0
  */
 @SuppressWarnings("unused")
 public class InappropriateKeySpecificationException extends RuntimeException
@@ -36,17 +37,17 @@ public class InappropriateKeySpecificationException extends RuntimeException
         super("The specified key specification is inappropriate for the factory.");
     }
 
-    public InappropriateKeySpecificationException(String message)
+    public InappropriateKeySpecificationException(final String message)
     {
         super(message);
     }
 
-    public InappropriateKeySpecificationException(Throwable cause)
+    public InappropriateKeySpecificationException(final Throwable cause)
     {
         super("The specified key specification is inappropriate for the factory.", cause);
     }
 
-    public InappropriateKeySpecificationException(String message, Throwable cause)
+    public InappropriateKeySpecificationException(final String message, final Throwable cause)
     {
         super(message, cause);
     }

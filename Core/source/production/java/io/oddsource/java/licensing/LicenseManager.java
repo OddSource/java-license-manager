@@ -28,7 +28,7 @@ import io.oddsource.java.licensing.exception.ExpiredLicenseException;
 import io.oddsource.java.licensing.exception.FailedToDecryptException;
 import io.oddsource.java.licensing.exception.InappropriateKeyException;
 import io.oddsource.java.licensing.exception.InappropriateKeySpecificationException;
-import io.oddsource.java.licensing.exception.InsecureEnvironmentException;
+import io.oddsource.java.licensing.exception.InsecureEnvironmentError;
 import io.oddsource.java.licensing.exception.InvalidLicenseException;
 import io.oddsource.java.licensing.exception.InvalidSignatureException;
 import io.oddsource.java.licensing.exception.KeyNotFoundException;
@@ -63,7 +63,7 @@ import java.util.Hashtable;
  * @version 1.0.2
  * @since 1.0.0
  * @see LicenseSecurityManager
- * @see InsecureEnvironmentException
+ * @see InsecureEnvironmentError
  */
 public final class LicenseManager
 {
@@ -101,7 +101,7 @@ public final class LicenseManager
         }
         catch(ClassNotFoundException e)
         {
-            throw new InsecureEnvironmentException("The class LicenseSecurityManager could not be initialized.", e);
+            throw new InsecureEnvironmentError("The class LicenseSecurityManager could not be initialized.", e);
         }
 
         int cacheTimeInMinutes = LicenseManagerProperties.getCacheTimeInMinutes();
@@ -122,7 +122,7 @@ public final class LicenseManager
      *
      * @return the license manager instance.
      * @throws IllegalArgumentException if {@link LicenseManagerProperties#setLicenseProvider(LicenseProvider) licenseProvider}, {@link LicenseManagerProperties#setPublicKeyPasswordProvider(PasswordProvider) publicKeyPasswordProvider} or {@link LicenseManagerProperties#setPublicKeyDataProvider(PublicKeyDataProvider) publicKeyDataProvider} are null.
-     * @throws InsecureEnvironmentException if the {@link LicenseSecurityManager} cannot be instantiated
+     * @throws InsecureEnvironmentError if the {@link LicenseSecurityManager} cannot be instantiated
      * @see LicenseSecurityManager for more information on the security features that protect the license manager
      */
     public static synchronized LicenseManager getInstance()

@@ -25,8 +25,8 @@ import io.oddsource.java.licensing.LicenseValidator;
  *
  * @author Nick Williams
  * @version 1.0.0
- * @since 1.0.0
  * @see LicenseValidator
+ * @since 1.0.0
  */
 @SuppressWarnings("unused")
 public class ExpiredLicenseException extends InvalidLicenseException
@@ -38,17 +38,17 @@ public class ExpiredLicenseException extends InvalidLicenseException
         super("The license has expired.");
     }
 
-    public ExpiredLicenseException(String message)
+    public ExpiredLicenseException(final String message)
     {
         super(message);
     }
 
-    public ExpiredLicenseException(Throwable cause)
+    public ExpiredLicenseException(final Throwable cause)
     {
         super("The license has expired.", cause);
     }
 
-    public ExpiredLicenseException(String message, Throwable cause)
+    public ExpiredLicenseException(final String message, final Throwable cause)
     {
         super(message, cause);
     }

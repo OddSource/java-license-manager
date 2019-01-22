@@ -1,5 +1,5 @@
 /*
- * InsecureEnvironmentException.java from LicenseManager modified Friday, September 21, 2012 07:46:54 CDT (-0500).
+ * InsecureEnvironmentError.java from LicenseManager modified Friday, September 21, 2012 07:46:54 CDT (-0500).
  *
  * Copyright 2010-2013 the original author or authors.
  *
@@ -24,23 +24,23 @@ package io.oddsource.java.licensing.exception;
  *
  * @author Nick Williams
  * @version 1.0.0
- * @since 1.0.0
  * @see io.oddsource.java.licensing.LicenseSecurityManager
+ * @since 1.0.0
  */
 @SuppressWarnings("unused")
-public class InsecureEnvironmentException extends Error
+public class InsecureEnvironmentError extends Error
 {
     private static final long serialVersionUID = 1L;
 
-    public InsecureEnvironmentException(String message, Throwable cause)
+    public InsecureEnvironmentError(final String message, final Throwable cause)
     {
         super("The license manager was activated in an insecure environment. " + message, cause);
     }
 
-    public InsecureEnvironmentException(SecurityException cause)
+    public InsecureEnvironmentError(final SecurityException cause)
     {
         super("The license manager was activated in an insecure environment. A security manager has already been " +
-                  "installed, but it allows reflection access to the license cache and doesn't allow a new security " +
-                  "manager to be installed.", cause);
+              "installed, but it allows reflection access to the license cache and doesn't allow a new security " +
+              "manager to be installed.", cause);
     }
 }

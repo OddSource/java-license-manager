@@ -130,7 +130,7 @@ public class TestImmutableArrayList
         assertEquals("The lists should be equal.", this.list, test);
     }
 
-    @Test(expected=ImmutableModifiedThroughReflectionException.class)
+    @Test(expected= ImmutableModifiedThroughReflectionError.class)
     public void testClone02()
     {
         this.getInternal().remove(2);
@@ -155,7 +155,7 @@ public class TestImmutableArrayList
         this.list.get(4);
     }
 
-    @Test(expected=ImmutableModifiedThroughReflectionException.class)
+    @Test(expected= ImmutableModifiedThroughReflectionError.class)
     public void testGet04()
     {
         this.getInternal().add(null);
@@ -180,7 +180,7 @@ public class TestImmutableArrayList
         assertEquals("The index is not correct.", -1, this.list.indexOf("HisString4"));
     }
 
-    @Test(expected=ImmutableModifiedThroughReflectionException.class)
+    @Test(expected= ImmutableModifiedThroughReflectionError.class)
     public void testIndexOf04()
     {
         this.getInternal().add("Test");
@@ -205,7 +205,7 @@ public class TestImmutableArrayList
         assertEquals("The index is not correct.", -1, this.list.lastIndexOf("HisString4"));
     }
 
-    @Test(expected=ImmutableModifiedThroughReflectionException.class)
+    @Test(expected= ImmutableModifiedThroughReflectionError.class)
     public void testLastIndexOf04()
     {
         this.getInternal().remove("HerString4");
@@ -251,7 +251,7 @@ public class TestImmutableArrayList
         }
     }
 
-    @Test(expected=ImmutableModifiedThroughReflectionException.class)
+    @Test(expected= ImmutableModifiedThroughReflectionError.class)
     public void testListIterator103()
     {
         this.getInternal().remove("MyString1");
@@ -281,7 +281,7 @@ public class TestImmutableArrayList
         }
     }
 
-    @Test(expected=ImmutableModifiedThroughReflectionException.class)
+    @Test(expected= ImmutableModifiedThroughReflectionError.class)
     public void testListIterator202()
     {
         this.getInternal().remove("MyString1");
@@ -310,7 +310,7 @@ public class TestImmutableArrayList
         assertEquals("String 2 is not correct.", "HerString4", test.get(1));
     }
 
-    @Test(expected=ImmutableModifiedThroughReflectionException.class)
+    @Test(expected= ImmutableModifiedThroughReflectionError.class)
     public void testSubList03()
     {
         this.getInternal().add("Test");

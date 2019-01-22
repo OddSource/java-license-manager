@@ -37,17 +37,17 @@ public class ObjectDeserializationException extends RuntimeException
         super("An error occurred while reading the object from the byte array.");
     }
 
-    public ObjectDeserializationException(String message)
+    public ObjectDeserializationException(final String message)
     {
         super(message);
     }
 
-    public ObjectDeserializationException(Throwable cause)
+    public ObjectDeserializationException(final Throwable cause)
     {
         super("An error occurred while reading the object from the byte array.", cause);
     }
 
-    public ObjectDeserializationException(String message, Throwable cause)
+    public ObjectDeserializationException(final String message, final Throwable cause)
     {
         super(message, cause);
     }

@@ -35,17 +35,17 @@ public class KeyNotFoundException extends RuntimeException
         super("The key file could not be found.");
     }
 
-    public KeyNotFoundException(String message)
+    public KeyNotFoundException(final String message)
     {
         super(message);
     }
 
-    public KeyNotFoundException(Throwable cause)
+    public KeyNotFoundException(final Throwable cause)
     {
         super("The key file could not be found.", cause);
     }
 
-    public KeyNotFoundException(String message, Throwable cause)
+    public KeyNotFoundException(final String message, final Throwable cause)
     {
         super(message, cause);
     }

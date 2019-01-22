@@ -33,6 +33,6 @@ final class MockValidObject extends ValidObject
     protected final void checkValidity()
     {
         if(!this.valid)
-            throw new ImmutableModifiedThroughReflectionException();
+            throw new ImmutableModifiedThroughReflectionError();
     }
 }

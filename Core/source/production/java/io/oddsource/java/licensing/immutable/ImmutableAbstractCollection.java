@@ -60,16 +60,16 @@ public abstract class ImmutableAbstractCollection<E> extends ValidObject
 
     /**
      * Checks the validity of this object, and throws an
-     * {@link ImmutableModifiedThroughReflectionException} if that check fails.
+     * {@link ImmutableModifiedThroughReflectionError} if that check fails.
      *
-     * @throws ImmutableModifiedThroughReflectionException if the validity check fails.
+     * @throws ImmutableModifiedThroughReflectionError if the validity check fails.
      */
     @Override
     protected final void checkValidity()
     {
         if(this.internalSize != this.internalCollection.size() ||
                 this.internalHashCode != this.internalCollection.hashCode())
-            throw new ImmutableModifiedThroughReflectionException();
+            throw new ImmutableModifiedThroughReflectionError();
     }
 
     @Override

@@ -95,21 +95,21 @@ public class TestImmutableIterator
         }
     }
 
-    @Test(expected=ImmutableModifiedThroughReflectionException.class)
+    @Test(expected= ImmutableModifiedThroughReflectionError.class)
     public void testNext02()
     {
         this.valid.valid = false;
         this.iterator.hasNext();
     }
 
-    @Test(expected=ImmutableModifiedThroughReflectionException.class)
+    @Test(expected= ImmutableModifiedThroughReflectionError.class)
     public void testNext03()
     {
         this.valid.valid = false;
         this.iterator.next();
     }
 
-    @Test(expected=ImmutableModifiedThroughReflectionException.class)
+    @Test(expected= ImmutableModifiedThroughReflectionError.class)
     public void testNext04()
     {
         try {
@@ -123,7 +123,7 @@ public class TestImmutableIterator
         this.iterator.next();
     }
 
-    @Test(expected=ImmutableModifiedThroughReflectionException.class)
+    @Test(expected= ImmutableModifiedThroughReflectionError.class)
     public void testNext05()
     {
         try {

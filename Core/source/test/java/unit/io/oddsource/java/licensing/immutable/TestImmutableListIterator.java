@@ -109,21 +109,21 @@ public class TestImmutableListIterator
         }
     }
 
-    @Test(expected=ImmutableModifiedThroughReflectionException.class)
+    @Test(expected= ImmutableModifiedThroughReflectionError.class)
     public void testNext02()
     {
         this.valid.valid = false;
         this.iterator.hasNext();
     }
 
-    @Test(expected=ImmutableModifiedThroughReflectionException.class)
+    @Test(expected= ImmutableModifiedThroughReflectionError.class)
     public void testNext03()
     {
         this.valid.valid = false;
         this.iterator.hasNext();
     }
 
-    @Test(expected=ImmutableModifiedThroughReflectionException.class)
+    @Test(expected= ImmutableModifiedThroughReflectionError.class)
     public void testNext04()
     {
         try {
@@ -137,7 +137,7 @@ public class TestImmutableListIterator
         this.iterator.next();
     }
 
-    @Test(expected=ImmutableModifiedThroughReflectionException.class)
+    @Test(expected= ImmutableModifiedThroughReflectionError.class)
     public void testNext05()
     {
         try {
@@ -174,21 +174,21 @@ public class TestImmutableListIterator
         }
     }
 
-    @Test(expected=ImmutableModifiedThroughReflectionException.class)
+    @Test(expected= ImmutableModifiedThroughReflectionError.class)
     public void testPrevious02()
     {
         this.valid.valid = false;
         this.iterator.hasPrevious();
     }
 
-    @Test(expected=ImmutableModifiedThroughReflectionException.class)
+    @Test(expected= ImmutableModifiedThroughReflectionError.class)
     public void testPrevious03()
     {
         this.valid.valid = false;
         this.iterator.previous();
     }
 
-    @Test(expected=ImmutableModifiedThroughReflectionException.class)
+    @Test(expected= ImmutableModifiedThroughReflectionError.class)
     public void testPrevious04()
     {
         try {
@@ -202,7 +202,7 @@ public class TestImmutableListIterator
         this.iterator.previous();
     }
 
-    @Test(expected=ImmutableModifiedThroughReflectionException.class)
+    @Test(expected= ImmutableModifiedThroughReflectionError.class)
     public void testPrevious05()
     {
         try {

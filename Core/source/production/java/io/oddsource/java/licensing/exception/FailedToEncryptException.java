@@ -1,5 +1,5 @@
 /*
- * AlgorithmNotSupportedException.java from LicenseManager modified Friday, September 21, 2012 07:46:54 CDT (-0500).
+ * FailedToDecryptException.java from LicenseManager modified Friday, September 21, 2012 07:46:54 CDT (-0500).
  *
  * Copyright 2010-2013 the original author or authors.
  *
@@ -19,35 +19,36 @@
 package io.oddsource.java.licensing.exception;
 
 /**
- * This exception is thrown when the specified algorithm is not supported by
- * this JVM.
+ * This exception is thrown when the data was corrupt and undecryptable or when
+ * the provided decryption password was incorrect. It is impossible to know
+ * which is the actual cause.
  *
  * @author Nick Williams
  * @version 1.0.0
  * @since 1.0.0
  */
 @SuppressWarnings("unused")
-public class AlgorithmNotSupportedException extends RuntimeException
+public class FailedToEncryptException extends RuntimeException
 {
     private static final long serialVersionUID = 1L;
 
-    public AlgorithmNotSupportedException()
+    public FailedToEncryptException()
     {
-        super("The specified algorithm is not supported on this system.");
+        super("Failed to decrypt the data. Either the password was incorrect or the data was corrupt.");
     }
 
-    public AlgorithmNotSupportedException(final String algorithm)
+    public FailedToEncryptException(final String message)
     {
-        super("The algorithm \"" + algorithm + "\" is not supported on this system.");
+        super(message);
     }
 
-    public AlgorithmNotSupportedException(final Throwable cause)
+    public FailedToEncryptException(final Throwable cause)
     {
-        super(cause);
+        super("Failed to decrypt the data. Either the password was incorrect or the data was corrupt.", cause);
     }
 
-    public AlgorithmNotSupportedException(final String algorithm, final Throwable cause)
+    public FailedToEncryptException(final String message, final Throwable cause)
     {
-        super("The algorithm \"" + algorithm + "\" is not supported on this system.", cause);
+        super(message, cause);
     }
 }

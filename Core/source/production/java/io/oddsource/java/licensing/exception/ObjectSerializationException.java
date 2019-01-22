@@ -36,17 +36,17 @@ public class ObjectSerializationException extends RuntimeException
         super("An I/O error occurred while writing the object to the byte array.");
     }
 
-    public ObjectSerializationException(String message)
+    public ObjectSerializationException(final String message)
     {
         super(message);
     }
 
-    public ObjectSerializationException(Throwable cause)
+    public ObjectSerializationException(final Throwable cause)
     {
         super("An I/O error occurred while writing the object to the byte array.", cause);
     }
 
-    public ObjectSerializationException(String message, Throwable cause)
+    public ObjectSerializationException(final String message, final Throwable cause)
     {
         super(message, cause);
     }

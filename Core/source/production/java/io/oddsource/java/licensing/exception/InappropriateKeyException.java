@@ -23,8 +23,8 @@ package io.oddsource.java.licensing.exception;
  * given cipher.
  *
  * @author Nick Williams
- * @since 1.0.0
  * @version 1.0.0
+ * @since 1.0.0
  */
 @SuppressWarnings("unused")
 public class InappropriateKeyException extends RuntimeException
@@ -36,17 +36,17 @@ public class InappropriateKeyException extends RuntimeException
         super("The specified key is inappropriate for the cipher.");
     }
 
-    public InappropriateKeyException(String message)
+    public InappropriateKeyException(final String message)
     {
         super(message);
     }
 
-    public InappropriateKeyException(Throwable cause)
+    public InappropriateKeyException(final Throwable cause)
     {
         super("The specified key is inappropriate for the cipher.", cause);
     }
 
-    public InappropriateKeyException(String message, Throwable cause)
+    public InappropriateKeyException(final String message, final Throwable cause)
     {
         super(message, cause);
     }

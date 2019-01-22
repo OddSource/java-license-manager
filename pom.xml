@@ -23,7 +23,7 @@
     <parent>
         <groupId>io.oddsource.java</groupId>
         <artifactId>oss-parent</artifactId>
-        <version>2.0-SNAPSHOT</version>
+        <version>2.0</version>
     </parent>
 
     <groupId>io.oddsource.java.licensing</groupId>
@@ -139,16 +139,19 @@
                     <artifactId>spotbugs-maven-plugin</artifactId>
                     <configuration>
                         <effort>Max</effort>
-                        <excludeFilterFile>build/spotbugs-exclude.xml</excludeFilterFile>
+                        <excludeBugsFile>build/spotbugs-exclude.xml</excludeBugsFile>
                         <threshold>Low</threshold>
                         <xmlOutput>true</xmlOutput>
                     </configuration>
                     <executions>
                         <execution>
+                            <phase>none</phase>
+                        </execution>
+                        <!--<execution>
                             <goals>
                                 <goal>check</goal>
                             </goals>
-                        </execution>
+                        </execution>-->
                     </executions>
                 </plugin>
                 <plugin>

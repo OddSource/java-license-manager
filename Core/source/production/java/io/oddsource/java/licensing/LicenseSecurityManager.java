@@ -18,7 +18,7 @@
 
 package io.oddsource.java.licensing;
 
-import io.oddsource.java.licensing.exception.InsecureEnvironmentException;
+import io.oddsource.java.licensing.exception.InsecureEnvironmentError;
 
 import java.io.FileDescriptor;
 import java.lang.reflect.AccessibleObject;
@@ -39,7 +39,7 @@ import java.security.Permission;
  * If another security manager is already installed, this checks to make sure it prevents reflection attacks against
  * critical LicenseManager classes. If it prevents attacks, it is a suitable security manager and allowed to remain. If
  * it does not prevent attacks, this attempts to override the currently installed security manager and install itself.
- * If the existing security manager prevents this from installing itself, an {@link InsecureEnvironmentException} is
+ * If the existing security manager prevents this from installing itself, an {@link InsecureEnvironmentError} is
  * thrown and the LicenseManager fails to start.<br />
  * <br />
  * When this security manager installs itself over another, it will nest the other security manager within itself and
@@ -106,7 +106,7 @@ final class LicenseSecurityManager extends SecurityManager
         }
         catch(NoSuchMethodException e)
         {
-            throw new InsecureEnvironmentException("Unexpected error", e);
+            throw new InsecureEnvironmentError("Unexpected error", e);
         }
         catch(SecurityException ignore)
         {
@@ -124,7 +124,7 @@ final class LicenseSecurityManager extends SecurityManager
         }
         catch(NoSuchMethodException e)
         {
-            throw new InsecureEnvironmentException("Unexpected error", e);
+            throw new InsecureEnvironmentError("Unexpected error", e);
         }
         catch(SecurityException ignore)
         {
@@ -156,7 +156,7 @@ final class LicenseSecurityManager extends SecurityManager
         catch(SecurityException e)
         {
             // since we can't install the security manager, indicate that the environment is insecure
-            throw new InsecureEnvironmentException(e);
+            throw new InsecureEnvironmentError(e);
         }
     }
 
@@ -468,7 +468,7 @@ final class LicenseSecurityManager extends SecurityManager
     {
         private static final long serialVersionUID = 8319947110221501285L;
 
-        final AccessibleObject[] targets;
+        transient final AccessibleObject[] targets;
 
         ObjectReflectionPermission(String name, AccessibleObject[] targets)
         {

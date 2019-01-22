@@ -25,8 +25,8 @@ import io.oddsource.java.licensing.LicenseValidator;
  *
  * @author Nick Williams
  * @version 1.0.0
- * @since 1.0.0
  * @see LicenseValidator
+ * @since 1.0.0
  */
 @SuppressWarnings("unused")
 public class InvalidLicenseException extends RuntimeException
@@ -38,17 +38,17 @@ public class InvalidLicenseException extends RuntimeException
         super("The license is not valid.");
     }
 
-    public InvalidLicenseException(String message)
+    public InvalidLicenseException(final String message)
     {
         super(message);
     }
 
-    public InvalidLicenseException(Throwable cause)
+    public InvalidLicenseException(final Throwable cause)
     {
         super("The license is not valid.", cause);
     }
 
-    public InvalidLicenseException(String message, Throwable cause)
+    public InvalidLicenseException(final String message, final Throwable cause)
     {
         super(message, cause);
     }

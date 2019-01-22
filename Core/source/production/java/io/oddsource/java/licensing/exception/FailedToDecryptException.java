@@ -24,8 +24,8 @@ package io.oddsource.java.licensing.exception;
  * which is the actual cause.
  *
  * @author Nick Williams
- * @since 1.0.0
  * @version 1.0.0
+ * @since 1.0.0
  */
 @SuppressWarnings("unused")
 public class FailedToDecryptException extends RuntimeException
@@ -37,17 +37,17 @@ public class FailedToDecryptException extends RuntimeException
         super("Failed to decrypt the data. Either the password was incorrect or the data was corrupt.");
     }
 
-    public FailedToDecryptException(String message)
+    public FailedToDecryptException(final String message)
     {
         super(message);
     }
 
-    public FailedToDecryptException(Throwable cause)
+    public FailedToDecryptException(final Throwable cause)
     {
         super("Failed to decrypt the data. Either the password was incorrect or the data was corrupt.", cause);
     }
 
-    public FailedToDecryptException(String message, Throwable cause)
+    public FailedToDecryptException(final String message, final Throwable cause)
     {
         super(message, cause);
     }

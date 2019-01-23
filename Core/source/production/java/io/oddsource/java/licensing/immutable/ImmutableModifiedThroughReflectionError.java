@@ -1,5 +1,6 @@
 /*
- * ImmutableModifiedThroughReflectionError.java from LicenseManager modified Friday, September 21, 2012 07:46:54 CDT (-0500).
+ * ImmutableModifiedThroughReflectionError.java from LicenseManager modified Friday, September 21, 2012 07:46:54 CDT
+ * (-0500).
  *
  * Copyright 2010-2013 the original author or authors.
  *
@@ -36,17 +37,17 @@ public class ImmutableModifiedThroughReflectionError extends Error
         super("This immutable object appears to have been modified through reflection.");
     }
 
-    public ImmutableModifiedThroughReflectionError(String message)
+    public ImmutableModifiedThroughReflectionError(final String message)
     {
         super(message);
     }
 
-    public ImmutableModifiedThroughReflectionError(Throwable cause)
+    public ImmutableModifiedThroughReflectionError(final Throwable cause)
     {
         super("This immutable object appears to have been modified through reflection.", cause);
     }
 
-    public ImmutableModifiedThroughReflectionError(String message, Throwable cause)
+    public ImmutableModifiedThroughReflectionError(final String message, final Throwable cause)
     {
         super(message, cause);
     }

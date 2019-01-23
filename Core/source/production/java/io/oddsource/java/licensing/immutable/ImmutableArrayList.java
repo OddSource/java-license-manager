@@ -34,7 +34,7 @@ import java.util.List;
  * @since 1.0.0
  */
 public final class ImmutableArrayList<E> extends ImmutableAbstractCollection<E>
-        implements List<E>, Serializable, Cloneable
+    implements List<E>, Serializable, Cloneable
 {
     private final static long serialVersionUID = -6912407141647481417L;
 
@@ -44,13 +44,14 @@ public final class ImmutableArrayList<E> extends ImmutableAbstractCollection<E>
      * Constructor that copies.
      *
      * @param list the list to decorate, must not be null
+     *
      * @throws IllegalArgumentException if list is null
      */
-    public ImmutableArrayList(List<E> list)
+    public ImmutableArrayList(final List<E> list)
     {
-        super(new ArrayList<E>(list));
+        super(new ArrayList<>(list));
 
-        this.internalList = (ArrayList<E>)this.internalCollection;
+        this.internalList = (ArrayList<E>) this.internalCollection;
         this.internalList.trimToSize();
     }
 
@@ -61,12 +62,12 @@ public final class ImmutableArrayList<E> extends ImmutableAbstractCollection<E>
         synchronized(this.internalList)
         {
             this.checkValidity();
-            return new ImmutableArrayList<E>((List<E>)this.internalList.clone());
+            return new ImmutableArrayList<>((List<E>) this.internalList.clone());
         }
     }
 
     @Override
-    public final E get(int index)
+    public final E get(final int index)
     {
         synchronized(this.internalList)
         {
@@ -76,7 +77,7 @@ public final class ImmutableArrayList<E> extends ImmutableAbstractCollection<E>
     }
 
     @Override
-    public final int indexOf(Object o)
+    public final int indexOf(final Object o)
     {
         synchronized(this.internalList)
         {
@@ -86,7 +87,7 @@ public final class ImmutableArrayList<E> extends ImmutableAbstractCollection<E>
     }
 
     @Override
-    public final int lastIndexOf(Object o)
+    public final int lastIndexOf(final Object o)
     {
         synchronized(this.internalList)
         {
@@ -96,58 +97,56 @@ public final class ImmutableArrayList<E> extends ImmutableAbstractCollection<E>
     }
 
     @Override
-    @SuppressWarnings("unchecked")
     public final ImmutableListIterator<E> listIterator()
     {
         synchronized(this.internalList)
         {
             this.checkValidity();
-            return new ImmutableListIterator<E>(this.internalList.listIterator(), this);
+            return new ImmutableListIterator<>(this.internalList.listIterator(), this);
         }
     }
 
     @Override
-    @SuppressWarnings("unchecked")
-    public final ImmutableListIterator<E> listIterator(int index)
+    public final ImmutableListIterator<E> listIterator(final int index)
     {
         synchronized(this.internalList)
         {
             this.checkValidity();
-            return new ImmutableListIterator<E>(this.internalList.listIterator(index), this);
+            return new ImmutableListIterator<>(this.internalList.listIterator(index), this);
         }
     }
 
     @Override
-    public final ImmutableArrayList<E> subList(int fromIndex, int toIndex)
+    public final ImmutableArrayList<E> subList(final int fromIndex, final int toIndex)
     {
         synchronized(this.internalList)
         {
             this.checkValidity();
-            List<E> subList = this.internalList.subList(fromIndex, toIndex);
-            return new ImmutableArrayList<E>(subList);
+            final List<E> subList = this.internalList.subList(fromIndex, toIndex);
+            return new ImmutableArrayList<>(subList);
         }
     }
 
     @Override
-    public final void add(int index, E e)
+    public final void add(final int index, final E e)
     {
         throw new UnsupportedOperationException("This list cannot be modified.");
     }
 
     @Override
-    public final boolean addAll(int index, Collection<? extends E> c)
+    public final boolean addAll(final int index, final Collection<? extends E> c)
     {
         throw new UnsupportedOperationException("This list cannot be modified.");
     }
 
     @Override
-    public final E remove(int index)
+    public final E remove(final int index)
     {
         throw new UnsupportedOperationException("This list cannot be modified.");
     }
 
     @Override
-    public final E set(int index, E e)
+    public final E set(final int index, final E e)
     {
         throw new UnsupportedOperationException("This list cannot be modified.");
     }

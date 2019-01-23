@@ -33,7 +33,7 @@ public final class ImmutableIterator<E> implements Immutable, Iterator<E>
 
     private final ValidObject validObject;
 
-    ImmutableIterator(Iterator<E> iterator, ValidObject validObject)
+    ImmutableIterator(final Iterator<E> iterator, final ValidObject validObject)
     {
         this.internal = iterator;
         this.validObject = validObject;

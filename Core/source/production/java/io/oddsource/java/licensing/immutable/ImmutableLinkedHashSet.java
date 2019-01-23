@@ -34,7 +34,7 @@ import java.util.Set;
  * @since 1.0.0
  */
 public final class ImmutableLinkedHashSet<E> extends ImmutableAbstractCollection<E>
-        implements Set<E>, Serializable, Cloneable
+    implements Set<E>, Serializable, Cloneable
 {
     private final static long serialVersionUID = 2284350955829958161L;
 
@@ -46,14 +46,15 @@ public final class ImmutableLinkedHashSet<E> extends ImmutableAbstractCollection
      * Constructor that copies.
      *
      * @param list the set to decorate, must not be null
+     *
      * @throws IllegalArgumentException if list is null
      */
-    public ImmutableLinkedHashSet(Set<E> list)
+    public ImmutableLinkedHashSet(final Set<E> list)
     {
-        super(new LinkedHashSet<E>(list));
+        super(new LinkedHashSet<>(list));
 
-        this.internalSet = (LinkedHashSet<E>)this.internalCollection;
-        this.internalList = new ArrayList<E>(list);
+        this.internalSet = (LinkedHashSet<E>) this.internalCollection;
+        this.internalList = new ArrayList<>(list);
     }
 
     @Override
@@ -63,7 +64,7 @@ public final class ImmutableLinkedHashSet<E> extends ImmutableAbstractCollection
         synchronized(this.internalSet)
         {
             this.checkValidity();
-            return new ImmutableLinkedHashSet<E>((Set<E>)this.internalSet.clone());
+            return new ImmutableLinkedHashSet<>((Set<E>) this.internalSet.clone());
         }
     }
 
@@ -71,9 +72,10 @@ public final class ImmutableLinkedHashSet<E> extends ImmutableAbstractCollection
      * Retrieves the indexed element specified.
      *
      * @param index The element to retrieve.
+     *
      * @return The element requested.
      */
-    public E get(int index)
+    public E get(final int index)
     {
         return index < 0 ? null : this.internalList.get(index);
     }
@@ -82,9 +84,10 @@ public final class ImmutableLinkedHashSet<E> extends ImmutableAbstractCollection
      * Retrieves the matching element specified.
      *
      * @param object The element to match.
+     *
      * @return The element requested.
      */
-    public E get(E object)
+    public E get(final E object)
     {
         return this.get(this.internalList.indexOf(object));
     }

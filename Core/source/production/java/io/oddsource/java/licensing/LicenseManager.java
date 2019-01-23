@@ -18,6 +18,11 @@
 
 package io.oddsource.java.licensing;
 
+import java.lang.reflect.AnnotatedElement;
+import java.security.PublicKey;
+import java.util.Arrays;
+import java.util.Hashtable;
+
 import io.oddsource.java.licensing.encryption.Encryptor;
 import io.oddsource.java.licensing.encryption.KeyFileUtilities;
 import io.oddsource.java.licensing.encryption.PasswordProvider;
@@ -33,11 +38,6 @@ import io.oddsource.java.licensing.exception.InvalidLicenseException;
 import io.oddsource.java.licensing.exception.InvalidSignatureException;
 import io.oddsource.java.licensing.exception.KeyNotFoundException;
 import io.oddsource.java.licensing.exception.ObjectTypeNotExpectedException;
-
-import java.lang.reflect.AnnotatedElement;
-import java.security.PublicKey;
-import java.util.Arrays;
-import java.util.Hashtable;
 
 /**
  * This class manages licenses in the client application. All interaction with the license manager done from the client
@@ -58,12 +58,12 @@ import java.util.Hashtable;
  * disabling or compromising the security features in this product. It is instantiated when {@code createInstance} is
  * called and cannot be disabled. For more information on how it works, see the JavaDoc for the
  * {@link LicenseSecurityManager}.
- * 
+ *
  * @author Nick Williams
  * @version 1.0.2
- * @since 1.0.0
  * @see LicenseSecurityManager
  * @see InsecureEnvironmentError
+ * @since 1.0.0
  */
 public final class LicenseManager
 {
@@ -81,39 +81,45 @@ public final class LicenseManager
 
     private final int cacheTimeInMilliseconds;
 
-    private final Hashtable<Object, LicenseCacheEntry> licenseCache = new Hashtable<Object, LicenseCacheEntry>();
+    private final Hashtable<Object, LicenseCacheEntry> licenseCache = new Hashtable<>();
 
     private LicenseManager()
     {
         if(LicenseManagerProperties.getLicenseProvider() == null)
+        {
             throw new IllegalArgumentException("Parameter licenseProvider must not be null.");
+        }
 
         if(LicenseManagerProperties.getPublicKeyDataProvider() == null)
+        {
             throw new IllegalArgumentException("Parameter publicKeyDataProvider must not be null.");
+        }
 
         if(LicenseManagerProperties.getPublicKeyPasswordProvider() == null)
+        {
             throw new IllegalArgumentException("Parameter publicKeyPasswordProvider must not be null.");
+        }
 
         // install the security manager
         try
         {
             Class.forName("io.oddsource.java.licensing.LicenseSecurityManager");
         }
-        catch(ClassNotFoundException e)
+        catch(final ClassNotFoundException e)
         {
             throw new InsecureEnvironmentError("The class LicenseSecurityManager could not be initialized.", e);
         }
 
-        int cacheTimeInMinutes = LicenseManagerProperties.getCacheTimeInMinutes();
+        final int cacheTimeInMinutes = LicenseManagerProperties.getCacheTimeInMinutes();
 
         this.publicKeyDataProvider = LicenseManagerProperties.getPublicKeyDataProvider();
         this.publicKeyPasswordProvider = LicenseManagerProperties.getPublicKeyPasswordProvider();
         this.licenseProvider = LicenseManagerProperties.getLicenseProvider();
         this.licensePasswordProvider = LicenseManagerProperties.getLicensePasswordProvider() == null ?
-                                            LicenseManagerProperties.getPublicKeyPasswordProvider() :
-                                            LicenseManagerProperties.getLicensePasswordProvider();
+                                       LicenseManagerProperties.getPublicKeyPasswordProvider() :
+                                       LicenseManagerProperties.getLicensePasswordProvider();
         this.licenseValidator = LicenseManagerProperties.getLicenseValidator();
-        this.cacheTimeInMilliseconds = cacheTimeInMinutes < 1 ? ( 10 * 1000 ) : ( cacheTimeInMinutes * 60 * 1000 );
+        this.cacheTimeInMilliseconds = cacheTimeInMinutes < 1 ? (10 * 1000) : (cacheTimeInMinutes * 60 * 1000);
     }
 
     /**
@@ -121,7 +127,11 @@ public final class LicenseManager
      * bet set in {@link LicenseManagerProperties}. See the documentation for that class for more details.
      *
      * @return the license manager instance.
-     * @throws IllegalArgumentException if {@link LicenseManagerProperties#setLicenseProvider(LicenseProvider) licenseProvider}, {@link LicenseManagerProperties#setPublicKeyPasswordProvider(PasswordProvider) publicKeyPasswordProvider} or {@link LicenseManagerProperties#setPublicKeyDataProvider(PublicKeyDataProvider) publicKeyDataProvider} are null.
+     *
+     * @throws IllegalArgumentException if {@link LicenseManagerProperties#setLicenseProvider(LicenseProvider)
+     *     licenseProvider}, {@link LicenseManagerProperties#setPublicKeyPasswordProvider(PasswordProvider)
+     *     publicKeyPasswordProvider} or {@link LicenseManagerProperties#setPublicKeyDataProvider(PublicKeyDataProvider)
+     *     publicKeyDataProvider} are null.
      * @throws InsecureEnvironmentError if the {@link LicenseSecurityManager} cannot be instantiated
      * @see LicenseSecurityManager for more information on the security features that protect the license manager
      */
@@ -140,13 +150,16 @@ public final class LicenseManager
      * was provided.
      *
      * @param license The license to validate
+     *
      * @throws InvalidLicenseException when the license is invalid for any reason.
      * @throws ExpiredLicenseException when the license is expired.
      */
-    public final void validateLicense(License license) throws InvalidLicenseException
+    public final void validateLicense(final License license) throws InvalidLicenseException
     {
         if(this.licenseValidator != null)
+        {
             this.licenseValidator.validateLicense(license);
+        }
     }
 
     /**
@@ -156,17 +169,20 @@ public final class LicenseManager
      *
      * @param context The context (account, client, etc.) for which to check the feature(s) against its license
      * @param featureName The feature (or features) to check against the license
+     *
      * @return {@code true} if the license exists and has this feature enabled, {@code false} otherwise.
+     *
      * @throws InvalidLicenseException when the license is invalid for any reason.
      * @throws ExpiredLicenseException when the license is expired.
      */
-    public final boolean hasLicenseForFeature(Object context, String featureName) throws InvalidLicenseException
+    public final boolean hasLicenseForFeature(final Object context, final String featureName)
+        throws InvalidLicenseException
     {
-        License license = this.getLicense(context);
+        final License license = this.getValidatedLicenseOrNullIfNonExistent(context);
         if(license == null)
+        {
             return false;
-
-        this.validateLicense(license);
+        }
 
         return license.hasLicenseForFeature(featureName);
     }
@@ -178,132 +194,156 @@ public final class LicenseManager
      *
      * @param context The context (account, client, etc.) for which to check the feature(s) against its license
      * @param feature The feature (or features) to check against the license
+     *
      * @return {@code true} if the license exists and has this feature enabled, {@code false} otherwise.
+     *
      * @throws InvalidLicenseException when the license is invalid for any reason.
      * @throws ExpiredLicenseException when the license is expired.
      */
-    public final boolean hasLicenseForFeature(Object context, FeatureObject feature) throws InvalidLicenseException
+    public final boolean hasLicenseForFeature(final Object context, final FeatureObject feature)
+        throws InvalidLicenseException
     {
-        License license = this.getLicense(context);
+        final License license = this.getValidatedLicenseOrNullIfNonExistent(context);
         if(license == null)
+        {
             return false;
-
-        this.validateLicense(license);
+        }
 
         return license.hasLicenseForFeature(feature);
     }
 
     /**
-     * Checks whether the license assigned to the specified context is licensed to use any of the features specified.<br />
+     * Checks whether the license assigned to the specified context is licensed to use any of the features specified.<br
+     * />
      * <br />
      * Throws the same exceptions as {@link #getLicense(Object)} and for the same reasons.
      *
      * @param context The context (account, client, etc.) for which to check the feature(s) against its license
      * @param featureNames The feature (or features) to check against the license
+     *
      * @return {@code true} if the license exists and has this feature enabled, {@code false} otherwise.
+     *
      * @throws InvalidLicenseException when the license is invalid for any reason.
      * @throws ExpiredLicenseException when the license is expired.
      */
-    public final boolean hasLicenseForAnyFeature(Object context, String... featureNames) throws InvalidLicenseException
+    public final boolean hasLicenseForAnyFeature(final Object context, final String... featureNames)
+        throws InvalidLicenseException
     {
-        License license = this.getLicense(context);
+        final License license = this.getValidatedLicenseOrNullIfNonExistent(context);
         if(license == null)
+        {
             return false;
-
-        this.validateLicense(license);
+        }
 
         return license.hasLicenseForAnyFeature(featureNames);
     }
 
     /**
-     * Checks whether the license assigned to the specified context is licensed to use any of the features specified.<br />
+     * Checks whether the license assigned to the specified context is licensed to use any of the features specified.<br
+     * />
      * <br />
      * Throws the same exceptions as {@link #getLicense(Object)} and for the same reasons.
      *
      * @param context The context (account, client, etc.) for which to check the feature(s) against its license
      * @param features The feature (or features) to check against the license
+     *
      * @return {@code true} if the license exists and has this feature enabled, {@code false} otherwise.
+     *
      * @throws InvalidLicenseException when the license is invalid for any reason.
      * @throws ExpiredLicenseException when the license is expired.
      */
-    public final boolean hasLicenseForAnyFeature(Object context, FeatureObject... features) throws InvalidLicenseException
+    public final boolean hasLicenseForAnyFeature(final Object context, final FeatureObject... features)
+        throws InvalidLicenseException
     {
-        License license = this.getLicense(context);
+        final License license = this.getValidatedLicenseOrNullIfNonExistent(context);
         if(license == null)
+        {
             return false;
-
-        this.validateLicense(license);
+        }
 
         return license.hasLicenseForAnyFeature(features);
     }
 
     /**
-     * Checks whether the license assigned to the specified context is licensed to use all of the features specified.<br />
+     * Checks whether the license assigned to the specified context is licensed to use all of the features specified.<br
+     * />
      * <br />
      * Throws the same exceptions as {@link #getLicense(Object)} and for the same reasons.
      *
      * @param context The context (account, client, etc.) for which to check the feature(s) against its license
      * @param featureNames The feature (or features) to check against the license
+     *
      * @return {@code true} if the license exists and has this feature enabled, {@code false} otherwise.
+     *
      * @throws InvalidLicenseException when the license is invalid for any reason.
      * @throws ExpiredLicenseException when the license is expired.
      */
-    public final boolean hasLicenseForAllFeatures(Object context, String... featureNames) throws InvalidLicenseException
+    public final boolean hasLicenseForAllFeatures(final Object context, final String... featureNames)
+        throws InvalidLicenseException
     {
-        License license = this.getLicense(context);
+        final License license = this.getValidatedLicenseOrNullIfNonExistent(context);
         if(license == null)
+        {
             return false;
-
-        this.validateLicense(license);
+        }
 
         return license.hasLicenseForAllFeatures(featureNames);
     }
 
     /**
-     * Checks whether the license assigned to the specified context is licensed to use all of the features specified.<br />
+     * Checks whether the license assigned to the specified context is licensed to use all of the features specified.<br
+     * />
      * <br />
      * Throws the same exceptions as {@link #getLicense(Object)} and for the same reasons.
      *
      * @param context The context (account, client, etc.) for which to check the feature(s) against its license
      * @param features The feature (or features) to check against the license
+     *
      * @return {@code true} if the license exists and has this feature enabled, {@code false} otherwise.
+     *
      * @throws InvalidLicenseException when the license is invalid for any reason.
      * @throws ExpiredLicenseException when the license is expired.
      */
-    public final boolean hasLicenseForAllFeatures(Object context, FeatureObject... features) throws InvalidLicenseException
+    public final boolean hasLicenseForAllFeatures(final Object context, final FeatureObject... features)
+        throws InvalidLicenseException
     {
-        License license = this.getLicense(context);
+        final License license = this.getValidatedLicenseOrNullIfNonExistent(context);
         if(license == null)
+        {
             return false;
-
-        this.validateLicense(license);
+        }
 
         return license.hasLicenseForAllFeatures(features);
     }
 
     /**
-     * Checks whether the license assigned to the specified context is licensed to use the feature(s) in the annotation value.<br />
+     * Checks whether the license assigned to the specified context is licensed to use the feature(s) in the annotation
+     * value.<br />
      * <br />
      * Throws the same exceptions as {@link #getLicense(Object)} and for the same reasons.
      *
      * @param context The context (account, client, etc.) for which to check the feature(s) against its license
      * @param annotation The annotation object whose value(s) is(are) the feature(s) to check against the license
+     *
      * @return {@code true} if the license exists and has this feature(s) enabled, {@code false} otherwise.
+     *
      * @throws InvalidLicenseException when the license is invalid for any reason.
      * @throws ExpiredLicenseException when the license is expired.
      */
-    public final boolean hasLicenseForFeatures(Object context, FeatureRestriction annotation)
-            throws InvalidLicenseException
+    public final boolean hasLicenseForFeatures(final Object context, final FeatureRestriction annotation)
+        throws InvalidLicenseException
     {
-        License license = this.getLicense(context);
+        final License license = this.getValidatedLicenseOrNullIfNonExistent(context);
         if(license == null)
+        {
             return false;
+        }
 
         this.validateLicense(license);
 
         return annotation.operand() == FeatureRestrictionOperand.AND ?
-                license.hasLicenseForAllFeatures(annotation.value()) :
-                license.hasLicenseForAnyFeature(annotation.value());
+               license.hasLicenseForAllFeatures(annotation.value()) :
+               license.hasLicenseForAnyFeature(annotation.value());
     }
 
     /**
@@ -313,26 +353,46 @@ public final class LicenseManager
      * Throws the same exceptions as {@link #getLicense(Object)} and for the same reasons.
      *
      * @param context The context (account, client, etc.) for which to check the feature(s) against its license
-     * @param target The target (a package reflection object, class reflection object or method reflection object) to check for the {@link FeatureRestriction} annotation and check its value against the license
-     * @return {@code false} if the license does not exist, {@code true} if the target is not annotated with {@link FeatureRestriction} and, if it is annotated, {@code true} if the feature(s) is(are) licensed or {@code false} if the feature(s) is(are) not licensed
+     * @param target The target (a package reflection object, class reflection object or method reflection object)
+     *     to check for the {@link FeatureRestriction} annotation and check its value against the license
+     *
+     * @return {@code false} if the license does not exist, {@code true} if the target is not annotated with {@link
+     *     FeatureRestriction} and, if it is annotated, {@code true} if the feature(s) is(are) licensed or {@code false}
+     *     if the feature(s) is(are) not licensed
+     *
      * @throws InvalidLicenseException when the license is invalid for any reason.
      * @throws ExpiredLicenseException when the license is expired.
      */
-    public final boolean hasLicenseForFeatures(Object context, AnnotatedElement target) throws InvalidLicenseException
+    public final boolean hasLicenseForFeatures(final Object context, final AnnotatedElement target)
+        throws InvalidLicenseException
     {
-        License license = this.getLicense(context);
+        final License license = this.getValidatedLicenseOrNullIfNonExistent(context);
         if(license == null)
+        {
             return false;
+        }
+
+        final FeatureRestriction annotation = target.getAnnotation(FeatureRestriction.class);
+
+        return annotation == null || (
+            annotation.operand() == FeatureRestrictionOperand.AND ?
+            license.hasLicenseForAllFeatures(annotation.value()) :
+            license.hasLicenseForAnyFeature(annotation.value())
+        );
+    }
+
+    private License getValidatedLicenseOrNullIfNonExistent(final Object context)
+        throws InvalidLicenseException
+    {
+        final License license = this.getLicense(context);
+        if(license == null)
+        {
+            return null;
+        }
 
         this.validateLicense(license);
 
-        FeatureRestriction annotation = target.getAnnotation(FeatureRestriction.class);
-
-        return annotation == null || (
-                annotation.operand() == FeatureRestrictionOperand.AND ?
-                    license.hasLicenseForAllFeatures(annotation.value()) :
-                    license.hasLicenseForAnyFeature(annotation.value())
-        );
+        return license;
     }
 
     /**
@@ -350,25 +410,30 @@ public final class LicenseManager
      * its knees.
      *
      * @param context The context (account, client, etc.) for which to retrieve the license object
+     *
      * @return the requested license object, or null if none exists.
+     *
      * @throws KeyNotFoundException if the public key data could not be found.
      * @throws AlgorithmNotSupportedException if the signature algorithm is not supported on this system.
      * @throws InappropriateKeySpecificationException if an inappropriate key specification is provided.
-     * @throws InappropriateKeyException if there is a problem initializing the verification mechanism with the public key.
+     * @throws InappropriateKeyException if there is a problem initializing the verification mechanism with the
+     *     public key.
      * @throws CorruptSignatureException if the signature data has been corrupted (most likely tampered with).
      * @throws InvalidSignatureException if the signature is invalid (most likely tampered with).
      * @throws FailedToDecryptException if the license or signature could not be decrypted.
      * @throws ObjectTypeNotExpectedException if the license data was tampered with.
      */
-    public final License getLicense(Object context) throws KeyNotFoundException, AlgorithmNotSupportedException,
-                                                           InappropriateKeySpecificationException,
-                                                           InappropriateKeyException, CorruptSignatureException,
-                                                           InvalidSignatureException, FailedToDecryptException
+    public final License getLicense(final Object context) throws KeyNotFoundException, AlgorithmNotSupportedException,
+                                                                 InappropriateKeySpecificationException,
+                                                                 InappropriateKeyException, CorruptSignatureException,
+                                                                 InvalidSignatureException, FailedToDecryptException
     {
         if(context == null)
+        {
             throw new IllegalArgumentException("License context cannot be null.");
+        }
 
-        long time = System.currentTimeMillis();
+        final long time = System.currentTimeMillis();
 
         LicenseCacheEntry entry;
 
@@ -387,15 +452,17 @@ public final class LicenseManager
 
             if(entry == null || entry.license == null)
             {
-                SignedLicense signedLicense = this.licenseProvider.getLicense(context);
+                final SignedLicense signedLicense = this.licenseProvider.getLicense(context);
                 if(signedLicense == null)
+                {
                     return null;
+                }
 
-                License license = this.decryptAndVerifyLicense(signedLicense);
+                final License license = this.decryptAndVerifyLicense(signedLicense);
 
                 signedLicense.erase();
 
-                long expires = time + this.cacheTimeInMilliseconds;
+                final long expires = time + this.cacheTimeInMilliseconds;
 
                 entry = new LicenseCacheEntry(license, expires);
 
@@ -426,28 +493,30 @@ public final class LicenseManager
      * retrieval and caching mechanisms normally used when calling {@link #getLicense(Object)}.
      *
      * @param signedLicense The signed license object to verify
+     *
      * @throws AlgorithmNotSupportedException if the signature algorithm is not supported on this system.
-     * @throws InappropriateKeyException if there is a problem initializing the verification mechanism with the public key.
+     * @throws InappropriateKeyException if there is a problem initializing the verification mechanism with the
+     *     public key.
      * @throws CorruptSignatureException if the signature data has been corrupted (most likely tampered with).
      * @throws InvalidSignatureException if the signature is invalid (most likely tampered with).
      */
-    public final void verifyLicenseSignature(SignedLicense signedLicense)
-            throws AlgorithmNotSupportedException, InappropriateKeyException, CorruptSignatureException,
-                   InvalidSignatureException
+    public final void verifyLicenseSignature(final SignedLicense signedLicense)
+        throws AlgorithmNotSupportedException, InappropriateKeyException, CorruptSignatureException,
+               InvalidSignatureException
     {
-        PublicKey key;
+        final PublicKey key;
         {
-            char[] password = this.publicKeyPasswordProvider.getPassword();
-            byte[] keyData = this.publicKeyDataProvider.getEncryptedPublicKeyData();
+            final char[] password = this.publicKeyPasswordProvider.getPassword();
+            final byte[] keyData = this.publicKeyDataProvider.getEncryptedPublicKeyData();
 
             key = KeyFileUtilities.readEncryptedPublicKey(keyData, password);
 
             Arrays.fill(password, '\u0000');
-            Arrays.fill(keyData, (byte)0);
+            Arrays.fill(keyData, (byte) 0);
         }
 
         new DataSignatureManager().verifySignature(
-                key, signedLicense.getLicenseContent(), signedLicense.getSignatureContent()
+            key, signedLicense.getLicenseContent(), signedLicense.getSignatureContent()
         );
     }
 
@@ -460,33 +529,36 @@ public final class LicenseManager
      * mechanisms normally used when calling {@link #getLicense(Object)}.
      *
      * @param signedLicense The signed license object to verify
+     *
      * @return the decrypted license object.
+     *
      * @throws AlgorithmNotSupportedException if the signature algorithm is not supported on this system.
-     * @throws InappropriateKeyException if there is a problem initializing the verification mechanism with the public key.
+     * @throws InappropriateKeyException if there is a problem initializing the verification mechanism with the
+     *     public key.
      * @throws CorruptSignatureException if the signature data has been corrupted (most likely tampered with).
      * @throws InvalidSignatureException if the signature is invalid (most likely tampered with).
      * @throws FailedToDecryptException if the license could not be decrypted.
      */
-    public final License decryptAndVerifyLicense(SignedLicense signedLicense)
+    public final License decryptAndVerifyLicense(final SignedLicense signedLicense)
     {
-        License license;
+        final License license;
         {
-            byte[] unencrypted;
+            final byte[] unencrypted;
             {
                 this.verifyLicenseSignature(signedLicense);
 
-                char[] password = this.licensePasswordProvider.getPassword();
-                byte[] encrypted = signedLicense.getLicenseContent();
+                final char[] password = this.licensePasswordProvider.getPassword();
+                final byte[] encrypted = signedLicense.getLicenseContent();
 
                 unencrypted = Encryptor.decryptRaw(encrypted, password);
 
                 Arrays.fill(password, '\u0000');
-                Arrays.fill(encrypted, (byte)0);
+                Arrays.fill(encrypted, (byte) 0);
             }
 
             license = License.deserialize(unencrypted);
 
-            Arrays.fill(unencrypted, (byte)0);
+            Arrays.fill(unencrypted, (byte) 0);
         }
         return license;
     }
@@ -500,7 +572,7 @@ public final class LicenseManager
 
         private final long expires;
 
-        public LicenseCacheEntry(License license, long expires)
+        public LicenseCacheEntry(final License license, final long expires)
         {
             this.license = license;
             this.expires = expires;

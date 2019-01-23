@@ -18,13 +18,13 @@
 
 package io.oddsource.java.licensing;
 
-import org.apache.commons.codec.binary.Base64;
-import org.apache.commons.io.FileUtils;
-
 import java.io.File;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.net.URL;
+
+import org.apache.commons.codec.binary.Base64;
+import org.apache.commons.io.FileUtils;
 
 /**
  * A default implementation of the {@link LicenseProvider} that assumes the binary data from the signed and serialized
@@ -59,7 +59,6 @@ public class FileLicenseProvider extends DeserializingLicenseProvider
     public FileLicenseProvider()
     {
         this.classLoader = this.getClass().getClassLoader();
-        this.fileOnClasspath = false;
     }
 
     /**
@@ -69,10 +68,12 @@ public class FileLicenseProvider extends DeserializingLicenseProvider
      *
      * @param classLoader The class loader to use for finding the file
      */
-    public FileLicenseProvider(ClassLoader classLoader)
+    public FileLicenseProvider(final ClassLoader classLoader)
     {
         if(classLoader == null)
+        {
             throw new IllegalArgumentException("Argument classLoader cannot be null.");
+        }
 
         this.classLoader = classLoader;
         this.fileOnClasspath = true;
@@ -83,17 +84,22 @@ public class FileLicenseProvider extends DeserializingLicenseProvider
      * Returns null (not an empty array) if no license is found.
      *
      * @param context The context for which to get the license
+     *
      * @return the signed license data.
      */
     @Override
-    protected byte[] getLicenseData(Object context)
+    protected byte[] getLicenseData(final Object context)
     {
         if(context == null)
+        {
             throw new IllegalArgumentException("Argument context cannot be null.");
+        }
 
-        File file = this.getLicenseFile(context);
+        final File file = this.getLicenseFile(context);
         if(file == null || !file.exists() || !file.canRead())
+        {
             return null;
+        }
 
         try
         {
@@ -106,7 +112,7 @@ public class FileLicenseProvider extends DeserializingLicenseProvider
 
             return data;
         }
-        catch(IOException e)
+        catch(final IOException e)
         {
             return null;
         }
@@ -117,27 +123,32 @@ public class FileLicenseProvider extends DeserializingLicenseProvider
      * return a file handle to a non-existent file. So, the file should be checked for existence and readability.
      *
      * @param context The context for which to get the license
+     *
      * @return the license file handle.
      */
-    protected File getLicenseFile(Object context)
+    protected File getLicenseFile(final Object context)
     {
         String fileName = this.getFilePrefix() + context.toString() + this.getFileSuffix();
 
         if(this.isFileOnClasspath())
         {
             if(fileName.startsWith("/"))
+            {
                 fileName = fileName.substring(1);
+            }
 
-            URL url = this.classLoader.getResource(fileName);
+            final URL url = this.classLoader.getResource(fileName);
             if(url == null)
+            {
                 fileName = null;
+            }
             else
             {
                 try
                 {
                     return new File(url.toURI());
                 }
-                catch(URISyntaxException e)
+                catch(final URISyntaxException e)
                 {
                     return new File(url.getPath());
                 }
@@ -166,10 +177,12 @@ public class FileLicenseProvider extends DeserializingLicenseProvider
      *
      * @param filePrefix The file prefix
      */
-    public void setFilePrefix(String filePrefix)
+    public void setFilePrefix(final String filePrefix)
     {
         if(filePrefix == null)
+        {
             throw new IllegalArgumentException("Argument filePrefix cannot be null.");
+        }
 
         this.filePrefix = filePrefix;
     }
@@ -193,10 +206,12 @@ public class FileLicenseProvider extends DeserializingLicenseProvider
      *
      * @param fileSuffix The file suffix
      */
-    public void setFileSuffix(String fileSuffix)
+    public void setFileSuffix(final String fileSuffix)
     {
         if(fileSuffix == null)
+        {
             throw new IllegalArgumentException("Argument fileSuffix cannot be null.");
+        }
 
         this.fileSuffix = fileSuffix;
     }
@@ -228,7 +243,7 @@ public class FileLicenseProvider extends DeserializingLicenseProvider
      *
      * @param fileOnClasspath Whether the file is on the classpath
      */
-    public void setFileOnClasspath(boolean fileOnClasspath)
+    public void setFileOnClasspath(final boolean fileOnClasspath)
     {
         this.fileOnClasspath = fileOnClasspath;
     }
@@ -250,7 +265,7 @@ public class FileLicenseProvider extends DeserializingLicenseProvider
      *
      * @param base64Encoded Whether the file is Base64 encoded.
      */
-    public void setBase64Encoded(boolean base64Encoded)
+    public void setBase64Encoded(final boolean base64Encoded)
     {
         this.base64Encoded = base64Encoded;
     }

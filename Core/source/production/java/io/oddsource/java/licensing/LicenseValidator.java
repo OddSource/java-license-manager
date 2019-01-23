@@ -40,8 +40,11 @@ public interface LicenseValidator
      * (expired, not who it belongs to, etc.).
      *
      * @param license The license to validate
-     * @throws InvalidLicenseException when the license is invalid for any reason; the implementer is required to provide adequate description in this exception to indicate why the license is invalid; extending the exception is encouraged.
+     *
+     * @throws InvalidLicenseException when the license is invalid for any reason; the implementer is required to
+     *     provide adequate description in this exception to indicate why the license is invalid; extending the
+     *     exception is encouraged.
      * @throws ExpiredLicenseException when the license is expired.
      */
-    public void validateLicense(License license) throws InvalidLicenseException;
+    void validateLicense(License license) throws InvalidLicenseException;
 }

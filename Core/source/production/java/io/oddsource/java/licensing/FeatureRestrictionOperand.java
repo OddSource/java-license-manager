@@ -28,6 +28,5 @@ package io.oddsource.java.licensing;
 public enum FeatureRestrictionOperand
 {
     AND,
-
-    OR
+    OR,
 }

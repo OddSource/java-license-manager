@@ -18,18 +18,18 @@
 
 package io.oddsource.java.licensing;
 
-import io.oddsource.java.licensing.encryption.KeyFileUtilities;
-import io.oddsource.java.licensing.exception.AlgorithmNotSupportedException;
-import io.oddsource.java.licensing.exception.CorruptSignatureException;
-import io.oddsource.java.licensing.exception.InappropriateKeyException;
-import io.oddsource.java.licensing.exception.InvalidSignatureException;
-
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.security.PrivateKey;
 import java.security.PublicKey;
 import java.security.Signature;
 import java.security.SignatureException;
+
+import io.oddsource.java.licensing.encryption.KeyFileUtilities;
+import io.oddsource.java.licensing.exception.AlgorithmNotSupportedException;
+import io.oddsource.java.licensing.exception.CorruptSignatureException;
+import io.oddsource.java.licensing.exception.InappropriateKeyException;
+import io.oddsource.java.licensing.exception.InvalidSignatureException;
 
 /**
  * This class manages the signatures for objects.
@@ -40,16 +40,16 @@ import java.security.SignatureException;
  */
 public final class DataSignatureManager
 {
-    public final byte[] signData(PrivateKey key, byte[] data)
-            throws AlgorithmNotSupportedException, InappropriateKeyException
+    public final byte[] signData(final PrivateKey key, final byte[] data)
+        throws AlgorithmNotSupportedException, InappropriateKeyException
     {
-        Signature signature = this.getSignature();
+        final Signature signature = this.getSignature();
 
         try
         {
             signature.initSign(key);
         }
-        catch(InvalidKeyException e)
+        catch(final InvalidKeyException e)
         {
             throw new InappropriateKeyException("While initializing the signature object with the public key.", e);
         }
@@ -58,7 +58,7 @@ public final class DataSignatureManager
         {
             signature.update(data);
         }
-        catch(SignatureException e)
+        catch(final SignatureException e)
         {
             throw new RuntimeException("This should never happen.", e);
         }
@@ -67,23 +67,23 @@ public final class DataSignatureManager
         {
             return signature.sign();
         }
-        catch(SignatureException e)
+        catch(final SignatureException e)
         {
             throw new RuntimeException("This should never happen.", e);
         }
     }
 
-    public final void verifySignature(PublicKey key, byte[] data, byte[] signatureContent)
-            throws AlgorithmNotSupportedException, InappropriateKeyException,
-                   CorruptSignatureException, InvalidSignatureException
+    public final void verifySignature(final PublicKey key, final byte[] data, final byte[] signatureContent)
+        throws AlgorithmNotSupportedException, InappropriateKeyException, CorruptSignatureException,
+               InvalidSignatureException
     {
-        Signature signature = this.getSignature();
+        final Signature signature = this.getSignature();
 
         try
         {
             signature.initVerify(key);
         }
-        catch(InvalidKeyException e)
+        catch(final InvalidKeyException e)
         {
             throw new InappropriateKeyException("While initializing the signature object with the public key.", e);
         }
@@ -92,7 +92,7 @@ public final class DataSignatureManager
         {
             signature.update(data);
         }
-        catch(SignatureException e)
+        catch(final SignatureException e)
         {
             throw new RuntimeException("This should never happen.", e);
         }
@@ -100,9 +100,11 @@ public final class DataSignatureManager
         try
         {
             if(!signature.verify(signatureContent))
+            {
                 throw new InvalidSignatureException("The license signature is invalid.");
+            }
         }
-        catch(SignatureException e)
+        catch(final SignatureException e)
         {
             throw new CorruptSignatureException("While verifying the signature.", e);
         }
@@ -115,7 +117,7 @@ public final class DataSignatureManager
         {
             return Signature.getInstance("SHA1with" + KeyFileUtilities.keyAlgorithm);
         }
-        catch(NoSuchAlgorithmException e)
+        catch(final NoSuchAlgorithmException e)
         {
             throw new AlgorithmNotSupportedException("SHA-1 with " + KeyFileUtilities.keyAlgorithm);
         }

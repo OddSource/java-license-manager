@@ -39,6 +39,6 @@ public final class LicensingCharsets
      */
     private LicensingCharsets()
     {
-        throw new RuntimeException("This class cannot be instantiated.");
+        throw new AssertionError("This class cannot be instantiated.");
     }
 }

@@ -37,7 +37,7 @@ public final class SignedLicense implements Serializable
 
     private final byte[] signatureContent;
 
-    public SignedLicense(byte[] licenseContent, byte[] signatureContent)
+    public SignedLicense(final byte[] licenseContent, final byte[] signatureContent)
     {
         this.licenseContent = Arrays.copyOf(licenseContent, licenseContent.length);
         this.signatureContent = Arrays.copyOf(signatureContent, signatureContent.length);
@@ -73,7 +73,7 @@ public final class SignedLicense implements Serializable
      */
     protected final void erase()
     {
-        Arrays.fill(this.licenseContent, (byte)0);
-        Arrays.fill(this.signatureContent, (byte)0);
+        Arrays.fill(this.licenseContent, (byte) 0);
+        Arrays.fill(this.signatureContent, (byte) 0);
     }
 }

@@ -18,11 +18,11 @@
 
 package io.oddsource.java.licensing;
 
-import io.oddsource.java.licensing.immutable.ImmutableLinkedHashSet;
-
 import java.io.Serializable;
 import java.util.LinkedHashSet;
 import java.util.Set;
+
+import io.oddsource.java.licensing.immutable.ImmutableLinkedHashSet;
 
 /**
  * This is the license object, which is serialized and signed to a file for use by the application later. All the
@@ -33,9 +33,9 @@ import java.util.Set;
  *
  * @author Nick Williams
  * @version 1.7.0
- * @since 1.0.0
  * @see License.Builder
  * @see License.Feature
+ * @since 1.0.0
  */
 public final class License implements Serializable, Cloneable
 {
@@ -64,7 +64,7 @@ public final class License implements Serializable, Cloneable
      *
      * @param builder The builder to use to construct this license
      */
-    private License(License.Builder builder)
+    private License(final License.Builder builder)
     {
         this.productKey = builder.productKey == null ? "" : builder.productKey;
         this.holder = builder.holder == null ? "" : builder.holder;
@@ -74,7 +74,7 @@ public final class License implements Serializable, Cloneable
         this.goodAfterDate = builder.goodAfterDate;
         this.goodBeforeDate = builder.goodBeforeDate;
         this.numberOfLicenses = builder.numberOfLicenses;
-        this.features = new ImmutableLinkedHashSet<License.Feature>(builder.features);
+        this.features = new ImmutableLinkedHashSet<>(builder.features);
     }
 
     /**
@@ -82,10 +82,12 @@ public final class License implements Serializable, Cloneable
      *
      * @param parts The tokenized string to construct this license from
      */
-    private License(String[] parts)
+    private License(final String[] parts)
     {
         if(parts == null || parts.length != 9)
+        {
             throw new IllegalArgumentException("There should be exactly nine parts to the serialized license.");
+        }
 
         this.productKey = parts[0] == null ? "" : parts[0];
         this.holder = parts[1] == null ? "" : parts[1];
@@ -96,13 +98,15 @@ public final class License implements Serializable, Cloneable
         this.goodBeforeDate = Long.parseLong(parts[6]);
         this.numberOfLicenses = Integer.parseInt(parts[7]);
 
-        Set<License.Feature> features = new LinkedHashSet<License.Feature>();
+        final Set<License.Feature> features = new LinkedHashSet<>();
         if(parts[8] != null && parts[8].trim().length() > 0)
         {
-            for(String feature : parts[8].split("\\, "))
+            for(final String feature : parts[8].split(", "))
+            {
                 features.add(License.Feature.fromString(feature));
+            }
         }
-        this.features = new ImmutableLinkedHashSet<License.Feature>(features);
+        this.features = new ImmutableLinkedHashSet<>(features);
     }
 
     /**
@@ -119,12 +123,13 @@ public final class License implements Serializable, Cloneable
      * Deserializes a serialized license into an actual License object.
      *
      * @param data The serialized data to create the license from
+     *
      * @return the unserialized license.
      */
-    protected static License deserialize(byte[] data)
+    protected static License deserialize(final byte[] data)
     {
-        String string = new String(data, LicensingCharsets.UTF_8);
-        String[] parts = string.substring(1, string.length() - 1).split("\\]\\[", -1);
+        final String string = new String(data, LicensingCharsets.UTF_8);
+        final String[] parts = string.substring(1, string.length() - 1).split("]\\[", -1);
 
         return new License(parts);
     }
@@ -227,6 +232,7 @@ public final class License implements Serializable, Cloneable
      * information on features see {@link License.Feature} and {@link License.Builder}.
      *
      * @return a list of all of the licensed features.
+     *
      * @see License.Feature
      */
     public final ImmutableLinkedHashSet<License.Feature> getFeatures()
@@ -239,9 +245,10 @@ public final class License implements Serializable, Cloneable
      * feature is not expired based on the current date before returning {@code true}.
      *
      * @param featureName The feature to check
+     *
      * @return {@code true} if this feature is licensed and valid, {@code false} otherwise.
      */
-    public final boolean hasLicenseForFeature(String featureName)
+    public final boolean hasLicenseForFeature(final String featureName)
     {
         return this.hasLicenseForFeature(System.currentTimeMillis(), featureName);
     }
@@ -252,12 +259,13 @@ public final class License implements Serializable, Cloneable
      *
      * @param currentDate The date (millisecond timestamp) to check the feature against
      * @param featureName The feature to check
+     *
      * @return {@code true} if this feature is licensed and valid, {@code false} otherwise.
      */
-    public final boolean hasLicenseForFeature(long currentDate, String featureName)
+    public final boolean hasLicenseForFeature(final long currentDate, final String featureName)
     {
-        License.Feature feature = new License.Feature(featureName);
-        License.Feature contained = this.features.get(feature);
+        final License.Feature feature = new License.Feature(featureName);
+        final License.Feature contained = this.features.get(feature);
         return contained != null && (contained.getGoodBeforeDate() < 0 || contained.getGoodBeforeDate() >= currentDate);
     }
 
@@ -266,9 +274,10 @@ public final class License implements Serializable, Cloneable
      * feature is not expired based on the current date before returning {@code true}.
      *
      * @param feature The feature to check
+     *
      * @return {@code true} if this feature is licensed and valid, {@code false} otherwise.
      */
-    public final boolean hasLicenseForFeature(FeatureObject feature)
+    public final boolean hasLicenseForFeature(final FeatureObject feature)
     {
         return this.hasLicenseForFeature(System.currentTimeMillis(), feature.getName());
     }
@@ -279,9 +288,10 @@ public final class License implements Serializable, Cloneable
      *
      * @param currentDate The date (millisecond timestamp) to check the feature against
      * @param feature The feature to check
+     *
      * @return {@code true} if this feature is licensed and valid, {@code false} otherwise.
      */
-    public final boolean hasLicenseForFeature(long currentDate, FeatureObject feature)
+    public final boolean hasLicenseForFeature(final long currentDate, final FeatureObject feature)
     {
         return this.hasLicenseForFeature(currentDate, feature.getName());
     }
@@ -292,9 +302,10 @@ public final class License implements Serializable, Cloneable
      * Features are only valid if they have no expiration date or they are not expired.
      *
      * @param featureNames The features to check
+     *
      * @return {@code true} if any one feature listed is licensed and valid, {@code false} otherwise.
      */
-    public final boolean hasLicenseForAnyFeature(String... featureNames)
+    public final boolean hasLicenseForAnyFeature(final String... featureNames)
     {
         return this.hasLicenseForAnyFeature(System.currentTimeMillis(), featureNames);
     }
@@ -306,14 +317,17 @@ public final class License implements Serializable, Cloneable
      *
      * @param currentDate The date (millisecond timestamp) to check features against
      * @param featureNames The features to check
+     *
      * @return {@code true} if any one feature listed is licensed and valid, {@code false} otherwise.
      */
-    public final boolean hasLicenseForAnyFeature(long currentDate, String... featureNames)
+    public final boolean hasLicenseForAnyFeature(final long currentDate, final String... featureNames)
     {
-        for(String featureName : featureNames)
+        for(final String featureName : featureNames)
         {
             if(this.hasLicenseForFeature(currentDate, featureName))
+            {
                 return true;
+            }
         }
         return false;
     }
@@ -324,9 +338,10 @@ public final class License implements Serializable, Cloneable
      * Features are only valid if they have no expiration date or they are not expired.
      *
      * @param features The features to check
+     *
      * @return {@code true} if any one feature listed is licensed and valid, {@code false} otherwise.
      */
-    public final boolean hasLicenseForAnyFeature(FeatureObject... features)
+    public final boolean hasLicenseForAnyFeature(final FeatureObject... features)
     {
         return this.hasLicenseForAnyFeature(System.currentTimeMillis(), features);
     }
@@ -338,14 +353,17 @@ public final class License implements Serializable, Cloneable
      *
      * @param currentDate The date (millisecond timestamp) to check features against
      * @param features The features to check
+     *
      * @return {@code true} if any one feature listed is licensed and valid, {@code false} otherwise.
      */
-    public final boolean hasLicenseForAnyFeature(long currentDate, FeatureObject... features)
+    public final boolean hasLicenseForAnyFeature(final long currentDate, final FeatureObject... features)
     {
-        for(FeatureObject feature : features)
+        for(final FeatureObject feature : features)
         {
             if(this.hasLicenseForFeature(currentDate, feature))
+            {
                 return true;
+            }
         }
         return false;
     }
@@ -356,9 +374,10 @@ public final class License implements Serializable, Cloneable
      * If any one feature is expired, this method returns {@code false}.
      *
      * @param featureNames The features to check
+     *
      * @return {@code true} if every feature listed is licensed and valid, {@code false} otherwise.
      */
-    public final boolean hasLicenseForAllFeatures(String... featureNames)
+    public final boolean hasLicenseForAllFeatures(final String... featureNames)
     {
         return this.hasLicenseForAllFeatures(System.currentTimeMillis(), featureNames);
     }
@@ -370,14 +389,17 @@ public final class License implements Serializable, Cloneable
      *
      * @param currentDate The date (millisecond timestamp) to check features against
      * @param featureNames The features to check
+     *
      * @return {@code true} if every feature listed is licensed and valid, {@code false} otherwise.
      */
-    public final boolean hasLicenseForAllFeatures(long currentDate, String... featureNames)
+    public final boolean hasLicenseForAllFeatures(final long currentDate, final String... featureNames)
     {
-        for(String featureName : featureNames)
+        for(final String featureName : featureNames)
         {
             if(!this.hasLicenseForFeature(currentDate, featureName))
+            {
                 return false;
+            }
         }
         return true;
     }
@@ -388,9 +410,10 @@ public final class License implements Serializable, Cloneable
      * If any one feature is expired, this method returns {@code false}.
      *
      * @param features The features to check
+     *
      * @return {@code true} if every feature listed is licensed and valid, {@code false} otherwise.
      */
-    public final boolean hasLicenseForAllFeatures(FeatureObject... features)
+    public final boolean hasLicenseForAllFeatures(final FeatureObject... features)
     {
         return this.hasLicenseForAllFeatures(System.currentTimeMillis(), features);
     }
@@ -402,14 +425,17 @@ public final class License implements Serializable, Cloneable
      *
      * @param currentDate The date (millisecond timestamp) to check features against
      * @param features The features to check
+     *
      * @return {@code true} if every feature listed is licensed and valid, {@code false} otherwise.
      */
-    public final boolean hasLicenseForAllFeatures(long currentDate, FeatureObject... features)
+    public final boolean hasLicenseForAllFeatures(final long currentDate, final FeatureObject... features)
     {
-        for(FeatureObject feature : features)
+        for(final FeatureObject feature : features)
         {
             if(!this.hasLicenseForFeature(currentDate, feature))
+            {
                 return false;
+            }
         }
         return true;
     }
@@ -419,32 +445,51 @@ public final class License implements Serializable, Cloneable
      * deeply.
      *
      * @param object The license to check for equality against
+     *
      * @return {@code true} if the licenses are identical, {@code false} otherwise.
      */
     @Override
-    public final boolean equals(Object object)
+    public final boolean equals(final Object object)
     {
         if(object == null || !object.getClass().equals(License.class))
-            return false;
-
-        License license = (License)object;
-
-        boolean equals = ((license.productKey == null && this.productKey == null) || (license.productKey != null && license.productKey.equals(this.productKey))) &&
-               ((license.holder == null && this.holder == null) || (license.holder != null && license.holder.equals(this.holder))) &&
-               ((license.issuer == null && this.issuer == null) || (license.issuer != null && license.issuer.equals(this.issuer))) &&
-               ((license.subject == null && this.subject == null) || (license.subject != null && license.subject.equals(this.subject))) &&
-               license.issueDate == this.issueDate &&
-               license.goodAfterDate == this.goodAfterDate &&
-               license.goodBeforeDate == this.goodBeforeDate &&
-               license.numberOfLicenses == this.numberOfLicenses;
-        if(!equals)
-            return false;
-
-        for(License.Feature feature : this.features)
         {
-            License.Feature contained = license.features.get(feature);
+            return false;
+        }
+
+        final License license = (License) object;
+
+        final boolean equals = (
+                                   (license.productKey == null && this.productKey == null) ||
+                                   (license.productKey != null && license.productKey.equals(this.productKey))
+                               ) &&
+                               (
+                                   (license.holder == null && this.holder == null) ||
+                                   (license.holder != null && license.holder.equals(this.holder))
+                               ) &&
+                               (
+                                   (license.issuer == null && this.issuer == null) ||
+                                   (license.issuer != null && license.issuer.equals(this.issuer))
+                               ) &&
+                               (
+                                   (license.subject == null && this.subject == null) ||
+                                   (license.subject != null && license.subject.equals(this.subject))
+                               ) &&
+                               license.issueDate == this.issueDate &&
+                               license.goodAfterDate == this.goodAfterDate &&
+                               license.goodBeforeDate == this.goodBeforeDate &&
+                               license.numberOfLicenses == this.numberOfLicenses;
+        if(!equals)
+        {
+            return false;
+        }
+
+        for(final License.Feature feature : this.features)
+        {
+            final License.Feature contained = license.features.get(feature);
             if(contained == null || contained.getGoodBeforeDate() != feature.getGoodBeforeDate())
+            {
                 return false;
+            }
         }
 
         return true;
@@ -461,24 +506,40 @@ public final class License implements Serializable, Cloneable
         int result = this.numberOfLicenses;
 
         if(this.productKey != null && this.productKey.length() > 0)
+        {
             result = 31 * result + this.productKey.hashCode();
+        }
         else
+        {
             result = 31 * result;
+        }
 
         if(this.holder != null && this.holder.length() > 0)
+        {
             result = 31 * result + this.holder.hashCode();
+        }
         else
+        {
             result = 31 * result;
+        }
 
         if(this.issuer != null && this.issuer.length() > 0)
+        {
             result = 31 * result + this.issuer.hashCode();
+        }
         else
+        {
             result = 31 * result;
+        }
 
         if(this.subject != null && this.subject.length() > 0)
+        {
             result = 31 * result + this.subject.hashCode();
+        }
         else
+        {
             result = 31 * result;
+        }
 
         result = 31 * result + Long.valueOf(this.issueDate).hashCode();
         result = 31 * result + Long.valueOf(this.goodAfterDate).hashCode();
@@ -496,16 +557,17 @@ public final class License implements Serializable, Cloneable
     @Override
     public final String toString()
     {
-        return new StringBuilder().append('[')
-               .append(this.productKey == null ? "" : this.productKey).append("][")
-               .append(this.holder == null ? "" : this.holder).append("][")
-               .append(this.issuer == null ? "" : this.issuer).append("][")
-               .append(this.subject == null ? "" : this.subject).append("][")
-               .append(this.issueDate).append("][")
-               .append(this.goodAfterDate).append("][")
-               .append(this.goodBeforeDate).append("][")
-               .append(this.numberOfLicenses).append(']')
-               .append(this.features).toString();
+        //noinspection StringBufferReplaceableByString
+        return new StringBuilder().append('[').
+            append(this.productKey == null ? "" : this.productKey).append("][").
+            append(this.holder == null ? "" : this.holder).append("][").
+            append(this.issuer == null ? "" : this.issuer).append("][").
+            append(this.subject == null ? "" : this.subject).append("][").
+            append(this.issueDate).append("][").
+            append(this.goodAfterDate).append("][").
+            append(this.goodBeforeDate).append("][").
+            append(this.numberOfLicenses).append(']').
+            append(this.features).toString();
     }
 
     /**
@@ -517,18 +579,20 @@ public final class License implements Serializable, Cloneable
     @SuppressWarnings("CloneDoesntCallSuperClone")
     public final License clone()
     {
-        License.Builder builder = new License.Builder().
-                withProductKey(this.productKey).
-                withHolder(this.holder).
-                withIssuer(this.issuer).
-                withSubject(this.subject).
-                withIssueDate(this.issueDate).
-                withGoodAfterDate(this.goodAfterDate).
-                withGoodBeforeDate(this.goodBeforeDate).
-                withNumberOfLicenses(this.numberOfLicenses);
+        final License.Builder builder = new License.Builder().
+            withProductKey(this.productKey).
+            withHolder(this.holder).
+            withIssuer(this.issuer).
+            withSubject(this.subject).
+            withIssueDate(this.issueDate).
+            withGoodAfterDate(this.goodAfterDate).
+            withGoodBeforeDate(this.goodBeforeDate).
+            withNumberOfLicenses(this.numberOfLicenses);
 
-        for(License.Feature feature : this.features)
+        for(final License.Feature feature : this.features)
+        {
             builder.addFeature(feature.clone());
+        }
 
         return builder.build();
     }
@@ -543,9 +607,9 @@ public final class License implements Serializable, Cloneable
      *
      * @author Nick Williams
      * @version 1.2.0
-     * @since 1.0.0
      * @see License
      * @see License.Builder
+     * @since 1.0.0
      */
     public static final class Feature implements Cloneable, Serializable, FeatureObject
     {
@@ -560,7 +624,7 @@ public final class License implements Serializable, Cloneable
          *
          * @param name The feature name
          */
-        private Feature(String name)
+        private Feature(final String name)
         {
             this(name, -1);
         }
@@ -571,7 +635,7 @@ public final class License implements Serializable, Cloneable
          * @param name The feature name
          * @param goodBeforeDate The feature expiration date
          */
-        private Feature(String name, long goodBeforeDate)
+        private Feature(final String name, final long goodBeforeDate)
         {
             this.name = name;
             this.goodBeforeDate = goodBeforeDate;
@@ -581,16 +645,21 @@ public final class License implements Serializable, Cloneable
          * Deserializes a string representation of a feature into a feature.
          *
          * @param input The string representation of a feature, generated with {@link #toString()}.
+         *
          * @return the unserialized feature.
          */
-        private static License.Feature fromString(String input)
+        private static License.Feature fromString(final String input)
         {
             if(input == null)
+            {
                 throw new IllegalArgumentException("The input argument did not contain exactly two parts.");
+            }
 
-            String[] parts = input.split("" + (char)0x1F);
+            final String[] parts = input.split("" + (char) 0x1F);
             if(parts.length != 2)
+            {
                 throw new IllegalArgumentException("The input argument did not contain exactly two parts.");
+            }
 
             return new License.Feature(parts[0], Long.parseLong(parts[1]));
         }
@@ -621,14 +690,17 @@ public final class License implements Serializable, Cloneable
          * feature (equal) and have different expiration dates.
          *
          * @param object The feature to check for equality against
+         *
          * @return {@code true} if the features are the same, {@code false} otherwise.
          */
         @Override
-        public final boolean equals(Object object)
+        public final boolean equals(final Object object)
         {
             if(object == null || object.getClass() != License.Feature.class)
+            {
                 return false;
-            License.Feature feature = (License.Feature)object;
+            }
+            final License.Feature feature = (License.Feature) object;
             return feature.name.equals(this.name);
         }
 
@@ -651,7 +723,7 @@ public final class License implements Serializable, Cloneable
         @Override
         public final String toString()
         {
-            return this.name + (char)0x1F + Long.toString(this.goodBeforeDate);
+            return this.name + (char) 0x1F + this.goodBeforeDate;
         }
 
         /**
@@ -674,6 +746,8 @@ public final class License implements Serializable, Cloneable
      */
     public static final class Builder
     {
+        private final Set<License.Feature> features = new LinkedHashSet<>();
+
         private String productKey;
 
         private String holder;
@@ -690,18 +764,19 @@ public final class License implements Serializable, Cloneable
 
         private int numberOfLicenses = Integer.MAX_VALUE;
 
-        private Set<License.Feature> features = new LinkedHashSet<License.Feature>();
-
         /**
          * Sets the product key for this license. The productKey, {@link #withIssuer(String) issuer},
-         * {@link #withHolder(String) holder}, and {@link #withSubject(String) subject} are symbolically named; they are interchangeable
-         * and can be used to hold any number of pieces of information. For example, one might use the holder to store a
+         * {@link #withHolder(String) holder}, and {@link #withSubject(String) subject} are symbolically named; they are
+         * interchangeable
+         * and can be used to hold any number of pieces of information. For example, one might use the holder to store
+         * a
          * hardware ID, or the subject to store a product name and version combination.
          *
          * @param productKey The product key
+         *
          * @return the builder instance.
          */
-        public Builder withProductKey(String productKey)
+        public Builder withProductKey(final String productKey)
         {
             this.productKey = productKey;
             return this;
@@ -709,44 +784,53 @@ public final class License implements Serializable, Cloneable
 
         /**
          * Sets the issuer for this license. The {@link #withProductKey(String) productKey}, issuer,
-         * {@link #withHolder(String) holder}, and {@link #withSubject(String) subject} are symbolically named; they are interchangeable
-         * and can be used to hold any number of pieces of information. For example, one might use the holder to store a
+         * {@link #withHolder(String) holder}, and {@link #withSubject(String) subject} are symbolically named; they are
+         * interchangeable
+         * and can be used to hold any number of pieces of information. For example, one might use the holder to store
+         * a
          * hardware ID, or the subject to store a product name and version combination.
          *
          * @param issuer The license issuer
+         *
          * @return the builder instance.
          */
-        public Builder withIssuer(String issuer)
+        public Builder withIssuer(final String issuer)
         {
             this.issuer = issuer;
             return this;
         }
 
         /**
-         * Sets the holder for this license. The {@link #withProductKey(String) productKey}, {@link #withIssuer(String) issuer},
+         * Sets the holder for this license. The {@link #withProductKey(String) productKey}, {@link #withIssuer(String)
+         * issuer},
          * holder, and {@link #withSubject(String) subject} are symbolically named; they are interchangeable
-         * and can be used to hold any number of pieces of information. For example, one might use the holder to store a
+         * and can be used to hold any number of pieces of information. For example, one might use the holder to store
+         * a
          * hardware ID, or the subject to store a product name and version combination.
          *
          * @param holder The license holder
+         *
          * @return the builder instance.
          */
-        public Builder withHolder(String holder)
+        public Builder withHolder(final String holder)
         {
             this.holder = holder;
             return this;
         }
 
         /**
-         * Sets the subject for this license. The {@link #withProductKey(String) productKey}, {@link #withIssuer(String) issuer},
+         * Sets the subject for this license. The {@link #withProductKey(String) productKey}, {@link #withIssuer(String)
+         * issuer},
          * {@link #withHolder(String) holder}, and subject are symbolically named; they are interchangeable
-         * and can be used to hold any number of pieces of information. For example, one might use the holder to store a
+         * and can be used to hold any number of pieces of information. For example, one might use the holder to store
+         * a
          * hardware ID, or the subject to store a product name and version combination.
          *
          * @param subject The license subject
+         *
          * @return the builder instance.
          */
-        public Builder withSubject(String subject)
+        public Builder withSubject(final String subject)
         {
             this.subject = subject;
             return this;
@@ -756,9 +840,10 @@ public final class License implements Serializable, Cloneable
          * Sets the issue date (millisecond timestamp) for this license.
          *
          * @param issueDate The date this license was issued
+         *
          * @return the builder instance.
          */
-        public Builder withIssueDate(long issueDate)
+        public Builder withIssueDate(final long issueDate)
         {
             this.issueDate = issueDate;
             return this;
@@ -769,9 +854,10 @@ public final class License implements Serializable, Cloneable
          * but that is not required.)
          *
          * @param goodAfterDate The date after which this license is valid
+         *
          * @return the builder instance.
          */
-        public Builder withGoodAfterDate(long goodAfterDate)
+        public Builder withGoodAfterDate(final long goodAfterDate)
         {
             this.goodAfterDate = goodAfterDate;
             return this;
@@ -781,9 +867,10 @@ public final class License implements Serializable, Cloneable
          * Sets the expiration date (millisecond timestamp) for this license.
          *
          * @param goodBeforeDate The date after which this license is no longer valid
+         *
          * @return the builder instance.
          */
-        public Builder withGoodBeforeDate(long goodBeforeDate)
+        public Builder withGoodBeforeDate(final long goodBeforeDate)
         {
             this.goodBeforeDate = goodBeforeDate;
             return this;
@@ -793,9 +880,10 @@ public final class License implements Serializable, Cloneable
          * Sets the number of licenses/seats/users this license is good for.
          *
          * @param numberOfLicenses The number of licenses this license is good for
+         *
          * @return the builder instance.
          */
-        public Builder withNumberOfLicenses(int numberOfLicenses)
+        public Builder withNumberOfLicenses(final int numberOfLicenses)
         {
             this.numberOfLicenses = numberOfLicenses;
             return this;
@@ -805,16 +893,18 @@ public final class License implements Serializable, Cloneable
          * Adds a feature to this license with no expiration date.
          *
          * @param featureName The feature to add to this license
+         *
          * @return the builder instance.
          */
-        public Builder addFeature(String featureName)
+        public Builder addFeature(final String featureName)
         {
             this.features.add(new License.Feature(featureName));
             return this;
         }
+
         @Deprecated
         @SuppressWarnings("unused")
-        public Builder withFeature(String featureName)
+        public Builder withFeature(final String featureName)
         {
             return this.addFeature(featureName);
         }
@@ -824,16 +914,18 @@ public final class License implements Serializable, Cloneable
          *
          * @param featureName The feature to add to this license
          * @param goodBeforeDate The expiration date for this license
+         *
          * @return the builder instance.
          */
-        public Builder addFeature(String featureName, long goodBeforeDate)
+        public Builder addFeature(final String featureName, final long goodBeforeDate)
         {
             this.features.add(new License.Feature(featureName, goodBeforeDate));
             return this;
         }
+
         @Deprecated
         @SuppressWarnings("unused")
-        public Builder withFeature(String featureName, long goodBeforeDate)
+        public Builder withFeature(final String featureName, final long goodBeforeDate)
         {
             return this.addFeature(featureName, goodBeforeDate);
         }
@@ -842,16 +934,18 @@ public final class License implements Serializable, Cloneable
          * Adds the existing feature object to this license.
          *
          * @param feature The feature object to add to this license
+         *
          * @return the builder instance.
          */
-        public Builder addFeature(License.Feature feature)
+        public Builder addFeature(final License.Feature feature)
         {
             this.features.add(feature);
             return this;
         }
+
         @Deprecated
         @SuppressWarnings("unused")
-        public Builder withFeature(License.Feature feature)
+        public Builder withFeature(final License.Feature feature)
         {
             return this.addFeature(feature);
         }

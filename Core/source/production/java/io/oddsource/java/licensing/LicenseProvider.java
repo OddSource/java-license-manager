@@ -32,7 +32,8 @@ public interface LicenseProvider
      * Gets the stored, still-encrypted license content and signature from the persistence store.
      *
      * @param context The context for which to get the license
+     *
      * @return the signed license object.
      */
-    public SignedLicense getLicense(Object context);
+    SignedLicense getLicense(Object context);
 }

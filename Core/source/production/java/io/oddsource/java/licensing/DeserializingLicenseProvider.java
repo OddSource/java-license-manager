@@ -33,17 +33,18 @@ public abstract class DeserializingLicenseProvider implements LicenseProvider
      * Gets the stored, still-encrypted license content and signature from the persistence store.
      *
      * @param context The context for which to get the license
+     *
      * @return the signed license object.
      */
     @Override
-    public final SignedLicense getLicense(Object context)
+    public final SignedLicense getLicense(final Object context)
     {
-        byte[] data = this.getLicenseData(context);
+        final byte[] data = this.getLicenseData(context);
 
         return data == null ? null : this.deserializeLicense(data);
     }
 
-    public final SignedLicense deserializeLicense(byte[] data)
+    public final SignedLicense deserializeLicense(final byte[] data)
     {
         return new ObjectSerializer().readObject(SignedLicense.class, data);
     }
@@ -53,6 +54,7 @@ public abstract class DeserializingLicenseProvider implements LicenseProvider
      * no license is found, this method should return null (not an empty array).
      *
      * @param context The context for which to get the license
+     *
      * @return the signed license data.
      */
     protected abstract byte[] getLicenseData(Object context);

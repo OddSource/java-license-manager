@@ -18,16 +18,17 @@
 
 package io.oddsource.java.licensing;
 
-import io.oddsource.java.licensing.exception.ObjectDeserializationException;
-import io.oddsource.java.licensing.exception.ObjectSerializationException;
-import io.oddsource.java.licensing.exception.ObjectTypeNotExpectedException;
-import org.apache.commons.io.output.ByteArrayOutputStream;
-
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
+
+import org.apache.commons.io.output.ByteArrayOutputStream;
+
+import io.oddsource.java.licensing.exception.ObjectDeserializationException;
+import io.oddsource.java.licensing.exception.ObjectSerializationException;
+import io.oddsource.java.licensing.exception.ObjectTypeNotExpectedException;
 
 /**
  * This is a helper class for writing any object and reading simple objects (no
@@ -42,60 +43,49 @@ public final class ObjectSerializer
     /**
      * Deserializes an object of the specified type from the provided byte stream.
      *
-     * @param expectedType The type that is expected to be retrieved from {@code byteStream} (must implement {@link Serializable})
-     * @param byteStream The byte stream to retrieve the object from (it must contain exactly one object, of the exact type passed to {@code expectedType})
+     * @param expectedType The type that is expected to be retrieved from {@code byteStream} (must implement {@link
+     *     Serializable})
+     * @param byteStream The byte stream to retrieve the object from (it must contain exactly one object, of the
+     *     exact type passed to {@code expectedType})
+     *
      * @return the requested unserialized object, presumably in the stream.
-     * @throws ObjectTypeNotExpectedException If the object found in the stream does not match the type {@code expectedType} or if a {@link ClassNotFoundException} or {@link NoClassDefFoundError} occurs
-     * @throws ObjectDeserializationException If an I/O exception occurs while deserializing the object from the stream
+     *
+     * @throws ObjectTypeNotExpectedException If the object found in the stream does not match the type {@code
+     *     expectedType} or if a {@link ClassNotFoundException} or {@link NoClassDefFoundError} occurs
+     * @throws ObjectDeserializationException If an I/O exception occurs while deserializing the object from the
+     *     stream
      */
-    public final <T extends Serializable> T readObject(Class<T> expectedType, byte[] byteStream)
-            throws ObjectDeserializationException
+    public final <T extends Serializable> T readObject(final Class<T> expectedType, final byte[] byteStream)
+        throws ObjectDeserializationException
     {
-        ByteArrayInputStream bytes = new ByteArrayInputStream(byteStream);
-        ObjectInputStream stream = null;
-        try
+        final ByteArrayInputStream bytes = new ByteArrayInputStream(byteStream);
+        try(final ObjectInputStream stream = new ObjectInputStream(bytes))
         {
-            stream = new ObjectInputStream(bytes);
-            Object allegedObject = stream.readObject();
+            final Object allegedObject = stream.readObject();
             if(!expectedType.isInstance(allegedObject))
             {
                 throw new ObjectTypeNotExpectedException(
-                        expectedType.getName(),
-                        allegedObject.getClass().getName()
+                    expectedType.getName(),
+                    allegedObject.getClass().getName()
                 );
             }
 
             return expectedType.cast(allegedObject);
         }
-        catch(IOException e)
+        catch(final IOException e)
         {
             throw new ObjectDeserializationException(
-                    "An I/O error occurred while reading the object from the byte array.",
-                    e
+                "An I/O error occurred while reading the object from the byte array.",
+                e
             );
         }
-        catch(ClassNotFoundException e)
+        catch(final ClassNotFoundException | NoClassDefFoundError e)
         {
             throw new ObjectTypeNotExpectedException(
-                    expectedType.getName(),
-                    e.getMessage(),
-                    e
+                expectedType.getName(),
+                e.getMessage(),
+                e
             );
-        }
-        catch(NoClassDefFoundError e)
-        {
-            throw new ObjectTypeNotExpectedException(
-                    expectedType.getName(),
-                    e.getMessage(),
-                    e
-            );
-        }
-        finally
-        {
-            try {
-                if(stream != null)
-                    stream.close();
-            } catch(IOException ignore) { }
         }
     }
 
@@ -103,29 +93,22 @@ public final class ObjectSerializer
      * Serializes the {@link Serializable} object passed and returns it as a byte array.
      *
      * @param object The object to serialize
+     *
      * @return the byte stream with the object serialized in it.
+     *
      * @throws ObjectSerializationException if an I/O exception occurs while serializing the object.
      */
-    public final byte[] writeObject(Serializable object) throws ObjectSerializationException
+    public final byte[] writeObject(final Serializable object) throws ObjectSerializationException
     {
-        ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+        final ByteArrayOutputStream bytes = new ByteArrayOutputStream();
 
-        ObjectOutputStream stream = null;
-        try
+        try(final ObjectOutputStream stream = new ObjectOutputStream(bytes))
         {
-            stream = new ObjectOutputStream(bytes);
             stream.writeObject(object);
         }
-        catch(IOException e)
+        catch(final IOException e)
         {
             throw new ObjectSerializationException(e);
-        }
-        finally
-        {
-            try {
-                if(stream != null)
-                    stream.close();
-            } catch(IOException ignore) { }
         }
 
         return bytes.toByteArray();

@@ -35,11 +35,11 @@ import java.lang.annotation.Target;
  * @since 1.0.0
  */
 @Documented
-@Target({ElementType.METHOD,ElementType.PACKAGE,ElementType.TYPE})
+@Target({ElementType.METHOD, ElementType.PACKAGE, ElementType.TYPE})
 @Retention(RetentionPolicy.RUNTIME)
 public @interface FeatureRestriction
 {
-    public String[] value();
+    String[] value();
 
-    public FeatureRestrictionOperand operand() default FeatureRestrictionOperand.AND;
+    FeatureRestrictionOperand operand() default FeatureRestrictionOperand.AND;
 }

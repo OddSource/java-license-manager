@@ -15,6 +15,28 @@
  */
 package io.oddsource.java.licensing.licensor.interfaces.cli;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
+import java.io.PrintWriter;
+import java.text.SimpleDateFormat;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Properties;
+
+import org.apache.commons.cli.CommandLine;
+import org.apache.commons.cli.CommandLineParser;
+import org.apache.commons.cli.DefaultParser;
+import org.apache.commons.cli.HelpFormatter;
+import org.apache.commons.cli.Option;
+import org.apache.commons.cli.Options;
+import org.apache.commons.cli.ParseException;
+import org.apache.commons.codec.binary.Base64;
+import org.apache.commons.io.FileUtils;
+
 import io.oddsource.java.licensing.License;
 import io.oddsource.java.licensing.LicensingCharsets;
 import io.oddsource.java.licensing.encryption.FilePrivateKeyDataProvider;
@@ -28,27 +50,6 @@ import io.oddsource.java.licensing.exception.ObjectSerializationException;
 import io.oddsource.java.licensing.licensor.LicenseCreator;
 import io.oddsource.java.licensing.licensor.LicenseCreatorProperties;
 import io.oddsource.java.licensing.licensor.interfaces.cli.spi.TextInterfaceDevice;
-import org.apache.commons.cli.CommandLine;
-import org.apache.commons.cli.CommandLineParser;
-import org.apache.commons.cli.DefaultParser;
-import org.apache.commons.cli.HelpFormatter;
-import org.apache.commons.cli.Option;
-import org.apache.commons.cli.Options;
-import org.apache.commons.cli.ParseException;
-import org.apache.commons.codec.binary.Base64;
-import org.apache.commons.io.FileUtils;
-
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
-import java.io.PrintWriter;
-import java.text.SimpleDateFormat;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Properties;
 
 /**
  * A command-line tool for generating licenses. Usage is as follows:<br />
@@ -76,22 +77,32 @@ import java.util.Properties;
  * that were expected in that file.<br />
  * <br />
  * <b>Required Config Properties File Properties</b><br />
- * <code>io.oddsource.java.licensing.privateKeyFile=[The path to the file containing the encrypted private key; either this or io.oddsource.java.licensing.privateKeyClass must be specified.]<br />
- * io.oddsource.java.licensing.privateKeyProvider=[The fully-qualified (canonical) name of the implementation of {@link PrivateKeyDataProvider}; either this or io.oddsource.java.licensing.privateKeyFile must be specified.]<br />
- * io.oddsource.java.licensing.privateKeyPassword=[The password for decrypting the private key; either this or io.oddsource.java.licensing.privateKeyPasswordClass must be specified.]<br />
- * io.oddsource.java.licensing.privateKeyPasswordProvider=[The fully-qualified (canonical) name of the implementation of {@link PasswordProvider} that provides the private key password; either this or io.oddsource.java.licensing.privateKeyPassword must be specified]</code><br />
+ * <code>io.oddsource.java.licensing.privateKeyFile=[The path to the file containing the encrypted private key; either
+ * this or io.oddsource.java.licensing.privateKeyClass must be specified.]<br />
+ * io.oddsource.java.licensing.privateKeyProvider=[The fully-qualified (canonical) name of the implementation of {@link
+ * PrivateKeyDataProvider}; either this or io.oddsource.java.licensing.privateKeyFile must be specified.]<br />
+ * io.oddsource.java.licensing.privateKeyPassword=[The password for decrypting the private key; either this or
+ * io.oddsource.java.licensing.privateKeyPasswordClass must be specified.]<br />
+ * io.oddsource.java.licensing.privateKeyPasswordProvider=[The fully-qualified (canonical) name of the implementation of
+ * {@link PasswordProvider} that provides the private key password; either this or
+ * io.oddsource.java.licensing.privateKeyPassword must be specified]</code><br />
  * <br />
  * <b>License Properties File Properties</b> (Specify only those that you wish to include in the license)<br />
  * <code>io.oddsource.java.licensing.productKey=[The product key/serial number (String) for this license]
  * io.oddsource.java.licensing.holder=[The holder (String) for this license]
  * io.oddsource.java.licensing.issuer=[The issuer (String) for this license]
  * io.oddsource.java.licensing.subject=[The subject (String) for this license]
- * io.oddsource.java.licensing.issueDate=[The date this license was issued (defaults to the current date/time), format: YYYY-MM-DD hh:mm:ss in 24-hour time]
- * io.oddsource.java.licensing.goodAfterDate=[The date this license becomes active, format: YYYY-MM-DD hh:mm:ss in 24-hour time]
- * io.oddsource.java.licensing.goodBeforeDate=[The date this license expires, format: format: YYYY-MM-DD hh:mm:ss in 24-hour time]
+ * io.oddsource.java.licensing.issueDate=[The date this license was issued (defaults to the current date/time), format:
+ * YYYY-MM-DD hh:mm:ss in 24-hour time]
+ * io.oddsource.java.licensing.goodAfterDate=[The date this license becomes active, format: YYYY-MM-DD hh:mm:ss in
+ * 24-hour time]
+ * io.oddsource.java.licensing.goodBeforeDate=[The date this license expires, format: format: YYYY-MM-DD hh:mm:ss in
+ * 24-hour time]
  * io.oddsource.java.licensing.numberOfLicenses=[The seats/users/number of licenses this license is good for]
- * io.oddsource.java.licensing.features.MY_FEATURE=[Feature expiration date for "MY_FEATURE", format: YYYY-MM-DD hh:mm:ss in 24-hour time or "none"]
- * io.oddsource.java.licensing.features.ANOTHER_FEATURE=[Feature expiration date for "ANOTHER_FEATURE", format: YYYY-MM-DD hh:mm:ss in 24-hour time or "none"]</code><br />
+ * io.oddsource.java.licensing.features.MY_FEATURE=[Feature expiration date for "MY_FEATURE", format: YYYY-MM-DD
+ * hh:mm:ss in 24-hour time or "none"]
+ * io.oddsource.java.licensing.features.ANOTHER_FEATURE=[Feature expiration date for "ANOTHER_FEATURE", format:
+ * YYYY-MM-DD hh:mm:ss in 24-hour time or "none"]</code><br />
  * <br />
  * You can specify any arbitrary number of features (and their expiration date) using multiple properties that start
  * with <code>io.oddsource.java.licensing.features</code>. The last part of the property key should be the
@@ -111,6 +122,7 @@ import java.util.Properties;
  * @version 1.0.0
  * @since 1.0.0
  */
+@SuppressWarnings("Duplicates")
 public class ConsoleLicenseGenerator
 {
     public static final String PROPERTY_PRIVATE_KEY_FILE = "io.oddsource.java.licensing.privateKeyFile";
@@ -119,7 +131,8 @@ public class ConsoleLicenseGenerator
 
     public static final String PROPERTY_PRIVATE_KEY_PASSWORD = "io.oddsource.java.licensing.privateKeyPassword";
 
-    public static final String PROPERTY_PRIVATE_KEY_PASSWORD_PROVIDER = "io.oddsource.java.licensing.privateKeyPasswordProvider";
+    public static final String PROPERTY_PRIVATE_KEY_PASSWORD_PROVIDER =
+        "io.oddsource.java.licensing.privateKeyPasswordProvider";
 
     public static final String PROPERTY_LICENSE_PRODUCT_KEY = "io.oddsource.java.licensing.productKey";
 
@@ -167,10 +180,10 @@ public class ConsoleLicenseGenerator
     private static final Option HELP = Option.builder("help").desc("Display this help message").hasArg(false).build();
 
     private static final Option CONFIG = Option.builder("config").argName("file").hasArg(true).
-            desc("Specify the .properties file that configures this generator").required(false).build();
+        desc("Specify the .properties file that configures this generator").required(false).build();
 
     private static final Option LICENSE = Option.builder("license").argName("file").hasArg(true).
-            desc("Specify the .properties file that contains the data for this license").required(false).build();
+        desc("Specify the .properties file that contains the data for this license").required(false).build();
 
     private final SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
@@ -180,8 +193,10 @@ public class ConsoleLicenseGenerator
 
     protected CommandLine cli = null;
 
-    protected ConsoleLicenseGenerator(TextInterfaceDevice textInterfaceDevice,
-                                      CommandLineParser cliParser)
+    protected ConsoleLicenseGenerator(
+        final TextInterfaceDevice textInterfaceDevice,
+        final CommandLineParser cliParser
+    )
     {
         this.device = textInterfaceDevice;
         this.cliParser = cliParser;
@@ -194,12 +209,12 @@ public class ConsoleLicenseGenerator
         this.device.printOutLn();
     }
 
-    protected void processCommandLineOptions(String[] arguments)
+    protected void processCommandLineOptions(final String[] arguments)
     {
-        Options firstParseOptions = new Options();
+        final Options firstParseOptions = new Options();
         firstParseOptions.addOption(HELP);
 
-        Options options = new Options();
+        final Options options = new Options();
         options.addOption(HELP).addOption(CONFIG).addOption(LICENSE);
 
         try
@@ -208,7 +223,7 @@ public class ConsoleLicenseGenerator
 
             if(this.cli.hasOption("help"))
             {
-                HelpFormatter formatter = new HelpFormatter();
+                final HelpFormatter formatter = new HelpFormatter();
                 this.printHelp(formatter, options);
 
                 this.device.exit(0);
@@ -218,83 +233,69 @@ public class ConsoleLicenseGenerator
                 this.cli = this.cliParser.parse(options, arguments);
             }
         }
-        catch(ParseException e)
+        catch(final ParseException e)
         {
             this.device.printErrLn(e.getLocalizedMessage());
 
-            HelpFormatter formatter = new HelpFormatter();
+            final HelpFormatter formatter = new HelpFormatter();
             this.printHelp(formatter, options);
 
             this.device.exit(1);
         }
     }
 
-    private void printHelp(HelpFormatter formatter, Options options)
+    private void printHelp(final HelpFormatter formatter, final Options options)
     {
-        OutputStreamWriter streamWriter = new OutputStreamWriter(this.device.out(), LicensingCharsets.UTF_8);
-        PrintWriter printWriter = new PrintWriter(streamWriter);
+        final OutputStreamWriter streamWriter = new OutputStreamWriter(this.device.out(), LicensingCharsets.UTF_8);
+        final PrintWriter printWriter = new PrintWriter(streamWriter);
         formatter.printHelp(printWriter, CLI_WIDTH, USAGE, null, options, 1, 3, null, false);
         printWriter.close();
         try
         {
             streamWriter.close();
         }
-        catch(IOException e)
+        catch(final IOException e)
         {
             e.printStackTrace(this.device.err());
         }
     }
 
-    protected Properties readPropertiesFile(String fileName) throws Exception
+    protected Properties readPropertiesFile(final String fileName) throws Exception
     {
-        File file = new File(fileName);
+        final File file = new File(fileName);
 
         if(!file.exists())
-            throw new FileNotFoundException("The file [" + fileName + "] does not exist.");
-        if(!file.canRead())
-            throw new IOException("The file [" + fileName + "] is not readable.");
-
-        InputStreamReader reader = null;
-        FileInputStream stream = null;
-        try
         {
-            stream = new FileInputStream(file);
-            reader = new InputStreamReader(stream, LicensingCharsets.UTF_8);
+            throw new FileNotFoundException("The file [" + fileName + "] does not exist.");
+        }
+        if(!file.canRead())
+        {
+            throw new IOException("The file [" + fileName + "] is not readable.");
+        }
 
-            Properties properties = new Properties();
+        try(
+            FileInputStream stream = new FileInputStream(file);
+            InputStreamReader reader = new InputStreamReader(stream, LicensingCharsets.UTF_8)
+        )
+        {
+            final Properties properties = new Properties();
             properties.load(reader);
 
             return properties;
         }
-        finally
-        {
-            if(reader != null)
-            {
-                try {
-                    reader.close();
-                } catch(Throwable ignore) { }
-            }
-
-            if(stream != null)
-            {
-                try {
-                    stream.close();
-                } catch(Throwable ignore) { }
-            }
-        }
     }
 
-    protected String promptForString(String message)
+    protected String promptForString(final String message)
     {
-        String input = this.device.readLine(message);
+        final String input = this.device.readLine(message);
         this.device.printOutLn();
 
         return input != null && input.trim().length() > 0 ? input.trim() : null;
     }
 
-    protected char[] promptForPassword(String message)
+    protected char[] promptForPassword(final String message)
     {
-        char[] input = this.device.readPassword(message);
+        final char[] input = this.device.readPassword(message);
         this.device.printOutLn();
 
         return input != null && input.length > 0 ? input : null;
@@ -305,9 +306,11 @@ public class ConsoleLicenseGenerator
         Properties properties = null;
         if(this.cli.hasOption("config"))
         {
-            String value = this.cli.getOptionValue("config");
+            final String value = this.cli.getOptionValue("config");
             if(value != null && value.trim().length() > 0)
+            {
                 properties = this.readPropertiesFile(value);
+            }
         }
 
         LicenseCreatorProperties.setPrivateKeyDataProvider(this.getPrivateKeyDataProvider(properties));
@@ -320,15 +323,15 @@ public class ConsoleLicenseGenerator
         this.device.printOutLn("Would you like to...");
         this.device.printOutLn("    (1) Read the private key from a file?");
         this.device.printOutLn("    (2) Use a PrivateKeyDataProvider implementation from the classpath?");
-        String input = this.device.readLine("Your selection (default 1)? ");
+        final String input = this.device.readLine("Your selection (default 1)? ");
         this.device.printOutLn();
 
         return input != null && input.trim().equals("2");
     }
 
-    private PrivateKeyDataProvider getPrivateKeyDataProvider(Properties properties) throws FileNotFoundException
+    private PrivateKeyDataProvider getPrivateKeyDataProvider(final Properties properties) throws FileNotFoundException
     {
-        PrivateKeyDataProvider provider;
+        final PrivateKeyDataProvider provider;
 
         if(properties == null)
         {
@@ -369,19 +372,21 @@ public class ConsoleLicenseGenerator
         }
         else
         {
-            String fileName = properties.getProperty(ConsoleLicenseGenerator.PROPERTY_PRIVATE_KEY_FILE);
+            final String fileName = properties.getProperty(ConsoleLicenseGenerator.PROPERTY_PRIVATE_KEY_FILE);
             if(fileName != null && fileName.trim().length() > 0)
             {
-                File file = new File(fileName);
+                final File file = new File(fileName);
                 if(!file.exists() || !file.canRead())
+                {
                     throw new FileNotFoundException("The private key file [" + file.getAbsolutePath() +
-                                               "] does not exist or cannot be read.");
+                                                    "] does not exist or cannot be read.");
+                }
 
                 provider = new FilePrivateKeyDataProvider(file);
             }
             else
             {
-                String className = properties.getProperty(ConsoleLicenseGenerator.PROPERTY_PRIVATE_KEY_PROVIDER);
+                final String className = properties.getProperty(ConsoleLicenseGenerator.PROPERTY_PRIVATE_KEY_PROVIDER);
                 if(className != null && className.trim().length() > 0)
                 {
                     provider = this.getObjectAsClass(className, PrivateKeyDataProvider.class);
@@ -403,7 +408,7 @@ public class ConsoleLicenseGenerator
         this.device.printOutLn("Would you like to...");
         this.device.printOutLn("    (1) Type the private key password in manually?");
         this.device.printOutLn("    (2) Use a PasswordProvider implementation from the classpath?");
-        String input = this.device.readLine("Your selection (default 1)? ");
+        final String input = this.device.readLine("Your selection (default 1)? ");
         this.device.printOutLn();
 
         return input != null && input.trim().equals("2");
@@ -413,7 +418,7 @@ public class ConsoleLicenseGenerator
     {
         private final char[] password;
 
-        PrivatePasswordProvider(char[] password)
+        PrivatePasswordProvider(final char[] password)
         {
             this.password = password;
         }
@@ -425,9 +430,9 @@ public class ConsoleLicenseGenerator
         }
     }
 
-    private PasswordProvider getPrivateKeyPasswordProvider(Properties properties)
+    private PasswordProvider getPrivateKeyPasswordProvider(final Properties properties)
     {
-        PasswordProvider provider;
+        final PasswordProvider provider;
 
         if(properties == null)
         {
@@ -435,7 +440,10 @@ public class ConsoleLicenseGenerator
             {
                 char[] password = this.promptForPassword("Please type the password for the private key: ");
                 while(password == null)
-                    password = this.promptForPassword("Invalid password. Please type the password for the private key: ");
+                {
+                    password =
+                        this.promptForPassword("Invalid password. Please type the password for the private key: ");
+                }
 
                 provider = new PrivatePasswordProvider(password);
             }
@@ -454,14 +462,15 @@ public class ConsoleLicenseGenerator
         }
         else
         {
-            String password = properties.getProperty(ConsoleLicenseGenerator.PROPERTY_PRIVATE_KEY_PASSWORD);
+            final String password = properties.getProperty(ConsoleLicenseGenerator.PROPERTY_PRIVATE_KEY_PASSWORD);
             if(password != null && password.trim().length() > 0)
             {
                 provider = new PrivatePasswordProvider(password.toCharArray());
             }
             else
             {
-                String className = properties.getProperty(ConsoleLicenseGenerator.PROPERTY_PRIVATE_KEY_PASSWORD_PROVIDER);
+                final String className =
+                    properties.getProperty(ConsoleLicenseGenerator.PROPERTY_PRIVATE_KEY_PASSWORD_PROVIDER);
                 if(className != null && className.trim().length() > 0)
                 {
                     provider = this.getObjectAsClass(className, PasswordProvider.class);
@@ -469,7 +478,8 @@ public class ConsoleLicenseGenerator
                 else
                 {
                     throw new RuntimeException("Neither [" + ConsoleLicenseGenerator.PROPERTY_PRIVATE_KEY_PASSWORD +
-                                               "] nor [" + ConsoleLicenseGenerator.PROPERTY_PRIVATE_KEY_PASSWORD_PROVIDER +
+                                               "] nor [" +
+                                               ConsoleLicenseGenerator.PROPERTY_PRIVATE_KEY_PASSWORD_PROVIDER +
                                                "] properties specified.");
                 }
             }
@@ -478,23 +488,23 @@ public class ConsoleLicenseGenerator
         return provider;
     }
 
-    private <T> T getObjectAsClass(String className, Class<T> castClass)
+    private <T> T getObjectAsClass(final String className, final Class<T> castClass)
     {
         try
         {
-            Class<?> objectClass = Class.forName(className);
+            final Class<?> objectClass = Class.forName(className);
             return objectClass.asSubclass(castClass).newInstance();
         }
-        catch(ClassNotFoundException e)
+        catch(final ClassNotFoundException e)
         {
             throw new RuntimeException("The class [" + className + "] could not be located.");
         }
-        catch(ClassCastException e)
+        catch(final ClassCastException e)
         {
             throw new RuntimeException("The class [" + className + "] does not implement interface [" +
                                        castClass.getCanonicalName() + "].");
         }
-        catch(Exception e)
+        catch(final Exception e)
         {
             throw new RuntimeException("Unable to instantiate class [" + className + "].", e);
         }
@@ -505,35 +515,45 @@ public class ConsoleLicenseGenerator
         Properties properties = null;
         if(this.cli.hasOption("license"))
         {
-            String value = this.cli.getOptionValue("license");
+            final String value = this.cli.getOptionValue("license");
             if(value != null && value.trim().length() > 0)
+            {
                 properties = this.readPropertiesFile(value);
+            }
         }
 
-        License.Builder builder = new License.Builder();
+        final License.Builder builder = new License.Builder();
 
         {
-            String productKey = this.getLicenseProductKey(properties);
+            final String productKey = this.getLicenseProductKey(properties);
             if(productKey != null)
+            {
                 builder.withProductKey(productKey);
+            }
         }
 
         {
-            String holder = this.getLicenseHolder(properties);
+            final String holder = this.getLicenseHolder(properties);
             if(holder != null)
+            {
                 builder.withHolder(holder);
+            }
         }
 
         {
-            String issuer = this.getLicenseIssuer(properties);
+            final String issuer = this.getLicenseIssuer(properties);
             if(issuer != null)
+            {
                 builder.withIssuer(issuer);
+            }
         }
 
         {
-            String subject = this.getLicenseSubject(properties);
+            final String subject = this.getLicenseSubject(properties);
             if(subject != null)
+            {
                 builder.withSubject(subject);
+            }
         }
 
         builder.withIssueDate(this.getLicenseIssueDate(properties));
@@ -541,132 +561,176 @@ public class ConsoleLicenseGenerator
         builder.withGoodBeforeDate(this.getLicenseGoodBeforeDate(properties));
         builder.withNumberOfLicenses(this.getLicenseNumberOfLicenses(properties));
 
-        Map<String, Long> map = this.getLicenseFeatures(properties);
-        for(Map.Entry<String, Long> entry : map.entrySet())
+        final Map<String, Long> map = this.getLicenseFeatures(properties);
+        for(final Map.Entry<String, Long> entry : map.entrySet())
         {
-            String name = entry.getKey();
-            Long expiration = map.get(name);
+            final String name = entry.getKey();
+            final Long expiration = map.get(name);
 
             if(expiration == null || expiration <= 0L)
+            {
                 builder.addFeature(name);
+            }
             else
+            {
                 builder.addFeature(name, expiration);
+            }
         }
 
-        char[] password = this.getLicensePassword(properties);
+        final char[] password = this.getLicensePassword(properties);
 
-        byte[] licenseData;
+        final byte[] licenseData;
 
-        License license = builder.build();
+        final License license = builder.build();
         if(password != null)
+        {
             licenseData = LicenseCreator.getInstance().signAndSerializeLicense(license, password);
+        }
         else
+        {
             licenseData = LicenseCreator.getInstance().signAndSerializeLicense(license);
+        }
 
         this.returnLicenseData(licenseData, properties);
     }
 
-    private String getLicenseProductKey(Properties properties)
+    private String getLicenseProductKey(final Properties properties)
     {
         if(properties == null)
+        {
             return this.promptForString("Please enter a product key for this license (you can leave this blank): ");
+        }
         else
+        {
             return properties.getProperty(ConsoleLicenseGenerator.PROPERTY_LICENSE_PRODUCT_KEY);
+        }
     }
 
-    private String getLicenseHolder(Properties properties)
+    private String getLicenseHolder(final Properties properties)
     {
         if(properties == null)
+        {
             return this.promptForString("Please enter a holder for this license (you can leave this blank): ");
+        }
         else
+        {
             return properties.getProperty(ConsoleLicenseGenerator.PROPERTY_LICENSE_HOLDER);
+        }
     }
 
-    private String getLicenseIssuer(Properties properties)
+    private String getLicenseIssuer(final Properties properties)
     {
         if(properties == null)
+        {
             return this.promptForString("Please enter an issuer for this license (you can leave this blank): ");
+        }
         else
+        {
             return properties.getProperty(ConsoleLicenseGenerator.PROPERTY_LICENSE_ISSUER);
+        }
     }
 
-    private String getLicenseSubject(Properties properties)
+    private String getLicenseSubject(final Properties properties)
     {
         if(properties == null)
+        {
             return this.promptForString("Please enter a subject for this license (you can leave this blank): ");
+        }
         else
+        {
             return properties.getProperty(ConsoleLicenseGenerator.PROPERTY_LICENSE_SUBJECT);
+        }
     }
 
-    private long parseDate(String date)
+    private long parseDate(final String date)
     {
         if(date == null || date.trim().length() == 0)
+        {
             return 0L;
+        }
 
         try
         {
             return this.simpleDateFormat.parse(date).getTime();
         }
-        catch(java.text.ParseException e)
+        catch(final java.text.ParseException e)
         {
             return 0L;
         }
     }
 
-    private long getLicenseIssueDate(Properties properties)
+    private long getLicenseIssueDate(final Properties properties)
     {
         if(properties == null)
+        {
             return this.parseDate(this.promptForString("Please enter an issue date for this license " +
                                                        "(YYYY-MM-DD hh:mm:ss or blank): "));
+        }
         else
+        {
             return this.parseDate(properties.getProperty(ConsoleLicenseGenerator.PROPERTY_LICENSE_ISSUE_DATE));
+        }
     }
 
-    private long getLicenseGoodAfterDate(Properties properties)
+    private long getLicenseGoodAfterDate(final Properties properties)
     {
         if(properties == null)
+        {
             return this.parseDate(this.promptForString("Please enter an activation/good-after date for this license " +
                                                        "(YYYY-MM-DD hh:mm:ss or blank): "));
+        }
         else
+        {
             return this.parseDate(properties.getProperty(ConsoleLicenseGenerator.PROPERTY_LICENSE_GOOD_AFTER_DATE));
+        }
     }
 
-    private long getLicenseGoodBeforeDate(Properties properties)
+    private long getLicenseGoodBeforeDate(final Properties properties)
     {
         if(properties == null)
+        {
             return this.parseDate(this.promptForString("Please enter an expiration date for this license " +
                                                        "(YYYY-MM-DD hh:mm:ss or blank): "));
+        }
         else
+        {
             return this.parseDate(properties.getProperty(ConsoleLicenseGenerator.PROPERTY_LICENSE_GOOD_BEFORE_DATE));
+        }
     }
 
-    private int parseInt(String integer)
+    private int parseInt(final String integer)
     {
         if(integer == null || integer.trim().length() == 0)
+        {
             return 0;
+        }
 
         try
         {
             return Integer.parseInt(integer);
         }
-        catch(Exception e)
+        catch(final Exception e)
         {
             return 0;
         }
     }
 
-    private int getLicenseNumberOfLicenses(Properties properties)
+    private int getLicenseNumberOfLicenses(final Properties properties)
     {
         if(properties == null)
+        {
             return this.parseInt(this.promptForString("Please enter a number of seats/licenses for this license " +
                                                       "(you can leave this blank): "));
+        }
         else
+        {
             return this.parseInt(properties.getProperty(ConsoleLicenseGenerator.PROPERTY_LICENSE_NUM_LICENSES));
+        }
     }
 
-    public Map<String, Long> getLicenseFeatures(Properties properties)
+    public Map<String, Long> getLicenseFeatures(final Properties properties)
     {
-        Map<String, Long> map = new HashMap<String, Long>();
+        final Map<String, Long> map = new HashMap<>();
 
         if(properties == null)
         {
@@ -675,9 +739,9 @@ public class ConsoleLicenseGenerator
 
             while(featureName != null)
             {
-                long expiration = this.parseDate(
-                        this.promptForString("Optionally enter an expiration date for feature [" + featureName +
-                                             "] (YYYY-MM-DD hh:mm:ss or blank): ")
+                final long expiration = this.parseDate(
+                    this.promptForString("Optionally enter an expiration date for feature [" + featureName +
+                                         "] (YYYY-MM-DD hh:mm:ss or blank): ")
                 );
 
                 map.put(featureName, expiration);
@@ -688,13 +752,13 @@ public class ConsoleLicenseGenerator
         }
         else
         {
-            for(String key : properties.stringPropertyNames())
+            for(final String key : properties.stringPropertyNames())
             {
                 if(key.startsWith(ConsoleLicenseGenerator.PROPERTY_LICENSE_FEATURE_PREFIX))
                 {
-                    String featureName = key.replace(ConsoleLicenseGenerator.PROPERTY_LICENSE_FEATURE_PREFIX, "");
+                    final String featureName = key.replace(ConsoleLicenseGenerator.PROPERTY_LICENSE_FEATURE_PREFIX, "");
 
-                    long expiration = this.parseDate(properties.getProperty(key));
+                    final long expiration = this.parseDate(properties.getProperty(key));
 
                     map.put(featureName, expiration);
                 }
@@ -704,18 +768,22 @@ public class ConsoleLicenseGenerator
         return map;
     }
 
-    private char[] getLicensePassword(Properties properties)
+    private char[] getLicensePassword(final Properties properties)
     {
         if(properties == null)
         {
-            char[] password = this.device.promptForValidPassword(0, 32, "the license with (if left blank, will use " +
-                                                                        "the private key password provider)");
+            final char[] password = this.device.promptForValidPassword(
+                0,
+                32,
+                "the license with (if left blank, will use " +
+                "the private key password provider)"
+            );
             this.device.printOutLn();
             return password == null || password.length == 0 ? null : password;
         }
         else
         {
-            String password = properties.getProperty(ConsoleLicenseGenerator.PROPERTY_LICENSE_PASSWORD);
+            final String password = properties.getProperty(ConsoleLicenseGenerator.PROPERTY_LICENSE_PASSWORD);
             return password == null || password.trim().length() == 0 ? null : password.toCharArray();
         }
     }
@@ -725,13 +793,13 @@ public class ConsoleLicenseGenerator
         this.device.printOutLn("Would you like to...");
         this.device.printOutLn("    (1) Output the Base64-encoded license data to the screen?");
         this.device.printOutLn("    (2) Write the raw, binary license data to a file?");
-        String input = this.device.readLine("Your selection (default 1)? ");
+        final String input = this.device.readLine("Your selection (default 1)? ");
         this.device.printOutLn();
 
         return input != null && input.trim().equals("2");
     }
 
-    private void returnLicenseData(byte[] licenseData, Properties properties) throws Exception
+    private void returnLicenseData(final byte[] licenseData, final Properties properties) throws Exception
     {
         if(properties == null)
         {
@@ -744,7 +812,7 @@ public class ConsoleLicenseGenerator
                                                     "the license to: ");
                 }
 
-                File file = new File(fileName);
+                final File file = new File(fileName);
                 FileUtils.writeByteArrayToFile(file, licenseData);
             }
             else
@@ -755,10 +823,10 @@ public class ConsoleLicenseGenerator
         }
         else
         {
-            String fileName = properties.getProperty(ConsoleLicenseGenerator.PROPERTY_LICENSE_FILE);
+            final String fileName = properties.getProperty(ConsoleLicenseGenerator.PROPERTY_LICENSE_FILE);
             if(fileName != null && fileName.trim().length() > 0)
             {
-                File file = new File(fileName);
+                final File file = new File(fileName);
                 FileUtils.writeByteArrayToFile(file, licenseData);
             }
             else
@@ -768,7 +836,7 @@ public class ConsoleLicenseGenerator
         }
     }
 
-    public void run(String[] arguments)
+    public void run(final String[] arguments)
     {
         this.processCommandLineOptions(arguments);
 
@@ -778,37 +846,37 @@ public class ConsoleLicenseGenerator
 
             this.generateLicense();
         }
-        catch(KeyNotFoundException e)
+        catch(final KeyNotFoundException e)
         {
             this.device.printErrLn(e.getLocalizedMessage() + " Correct the error and try again.");
             this.device.exit(51);
             return;
         }
-        catch(ObjectSerializationException e)
+        catch(final ObjectSerializationException e)
         {
             this.device.printErrLn(e.getLocalizedMessage() + " Correct the error and try again.");
             this.device.exit(52);
             return;
         }
-        catch(AlgorithmNotSupportedException e)
+        catch(final AlgorithmNotSupportedException e)
         {
             this.device.printErrLn(e.getLocalizedMessage() + " Contact your system administrator for assistance.");
             this.device.exit(41);
             return;
         }
-        catch(InappropriateKeyException e)
+        catch(final InappropriateKeyException e)
         {
             this.device.printErrLn(e.getLocalizedMessage() + " Contact your system administrator for assistance.");
             this.device.exit(42);
             return;
         }
-        catch(InappropriateKeySpecificationException e)
+        catch(final InappropriateKeySpecificationException e)
         {
             this.device.printErrLn(e.getLocalizedMessage() + " Contact your system administrator for assistance.");
             this.device.exit(43);
             return;
         }
-        catch(InterruptedException e)
+        catch(final InterruptedException e)
         {
             // in theory, this error wouldn't actually get reached in this circumstance,
             // but we'll catch it just in case
@@ -816,16 +884,16 @@ public class ConsoleLicenseGenerator
             this.device.exit(44);
             return;
         }
-        catch(IOException e)
+        catch(final IOException e)
         {
             this.device.printErrLn("An error occurred writing or reading files from the system. Analyze the error " +
-                    "below to determine what went wrong and fix it!");
+                                   "below to determine what went wrong and fix it!");
             this.device.printErrLn(e.toString());
             e.printStackTrace();
             this.device.exit(21);
             return;
         }
-        catch(Throwable t)
+        catch(final Throwable t)
         {
             this.device.printErrLn(t.toString());
             t.printStackTrace();
@@ -836,9 +904,9 @@ public class ConsoleLicenseGenerator
         this.device.exit(0);
     }
 
-    public static void main(String... arguments)
+    public static void main(final String... arguments)
     {
-        TextInterfaceDevice device = TextInterfaceDevice.CONSOLE;
+        final TextInterfaceDevice device = TextInterfaceDevice.CONSOLE;
 
         ConsoleUtilities.configureInterfaceDevice(device);
 

@@ -22,8 +22,8 @@ import java.io.PrintStream;
  * thread.
  *
  * @author Nick Williams
- * @since 1.0.0
  * @version 1.0.0
+ * @since 1.0.0
  */
 class Periods implements Runnable
 {
@@ -33,7 +33,7 @@ class Periods implements Runnable
 
     private final PrintStream outputStream;
 
-    public Periods(long timeBetweenPeriods, PrintStream outputStream)
+    public Periods(final long timeBetweenPeriods, final PrintStream outputStream)
     {
         this.run = true;
         this.timeBetweenPeriods = timeBetweenPeriods;
@@ -50,7 +50,7 @@ class Periods implements Runnable
             {
                 Thread.sleep(this.timeBetweenPeriods);
             }
-            catch(InterruptedException e)
+            catch(final InterruptedException e)
             {
                 break;
             }

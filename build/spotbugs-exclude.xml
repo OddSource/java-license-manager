@@ -35,8 +35,16 @@
     </Match>
 
     <Match>
-        <Class name="io.oddsource.java.licensing.FileLicenseProvider" />
-        <Method name="getLicenseData" />
+        <Or>
+            <And>
+                <Class name="io.oddsource.java.licensing.FileLicenseProvider" />
+                <Method name="getLicenseData" />
+            </And>
+            <And>
+                <Class name="io.oddsource.java.licensing.licensor.interfaces.cli.ConsoleLicenseGenerator" />
+                <Method name="promptForPassword" />
+            </And>
+        </Or>
         <Bug pattern="PZLA_PREFER_ZERO_LENGTH_ARRAYS" />
     </Match>
 </FindBugsFilter>

@@ -15,13 +15,12 @@
  */
 package io.oddsource.java.licensing.licensor.interfaces.cli.spi;
 
-import io.oddsource.java.licensing.licensor.interfaces.spi.AbstractPasswordPrompter;
-import io.oddsource.java.licensing.licensor.interfaces.spi.OutputDevice;
-import io.oddsource.java.licensing.licensor.interfaces.spi.PasswordPrompter;
-
 import java.io.IOError;
 import java.io.InputStream;
 import java.io.PrintStream;
+
+import io.oddsource.java.licensing.licensor.interfaces.spi.AbstractPasswordPrompter;
+import io.oddsource.java.licensing.licensor.interfaces.spi.OutputDevice;
 
 /**
  * An abstract implementation of {@link TextInterfaceDevice} that implements any common utilities among all interface
@@ -32,7 +31,7 @@ import java.io.PrintStream;
  * @since 1.0.0
  */
 public abstract class AbstractTextInterfaceDevice extends AbstractPasswordPrompter
-        implements TextInterfaceDevice, PasswordPrompter, OutputDevice
+    implements TextInterfaceDevice, OutputDevice
 {
     protected final InputStream in;
 
@@ -40,7 +39,11 @@ public abstract class AbstractTextInterfaceDevice extends AbstractPasswordPrompt
 
     protected final PrintStream err;
 
-    public AbstractTextInterfaceDevice(InputStream inputStream, PrintStream outputStream, PrintStream errorStream)
+    public AbstractTextInterfaceDevice(
+        final InputStream inputStream,
+        final PrintStream outputStream,
+        final PrintStream errorStream
+    )
     {
         this.in = inputStream;
         this.out = outputStream;
@@ -61,10 +64,11 @@ public abstract class AbstractTextInterfaceDevice extends AbstractPasswordPrompt
      * Prints a {@code char} to standard-out.
      *
      * @param c The {@code char} to be printed
+     *
      * @throws java.io.IOError if an I/O error occurs.
      */
     @Override
-    public void printOut(char c) throws IOError
+    public void printOut(final char c) throws IOError
     {
         this.out.print(c);
     }
@@ -73,10 +77,11 @@ public abstract class AbstractTextInterfaceDevice extends AbstractPasswordPrompt
      * Prints a {@code String} to standard-out.
      *
      * @param s The {@code String} to be printed
+     *
      * @throws java.io.IOError if an I/O error occurs.
      */
     @Override
-    public void printOut(String s) throws IOError
+    public void printOut(final String s) throws IOError
     {
         this.out.print(s);
     }
@@ -85,10 +90,11 @@ public abstract class AbstractTextInterfaceDevice extends AbstractPasswordPrompt
      * Prints an {@code Object} to standard-out.
      *
      * @param o The {@code Object} to be printed
+     *
      * @throws java.io.IOError if an I/O error occurs.
      */
     @Override
-    public void printOut(Object o) throws IOError
+    public void printOut(final Object o) throws IOError
     {
         this.out.print(o);
     }
@@ -97,10 +103,11 @@ public abstract class AbstractTextInterfaceDevice extends AbstractPasswordPrompt
      * Prints a {@code char} to standard-err.
      *
      * @param c The {@code char} to be printed
+     *
      * @throws java.io.IOError if an I/O error occurs.
      */
     @Override
-    public void printErr(char c) throws IOError
+    public void printErr(final char c) throws IOError
     {
         this.err.print(c);
     }
@@ -109,10 +116,11 @@ public abstract class AbstractTextInterfaceDevice extends AbstractPasswordPrompt
      * Prints a {@code String} to standard-err.
      *
      * @param s The {@code String} to be printed
+     *
      * @throws java.io.IOError if an I/O error occurs.
      */
     @Override
-    public void printErr(String s) throws IOError
+    public void printErr(final String s) throws IOError
     {
         this.err.print(s);
     }
@@ -121,10 +129,11 @@ public abstract class AbstractTextInterfaceDevice extends AbstractPasswordPrompt
      * Prints an {@code Object} to standard-out.
      *
      * @param o The {@code Object} to be printed
+     *
      * @throws java.io.IOError if an I/O error occurs.
      */
     @Override
-    public void printErr(Object o) throws IOError
+    public void printErr(final Object o) throws IOError
     {
         this.err.print(o);
     }
@@ -144,10 +153,11 @@ public abstract class AbstractTextInterfaceDevice extends AbstractPasswordPrompt
      * Prints a {@code char} to standard-out, then terminates the current line by writing the line separator string.
      *
      * @param c The {@code char} to be printed
+     *
      * @throws java.io.IOError if an I/O error occurs.
      */
     @Override
-    public void printOutLn(char c) throws IOError
+    public void printOutLn(final char c) throws IOError
     {
         this.out.println(c);
     }
@@ -156,16 +166,17 @@ public abstract class AbstractTextInterfaceDevice extends AbstractPasswordPrompt
      * Prints a {@code String} to standard-out, then terminates the current line by writing the line separator string.
      *
      * @param s The {@code String} to be printed
+     *
      * @throws java.io.IOError if an I/O error occurs.
      */
     @Override
-    public void printOutLn(String s) throws IOError
+    public void printOutLn(final String s) throws IOError
     {
         this.out.println(s);
     }
 
     @Override
-    public void outputMessage(String message) throws IOError
+    public void outputMessage(final String message) throws IOError
     {
         this.printOutLn(message);
     }
@@ -174,10 +185,11 @@ public abstract class AbstractTextInterfaceDevice extends AbstractPasswordPrompt
      * Prints an {@code Object} to standard-out, then terminates the current line by writing the line separator string.
      *
      * @param o The {@code Object} to be printed
+     *
      * @throws java.io.IOError if an I/O error occurs.
      */
     @Override
-    public void printOutLn(Object o) throws IOError
+    public void printOutLn(final Object o) throws IOError
     {
         this.out.println(o);
     }
@@ -197,10 +209,11 @@ public abstract class AbstractTextInterfaceDevice extends AbstractPasswordPrompt
      * Prints a {@code char} to standard-err, then terminates the current line by writing the line separator string.
      *
      * @param c The {@code char} to be printed
+     *
      * @throws java.io.IOError if an I/O error occurs.
      */
     @Override
-    public void printErrLn(char c) throws IOError
+    public void printErrLn(final char c) throws IOError
     {
         this.err.println(c);
     }
@@ -209,16 +222,17 @@ public abstract class AbstractTextInterfaceDevice extends AbstractPasswordPrompt
      * Prints a {@code String} to standard-err, then terminates the current line by writing the line separator string.
      *
      * @param s The {@code String} to be printed
+     *
      * @throws java.io.IOError if an I/O error occurs.
      */
     @Override
-    public void printErrLn(String s) throws IOError
+    public void printErrLn(final String s) throws IOError
     {
         this.err.println(s);
     }
 
     @Override
-    public void outputErrorMessage(String message) throws IOError
+    public void outputErrorMessage(final String message) throws IOError
     {
         this.printErrLn(message);
     }
@@ -227,10 +241,11 @@ public abstract class AbstractTextInterfaceDevice extends AbstractPasswordPrompt
      * Prints an {@code Object} to standard-err, then terminates the current line by writing the line separator string.
      *
      * @param o The {@code Object} to be printed
+     *
      * @throws java.io.IOError if an I/O error occurs.
      */
     @Override
-    public void printErrLn(Object o) throws IOError
+    public void printErrLn(final Object o) throws IOError
     {
         this.err.println(o);
     }
@@ -279,29 +294,35 @@ public abstract class AbstractTextInterfaceDevice extends AbstractPasswordPrompt
      * @param minLength The minimum legal length for the password
      * @param maxLength The maximum legal length for the password
      * @param what What we're prompting for a password for
+     *
      * @return the valid, confirmed password entered by the user.
+     *
      * @throws IOError if an I/O error occurs.
      */
     @Override
-    public char[] promptForValidPassword(int minLength, int maxLength, String what) throws IOError
+    public char[] promptForValidPassword(final int minLength, final int maxLength, final String what) throws IOError
     {
-        String minString = AbstractTextInterfaceDevice.getNumberString(minLength);
+        final String minString = AbstractTextInterfaceDevice.getNumberString(minLength);
 
-        String maxString = AbstractTextInterfaceDevice.getNumberString(maxLength);
+        final String maxString = AbstractTextInterfaceDevice.getNumberString(maxLength);
 
         return this.promptForValidPassword(minLength, maxLength,
                                            "Enter pass phrase to encrypt " + what + ": ",
                                            "Verifying - Reenter pass phrase to encrypt " + what + ": ",
                                            "The password must be at least " + minString +
-                                                       " characters and no more than " + maxString + " characters long.",
-                                           "ERROR: Passwords do not match. Please try again, or press Ctrl+C to cancel.",
-                                           this);
+                                           " characters and no more than " + maxString + " characters long.",
+                                           "ERROR: Passwords do not match. Please try again, or press Ctrl+C to " +
+                                           "cancel.",
+                                           this
+        );
     }
 
-    private static final String[] FIRST_TEN_NUMBERS = new String[] { "zero", "one", "two", "three", "four", "five",
-                                                                     "six", "seven", "eight", "nine", "ten" };
+    private static final String[] FIRST_TEN_NUMBERS = new String[] {
+        "zero", "one", "two", "three", "four", "five",
+        "six", "seven", "eight", "nine", "ten"
+    };
 
-    private static String getNumberString(int number)
+    private static String getNumberString(final int number)
     {
         return number < 0 || number > 10 ? "" + number : AbstractTextInterfaceDevice.FIRST_TEN_NUMBERS[number];
     }

@@ -57,7 +57,7 @@ public class ConsoleInterfaceDevice extends AbstractTextInterfaceDevice
      * @param exitCode The exit status to exit with
      */
     @Override
-    public void exit(int exitCode)
+    public void exit(final int exitCode)
     {
         this.runtime.exit(exitCode);
     }
@@ -69,13 +69,15 @@ public class ConsoleInterfaceDevice extends AbstractTextInterfaceDevice
      * Note: Wraps {@link java.lang.Runtime#addShutdownHook(Thread)}.
      *
      * @param hook An initialized but unstarted Thread object
-     * @throws IllegalArgumentException if the specified hook has already been registered, or if it can be determined that the hook is already running or has already been run.
+     *
+     * @throws IllegalArgumentException if the specified hook has already been registered, or if it can be
+     *     determined that the hook is already running or has already been run.
      * @throws IllegalStateException if the application is already in the process of shutting down.
      * @throws SecurityException if registering shutdown hooks is forbidden.
      */
     @Override
-    public void registerShutdownHook(Thread hook)
-            throws IllegalArgumentException, IllegalStateException, SecurityException
+    public void registerShutdownHook(final Thread hook)
+        throws IllegalArgumentException, IllegalStateException, SecurityException
     {
         this.runtime.addShutdownHook(hook);
     }
@@ -86,12 +88,15 @@ public class ConsoleInterfaceDevice extends AbstractTextInterfaceDevice
      * Note: Wraps {@link java.lang.Runtime#removeShutdownHook(Thread)}.
      *
      * @param hook The hook to remove
-     * @return {@code true} if the specified hook had previously been registered and was successfully de-registered, {@code false} otherwise
+     *
+     * @return {@code true} if the specified hook had previously been registered and was successfully de-registered,
+     *     {@code false} otherwise
+     *
      * @throws IllegalStateException if the virtual machine is already in the process of shutting down.
      * @throws SecurityException if registering shutdown hooks is forbidden.
      */
     @Override
-    public boolean unregisterShutdownHook(Thread hook) throws IllegalStateException, SecurityException
+    public boolean unregisterShutdownHook(final Thread hook) throws IllegalStateException, SecurityException
     {
         return this.runtime.removeShutdownHook(hook);
     }
@@ -102,12 +107,20 @@ public class ConsoleInterfaceDevice extends AbstractTextInterfaceDevice
      * Note: Wraps {@link java.io.Console#format(String, Object...)}.
      *
      * @param format A format string as described in {@link java.util.Formatter #syntax}
-     * @param arguments Arguments referenced by the format specifiers in the format string. If there are more arguments than format specifiers, the extra arguments are ignored. The number of arguments is variable and may be zero. The maximum number of arguments is limited by the maximum dimension of a Java array as defined by the Java Virtual Machine Specification. The behaviour on a null argument depends on the conversion.
+     * @param arguments Arguments referenced by the format specifiers in the format string. If there are more
+     *     arguments than format specifiers, the extra arguments are ignored. The number of arguments is variable and
+     *     may be zero. The maximum number of arguments is limited by the maximum dimension of a Java array as defined
+     *     by the Java Virtual Machine Specification. The behaviour on a null argument depends on the conversion.
+     *
      * @return this device.
-     * @throws java.util.IllegalFormatException - if a format string contains an illegal syntax, a format specifier that is incompatible with the given arguments, insufficient arguments given the format string, or other illegal conditions. For specification of all possible formatting errors, see the Details section of the formatter class specification.
+     *
+     * @throws java.util.IllegalFormatException - if a format string contains an illegal syntax, a format specifier
+     *     that is incompatible with the given arguments, insufficient arguments given the format string, or other
+     *     illegal conditions. For specification of all possible formatting errors, see the Details section of the
+     *     formatter class specification.
      */
     @Override
-    public TextInterfaceDevice format(String format, Object... arguments) throws IllegalFormatException
+    public TextInterfaceDevice format(final String format, final Object... arguments) throws IllegalFormatException
     {
         this.console.format(format, arguments);
         return this;
@@ -123,13 +136,22 @@ public class ConsoleInterfaceDevice extends AbstractTextInterfaceDevice
      * Note: Wraps {@link java.io.Console#printf(String, Object...)}.
      *
      * @param format A format string as described in {@link java.util.Formatter #syntax}
-     * @param arguments Arguments referenced by the format specifiers in the format string. If there are more arguments than format specifiers, the extra arguments are ignored. The number of arguments is variable and may be zero. The maximum number of arguments is limited by the maximum dimension of a Java array as defined by the Java Virtual Machine Specification. The behaviour on a null argument depends on the conversion.
+     * @param arguments Arguments referenced by the format specifiers in the format string. If there are more
+     *     arguments than format specifiers, the extra arguments are ignored. The number of arguments is variable and
+     *     may be zero. The maximum number of arguments is limited by the maximum dimension of a Java array as defined
+     *     by the Java Virtual Machine Specification. The behaviour on a null argument depends on the conversion.
+     *
      * @return this device.
-     * @throws java.util.IllegalFormatException if a format string contains an illegal syntax, a format specifier that is incompatible with the given arguments, insufficient arguments given the format string, or other illegal conditions. For specification of all possible formatting errors, see the Details section of the formatter class specification.
+     *
+     * @throws java.util.IllegalFormatException if a format string contains an illegal syntax, a format specifier
+     *     that is incompatible with the given arguments, insufficient arguments given the format string, or other
+     *     illegal conditions. For specification of all possible formatting errors, see the Details section of the
+     *     formatter class specification.
      * @throws java.io.IOError if an I/O error occurs.
      */
     @Override
-    public TextInterfaceDevice printf(String format, Object... arguments) throws IllegalFormatException, IOError
+    public TextInterfaceDevice printf(final String format, final Object... arguments)
+        throws IllegalFormatException, IOError
     {
         this.console.printf(format, arguments);
         return this;
@@ -151,7 +173,9 @@ public class ConsoleInterfaceDevice extends AbstractTextInterfaceDevice
      * <br />
      * Note: Wraps {@link java.io.Console#readLine()}.
      *
-     * @return a string containing the line read from the interface device input, not including any line-termination characters, or {@code null} if an end of stream has been reached.
+     * @return a string containing the line read from the interface device input, not including any line-termination
+     *     characters, or {@code null} if an end of stream has been reached.
+     *
      * @throws java.io.IOError if an I/O error occurs.
      */
     @Override
@@ -166,13 +190,22 @@ public class ConsoleInterfaceDevice extends AbstractTextInterfaceDevice
      * Note: Wraps {@link java.io.Console#readLine(String, Object...)}.
      *
      * @param format A format string as described in {@link java.util.Formatter #syntax}
-     * @param arguments Arguments referenced by the format specifiers in the format string. If there are more arguments than format specifiers, the extra arguments are ignored. The number of arguments is variable and may be zero. The maximum number of arguments is limited by the maximum dimension of a Java array as defined by the Java Virtual Machine Specification. The behaviour on a null argument depends on the conversion.
-     * @return a string containing the line read from the interface device input, not including any line-termination characters, or {@code null} if an end of stream has been reached.
-     * @throws java.util.IllegalFormatException if a format string contains an illegal syntax, a format specifier that is incompatible with the given arguments, insufficient arguments given the format string, or other illegal conditions. For specification of all possible formatting errors, see the Details section of the formatter class specification.
+     * @param arguments Arguments referenced by the format specifiers in the format string. If there are more
+     *     arguments than format specifiers, the extra arguments are ignored. The number of arguments is variable and
+     *     may be zero. The maximum number of arguments is limited by the maximum dimension of a Java array as defined
+     *     by the Java Virtual Machine Specification. The behaviour on a null argument depends on the conversion.
+     *
+     * @return a string containing the line read from the interface device input, not including any line-termination
+     *     characters, or {@code null} if an end of stream has been reached.
+     *
+     * @throws java.util.IllegalFormatException if a format string contains an illegal syntax, a format specifier
+     *     that is incompatible with the given arguments, insufficient arguments given the format string, or other
+     *     illegal conditions. For specification of all possible formatting errors, see the Details section of the
+     *     formatter class specification.
      * @throws java.io.IOError if an I/O error occurs.
      */
     @Override
-    public String readLine(String format, Object... arguments) throws IllegalFormatException, IOError
+    public String readLine(final String format, final Object... arguments) throws IllegalFormatException, IOError
     {
         return this.console.readLine(format, arguments);
     }
@@ -182,7 +215,9 @@ public class ConsoleInterfaceDevice extends AbstractTextInterfaceDevice
      * <br />
      * Note: Wraps {@link java.io.Console#readPassword()}.
      *
-     * @return a character array containing the password or passphrase read from the device, not including any line-termination characters, or {@code null} if an end of stream has been reached.
+     * @return a character array containing the password or passphrase read from the device, not including any
+     *     line-termination characters, or {@code null} if an end of stream has been reached.
+     *
      * @throws java.io.IOError if an I/O error occurs.
      */
     @Override
@@ -197,13 +232,22 @@ public class ConsoleInterfaceDevice extends AbstractTextInterfaceDevice
      * Note: Wraps {@link java.io.Console#readPassword(String, Object...)}.
      *
      * @param format A format string as described in {@link java.util.Formatter #syntax}
-     * @param arguments Arguments referenced by the format specifiers in the format string. If there are more arguments than format specifiers, the extra arguments are ignored. The number of arguments is variable and may be zero. The maximum number of arguments is limited by the maximum dimension of a Java array as defined by the Java Virtual Machine Specification. The behaviour on a null argument depends on the conversion.
-     * @return a character array containing the password or passphrase read from the device, not including any line-termination characters, or {@code null} if an end of stream has been reached.
-     * @throws java.util.IllegalFormatException if a format string contains an illegal syntax, a format specifier that is incompatible with the given arguments, insufficient arguments given the format string, or other illegal conditions. For specification of all possible formatting errors, see the Details section of the formatter class specification.
+     * @param arguments Arguments referenced by the format specifiers in the format string. If there are more
+     *     arguments than format specifiers, the extra arguments are ignored. The number of arguments is variable and
+     *     may be zero. The maximum number of arguments is limited by the maximum dimension of a Java array as defined
+     *     by the Java Virtual Machine Specification. The behaviour on a null argument depends on the conversion.
+     *
+     * @return a character array containing the password or passphrase read from the device, not including any
+     *     line-termination characters, or {@code null} if an end of stream has been reached.
+     *
+     * @throws java.util.IllegalFormatException if a format string contains an illegal syntax, a format specifier
+     *     that is incompatible with the given arguments, insufficient arguments given the format string, or other
+     *     illegal conditions. For specification of all possible formatting errors, see the Details section of the
+     *     formatter class specification.
      * @throws java.io.IOError if an I/O error occurs.
      */
     @Override
-    public char[] readPassword(String format, Object... arguments) throws IllegalFormatException, IOError
+    public char[] readPassword(final String format, final Object... arguments) throws IllegalFormatException, IOError
     {
         return this.console.readPassword(format, arguments);
     }

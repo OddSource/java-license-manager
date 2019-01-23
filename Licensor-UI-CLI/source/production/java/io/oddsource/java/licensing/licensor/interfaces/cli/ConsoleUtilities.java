@@ -21,8 +21,8 @@ import io.oddsource.java.licensing.licensor.interfaces.cli.spi.TextInterfaceDevi
  * Utilities used by the text interface classes.
  *
  * @author Nick Williams
- * @since 1.0.0
  * @version 1.0.0
+ * @since 1.0.0
  */
 class ConsoleUtilities
 {
@@ -33,7 +33,8 @@ class ConsoleUtilities
      */
     public static void configureInterfaceDevice(final TextInterfaceDevice interfaceDevice)
     {
-        interfaceDevice.registerShutdownHook(new Thread(new Runnable() {
+        interfaceDevice.registerShutdownHook(new Thread(new Runnable()
+        {
             @Override
             public void run()
             {

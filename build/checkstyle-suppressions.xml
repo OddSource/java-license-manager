@@ -21,15 +21,15 @@
     "http://www.puppycrawl.com/dtds/suppressions_1_0.dtd">
 <suppressions>
     <suppress files="DefaultLicenseValidator" checks="MultipleStringLiterals" />
-    <suppress files="ImmutableAbstractCollection.java" checks="NoWhitespaceBefore" lines="180" />
-    <suppress files="ImmutableAbstractCollection.java" checks="VisibilityModifier" lines="43" />
+    <suppress files="ImmutableAbstractCollection.java" checks="NoWhitespaceBefore" lines="177" />
+    <suppress files="ImmutableAbstractCollection.java" checks="VisibilityModifier" lines="40" />
     <suppress files="ImmutableArrayList.java" checks="SuperClone" />
     <suppress files="ImmutableLinkedHashSet.java" checks="SuperClone" />
     <suppress files="License.java" checks="SuperClone" />
-    <suppress files="LicenseManager.java" checks="NoWhitespaceAfter" lines="144" />
-    <suppress files="LicenseSecurityManager.java" checks="MethodLength" lines="106" />
-    <suppress files="LicenseSecurityManager.java" checks="ReturnCount" lines="106" />
-    <suppress files="ObjectSerializer.java" checks="NoWhitespaceBefore" lines="67" />
+    <suppress files="LicenseManager.java" checks="NoWhitespaceAfter" lines="141" />
+    <suppress files="LicenseSecurityManager.java" checks="MethodLength" lines="103" />
+    <suppress files="LicenseSecurityManager.java" checks="ReturnCount" lines="103" />
+    <suppress files="ObjectSerializer.java" checks="NoWhitespaceBefore" lines="64" />
 
     <suppress files="exception/[A-Za-z0-9]+\.java" checks="MultipleStringLiterals" />
 

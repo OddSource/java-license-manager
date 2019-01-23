@@ -10,6 +10,7 @@ Changelog
 - [MAJOR] ``ImmutableModifiedThroughReflectionException`` has been renamed to
   ``ImmutableModifiedThroughReflectionError``
 - [MAJOR] ``InsecureEnvironmentException`` has been renamed to ``InsecureEnvironmentError``
+- [MAJOR] Removed methods in ``License.Builder`` previously marked as deprecated
 - [MINOR] Codified explicit code style rules
 - [MINOR] Configured mandatory license header check in Maven build
 - [MINOR] Fixed #3: License Manager should now run under Java 10

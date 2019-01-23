@@ -786,7 +786,10 @@ public final class License implements Serializable, Cloneable
 
         private int numberOfLicenses = Integer.MAX_VALUE;
 
-        Builder()
+        /**
+         * Creates a new builder for generating a new license.
+         */
+        public Builder()
         {
 
         }

@@ -28,6 +28,7 @@ import java.security.KeyPairGenerator;
 import java.security.NoSuchAlgorithmException;
 import java.security.PrivateKey;
 import java.security.PublicKey;
+import java.util.Locale;
 
 /**
  * The generator one should use to create public/private key pairs for use with
@@ -292,7 +293,7 @@ public final class RSAKeyPairGenerator implements RSAKeyPairGeneratorInterface
 
     /**
      * Takes an array of integer-representable primitives ({@code byte}, {@code char}, {@code short}, {@code int})
-     * and returns a Java code array-literal instantiation of the array, with values in hexadecimal literal format.
+     * and returns a Java code array-literal representation of the array, with values in hexadecimal literal format.
      * It is the user's responsibility to ensure that the values contained in the array can fit within the smaller
      * precision of the array type, if applicable.
      *
@@ -314,7 +315,7 @@ public final class RSAKeyPairGenerator implements RSAKeyPairGeneratorInterface
                 stringBuilder.append("\r\n\t\t\t\t");
             }
             stringBuilder.append("0x");
-            stringBuilder.append(String.format("%08x", value).toUpperCase());
+            stringBuilder.append(String.format("%08x", value).toUpperCase(Locale.US));
         }
         stringBuilder.append("\r\n\t\t}");
         return stringBuilder.toString();

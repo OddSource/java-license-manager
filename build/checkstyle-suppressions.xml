@@ -43,6 +43,7 @@
     <suppress files="source/test" checks="FinalParameters" />
     <suppress files="source/test" checks="IllegalCatch" />
     <suppress files="source/test" checks="IllegalThrows" />
+    <suppress files="source/test" checks="InnerTypeLast" />
     <suppress files="source/test" checks="JavadocMethod" />
     <suppress files="source/test" checks="JavadocPackage" />
     <suppress files="source/test" checks="JavadocType" />
@@ -53,6 +54,7 @@
     <suppress files="source/test" checks="MultipleStringLiterals" />
     <suppress files="source/test" checks="OneTopLevelClass" />
     <suppress files="source/test" checks="OuterTypeNumber" />
+    <suppress files="source/test" checks="ThrowsCount" />
     <suppress files="source/test" checks="VariableDeclarationUsageDistance" />
     <suppress files="source/test" checks="VisibilityModifier" />
 </suppressions>

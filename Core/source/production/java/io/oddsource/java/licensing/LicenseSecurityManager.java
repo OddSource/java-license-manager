@@ -110,24 +110,47 @@ final class LicenseSecurityManager extends SecurityManager
             throw new IllegalArgumentException("Parameter securityManager cannot be null!");
         }
 
-        // Make sure we can't call java.lang.reflect.AccessibleObject#setAccessible on License/LicenseManager methods
-        // Make sure we can't call java.lang.System#setSecurityManager()
+        // Make sure we can't call java.lang.reflect.AccessibleObject#setAccessible on License methods
         try
         {
             securityManager.checkPermission(new ObjectReflectionPermission(
                 LicenseSecurityManager.SUPPRESS_ACCESS_CHECKS_PERMISSION_STRING,
                 new AccessibleObject[] {License.class.getDeclaredMethod("deserialize", byte[].class)}
             ));
-            securityManager.checkPermission(new ObjectReflectionPermission(
-                LicenseSecurityManager.SUPPRESS_ACCESS_CHECKS_PERMISSION_STRING,
-                new AccessibleObject[] {LicenseManager.class.getMethod("validateLicense", License.class)}
-            ));
-            securityManager.checkPermission(LicenseSecurityManager.SET_SECURITY_MANAGER_PERMISSION);
             return false;
         }
         catch(final NoSuchMethodException e)
         {
-            throw new AssertionError("Unexpected error", e);
+            throw new AssertionError("Unexpected error checking security of License reflection", e);
+        }
+        catch(final SecurityException ignore)
+        {
+            // this is a good thing
+        }
+
+        // Make sure we can't call java.lang.reflect.AccessibleObject#setAccessible on LicenseManager methods
+        try
+        {
+            securityManager.checkPermission(new ObjectReflectionPermission(
+                LicenseSecurityManager.SUPPRESS_ACCESS_CHECKS_PERMISSION_STRING,
+                new AccessibleObject[] {LicenseManager.class.getMethod("validateLicense", License.class)}
+            ));
+            return false;
+        }
+        catch(final NoSuchMethodException e)
+        {
+            throw new AssertionError("Unexpected error checking security of LicenseManager reflection", e);
+        }
+        catch(final SecurityException ignore)
+        {
+            // this is a good thing
+        }
+
+        // Make sure we can't call java.lang.System#setSecurityManager()
+        try
+        {
+            securityManager.checkPermission(LicenseSecurityManager.SET_SECURITY_MANAGER_PERMISSION);
+            return false;
         }
         catch(final SecurityException ignore)
         {

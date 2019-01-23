@@ -591,7 +591,7 @@ public final class License implements Serializable, Cloneable
             append(this.issueDate).append(License.licenseStringRepresentationSeparator).
             append(this.goodAfterDate).append(License.licenseStringRepresentationSeparator).
             append(this.goodBeforeDate).append(License.licenseStringRepresentationSeparator).
-            append(this.numberOfLicenses).append(License.licenseStringRepresentationSeparator).
+            append(this.numberOfLicenses).append(']').
             append(this.features).toString();
     }
 
@@ -789,7 +789,7 @@ public final class License implements Serializable, Cloneable
 
         private int numberOfLicenses = Integer.MAX_VALUE;
 
-        private Builder()
+        Builder()
         {
 
         }

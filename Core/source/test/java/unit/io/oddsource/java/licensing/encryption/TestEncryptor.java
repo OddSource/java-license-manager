@@ -62,7 +62,7 @@ public class TestEncryptor
         {
             Throwable cause = e.getCause();
             assertNotNull("Expected cause for InvocationTargetException, but got no cause.", cause);
-            assertSame("Expected exception java.lang.RuntimeException, but got " + cause.getClass(), RuntimeException.class, cause.getClass());
+            assertSame("Expected exception java.lang.RuntimeException, but got " + cause.getClass(), AssertionError.class, cause.getClass());
             assertEquals("The message was incorrect.", "This class cannot be instantiated.", cause.getMessage());
         }
     }

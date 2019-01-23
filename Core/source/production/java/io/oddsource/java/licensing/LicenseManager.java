@@ -345,8 +345,6 @@ public final class LicenseManager
             return false;
         }
 
-        this.validateLicense(license);
-
         return annotation.operand() == FeatureRestrictionOperand.AND ?
                license.hasLicenseForAllFeatures(annotation.value()) :
                license.hasLicenseForAnyFeature(annotation.value());

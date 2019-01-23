@@ -15,11 +15,6 @@
  */
 package io.oddsource.java.licensing.encryption;
 
-import io.oddsource.java.licensing.exception.AlgorithmNotSupportedException;
-import io.oddsource.java.licensing.exception.InappropriateKeyException;
-import io.oddsource.java.licensing.exception.InappropriateKeySpecificationException;
-import io.oddsource.java.licensing.exception.RSA2048NotSupportedException;
-
 import java.io.File;
 import java.io.IOException;
 import java.security.InvalidParameterException;
@@ -30,16 +25,43 @@ import java.security.PrivateKey;
 import java.security.PublicKey;
 import java.util.Locale;
 
+import io.oddsource.java.licensing.exception.AlgorithmNotSupportedException;
+import io.oddsource.java.licensing.exception.InappropriateKeyException;
+import io.oddsource.java.licensing.exception.InappropriateKeySpecificationException;
+import io.oddsource.java.licensing.exception.KeyNotFoundException;
+import io.oddsource.java.licensing.exception.RSA2048NotSupportedException;
+
 /**
  * The generator one should use to create public/private key pairs for use with
  * the application.
  *
  * @author Nick Williams
- * @since 1.0.0
  * @version 1.0.0
+ * @since 1.0.0
  */
 public final class RSAKeyPairGenerator implements RSAKeyPairGeneratorInterface
 {
+    private static final String BYTE_TYPE_NAME = "byte";
+
+    private static final String CODE_LF = "\n";
+
+    private static final String CODE_TAB = "    ";
+
+    private static final String CODE_STATEMENT_END = ";" + CODE_LF;
+
+    private static final String CODE_OPENING_BRACE = "{";
+
+    private static final String CODE_OPENING_BRACE_LF = CODE_OPENING_BRACE + CODE_LF;
+
+    private static final String CODE_CLOSING_BRACE = "}";
+
+    private static final String CODE_CLOSING_BRACE_LF = CODE_CLOSING_BRACE + CODE_LF;
+
+    private static final short CODE_ARRAY_VALUES_PER_LINE = 8;
+
+    /**
+     * Constructor.
+     */
     public RSAKeyPairGenerator()
     {
 
@@ -47,32 +69,41 @@ public final class RSAKeyPairGenerator implements RSAKeyPairGeneratorInterface
 
     /**
      * Generates a key pair with RSA 2048-bit security.
+     *
      * @return a public/private key pair.
+     *
      * @throws RSA2048NotSupportedException if RSA or 2048-bit encryption are not supported.
      */
     @Override
     public KeyPair generateKeyPair() throws RSA2048NotSupportedException
     {
-        KeyPairGenerator keyGenerator;
+        final KeyPairGenerator keyGenerator;
 
         try
         {
             keyGenerator = KeyPairGenerator.getInstance(
-                    KeyFileUtilities.keyAlgorithm
+                KeyFileUtilities.keyAlgorithm
             );
         }
-        catch(NoSuchAlgorithmException e)
+        catch(final NoSuchAlgorithmException e)
         {
-            throw new RSA2048NotSupportedException("RSA keys are not supported on your system. Contact your system administrator for assistance.", e);
+            throw new RSA2048NotSupportedException(
+                "RSA keys are not supported on your system. Contact your system administrator for assistance.",
+                e
+            );
         }
 
         try
         {
-            keyGenerator.initialize(2048);
+            keyGenerator.initialize(RSAKeyPairGeneratorInterface.KEY_SIZE);
         }
-        catch(InvalidParameterException e)
+        catch(final InvalidParameterException e)
         {
-            throw new RSA2048NotSupportedException("RSA is supported on your system, but 2048-bit keys are not. Contact your system administrator for assistance.", e);
+            throw new RSA2048NotSupportedException(
+                "RSA is supported on your system, but 2048-bit keys are not. Contact your system administrator for " +
+                "assistance.",
+                e
+            );
         }
 
         return keyGenerator.generateKeyPair();
@@ -85,16 +116,19 @@ public final class RSAKeyPairGenerator implements RSAKeyPairGeneratorInterface
      * @param privateOutputFileName The name of the file to save the encrypted private key to
      * @param publicOutputFileName The name of the file to save the encrypted public key to
      * @param password The password to encrypt both keys with
+     *
      * @throws IOException if an error occurs while writing to the files.
      * @throws AlgorithmNotSupportedException If the encryption algorithm is not supported
      * @throws InappropriateKeyException If the public or private keys are invalid
      * @throws InappropriateKeySpecificationException If the public or private keys are invalid
      */
     @Override
-    public void saveKeyPairToFiles(KeyPair keyPair, String privateOutputFileName, String publicOutputFileName,
-                                   char[] password)
-            throws IOException, AlgorithmNotSupportedException, InappropriateKeyException,
-                   InappropriateKeySpecificationException
+    public void saveKeyPairToFiles(
+        final KeyPair keyPair, final String privateOutputFileName, final String publicOutputFileName,
+        final char[] password
+    )
+        throws IOException, AlgorithmNotSupportedException, InappropriateKeyException,
+               InappropriateKeySpecificationException
     {
         this.saveKeyPairToFiles(keyPair, privateOutputFileName, publicOutputFileName, password, password);
     }
@@ -107,19 +141,22 @@ public final class RSAKeyPairGenerator implements RSAKeyPairGeneratorInterface
      * @param publicOutputFileName The name of the file to save the encrypted public key to
      * @param privatePassword The password to encrypt the private key with
      * @param publicPassword The password to encrypt the public key with
+     *
      * @throws IOException if an error occurs while writing to the files.
      * @throws AlgorithmNotSupportedException If the encryption algorithm is not supported
      * @throws InappropriateKeyException If the public or private keys are invalid
      * @throws InappropriateKeySpecificationException If the public or private keys are invalid
      */
     @Override
-    public void saveKeyPairToFiles(KeyPair keyPair, String privateOutputFileName, String publicOutputFileName,
-                                   char[] privatePassword, char[] publicPassword)
-            throws IOException, AlgorithmNotSupportedException, InappropriateKeyException,
-                   InappropriateKeySpecificationException
+    public void saveKeyPairToFiles(
+        final KeyPair keyPair, final String privateOutputFileName, final String publicOutputFileName,
+        final char[] privatePassword, final char[] publicPassword
+    )
+        throws IOException, AlgorithmNotSupportedException, InappropriateKeyException,
+               InappropriateKeySpecificationException
     {
-        PrivateKey privateKey = keyPair.getPrivate();
-        PublicKey publicKey = keyPair.getPublic();
+        final PrivateKey privateKey = keyPair.getPrivate();
+        final PublicKey publicKey = keyPair.getPublic();
 
         KeyFileUtilities.writeEncryptedPrivateKey(privateKey, new File(privateOutputFileName), privatePassword);
         KeyFileUtilities.writeEncryptedPublicKey(publicKey, new File(publicOutputFileName), publicPassword);
@@ -132,17 +169,22 @@ public final class RSAKeyPairGenerator implements RSAKeyPairGeneratorInterface
      * password.
      *
      * @param keyPair The key pair to save
-     * @param privateKeyProvider An object describing the {@link PrivateKeyDataProvider} class to generate, and into which the generated code will be saved
-     * @param publicKeyProvider An object describing the {@link PublicKeyDataProvider} class to generate, and into which the generated code will be saved
+     * @param privateKeyProvider An object describing the {@link PrivateKeyDataProvider} class to generate, and into
+     *     which the generated code will be saved
+     * @param publicKeyProvider An object describing the {@link PublicKeyDataProvider} class to generate, and into
+     *     which the generated code will be saved
      * @param password The password to encrypt the keys with
+     *
      * @throws AlgorithmNotSupportedException If the encryption algorithm is not supported
      * @throws InappropriateKeyException If the public or private keys are invalid
      * @throws InappropriateKeySpecificationException If the public or private keys are invalid
      */
     @Override
-    public void saveKeyPairToProviders(KeyPair keyPair, GeneratedClassDescriptor privateKeyProvider,
-                                       GeneratedClassDescriptor publicKeyProvider, char[] password)
-            throws AlgorithmNotSupportedException, InappropriateKeyException, InappropriateKeySpecificationException
+    public void saveKeyPairToProviders(
+        final KeyPair keyPair, final GeneratedClassDescriptor privateKeyProvider,
+        final GeneratedClassDescriptor publicKeyProvider, final char[] password
+    )
+        throws AlgorithmNotSupportedException, InappropriateKeyException, InappropriateKeySpecificationException
     {
         this.saveKeyPairToProviders(keyPair, privateKeyProvider, publicKeyProvider, password, password);
     }
@@ -154,63 +196,71 @@ public final class RSAKeyPairGenerator implements RSAKeyPairGeneratorInterface
      * respective passwords.
      *
      * @param keyPair The key pair to save
-     * @param privateKeyProvider An object describing the {@link PrivateKeyDataProvider} class to generate, and into which the generated code will be saved
-     * @param publicKeyProvider An object describing the {@link PublicKeyDataProvider} class to generate, and into which the generated code will be saved
+     * @param privateKeyProvider An object describing the {@link PrivateKeyDataProvider} class to generate, and into
+     *     which the generated code will be saved
+     * @param publicKeyProvider An object describing the {@link PublicKeyDataProvider} class to generate, and into
+     *     which the generated code will be saved
      * @param privatePassword The password to encrypt the private key with
      * @param publicPassword The password to encrypt the public key with
+     *
      * @throws AlgorithmNotSupportedException If the encryption algorithm is not supported
      * @throws InappropriateKeyException If the public or private keys are invalid
      * @throws InappropriateKeySpecificationException If the public or private keys are invalid
      */
     @Override
-    public void saveKeyPairToProviders(KeyPair keyPair, GeneratedClassDescriptor privateKeyProvider,
-                                       GeneratedClassDescriptor publicKeyProvider, char[] privatePassword,
-                                       char[] publicPassword)
-            throws AlgorithmNotSupportedException, InappropriateKeyException, InappropriateKeySpecificationException
+    public void saveKeyPairToProviders(
+        final KeyPair keyPair, final GeneratedClassDescriptor privateKeyProvider,
+        final GeneratedClassDescriptor publicKeyProvider, final char[] privatePassword,
+        final char[] publicPassword
+    )
+        throws AlgorithmNotSupportedException, InappropriateKeyException, InappropriateKeySpecificationException
     {
         if(keyPair == null)
+        {
             throw new IllegalArgumentException("Parameter keyPair cannot be null.");
-
-        if(privateKeyProvider == null)
-            throw new IllegalArgumentException("Parameter privateKeyProvider cannot be null.");
-
-        if(publicKeyProvider == null)
-            throw new IllegalArgumentException("Parameter publicKeyProvider cannot be null.");
-
+        }
+        if(privateKeyProvider == null || publicKeyProvider == null)
+        {
+            throw new IllegalArgumentException("Parameter privateKeyProvider and publicKeyProvider cannot be null.");
+        }
         if(privatePassword == null || privatePassword.length == 0)
+        {
             throw new IllegalArgumentException("Parameter privatePassword cannot be null or zero-length.");
-
+        }
         if(publicPassword == null || publicPassword.length == 0)
+        {
             throw new IllegalArgumentException("Parameter publicPassword cannot be null or zero-length.");
+        }
 
-        byte[] privateKey = KeyFileUtilities.writeEncryptedPrivateKey(keyPair.getPrivate(), privatePassword);
-        byte[] publicKey = KeyFileUtilities.writeEncryptedPublicKey(keyPair.getPublic(), publicPassword);
-
-        String privateKeyCode = this.arrayToCodeString(this.byteArrayToIntArray(privateKey), "byte");
-        String publicKeyCode = this.arrayToCodeString(this.byteArrayToIntArray(publicKey), "byte");
+        final String privateKeyCode = this.arrayToCodeString(
+            this.byteArrayToIntArray(KeyFileUtilities.writeEncryptedPrivateKey(keyPair.getPrivate(), privatePassword)),
+            RSAKeyPairGenerator.BYTE_TYPE_NAME
+        );
+        final String publicKeyCode = this.arrayToCodeString(
+            this.byteArrayToIntArray(KeyFileUtilities.writeEncryptedPublicKey(keyPair.getPublic(), publicPassword)),
+            RSAKeyPairGenerator.BYTE_TYPE_NAME
+        );
 
         privateKeyProvider.setJavaFileContents(this.generateJavaCode(
-                privateKeyProvider.getPackageName(),
-                privateKeyProvider.getClassName(),
-                "PrivateKeyDataProvider",
-                new String[] {
-                        "io.oddsource.java.licensing.encryption.PrivateKeyDataProvider",
-                        "io.oddsource.java.licensing.exception.KeyNotFoundException"
-                },
-                "public byte[] getEncryptedPrivateKeyData() throws KeyNotFoundException",
-                privateKeyCode
+            privateKeyProvider.getPackageName(), privateKeyProvider.getClassName(),
+            "PrivateKeyDataProvider",
+            new String[] {
+                PrivateKeyDataProvider.class.getCanonicalName(),
+                KeyNotFoundException.class.getCanonicalName(),
+            },
+            "public byte[] getEncryptedPrivateKeyData() throws KeyNotFoundException",
+            privateKeyCode
         ));
 
         publicKeyProvider.setJavaFileContents(this.generateJavaCode(
-                publicKeyProvider.getPackageName(),
-                publicKeyProvider.getClassName(),
-                "PublicKeyDataProvider",
-                new String[] {
-                        "io.oddsource.java.licensing.encryption.PublicKeyDataProvider",
-                        "io.oddsource.java.licensing.exception.KeyNotFoundException"
-                },
-                "public byte[] getEncryptedPublicKeyData() throws KeyNotFoundException",
-                publicKeyCode
+            publicKeyProvider.getPackageName(), publicKeyProvider.getClassName(),
+            "PublicKeyDataProvider",
+            new String[] {
+                PublicKeyDataProvider.class.getCanonicalName(),
+                KeyNotFoundException.class.getCanonicalName(),
+            },
+            "public byte[] getEncryptedPublicKeyData() throws KeyNotFoundException",
+            publicKeyCode
         ));
     }
 
@@ -220,26 +270,31 @@ public final class RSAKeyPairGenerator implements RSAKeyPairGeneratorInterface
      * the provided {@link RSAKeyPairGeneratorInterface.GeneratedClassDescriptor}.
      *
      * @param password The password to save to the specified Java class
-     * @param passwordProvider An object describing the {@link PasswordProvider} class to generate, and into which the generated code will be saved
+     * @param passwordProvider An object describing the {@link PasswordProvider} class to generate, and into which
+     *     the generated code will be saved
      */
     @Override
-    public void savePasswordToProvider(char[] password, GeneratedClassDescriptor passwordProvider)
+    public void savePasswordToProvider(final char[] password, final GeneratedClassDescriptor passwordProvider)
     {
         if(password == null || password.length == 0)
+        {
             throw new IllegalArgumentException("Parameter password cannot be null or zero-length.");
+        }
 
         if(passwordProvider == null)
+        {
             throw new IllegalArgumentException("Parameter passwordProvider cannot be null.");
+        }
 
-        String passwordCode = this.arrayToCodeString(this.charArrayToIntArray(password), "char");
+        final String passwordCode = this.arrayToCodeString(this.charArrayToIntArray(password), "char");
 
         passwordProvider.setJavaFileContents(this.generateJavaCode(
-                passwordProvider.getPackageName(),
-                passwordProvider.getClassName(),
-                "PasswordProvider",
-                new String[] { "io.oddsource.java.licensing.encryption.PasswordProvider" },
-                "public char[] getPassword()",
-                passwordCode
+            passwordProvider.getPackageName(),
+            passwordProvider.getClassName(),
+            "PasswordProvider",
+            new String[] {"io.oddsource.java.licensing.encryption.PasswordProvider"},
+            "public char[] getPassword()",
+            passwordCode
         ));
     }
 
@@ -253,40 +308,54 @@ public final class RSAKeyPairGenerator implements RSAKeyPairGeneratorInterface
      * @param imports An array of classes to import at the top of the Java code
      * @param methodSignature The signature of the sole method in the class
      * @param returnValue The statement that the method should return (will be prepended with "return ")
+     *
      * @return the Java code for the specified class.
      */
-    protected String generateJavaCode(String packageName, String className, String interfaceName, String[] imports,
-                                      String methodSignature, String returnValue)
+    protected String generateJavaCode(
+        final String packageName, final String className, final String interfaceName, final String[] imports,
+        final String methodSignature, final String returnValue
+    )
     {
-        StringBuilder stringBuilder = new StringBuilder();
+        final StringBuilder stringBuilder = new StringBuilder();
 
         if(packageName != null && packageName.trim().length() > 0)
-            stringBuilder.append("package ").append(packageName.trim()).append(";\r\n\r\n");
+        {
+            stringBuilder.append("package ").append(packageName.trim()).append(RSAKeyPairGenerator.CODE_STATEMENT_END).
+                append(RSAKeyPairGenerator.CODE_LF);
+        }
 
         if(imports != null && imports.length > 0)
         {
-            for(String importClass : imports)
-                stringBuilder.append("import ").append(importClass.trim()).append(";\r\n");
-            stringBuilder.append("\r\n");
+            for(final String importClass : imports)
+            {
+                stringBuilder.append("import ").append(importClass.trim()).
+                    append(RSAKeyPairGenerator.CODE_STATEMENT_END);
+            }
+            stringBuilder.append(RSAKeyPairGenerator.CODE_LF);
         }
 
-        boolean hasInterface = interfaceName != null && interfaceName.trim().length() > 0;
+        final boolean hasInterface = interfaceName != null && interfaceName.trim().length() > 0;
 
         stringBuilder.append("public final class ").append(className.trim());
         if(hasInterface)
+        {
             stringBuilder.append(" implements ").append(interfaceName.trim());
-        stringBuilder.append("\r\n");
-        stringBuilder.append("{\r\n");
+        }
+        stringBuilder.append(RSAKeyPairGenerator.CODE_LF).append(RSAKeyPairGenerator.CODE_OPENING_BRACE_LF);
         if(hasInterface)
-            stringBuilder.append("\t@Override\r\n");
-        stringBuilder.append("\t").append(methodSignature.trim()).append("\r\n");
-        stringBuilder.append("\t{\r\n");
+        {
+            stringBuilder.append(RSAKeyPairGenerator.CODE_TAB).append("@Override" + RSAKeyPairGenerator.CODE_LF);
+        }
+        stringBuilder.append(RSAKeyPairGenerator.CODE_TAB).append(methodSignature.trim()).
+            append(RSAKeyPairGenerator.CODE_LF);
+        stringBuilder.append(RSAKeyPairGenerator.CODE_TAB).append(RSAKeyPairGenerator.CODE_OPENING_BRACE_LF);
 
-        stringBuilder.append("\t\treturn ").append(returnValue).append(";\r\n");
+        stringBuilder.append(RSAKeyPairGenerator.CODE_TAB).append(RSAKeyPairGenerator.CODE_TAB).append("return ").
+            append(returnValue).append(RSAKeyPairGenerator.CODE_STATEMENT_END);
 
-        stringBuilder.append("\t}\r\n");
+        stringBuilder.append(RSAKeyPairGenerator.CODE_TAB).append(RSAKeyPairGenerator.CODE_CLOSING_BRACE_LF);
 
-        stringBuilder.append("}");
+        stringBuilder.append(RSAKeyPairGenerator.CODE_CLOSING_BRACE_LF);
 
         return stringBuilder.toString();
     }
@@ -299,25 +368,35 @@ public final class RSAKeyPairGenerator implements RSAKeyPairGeneratorInterface
      *
      * @param values The array of values to include in the array code
      * @param type The data type ({@code byte}, {@code char}, {@code short}, {@code int}) of the array to return
+     *
      * @return the Java code representation of this array.
      */
-    protected String arrayToCodeString(int[] values, String type)
+    protected String arrayToCodeString(final int[] values, final String type)
     {
-        StringBuilder stringBuilder = new StringBuilder("new ").append(type).append("[] {\r\n\t\t\t\t");
-        int i = 0, j = 1;
-        for(int value : values)
+        final StringBuilder stringBuilder = new StringBuilder("new ").append(type).append("[] ").
+            append(RSAKeyPairGenerator.CODE_OPENING_BRACE_LF).append(RSAKeyPairGenerator.CODE_TAB).
+            append(RSAKeyPairGenerator.CODE_TAB).append(RSAKeyPairGenerator.CODE_TAB).
+            append(RSAKeyPairGenerator.CODE_TAB);
+        int i = 0;
+        int j = 1;
+        for(final int value : values)
         {
             if(i++ > 0)
+            {
                 stringBuilder.append(", ");
-            if(j++ > 8)
+            }
+            if(j++ > RSAKeyPairGenerator.CODE_ARRAY_VALUES_PER_LINE)
             {
                 j = 2;
-                stringBuilder.append("\r\n\t\t\t\t");
+                stringBuilder.append(RSAKeyPairGenerator.CODE_LF).append(RSAKeyPairGenerator.CODE_TAB).
+                    append(RSAKeyPairGenerator.CODE_TAB).append(RSAKeyPairGenerator.CODE_TAB).
+                    append(RSAKeyPairGenerator.CODE_TAB);
             }
             stringBuilder.append("0x");
             stringBuilder.append(String.format("%08x", value).toUpperCase(Locale.US));
         }
-        stringBuilder.append("\r\n\t\t}");
+        stringBuilder.append(RSAKeyPairGenerator.CODE_LF).append(RSAKeyPairGenerator.CODE_TAB).
+            append(RSAKeyPairGenerator.CODE_TAB).append(RSAKeyPairGenerator.CODE_CLOSING_BRACE);
         return stringBuilder.toString();
     }
 
@@ -325,14 +404,17 @@ public final class RSAKeyPairGenerator implements RSAKeyPairGeneratorInterface
      * Converts a {@code byte} array to an {@code int} array.
      *
      * @param array The {@code byte} array to convert
+     *
      * @return the converted array as an {@code int} array.
      */
-    protected int[] byteArrayToIntArray(byte[] array)
+    protected int[] byteArrayToIntArray(final byte[] array)
     {
-        int[] a = new int[array.length];
+        final int[] a = new int[array.length];
         int i = 0;
-        for(byte b : array)
+        for(final byte b : array)
+        {
             a[i++] = b;
+        }
         return a;
     }
 
@@ -340,14 +422,17 @@ public final class RSAKeyPairGenerator implements RSAKeyPairGeneratorInterface
      * Converts a {@code char} array to an {@code int} array.
      *
      * @param array The {@code char} array to convert
+     *
      * @return the converted array as an {@code int} array.
      */
-    protected int[] charArrayToIntArray(char[] array)
+    protected int[] charArrayToIntArray(final char[] array)
     {
-        int[] a = new int[array.length];
+        final int[] a = new int[array.length];
         int i = 0;
-        for(char c : array)
+        for(final char c : array)
+        {
             a[i++] = c;
+        }
         return a;
     }
 }

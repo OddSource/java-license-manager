@@ -15,8 +15,8 @@
  */
 package io.oddsource.java.licensing.licensor;
 
-import io.oddsource.java.licensing.encryption.PrivateKeyDataProvider;
 import io.oddsource.java.licensing.encryption.PasswordProvider;
+import io.oddsource.java.licensing.encryption.PrivateKeyDataProvider;
 
 /**
  * This class is used to set properties that will be used to instantiate the {@link LicenseCreator}. Read the
@@ -33,13 +33,21 @@ public final class LicenseCreatorProperties
     private static PasswordProvider privateKeyPasswordProvider;
 
     /**
+     * This class cannot be instantiated.
+     */
+    private LicenseCreatorProperties()
+    {
+        throw new AssertionError("This class cannot be instantiated.");
+    }
+
+    /**
      * Sets the provider of the data for the private key used to sign the license object.<br />
      * <br />
      * This field is <b>required</b>.
      *
      * @param privateKeyDataProvider The provider of the data for the private key used to sign the license object
      */
-    public static void setPrivateKeyDataProvider(PrivateKeyDataProvider privateKeyDataProvider)
+    public static void setPrivateKeyDataProvider(final PrivateKeyDataProvider privateKeyDataProvider)
     {
         LicenseCreatorProperties.privateKeyDataProvider = privateKeyDataProvider;
     }
@@ -56,7 +64,7 @@ public final class LicenseCreatorProperties
      *
      * @param privateKeyPasswordProvider The provider of the password for decrypting the private key
      */
-    public static void setPrivateKeyPasswordProvider(PasswordProvider privateKeyPasswordProvider)
+    public static void setPrivateKeyPasswordProvider(final PasswordProvider privateKeyPasswordProvider)
     {
         LicenseCreatorProperties.privateKeyPasswordProvider = privateKeyPasswordProvider;
     }
@@ -64,13 +72,5 @@ public final class LicenseCreatorProperties
     static PasswordProvider getPrivateKeyPasswordProvider()
     {
         return LicenseCreatorProperties.privateKeyPasswordProvider;
-    }
-
-    /**
-     * This class cannot be instantiated.
-     */
-    private LicenseCreatorProperties()
-    {
-        throw new RuntimeException("This class cannot be instantiated.");
     }
 }

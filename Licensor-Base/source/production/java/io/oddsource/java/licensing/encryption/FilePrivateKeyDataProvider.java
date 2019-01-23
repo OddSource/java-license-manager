@@ -15,12 +15,13 @@
  */
 package io.oddsource.java.licensing.encryption;
 
-import io.oddsource.java.licensing.exception.KeyNotFoundException;
-import org.apache.commons.io.FileUtils;
-
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+
+import org.apache.commons.io.FileUtils;
+
+import io.oddsource.java.licensing.exception.KeyNotFoundException;
 
 /**
  * A default implementation of {@link PrivateKeyDataProvider} that reads the private key from a file.<br />
@@ -40,7 +41,7 @@ public class FilePrivateKeyDataProvider implements PrivateKeyDataProvider
      *
      * @param privateKeyFile the private key file
      */
-    public FilePrivateKeyDataProvider(File privateKeyFile)
+    public FilePrivateKeyDataProvider(final File privateKeyFile)
     {
         this.privateKeyFile = privateKeyFile.getAbsoluteFile();
     }
@@ -50,7 +51,7 @@ public class FilePrivateKeyDataProvider implements PrivateKeyDataProvider
      *
      * @param privateKeyFileName The private key file name
      */
-    public FilePrivateKeyDataProvider(String privateKeyFileName)
+    public FilePrivateKeyDataProvider(final String privateKeyFileName)
     {
         this.privateKeyFile = new File(privateKeyFileName).getAbsoluteFile();
     }
@@ -67,7 +68,9 @@ public class FilePrivateKeyDataProvider implements PrivateKeyDataProvider
      * an instance or class field).
      *
      * @return the encrypted file contents from the private key file.
-     * @throws KeyNotFoundException if the key data could not be retrieved; an acceptable message or chained cause must be provided.
+     *
+     * @throws KeyNotFoundException if the key data could not be retrieved; an acceptable message or chained cause
+     *     must be provided.
      */
     @Override
     public byte[] getEncryptedPrivateKeyData() throws KeyNotFoundException
@@ -76,12 +79,12 @@ public class FilePrivateKeyDataProvider implements PrivateKeyDataProvider
         {
             return FileUtils.readFileToByteArray(this.privateKeyFile);
         }
-        catch(FileNotFoundException e)
+        catch(final FileNotFoundException e)
         {
             throw new KeyNotFoundException("The private key file [" + this.privateKeyFile.getPath() +
                                            "] does not exist.");
         }
-        catch(IOException e)
+        catch(final IOException e)
         {
             throw new KeyNotFoundException("Could not read from the private key file [" +
                                            this.privateKeyFile.getPath() + "].", e);

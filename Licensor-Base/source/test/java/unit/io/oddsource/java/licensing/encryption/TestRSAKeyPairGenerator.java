@@ -225,7 +225,7 @@ public class TestRSAKeyPairGenerator
         assertNotNull("The code should not be null.", code);
         assertTrue("The code should have length.", code.length() > 0);
         assertEquals("The code is not correct.",
-                     "new byte[] {\r\n\t\t\t\t0x00000001, 0x00000006, 0x0000003F, 0x0000007A, 0xFFFFFF80, 0x00000041\r\n\t\t}", code);
+                     "new byte[] {\n                0x00000001, 0x00000006, 0x0000003F, 0x0000007A, 0xFFFFFF80, 0x00000041\n        }", code);
     }
 
     @Test
@@ -236,7 +236,7 @@ public class TestRSAKeyPairGenerator
         assertNotNull("The code should not be null.", code);
         assertTrue("The code should have length.", code.length() > 0);
         assertEquals("The code is not correct.",
-                     "new char[] {\r\n\t\t\t\t0x0000007A, 0x00000041, 0x00000002, 0x00000004, 0x00000006\r\n\t\t}", code);
+                     "new char[] {\n                0x0000007A, 0x00000041, 0x00000002, 0x00000004, 0x00000006\n        }", code);
     }
 
     @Test
@@ -250,11 +250,11 @@ public class TestRSAKeyPairGenerator
         assertNotNull("The code should not be null.", code);
         assertTrue("The code should have length.", code.length() > 0);
         assertEquals("The code is not correct.",
-                     "new short[] {\r\n\t\t\t\t" +
+                     "new short[] {\n                " +
                           "0x0000007A, 0x00000041, 0x00000002, 0x00000004, 0x00000006, 0x00000001, 0x00000006, " +
-                         "0x0000003F, \r\n\t\t\t\t0x0000007A, 0x00000015, 0x00000041, 0x00000041, 0x00000015, " +
-                         "0x0000007A, 0x00000006, 0x0000003F, \r\n\t\t\t\t0x00000004, 0x00000041, 0x0000007A, " +
-                         "0x00000006\r\n\t\t}",
+                         "0x0000003F, \n                0x0000007A, 0x00000015, 0x00000041, 0x00000041, 0x00000015, " +
+                         "0x0000007A, 0x00000006, 0x0000003F, \n                0x00000004, 0x00000041, 0x0000007A, " +
+                         "0x00000006\n        }",
                      code);
     }
 
@@ -275,7 +275,7 @@ public class TestRSAKeyPairGenerator
         );
 
         if(!task.call())
-            fail("Compiling of generated class did not succeed. Java code:\r\n" + code + "\r\nCompiler output:\r\n" + compilerOutput.toString());
+            fail("Compiling of generated class did not succeed. Java code:\n" + code + "\nCompiler output:\n" + compilerOutput.toString());
 
         return fileManager;
     }
@@ -297,13 +297,13 @@ public class TestRSAKeyPairGenerator
         assertNotNull("The code should not be null.", code);
         assertTrue("The code should have length.", code.length() > 0);
         assertEquals("The code is not correct.",
-                     "public final class TestGenerateJavaCode01\r\n" +
-                     "{\r\n" +
-                     "\tpublic final String testMethod01(String concatenate)\r\n" +
-                     "\t{\r\n" +
-                     "\t\treturn concatenate + \" some other cool text.\";\r\n" +
-                     "\t}\r\n" +
-                     "}",
+                     "public final class TestGenerateJavaCode01\n" +
+                     "{\n" +
+                     "    public final String testMethod01(String concatenate)\n" +
+                     "    {\n" +
+                     "        return concatenate + \" some other cool text.\";\n" +
+                     "    }\n" +
+                     "}\n",
                      code);
 
         JavaFileManager compiled = this.compileClass("TestGenerateJavaCode01", code);
@@ -337,18 +337,18 @@ public class TestRSAKeyPairGenerator
         assertNotNull("The code should not be null.", code);
         assertTrue("The code should have length.", code.length() > 0);
         assertEquals("The code is not correct.",
-                     "package com.nicholaswilliams.java.mock;\r\n" +
-                     "\r\n" +
-                     "import io.oddsource.java.licensing.encryption.TestRSAKeyPairGenerator;\r\n" +
-                     "\r\n" +
-                     "public final class TestGenerateJavaCode02 implements TestRSAKeyPairGenerator.TestDynamicCompileInterface\r\n" +
-                     "{\r\n" +
-                     "\t@Override\r\n" +
-                     "\tpublic long getSystemTimeInSeconds()\r\n" +
-                     "\t{\r\n" +
-                     "\t\treturn System.currentTimeMillis() / 1000L;\r\n" +
-                     "\t}\r\n" +
-                     "}",
+                     "package com.nicholaswilliams.java.mock;\n" +
+                     "\n" +
+                     "import io.oddsource.java.licensing.encryption.TestRSAKeyPairGenerator;\n" +
+                     "\n" +
+                     "public final class TestGenerateJavaCode02 implements TestRSAKeyPairGenerator.TestDynamicCompileInterface\n" +
+                     "{\n" +
+                     "    @Override\n" +
+                     "    public long getSystemTimeInSeconds()\n" +
+                     "    {\n" +
+                     "        return System.currentTimeMillis() / 1000L;\n" +
+                     "    }\n" +
+                     "}\n",
                      code);
 
         JavaFileManager compiled = this.compileClass("com.nicholaswilliams.java.mock.TestGenerateJavaCode02", code);

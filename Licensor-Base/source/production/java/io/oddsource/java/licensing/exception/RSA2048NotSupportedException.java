@@ -20,30 +20,49 @@ package io.oddsource.java.licensing.exception;
  * this library to run, is not supported with the current JVM.
  *
  * @author Nick Williams
- * @since 1.0.0
  * @version 1.0.0
+ * @since 1.0.0
  */
 @SuppressWarnings("unused")
 public class RSA2048NotSupportedException extends RuntimeException
 {
     private static final long serialVersionUID = 1L;
 
+    /**
+     * Constructor.
+     */
     public RSA2048NotSupportedException()
     {
         super("2048-bit RSA Security is not supported on this system.");
     }
 
-    public RSA2048NotSupportedException(String message)
+    /**
+     * Constructor.
+     *
+     * @param message The message
+     */
+    public RSA2048NotSupportedException(final String message)
     {
         super(message);
     }
 
-    public RSA2048NotSupportedException(Throwable cause)
+    /**
+     * Constructor.
+     *
+     * @param cause The cause
+     */
+    public RSA2048NotSupportedException(final Throwable cause)
     {
         super("2048-bit RSA Security is not supported on this system.", cause);
     }
 
-    public RSA2048NotSupportedException(String message, Throwable cause)
+    /**
+     * Constructor.
+     *
+     * @param message The message
+     * @param cause The cause
+     */
+    public RSA2048NotSupportedException(final String message, final Throwable cause)
     {
         super(message, cause);
     }

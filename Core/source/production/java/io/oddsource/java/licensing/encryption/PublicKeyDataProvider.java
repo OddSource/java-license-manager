@@ -27,8 +27,8 @@ import io.oddsource.java.licensing.exception.KeyNotFoundException;
  * licenses.
  *
  * @author Nick Williams
- * @since 1.0.0
  * @version 1.0.0
+ * @since 1.0.0
  */
 public interface PublicKeyDataProvider
 {
@@ -44,7 +44,9 @@ public interface PublicKeyDataProvider
      * an instance or class field).
      *
      * @return the encrypted file contents from the public key file.
-     * @throws KeyNotFoundException if the key data could not be retrieved; an acceptable message or chained cause must be provided.
+     *
+     * @throws KeyNotFoundException if the key data could not be retrieved; an acceptable message or chained cause
+     *     must be provided.
      */
     public byte[] getEncryptedPublicKeyData() throws KeyNotFoundException;
 }

@@ -18,12 +18,13 @@
 
 package io.oddsource.java.licensing.encryption;
 
-import io.oddsource.java.licensing.exception.KeyNotFoundException;
-import org.apache.commons.io.FileUtils;
-
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+
+import org.apache.commons.io.FileUtils;
+
+import io.oddsource.java.licensing.exception.KeyNotFoundException;
 
 /**
  * A default implementation of {@link PublicKeyDataProvider} that reads the public key from a file.<br />
@@ -43,7 +44,7 @@ public class FilePublicKeyDataProvider implements PublicKeyDataProvider
      *
      * @param publicKeyFile the public key file
      */
-    public FilePublicKeyDataProvider(File publicKeyFile)
+    public FilePublicKeyDataProvider(final File publicKeyFile)
     {
         this.publicKeyFile = publicKeyFile.getAbsoluteFile();
     }
@@ -53,7 +54,7 @@ public class FilePublicKeyDataProvider implements PublicKeyDataProvider
      *
      * @param publicKeyFileName The public key file name
      */
-    public FilePublicKeyDataProvider(String publicKeyFileName)
+    public FilePublicKeyDataProvider(final String publicKeyFileName)
     {
         this.publicKeyFile = new File(publicKeyFileName).getAbsoluteFile();
     }
@@ -70,7 +71,9 @@ public class FilePublicKeyDataProvider implements PublicKeyDataProvider
      * an instance or class field).
      *
      * @return the encrypted file contents from the public key file.
-     * @throws KeyNotFoundException if the key data could not be retrieved; an acceptable message or chained cause must be provided.
+     *
+     * @throws KeyNotFoundException if the key data could not be retrieved; an acceptable message or chained cause
+     *     must be provided.
      */
     @Override
     public byte[] getEncryptedPublicKeyData() throws KeyNotFoundException
@@ -79,12 +82,12 @@ public class FilePublicKeyDataProvider implements PublicKeyDataProvider
         {
             return FileUtils.readFileToByteArray(this.publicKeyFile);
         }
-        catch(FileNotFoundException e)
+        catch(final FileNotFoundException e)
         {
             throw new KeyNotFoundException("The public key file [" + this.publicKeyFile.getPath() +
                                            "] does not exist.");
         }
-        catch(IOException e)
+        catch(final IOException e)
         {
             throw new KeyNotFoundException("Could not read from the public key file [" +
                                            this.publicKeyFile.getPath() + "].", e);

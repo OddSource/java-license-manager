@@ -18,12 +18,13 @@
 
 package io.oddsource.java.licensing.encryption;
 
-import io.oddsource.java.licensing.LicensingCharsets;
-import io.oddsource.java.licensing.exception.AlgorithmNotSupportedException;
-import org.apache.commons.codec.binary.Base64;
-
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+
+import org.apache.commons.codec.binary.Base64;
+
+import io.oddsource.java.licensing.LicensingCharsets;
+import io.oddsource.java.licensing.exception.AlgorithmNotSupportedException;
 
 /**
  * Used for creating hash keys of things that won't need to be unencrypted.
@@ -43,7 +44,7 @@ public class Hasher
      * The salt that we use to hash strings.
      */
     private static final String salt =
-            "j4KgU305PZp't.\"%ordAY7q*?z9%8]amNL(0Wx5eG49b1sRj(^;8Kg2w0EoM";
+        "j4KgU305PZp't.\"%ordAY7q*?z9%8]amNL(0Wx5eG49b1sRj(^;8Kg2w0EoM";
 
     /**
      * Calculate the SHA-512 message digest hash of the
@@ -51,22 +52,23 @@ public class Hasher
      * data Base64 encoded.
      *
      * @param string The string to hash
+     *
      * @return the hashed string Base64 encoded.
      */
-    public static String hash(String string)
+    public static String hash(final String string)
     {
         try
         {
             return new String(
-                    Base64.encodeBase64(
-                            MessageDigest.getInstance(Hasher.algorithm).digest(
-                                    (string + Hasher.salt).getBytes(LicensingCharsets.UTF_8)
-                            )
-                    ),
-                    LicensingCharsets.UTF_8
+                Base64.encodeBase64(
+                    MessageDigest.getInstance(Hasher.algorithm).digest(
+                        (string + Hasher.salt).getBytes(LicensingCharsets.UTF_8)
+                    )
+                ),
+                LicensingCharsets.UTF_8
             );
         }
-        catch(NoSuchAlgorithmException e)
+        catch(final NoSuchAlgorithmException e)
         {
             throw new AlgorithmNotSupportedException(Hasher.algorithm, e);
         }

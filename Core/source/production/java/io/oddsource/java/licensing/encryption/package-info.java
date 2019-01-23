@@ -15,14 +15,10 @@
  */
 
 /**
- * This package contains samples for using the OddSource Code Java License Manager.
+ * This package contains helpers and utilities for encryption and decryption.
  *
  * @author Nick Williams
  * @version 1.0.0
  * @since 1.0.0
  */
-@FeatureRestriction("PACKAGE1")
-package io.oddsource.java.licensing.samples;
-
-import io.oddsource.java.licensing.FeatureRestriction;
-
+package io.oddsource.java.licensing.encryption;

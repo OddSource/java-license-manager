@@ -139,19 +139,16 @@
                     <artifactId>spotbugs-maven-plugin</artifactId>
                     <configuration>
                         <effort>Max</effort>
-                        <excludeBugsFile>build/spotbugs-exclude.xml</excludeBugsFile>
+                        <excludeFilterFile>build/spotbugs-exclude.xml</excludeFilterFile>
                         <threshold>Low</threshold>
                         <xmlOutput>true</xmlOutput>
                     </configuration>
                     <executions>
                         <execution>
-                            <phase>none</phase>
-                        </execution>
-                        <!--<execution>
                             <goals>
                                 <goal>check</goal>
                             </goals>
-                        </execution>-->
+                        </execution>
                     </executions>
                 </plugin>
                 <plugin>
@@ -260,11 +257,6 @@
                         </bottom>
                         <detectJavaApiLink>true</detectJavaApiLink>
                         <detectLinks>false</detectLinks>
-                        <links>
-                            <link>http://commons.apache.org/proper/commons-cli/javadocs/api-${version.dependency.commons.cli}/</link>
-                            <link>http://commons.apache.org/proper/commons-codec/javadocs/api-${version.dependency.commons.codec}/</link>
-                            <link>http://commons.apache.org/proper/commons-io/javadocs/api-${version.dependency.commons.io}/</link>
-                        </links>
                         <sourceFileExcludes>
                             <exclude>**Mock*.java</exclude>
                             <exclude>io/oddsource/java/mock/**</exclude>

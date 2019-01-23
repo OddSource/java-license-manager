@@ -15,14 +15,10 @@
  */
 
 /**
- * This package contains samples for using the OddSource Code Java License Manager.
+ * This package contains some base classes used by all licensor user interface code.
  *
  * @author Nick Williams
  * @version 1.0.0
  * @since 1.0.0
  */
-@FeatureRestriction("PACKAGE1")
-package io.oddsource.java.licensing.samples;
-
-import io.oddsource.java.licensing.FeatureRestriction;
-
+package io.oddsource.java.licensing.licensor.interfaces.spi;

@@ -18,15 +18,15 @@
 
 package io.oddsource.java.licensing.immutable;
 
+import static org.junit.Assert.*;
+
+import java.util.ArrayList;
+
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
-
-import java.util.ArrayList;
-
-import static org.junit.Assert.*;
 
 /**
  * Test class for ImmutableListIterator.
@@ -72,19 +72,19 @@ public class TestImmutableListIterator
 
     }
 
-    @Test(expected=UnsupportedOperationException.class)
+    @Test(expected = UnsupportedOperationException.class)
     public void testAddNotAllowed()
     {
         this.iterator.add("Test");
     }
 
-    @Test(expected=UnsupportedOperationException.class)
+    @Test(expected = UnsupportedOperationException.class)
     public void testRemoveNotAllowed()
     {
         this.iterator.remove();
     }
 
-    @Test(expected=UnsupportedOperationException.class)
+    @Test(expected = UnsupportedOperationException.class)
     public void testSetNotAllowed()
     {
         this.iterator.set("Test");
@@ -95,7 +95,7 @@ public class TestImmutableListIterator
     {
         this.valid.valid = true;
 
-        String[] array = new String[] { "MyString1", "YourString2", "HisString3", "HerString4" };
+        String[] array = new String[] {"MyString1", "YourString2", "HisString3", "HerString4"};
         int i = 0;
 
         while(this.iterator.hasNext())
@@ -109,27 +109,30 @@ public class TestImmutableListIterator
         }
     }
 
-    @Test(expected= ImmutableModifiedThroughReflectionError.class)
+    @Test(expected = ImmutableModifiedThroughReflectionError.class)
     public void testNext02()
     {
         this.valid.valid = false;
         this.iterator.hasNext();
     }
 
-    @Test(expected= ImmutableModifiedThroughReflectionError.class)
+    @Test(expected = ImmutableModifiedThroughReflectionError.class)
     public void testNext03()
     {
         this.valid.valid = false;
         this.iterator.hasNext();
     }
 
-    @Test(expected= ImmutableModifiedThroughReflectionError.class)
+    @Test(expected = ImmutableModifiedThroughReflectionError.class)
     public void testNext04()
     {
-        try {
+        try
+        {
             this.valid.valid = true;
             this.iterator.hasNext();
-        } catch(Throwable t) {
+        }
+        catch(Throwable t)
+        {
             t.printStackTrace();
             fail(t.toString());
         }
@@ -137,17 +140,20 @@ public class TestImmutableListIterator
         this.iterator.next();
     }
 
-    @Test(expected= ImmutableModifiedThroughReflectionError.class)
+    @Test(expected = ImmutableModifiedThroughReflectionError.class)
     public void testNext05()
     {
-        try {
+        try
+        {
             this.valid.valid = true;
             this.iterator.hasNext();
             this.iterator.next();
             this.iterator.hasNext();
             this.iterator.next();
             this.iterator.hasNext();
-        } catch(Throwable t) {
+        }
+        catch(Throwable t)
+        {
             t.printStackTrace();
             fail(t.toString());
         }
@@ -160,7 +166,7 @@ public class TestImmutableListIterator
     {
         this.valid.valid = true;
 
-        String[] array = new String[] { "MyString1", "YourString2", "HisString3", "HerString4" };
+        String[] array = new String[] {"MyString1", "YourString2", "HisString3", "HerString4"};
         int i = 4;
 
         while(this.iterator.hasPrevious())
@@ -174,27 +180,30 @@ public class TestImmutableListIterator
         }
     }
 
-    @Test(expected= ImmutableModifiedThroughReflectionError.class)
+    @Test(expected = ImmutableModifiedThroughReflectionError.class)
     public void testPrevious02()
     {
         this.valid.valid = false;
         this.iterator.hasPrevious();
     }
 
-    @Test(expected= ImmutableModifiedThroughReflectionError.class)
+    @Test(expected = ImmutableModifiedThroughReflectionError.class)
     public void testPrevious03()
     {
         this.valid.valid = false;
         this.iterator.previous();
     }
 
-    @Test(expected= ImmutableModifiedThroughReflectionError.class)
+    @Test(expected = ImmutableModifiedThroughReflectionError.class)
     public void testPrevious04()
     {
-        try {
+        try
+        {
             this.valid.valid = true;
             this.iterator.hasPrevious();
-        } catch(Throwable t) {
+        }
+        catch(Throwable t)
+        {
             t.printStackTrace();
             fail(t.toString());
         }
@@ -202,10 +211,11 @@ public class TestImmutableListIterator
         this.iterator.previous();
     }
 
-    @Test(expected= ImmutableModifiedThroughReflectionError.class)
+    @Test(expected = ImmutableModifiedThroughReflectionError.class)
     public void testPrevious05()
     {
-        try {
+        try
+        {
             this.valid.valid = true;
             this.iterator.next();
             this.iterator.next();
@@ -217,7 +227,9 @@ public class TestImmutableListIterator
             this.iterator.previous();
             this.iterator.hasPrevious();
             this.iterator.previous();
-        } catch(Throwable t) {
+        }
+        catch(Throwable t)
+        {
             t.printStackTrace();
             fail(t.toString());
         }

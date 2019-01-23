@@ -18,14 +18,14 @@
 
 package io.oddsource.java.licensing.encryption;
 
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
+import static org.junit.Assert.*;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 
-import static org.junit.Assert.*;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
 
 /**
  * Test class for Hasher.
@@ -46,7 +46,7 @@ public class TestHasher
 
     @Test
     public void testConstructionForbidden()
-            throws IllegalAccessException, InstantiationException, NoSuchMethodException
+        throws IllegalAccessException, InstantiationException, NoSuchMethodException
     {
         Constructor<Hasher> constructor = Hasher.class.getDeclaredConstructor();
         constructor.setAccessible(true);
@@ -60,7 +60,11 @@ public class TestHasher
         {
             Throwable cause = e.getCause();
             assertNotNull("Expected cause for InvocationTargetException, but got no cause.", cause);
-            assertSame("Expected exception java.lang.RuntimeException, but got " + cause.getClass(), RuntimeException.class, cause.getClass());
+            assertSame(
+                "Expected exception java.lang.RuntimeException, but got " + cause.getClass(),
+                RuntimeException.class,
+                cause.getClass()
+            );
             assertEquals("The message was incorrect.", "This class cannot be instantiated.", cause.getMessage());
         }
     }
@@ -99,6 +103,9 @@ public class TestHasher
         assertNotNull("The first encrypted string was null.", encrypted1);
         assertNotNull("The second encrypted string was null.", encrypted2);
 
-        assertFalse("The first encrypted string matches the second encrypted string, and it shouldn't.", encrypted1.equals(encrypted2));
+        assertFalse(
+            "The first encrypted string matches the second encrypted string, and it shouldn't.",
+            encrypted1.equals(encrypted2)
+        );
     }
 }

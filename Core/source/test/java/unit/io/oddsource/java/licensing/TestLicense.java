@@ -18,17 +18,18 @@
 
 package io.oddsource.java.licensing;
 
-import io.oddsource.java.licensing.immutable.ImmutableLinkedHashSet;
-import io.oddsource.java.licensing.mock.MockFeatureObject;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
+import static org.junit.Assert.*;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
-import static org.junit.Assert.*;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
+
+import io.oddsource.java.licensing.immutable.ImmutableLinkedHashSet;
+import io.oddsource.java.licensing.mock.MockFeatureObject;
 
 /**
  * Test class for License.
@@ -41,17 +42,17 @@ public class TestLicense
     public void setUp()
     {
         this.license = new License.Builder().
-                                withProductKey("5565-1039-AF89-GGX7-TN31-14AL").
-                                withIssuer("CN=Nick Williams, C=US, ST=TN").
-                                withHolder("CN=Tim Williams, C=US, ST=AL").
-                                withSubject("Simple Product Name(TM)").
-                                withIssueDate(2348907324983L).
-                                withGoodAfterDate(2348907325000L).
-                                withGoodBeforeDate(2348917325000L).
-                                withNumberOfLicenses(57).
-                                addFeature("nickFeature1").
-                                addFeature("allisonFeature2", 2348917325000L).
-                                build();
+            withProductKey("5565-1039-AF89-GGX7-TN31-14AL").
+            withIssuer("CN=Nick Williams, C=US, ST=TN").
+            withHolder("CN=Tim Williams, C=US, ST=AL").
+            withSubject("Simple Product Name(TM)").
+            withIssueDate(2348907324983L).
+            withGoodAfterDate(2348907325000L).
+            withGoodBeforeDate(2348917325000L).
+            withNumberOfLicenses(57).
+            addFeature("nickFeature1").
+            addFeature("allisonFeature2", 2348917325000L).
+            build();
     }
 
     @After
@@ -69,7 +70,7 @@ public class TestLicense
         try
         {
             String[] argument = null;
-            constructor.newInstance(new Object[] { argument });
+            constructor.newInstance(new Object[] {argument});
             fail("Expected exception IllegalArgumentException.");
         }
         catch(InvocationTargetException e)
@@ -88,7 +89,7 @@ public class TestLicense
         try
         {
             String[] argument = new String[] {};
-            constructor.newInstance(new Object[] { argument });
+            constructor.newInstance(new Object[] {argument});
             fail("Expected exception IllegalArgumentException.");
         }
         catch(InvocationTargetException e)
@@ -107,7 +108,7 @@ public class TestLicense
         try
         {
             String[] argument = new String[] {"one", "two", "three", "four", "five", "six", "seven", "eight"};
-            constructor.newInstance(new Object[] { argument });
+            constructor.newInstance(new Object[] {argument});
             fail("Expected exception IllegalArgumentException.");
         }
         catch(InvocationTargetException e)
@@ -125,8 +126,9 @@ public class TestLicense
 
         try
         {
-            String[] argument = new String[] {"one", "two", "three", "four", "five", "six", "seven", "eight", "nine", "ten"};
-            constructor.newInstance(new Object[] { argument });
+            String[] argument =
+                new String[] {"one", "two", "three", "four", "five", "six", "seven", "eight", "nine", "ten"};
+            constructor.newInstance(new Object[] {argument});
             fail("Expected exception IllegalArgumentException.");
         }
         catch(InvocationTargetException e)
@@ -214,7 +216,10 @@ public class TestLicense
         assertTrue("Result 1 is incorrect.", this.license.hasLicenseForAllFeatures("nickFeature1", "allisonFeature2"));
         assertFalse("Result 2 is incorrect.", this.license.hasLicenseForAllFeatures("timFeature1", "allisonFeature2"));
         assertFalse("Result 3 is incorrect.", this.license.hasLicenseForAllFeatures("nickFeature1", "timFeature2"));
-        assertFalse("Result 4 is incorrect.", this.license.hasLicenseForAllFeatures("nickFeature1", "allisonFeature2", "timFeature3"));
+        assertFalse(
+            "Result 4 is incorrect.",
+            this.license.hasLicenseForAllFeatures("nickFeature1", "allisonFeature2", "timFeature3")
+        );
         assertFalse("Result 5 is incorrect.", this.license.hasLicenseForAllFeatures("jeffFeature1", "timFeature2"));
         assertFalse("Result 6 is incorrect.", this.license.hasLicenseForAllFeatures("dogFeature1"));
     }
@@ -225,7 +230,10 @@ public class TestLicense
         assertTrue("Result 1 is incorrect.", this.license.hasLicenseForAnyFeature("nickFeature1", "allisonFeature2"));
         assertTrue("Result 2 is incorrect.", this.license.hasLicenseForAnyFeature("timFeature1", "allisonFeature2"));
         assertTrue("Result 3 is incorrect.", this.license.hasLicenseForAnyFeature("nickFeature1", "timFeature2"));
-        assertTrue("Result 4 is incorrect.", this.license.hasLicenseForAnyFeature("nickFeature1", "allisonFeature2", "timFeature3"));
+        assertTrue(
+            "Result 4 is incorrect.",
+            this.license.hasLicenseForAnyFeature("nickFeature1", "allisonFeature2", "timFeature3")
+        );
         assertFalse("Result 5 is incorrect.", this.license.hasLicenseForAnyFeature("jeffFeature1", "timFeature2"));
         assertFalse("Result 6 is incorrect.", this.license.hasLicenseForAnyFeature("dogFeature1"));
         assertTrue("Result 7 is incorrect.", this.license.hasLicenseForAnyFeature("nickFeature1"));
@@ -236,18 +244,18 @@ public class TestLicense
     public void testFeatures05()
     {
         this.license = new License.Builder().
-                                withProductKey("5565-1039-AF89-GGX7-TN31-14AL").
-                                withIssuer("CN=Nick Williams, C=US, ST=TN").
-                                withHolder("CN=Tim Williams, C=US, ST=AL").
-                                withSubject("Simple Product Name(TM)").
-                                withIssueDate(2348907324983L).
-                                withGoodAfterDate(2348907325000L).
-                                withGoodBeforeDate(2348917325000L).
-                                withNumberOfLicenses(57).
-                                addFeature("goodFeature1").
-                                addFeature("goodFeature2", 2348917325000L).
-                                addFeature("expiredFeature3", 1L).
-                                build();
+            withProductKey("5565-1039-AF89-GGX7-TN31-14AL").
+            withIssuer("CN=Nick Williams, C=US, ST=TN").
+            withHolder("CN=Tim Williams, C=US, ST=AL").
+            withSubject("Simple Product Name(TM)").
+            withIssueDate(2348907324983L).
+            withGoodAfterDate(2348907325000L).
+            withGoodBeforeDate(2348917325000L).
+            withNumberOfLicenses(57).
+            addFeature("goodFeature1").
+            addFeature("goodFeature2", 2348917325000L).
+            addFeature("expiredFeature3", 1L).
+            build();
 
         assertTrue("Feature 1 is missing now.", this.license.hasLicenseForFeature("goodFeature1"));
         assertTrue("Feature 2 is missing now.", this.license.hasLicenseForFeature("goodFeature2"));
@@ -264,106 +272,132 @@ public class TestLicense
     @Test
     public void testFeatures06()
     {
-        assertTrue("Feature 1 is missing.",
-                   this.license.hasLicenseForAllFeatures(new MockFeatureObject("nickFeature1")));
-        assertTrue("Feature 2 is missing.",
-                   this.license.hasLicenseForAllFeatures(new MockFeatureObject("allisonFeature2")));
+        assertTrue(
+            "Feature 1 is missing.",
+            this.license.hasLicenseForAllFeatures(new MockFeatureObject("nickFeature1"))
+        );
+        assertTrue(
+            "Feature 2 is missing.",
+            this.license.hasLicenseForAllFeatures(new MockFeatureObject("allisonFeature2"))
+        );
 
-        assertTrue("Feature 1 is missing now.",
-                   this.license.hasLicenseForFeature(new MockFeatureObject("nickFeature1")));
-        assertTrue("Feature 2 is missing now.",
-                   this.license.hasLicenseForFeature(new MockFeatureObject("allisonFeature2")));
-        assertFalse("There's a phantom feature.",
-                    this.license.hasLicenseForFeature(new MockFeatureObject("fakeFeature3")));
+        assertTrue(
+            "Feature 1 is missing now.",
+            this.license.hasLicenseForFeature(new MockFeatureObject("nickFeature1"))
+        );
+        assertTrue(
+            "Feature 2 is missing now.",
+            this.license.hasLicenseForFeature(new MockFeatureObject("allisonFeature2"))
+        );
+        assertFalse(
+            "There's a phantom feature.",
+            this.license.hasLicenseForFeature(new MockFeatureObject("fakeFeature3"))
+        );
     }
 
     @Test
     public void testFeatures07()
     {
         assertTrue("Result 1 is incorrect.", this.license.hasLicenseForAllFeatures(
-                new MockFeatureObject("nickFeature1"), new MockFeatureObject("allisonFeature2")
+            new MockFeatureObject("nickFeature1"), new MockFeatureObject("allisonFeature2")
         ));
         assertFalse("Result 2 is incorrect.", this.license.hasLicenseForAllFeatures(
-                new MockFeatureObject("timFeature1"), new MockFeatureObject("allisonFeature2")
+            new MockFeatureObject("timFeature1"), new MockFeatureObject("allisonFeature2")
         ));
         assertFalse("Result 3 is incorrect.", this.license.hasLicenseForAllFeatures(
-                new MockFeatureObject("nickFeature1"), new MockFeatureObject("timFeature2")
+            new MockFeatureObject("nickFeature1"), new MockFeatureObject("timFeature2")
         ));
         assertFalse("Result 4 is incorrect.", this.license.hasLicenseForAllFeatures(
-                new MockFeatureObject("nickFeature1"), new MockFeatureObject("allisonFeature2"),
-                new MockFeatureObject("timFeature3")
+            new MockFeatureObject("nickFeature1"), new MockFeatureObject("allisonFeature2"),
+            new MockFeatureObject("timFeature3")
         ));
         assertFalse("Result 5 is incorrect.", this.license.hasLicenseForAllFeatures(
-                new MockFeatureObject("jeffFeature1"), new MockFeatureObject("timFeature2")
+            new MockFeatureObject("jeffFeature1"), new MockFeatureObject("timFeature2")
         ));
-        assertFalse("Result 6 is incorrect.",
-                    this.license.hasLicenseForAllFeatures(new MockFeatureObject("dogFeature1")));
+        assertFalse(
+            "Result 6 is incorrect.",
+            this.license.hasLicenseForAllFeatures(new MockFeatureObject("dogFeature1"))
+        );
     }
 
     @Test
     public void testFeatures08()
     {
         assertTrue("Result 1 is incorrect.", this.license.hasLicenseForAnyFeature(
-                new MockFeatureObject("nickFeature1"), new MockFeatureObject("allisonFeature2")
+            new MockFeatureObject("nickFeature1"), new MockFeatureObject("allisonFeature2")
         ));
         assertTrue("Result 2 is incorrect.", this.license.hasLicenseForAnyFeature(
-                new MockFeatureObject("timFeature1"), new MockFeatureObject("allisonFeature2")
+            new MockFeatureObject("timFeature1"), new MockFeatureObject("allisonFeature2")
         ));
         assertTrue("Result 3 is incorrect.", this.license.hasLicenseForAnyFeature(
-                new MockFeatureObject("nickFeature1"), new MockFeatureObject("timFeature2")
+            new MockFeatureObject("nickFeature1"), new MockFeatureObject("timFeature2")
         ));
         assertTrue("Result 4 is incorrect.", this.license.hasLicenseForAnyFeature(
-                new MockFeatureObject("nickFeature1"), new MockFeatureObject("allisonFeature2"),
-                new MockFeatureObject("timFeature3")
+            new MockFeatureObject("nickFeature1"), new MockFeatureObject("allisonFeature2"),
+            new MockFeatureObject("timFeature3")
         ));
         assertFalse("Result 5 is incorrect.", this.license.hasLicenseForAnyFeature(
-                new MockFeatureObject("jeffFeature1"), new MockFeatureObject("timFeature2")
+            new MockFeatureObject("jeffFeature1"), new MockFeatureObject("timFeature2")
         ));
-        assertFalse("Result 6 is incorrect.",
-                    this.license.hasLicenseForAnyFeature(new MockFeatureObject("dogFeature1")));
-        assertTrue("Result 7 is incorrect.",
-                   this.license.hasLicenseForAnyFeature(new MockFeatureObject("nickFeature1")));
-        assertTrue("Result 8 is incorrect.",
-                   this.license.hasLicenseForAnyFeature(new MockFeatureObject("allisonFeature2")));
+        assertFalse(
+            "Result 6 is incorrect.",
+            this.license.hasLicenseForAnyFeature(new MockFeatureObject("dogFeature1"))
+        );
+        assertTrue(
+            "Result 7 is incorrect.",
+            this.license.hasLicenseForAnyFeature(new MockFeatureObject("nickFeature1"))
+        );
+        assertTrue(
+            "Result 8 is incorrect.",
+            this.license.hasLicenseForAnyFeature(new MockFeatureObject("allisonFeature2"))
+        );
     }
 
     @Test
     public void testFeatures09()
     {
         this.license = new License.Builder().
-                                withProductKey("5565-1039-AF89-GGX7-TN31-14AL").
-                                withIssuer("CN=Nick Williams, C=US, ST=TN").
-                                withHolder("CN=Tim Williams, C=US, ST=AL").
-                                withSubject("Simple Product Name(TM)").
-                                withIssueDate(2348907324983L).
-                                withGoodAfterDate(2348907325000L).
-                                withGoodBeforeDate(2348917325000L).
-                                withNumberOfLicenses(57).
-                                addFeature("goodFeature1").
-                                addFeature("goodFeature2", 2348917325000L).
-                                addFeature("expiredFeature3", 1L).
-                                build();
+            withProductKey("5565-1039-AF89-GGX7-TN31-14AL").
+            withIssuer("CN=Nick Williams, C=US, ST=TN").
+            withHolder("CN=Tim Williams, C=US, ST=AL").
+            withSubject("Simple Product Name(TM)").
+            withIssueDate(2348907324983L).
+            withGoodAfterDate(2348907325000L).
+            withGoodBeforeDate(2348917325000L).
+            withNumberOfLicenses(57).
+            addFeature("goodFeature1").
+            addFeature("goodFeature2", 2348917325000L).
+            addFeature("expiredFeature3", 1L).
+            build();
 
-        assertTrue("Feature 1 is missing now.",
-                   this.license.hasLicenseForFeature(new MockFeatureObject("goodFeature1")));
-        assertTrue("Feature 2 is missing now.",
-                   this.license.hasLicenseForFeature(new MockFeatureObject("goodFeature2")));
-        assertFalse("There's a phantom feature.",
-                    this.license.hasLicenseForFeature(new MockFeatureObject("expiredFeature3")));
+        assertTrue(
+            "Feature 1 is missing now.",
+            this.license.hasLicenseForFeature(new MockFeatureObject("goodFeature1"))
+        );
+        assertTrue(
+            "Feature 2 is missing now.",
+            this.license.hasLicenseForFeature(new MockFeatureObject("goodFeature2"))
+        );
+        assertFalse(
+            "There's a phantom feature.",
+            this.license.hasLicenseForFeature(new MockFeatureObject("expiredFeature3"))
+        );
 
         assertTrue("Error 1", this.license.hasLicenseForAnyFeature(new MockFeatureObject(
-                "goodFeature1"), new MockFeatureObject("expiredFeature3")
+            "goodFeature1"), new MockFeatureObject("expiredFeature3")
         ));
         assertFalse("Error 2", this.license.hasLicenseForAnyFeature(new MockFeatureObject("expiredFeature3")));
 
         assertTrue("Error 3", this.license.hasLicenseForAllFeatures(
-                new MockFeatureObject("goodFeature1"), new MockFeatureObject("goodFeature2")
+            new MockFeatureObject("goodFeature1"), new MockFeatureObject("goodFeature2")
         ));
         assertFalse("Error 4", this.license.hasLicenseForAllFeatures(
-                new MockFeatureObject("goodFeature1"), new MockFeatureObject("expiredFeature3")
+            new MockFeatureObject("goodFeature1"), new MockFeatureObject("expiredFeature3")
         ));
-        assertFalse("Error 5",
-                    this.license.hasLicenseForAllFeatures(new MockFeatureObject("expiredFeature3")));
+        assertFalse(
+            "Error 5",
+            this.license.hasLicenseForAllFeatures(new MockFeatureObject("expiredFeature3"))
+        );
     }
 
     @Test
@@ -394,17 +428,17 @@ public class TestLicense
     public void testEqualsWithDuplicate01()
     {
         License duplicate = new License.Builder().
-                                    withProductKey("5565-1039-AF89-GGX7-TN31-14AL").
-                                    withIssuer("CN=Nick Williams, C=US, ST=TN").
-                                    withHolder("CN=Tim Williams, C=US, ST=AL").
-                                    withSubject("Simple Product Name(TM)").
-                                    withIssueDate(2348907324983L).
-                                    withGoodAfterDate(2348907325000L).
-                                    withGoodBeforeDate(2348917325000L).
-                                    withNumberOfLicenses(57).
-                                    addFeature("nickFeature1").
-                                    addFeature("allisonFeature2", 2348917325000L).
-                                    build();
+            withProductKey("5565-1039-AF89-GGX7-TN31-14AL").
+            withIssuer("CN=Nick Williams, C=US, ST=TN").
+            withHolder("CN=Tim Williams, C=US, ST=AL").
+            withSubject("Simple Product Name(TM)").
+            withIssueDate(2348907324983L).
+            withGoodAfterDate(2348907325000L).
+            withGoodBeforeDate(2348917325000L).
+            withNumberOfLicenses(57).
+            addFeature("nickFeature1").
+            addFeature("allisonFeature2", 2348917325000L).
+            build();
 
         assertNotSame("The objects should not be the same.", this.license, duplicate);
         assertEquals("The objects should be equal.", this.license, duplicate);
@@ -415,17 +449,17 @@ public class TestLicense
     public void testEqualsWithDuplicate02()
     {
         License duplicate = new License.Builder().
-                                    withProductKey("5565-1039-AF89-GGX7-TN31-14AL").
-                                    withIssuer("CN=Nick Williams, C=US, ST=TN").
-                                    withHolder("CN=Tim Williams, C=US, ST=AL").
-                                    withSubject("Simple Product Name(TM)").
-                                    withIssueDate(2348907324983L).
-                                    withGoodAfterDate(2348907325000L).
-                                    withGoodBeforeDate(2348917325000L).
-                                    withNumberOfLicenses(57).
-                                    addFeature("allisonFeature2", 2348917325000L).
-                                    addFeature("nickFeature1").
-                                    build();
+            withProductKey("5565-1039-AF89-GGX7-TN31-14AL").
+            withIssuer("CN=Nick Williams, C=US, ST=TN").
+            withHolder("CN=Tim Williams, C=US, ST=AL").
+            withSubject("Simple Product Name(TM)").
+            withIssueDate(2348907324983L).
+            withGoodAfterDate(2348907325000L).
+            withGoodBeforeDate(2348917325000L).
+            withNumberOfLicenses(57).
+            addFeature("allisonFeature2", 2348917325000L).
+            addFeature("nickFeature1").
+            build();
 
         assertNotSame("The objects should not be the same.", this.license, duplicate);
         assertTrue("The objects should be equal.", this.license.equals(duplicate));
@@ -436,17 +470,17 @@ public class TestLicense
     public void testEqualsWithDuplicate03()
     {
         License duplicate = new License.Builder().
-                                    withProductKey("5565-1039-AF89-GGX7-TN31-14AL").
-                                    withIssuer("CN=Nick Williams, C=US, ST=TN").
-                                    withHolder("CN=Tim Williams, C=US, ST=AL").
-                                    withSubject("Simple Product Name").
-                                    withIssueDate(2348907324983L).
-                                    withGoodAfterDate(2348907325000L).
-                                    withGoodBeforeDate(2348917325000L).
-                                    withNumberOfLicenses(57).
-                                    addFeature("allisonFeature2", 2348917325000L).
-                                    addFeature("nickFeature1").
-                                    build();
+            withProductKey("5565-1039-AF89-GGX7-TN31-14AL").
+            withIssuer("CN=Nick Williams, C=US, ST=TN").
+            withHolder("CN=Tim Williams, C=US, ST=AL").
+            withSubject("Simple Product Name").
+            withIssueDate(2348907324983L).
+            withGoodAfterDate(2348907325000L).
+            withGoodBeforeDate(2348917325000L).
+            withNumberOfLicenses(57).
+            addFeature("allisonFeature2", 2348917325000L).
+            addFeature("nickFeature1").
+            build();
 
         assertNotSame("The objects should not be the same.", this.license, duplicate);
         assertFalse("The objects should not be equal.", this.license.equals(duplicate));
@@ -457,17 +491,17 @@ public class TestLicense
     public void testEqualsWithDuplicate04()
     {
         License duplicate = new License.Builder().
-                                    withProductKey("5565-1039-AF89-GGX7-TN31-14AL").
-                                    withIssuer("CN=Nick Williams, C=US, ST=TN").
-                                    withHolder("CN=Tim Williams, C=US, ST=AL").
-                                    withSubject("Simple Product Name(TM)").
-                                    withIssueDate(2348907324983L).
-                                    withGoodAfterDate(2348907325000L).
-                                    withGoodBeforeDate(2348917325001L).
-                                    withNumberOfLicenses(57).
-                                    addFeature("allisonFeature2", 2348917325000L).
-                                    addFeature("nickFeature1").
-                                    build();
+            withProductKey("5565-1039-AF89-GGX7-TN31-14AL").
+            withIssuer("CN=Nick Williams, C=US, ST=TN").
+            withHolder("CN=Tim Williams, C=US, ST=AL").
+            withSubject("Simple Product Name(TM)").
+            withIssueDate(2348907324983L).
+            withGoodAfterDate(2348907325000L).
+            withGoodBeforeDate(2348917325001L).
+            withNumberOfLicenses(57).
+            addFeature("allisonFeature2", 2348917325000L).
+            addFeature("nickFeature1").
+            build();
 
         assertNotSame("The objects should not be the same.", this.license, duplicate);
         assertFalse("The objects should not be equal.", this.license.equals(duplicate));
@@ -478,17 +512,17 @@ public class TestLicense
     public void testEqualsWithDuplicate05()
     {
         License duplicate = new License.Builder().
-                                    withProductKey("5565-1039-AF89-GGX7-TN31-14AL").
-                                    withIssuer("CN=Nick Williams, C=US, ST=TN").
-                                    withHolder("CN=Tim Williams, C=US, ST=AL").
-                                    withSubject("Simple Product Name(TM)").
-                                    withIssueDate(2348907324983L).
-                                    withGoodAfterDate(2348907325000L).
-                                    withGoodBeforeDate(2348917325000L).
-                                    withNumberOfLicenses(56).
-                                    addFeature("allisonFeature2", 2348917325000L).
-                                    addFeature("nickFeature1").
-                                    build();
+            withProductKey("5565-1039-AF89-GGX7-TN31-14AL").
+            withIssuer("CN=Nick Williams, C=US, ST=TN").
+            withHolder("CN=Tim Williams, C=US, ST=AL").
+            withSubject("Simple Product Name(TM)").
+            withIssueDate(2348907324983L).
+            withGoodAfterDate(2348907325000L).
+            withGoodBeforeDate(2348917325000L).
+            withNumberOfLicenses(56).
+            addFeature("allisonFeature2", 2348917325000L).
+            addFeature("nickFeature1").
+            build();
 
         assertNotSame("The objects should not be the same.", this.license, duplicate);
         assertFalse("The objects should not be equal.", this.license.equals(duplicate));
@@ -499,17 +533,17 @@ public class TestLicense
     public void testEqualsWithDuplicate06()
     {
         License duplicate = new License.Builder().
-                                    withProductKey("5565-1039-AF89-GGX7-TN31-14AL").
-                                    withIssuer("CN=Nick Williams, C=US, ST=TN").
-                                    withHolder("CN=Tim Williams, C=US, ST=AL").
-                                    withSubject("Simple Product Name(TM)").
-                                    withIssueDate(2348907324983L).
-                                    withGoodAfterDate(2348907324999L).
-                                    withGoodBeforeDate(2348917325000L).
-                                    withNumberOfLicenses(57).
-                                    addFeature("allisonFeature2", 2348917325000L).
-                                    addFeature("nickFeature1").
-                                    build();
+            withProductKey("5565-1039-AF89-GGX7-TN31-14AL").
+            withIssuer("CN=Nick Williams, C=US, ST=TN").
+            withHolder("CN=Tim Williams, C=US, ST=AL").
+            withSubject("Simple Product Name(TM)").
+            withIssueDate(2348907324983L).
+            withGoodAfterDate(2348907324999L).
+            withGoodBeforeDate(2348917325000L).
+            withNumberOfLicenses(57).
+            addFeature("allisonFeature2", 2348917325000L).
+            addFeature("nickFeature1").
+            build();
 
         assertNotSame("The objects should not be the same.", this.license, duplicate);
         assertFalse("The objects should not be equal.", this.license.equals(duplicate));
@@ -520,17 +554,17 @@ public class TestLicense
     public void testEqualsWithDuplicate07()
     {
         License duplicate = new License.Builder().
-                                    withProductKey("5565-1039-AF89-GGX7-TN31-14AL").
-                                    withIssuer("CN=Nick Williams, C=US, ST=TN").
-                                    withHolder("CN=Tim Williams, C=US, ST=AL").
-                                    withSubject("Simple Product Name(TM)").
-                                    withIssueDate(2348907324984L).
-                                    withGoodAfterDate(2348907325000L).
-                                    withGoodBeforeDate(2348917325000L).
-                                    withNumberOfLicenses(57).
-                                    addFeature("allisonFeature2", 2348917325000L).
-                                    addFeature("nickFeature1").
-                                    build();
+            withProductKey("5565-1039-AF89-GGX7-TN31-14AL").
+            withIssuer("CN=Nick Williams, C=US, ST=TN").
+            withHolder("CN=Tim Williams, C=US, ST=AL").
+            withSubject("Simple Product Name(TM)").
+            withIssueDate(2348907324984L).
+            withGoodAfterDate(2348907325000L).
+            withGoodBeforeDate(2348917325000L).
+            withNumberOfLicenses(57).
+            addFeature("allisonFeature2", 2348917325000L).
+            addFeature("nickFeature1").
+            build();
 
         assertNotSame("The objects should not be the same.", this.license, duplicate);
         assertFalse("The objects should not be equal.", this.license.equals(duplicate));
@@ -541,17 +575,17 @@ public class TestLicense
     public void testEqualsWithDuplicate08()
     {
         License duplicate = new License.Builder().
-                                withProductKey("5565-1039-AF89-GGX7-TN31-14AL").
-                                withIssuer("CN=Nick Williams, C=US, ST=TN").
-                                withHolder("CN=Tim Williams, C=US, ST=TN").
-                                withSubject("Simple Product Name(TM)").
-                                withIssueDate(2348907324983L).
-                                withGoodAfterDate(2348907325000L).
-                                withGoodBeforeDate(2348917325000L).
-                                withNumberOfLicenses(57).
-                                addFeature("allisonFeature2", 2348917325000L).
-                                addFeature("nickFeature1").
-                                build();
+            withProductKey("5565-1039-AF89-GGX7-TN31-14AL").
+            withIssuer("CN=Nick Williams, C=US, ST=TN").
+            withHolder("CN=Tim Williams, C=US, ST=TN").
+            withSubject("Simple Product Name(TM)").
+            withIssueDate(2348907324983L).
+            withGoodAfterDate(2348907325000L).
+            withGoodBeforeDate(2348917325000L).
+            withNumberOfLicenses(57).
+            addFeature("allisonFeature2", 2348917325000L).
+            addFeature("nickFeature1").
+            build();
 
         assertNotSame("The objects should not be the same.", this.license, duplicate);
         assertFalse("The objects should not be equal.", this.license.equals(duplicate));
@@ -562,17 +596,17 @@ public class TestLicense
     public void testEqualsWithDuplicate09()
     {
         License duplicate = new License.Builder().
-                                    withProductKey("5565-1039-AF89-GGX7-TN31-14AL").
-                                    withIssuer("CN=Nick Williams, C=US, ST=AL").
-                                    withHolder("CN=Tim Williams, C=US, ST=AL").
-                                    withSubject("Simple Product Name(TM)").
-                                    withIssueDate(2348907324983L).
-                                    withGoodAfterDate(2348907325000L).
-                                    withGoodBeforeDate(2348917325000L).
-                                    withNumberOfLicenses(57).
-                                    addFeature("allisonFeature2", 2348917325000L).
-                                    addFeature("nickFeature1").
-                                    build();
+            withProductKey("5565-1039-AF89-GGX7-TN31-14AL").
+            withIssuer("CN=Nick Williams, C=US, ST=AL").
+            withHolder("CN=Tim Williams, C=US, ST=AL").
+            withSubject("Simple Product Name(TM)").
+            withIssueDate(2348907324983L).
+            withGoodAfterDate(2348907325000L).
+            withGoodBeforeDate(2348917325000L).
+            withNumberOfLicenses(57).
+            addFeature("allisonFeature2", 2348917325000L).
+            addFeature("nickFeature1").
+            build();
 
         assertNotSame("The objects should not be the same.", this.license, duplicate);
         assertFalse("The objects should not be equal.", this.license.equals(duplicate));
@@ -583,17 +617,17 @@ public class TestLicense
     public void testEqualsWithDuplicate10()
     {
         License duplicate = new License.Builder().
-                                    withProductKey("5565-1039-AF89-GGX7-TN31-14AL").
-                                    withIssuer("CN=Nick Williams, C=US, ST=TN").
-                                    withHolder("CN=Tim Williams, C=US, ST=AL").
-                                    withSubject("Simple Product Name(TM)").
-                                    withIssueDate(2348907324983L).
-                                    withGoodAfterDate(2348907325000L).
-                                    withGoodBeforeDate(2348917325000L).
-                                    withNumberOfLicenses(57).
-                                    addFeature("allisonFeature3").
-                                    addFeature("nickFeature1").
-                                    build();
+            withProductKey("5565-1039-AF89-GGX7-TN31-14AL").
+            withIssuer("CN=Nick Williams, C=US, ST=TN").
+            withHolder("CN=Tim Williams, C=US, ST=AL").
+            withSubject("Simple Product Name(TM)").
+            withIssueDate(2348907324983L).
+            withGoodAfterDate(2348907325000L).
+            withGoodBeforeDate(2348917325000L).
+            withNumberOfLicenses(57).
+            addFeature("allisonFeature3").
+            addFeature("nickFeature1").
+            build();
 
         assertNotSame("The objects should not be the same.", this.license, duplicate);
         assertFalse("The objects should not be equal.", this.license.equals(duplicate));
@@ -604,17 +638,17 @@ public class TestLicense
     public void testEqualsWithDuplicate11()
     {
         License duplicate = new License.Builder().
-                                    withProductKey("5565-1039-AF89-GGX7-TN31-14AL").
-                                    withIssuer("CN=Nick Williams, C=US, ST=TN").
-                                    withHolder("CN=Tim Williams, C=US, ST=AL").
-                                    withSubject("Simple Product Name(TM)").
-                                    withIssueDate(2348907324983L).
-                                    withGoodAfterDate(2348907325000L).
-                                    withGoodBeforeDate(2348917325000L).
-                                    withNumberOfLicenses(57).
-                                    addFeature("allisonFeature2").
-                                    addFeature("nickFeature4").
-                                    build();
+            withProductKey("5565-1039-AF89-GGX7-TN31-14AL").
+            withIssuer("CN=Nick Williams, C=US, ST=TN").
+            withHolder("CN=Tim Williams, C=US, ST=AL").
+            withSubject("Simple Product Name(TM)").
+            withIssueDate(2348907324983L).
+            withGoodAfterDate(2348907325000L).
+            withGoodBeforeDate(2348917325000L).
+            withNumberOfLicenses(57).
+            addFeature("allisonFeature2").
+            addFeature("nickFeature4").
+            build();
 
         assertNotSame("The objects should not be the same.", this.license, duplicate);
         assertFalse("The objects should not be equal.", this.license.equals(duplicate));
@@ -625,17 +659,17 @@ public class TestLicense
     public void testEqualsWithDuplicate12()
     {
         License duplicate = new License.Builder().
-                                    withProductKey("5565-1039-AF89-GGX7-TN31-14AM").
-                                    withIssuer("CN=Nick Williams, C=US, ST=TN").
-                                    withHolder("CN=Tim Williams, C=US, ST=AL").
-                                    withSubject("Simple Product Name(TM)").
-                                    withIssueDate(2348907324983L).
-                                    withGoodAfterDate(2348907325000L).
-                                    withGoodBeforeDate(2348917325000L).
-                                    withNumberOfLicenses(57).
-                                    addFeature("nickFeature1").
-                                    addFeature("allisonFeature2", 2348917325000L).
-                                    build();
+            withProductKey("5565-1039-AF89-GGX7-TN31-14AM").
+            withIssuer("CN=Nick Williams, C=US, ST=TN").
+            withHolder("CN=Tim Williams, C=US, ST=AL").
+            withSubject("Simple Product Name(TM)").
+            withIssueDate(2348907324983L).
+            withGoodAfterDate(2348907325000L).
+            withGoodBeforeDate(2348917325000L).
+            withNumberOfLicenses(57).
+            addFeature("nickFeature1").
+            addFeature("allisonFeature2", 2348917325000L).
+            build();
 
         assertNotSame("The objects should not be the same.", this.license, duplicate);
         assertFalse("The objects should not be equal.", this.license.equals(duplicate));
@@ -655,26 +689,37 @@ public class TestLicense
     @Test
     public void testToString()
     {
-        assertEquals("The string was not correct.",
-                     "[5565-1039-AF89-GGX7-TN31-14AL][CN=Tim Williams, C=US, ST=AL][CN=Nick Williams, C=US, ST=TN][Simple Product Name(TM)][2348907324983][2348907325000][2348917325000][57][nickFeature1"+(char)0x1F+"-1, allisonFeature2"+(char)0x1F+"2348917325000]",
-                     this.license.toString());
+        assertEquals(
+            "The string was not correct.",
+            "[5565-1039-AF89-GGX7-TN31-14AL][CN=Tim Williams, C=US, ST=AL][CN=Nick Williams, C=US, ST=TN][Simple " +
+            "Product Name(TM)][2348907324983][2348907325000][2348917325000][57][nickFeature1" +
+            (char) 0x1F + "-1, allisonFeature2" + (char) 0x1F + "2348917325000]",
+            this.license.toString()
+        );
     }
 
     @Test
     public void testSerialization()
     {
-        assertEquals("The serialization was not correct.",
-                     "[5565-1039-AF89-GGX7-TN31-14AL][CN=Tim Williams, C=US, ST=AL][CN=Nick Williams, C=US, ST=TN][Simple Product Name(TM)][2348907324983][2348907325000][2348917325000][57][nickFeature1"+(char)0x1F+"-1, allisonFeature2"+(char)0x1F+"2348917325000]",
-                     new String(this.license.serialize()));
+        assertEquals(
+            "The serialization was not correct.",
+            "[5565-1039-AF89-GGX7-TN31-14AL][CN=Tim Williams, C=US, ST=AL][CN=Nick Williams, C=US, ST=TN][Simple " +
+            "Product Name(TM)][2348907324983][2348907325000][2348917325000][57][nickFeature1" +
+            (char) 0x1F + "-1, allisonFeature2" + (char) 0x1F + "2348917325000]",
+            new String(this.license.serialize())
+        );
     }
 
     @Test
     public void testDeserialization01()
     {
         License license = License.deserialize(
-                ( "[5565-1039-AF89-GGX7-TN31-14AL][CN=John E. Smith, C=CA, ST=QE][CN=OurCompany, C=US, ST=KY][Cool Product, by Company][14429073214631][1443907325000][1443917325000][12][fordFeature1" +
-                  (char) 0x1F + "-1, chevyFeature2" + (char) 0x1F + Long.MAX_VALUE + ", hondaFeature3" + (char) 0x1F +
-                  Long.MAX_VALUE + ", toyotaFeature4" + (char) 0x1F + "-1]" ).getBytes());
+            (
+                "[5565-1039-AF89-GGX7-TN31-14AL][CN=John E. Smith, C=CA, ST=QE][CN=OurCompany, C=US, ST=KY][Cool " +
+                "Product, by Company][14429073214631][1443907325000][1443917325000][12][fordFeature1" +
+                (char) 0x1F + "-1, chevyFeature2" + (char) 0x1F + Long.MAX_VALUE + ", hondaFeature3" + (char) 0x1F +
+                Long.MAX_VALUE + ", toyotaFeature4" + (char) 0x1F + "-1]"
+            ).getBytes());
 
         assertEquals("The product key is not correct.", "5565-1039-AF89-GGX7-TN31-14AL", license.getProductKey());
         assertEquals("The holder is not correct.", "CN=John E. Smith, C=CA, ST=QE", license.getHolder());
@@ -695,9 +740,12 @@ public class TestLicense
     public void testDeserialization02()
     {
         License license = License.deserialize(
-                ( "[6575-TH0T-SNL5-7XGG-1099-1040][CN=John E. Smith, C=CA, ST=QE][CN=OurCompany, C=US, ST=KY][Cool Product, by Company][14429073214631][1443907325000][1443917325000][12][fordFeature1" +
-                  (char) 0x1F + "-1, chevyFeature2" + (char) 0x1F + Long.MAX_VALUE + ", hondaFeature3" + (char) 0x1F +
-                  "1234567890, toyotaFeature4" + (char) 0x1F + "-1]" ).getBytes());
+            (
+                "[6575-TH0T-SNL5-7XGG-1099-1040][CN=John E. Smith, C=CA, ST=QE][CN=OurCompany, C=US, ST=KY][Cool " +
+                "Product, by Company][14429073214631][1443907325000][1443917325000][12][fordFeature1" +
+                (char) 0x1F + "-1, chevyFeature2" + (char) 0x1F + Long.MAX_VALUE + ", hondaFeature3" + (char) 0x1F +
+                "1234567890, toyotaFeature4" + (char) 0x1F + "-1]"
+            ).getBytes());
 
         assertEquals("The product key is not correct.", "6575-TH0T-SNL5-7XGG-1099-1040", license.getProductKey());
         assertEquals("The holder is not correct.", "CN=John E. Smith, C=CA, ST=QE", license.getHolder());
@@ -719,8 +767,7 @@ public class TestLicense
     @Test
     public void testDeserialization03()
     {
-        License license = License.deserialize(
-                ( "[][][][][0][0][0][0][]" ).getBytes());
+        License license = License.deserialize("[][][][][0][0][0][0][]".getBytes());
 
         assertEquals("The product key is not correct.", "", license.getProductKey());
         assertEquals("The holder is not correct.", "", license.getHolder());
@@ -734,14 +781,15 @@ public class TestLicense
     }
 
     @Test
-    public void testLicenseFeatureFromString01() throws NoSuchMethodException, InstantiationException, IllegalAccessException
+    public void testLicenseFeatureFromString01()
+        throws NoSuchMethodException, InstantiationException, IllegalAccessException
     {
         Method fromString = License.Feature.class.getDeclaredMethod("fromString", String.class);
         fromString.setAccessible(true);
 
         try
         {
-            fromString.invoke(null, new Object[] { null });
+            fromString.invoke(null, new Object[] {null});
             fail("Expected exception IllegalArgumentException.");
         }
         catch(InvocationTargetException e)
@@ -752,7 +800,8 @@ public class TestLicense
     }
 
     @Test
-    public void testLicenseFeatureFromString02() throws NoSuchMethodException, InstantiationException, IllegalAccessException
+    public void testLicenseFeatureFromString02()
+        throws NoSuchMethodException, InstantiationException, IllegalAccessException
     {
         Method fromString = License.Feature.class.getDeclaredMethod("fromString", String.class);
         fromString.setAccessible(true);
@@ -770,7 +819,8 @@ public class TestLicense
     }
 
     @Test
-    public void testLicenseFeatureConstructor03() throws NoSuchMethodException, InstantiationException, IllegalAccessException
+    public void testLicenseFeatureConstructor03()
+        throws NoSuchMethodException, InstantiationException, IllegalAccessException
     {
         Method fromString = License.Feature.class.getDeclaredMethod("fromString", String.class);
         fromString.setAccessible(true);
@@ -789,36 +839,39 @@ public class TestLicense
 
     @Test
     @SuppressWarnings("ObjectEqualsNull")
-    public void testLicenseFeatureEquals01() throws NoSuchMethodException, InstantiationException, IllegalAccessException, InvocationTargetException
+    public void testLicenseFeatureEquals01()
+        throws NoSuchMethodException, InstantiationException, IllegalAccessException, InvocationTargetException
     {
         Method fromString = License.Feature.class.getDeclaredMethod("fromString", String.class);
         fromString.setAccessible(true);
 
-        License.Feature feature1 = (License.Feature)fromString.invoke(null, "one" + (char)0x1F + "2");
+        License.Feature feature1 = (License.Feature) fromString.invoke(null, "one" + (char) 0x1F + "2");
 
         assertFalse("Equals should return false.", feature1.equals(null));
     }
 
     @Test
     @SuppressWarnings("EqualsBetweenInconvertibleTypes")
-    public void testLicenseFeatureEquals02() throws NoSuchMethodException, InstantiationException, IllegalAccessException, InvocationTargetException
+    public void testLicenseFeatureEquals02()
+        throws NoSuchMethodException, InstantiationException, IllegalAccessException, InvocationTargetException
     {
         Method fromString = License.Feature.class.getDeclaredMethod("fromString", String.class);
         fromString.setAccessible(true);
 
-        License.Feature feature1 = (License.Feature)fromString.invoke(null, "one" + (char)0x1F + "2");
+        License.Feature feature1 = (License.Feature) fromString.invoke(null, "one" + (char) 0x1F + "2");
 
-        assertFalse("Equals should return false.", feature1.equals("one" + (char)0x1F + "2"));
+        assertFalse("Equals should return false.", feature1.equals("one" + (char) 0x1F + "2"));
     }
 
     @Test
-    public void testLicenseFeatureEquals03() throws NoSuchMethodException, InstantiationException, IllegalAccessException, InvocationTargetException
+    public void testLicenseFeatureEquals03()
+        throws NoSuchMethodException, InstantiationException, IllegalAccessException, InvocationTargetException
     {
         Method fromString = License.Feature.class.getDeclaredMethod("fromString", String.class);
         fromString.setAccessible(true);
 
-        License.Feature feature1 = (License.Feature)fromString.invoke(null, "one" + (char)0x1F + "2");
-        License.Feature feature2 = (License.Feature)fromString.invoke(null, "one" + (char)0x1F + "5");
+        License.Feature feature1 = (License.Feature) fromString.invoke(null, "one" + (char) 0x1F + "2");
+        License.Feature feature2 = (License.Feature) fromString.invoke(null, "one" + (char) 0x1F + "5");
 
         assertNotSame("The objects should not be the same.", feature1, feature2);
         assertEquals("The objects should be equal.", feature1, feature2);
@@ -826,13 +879,14 @@ public class TestLicense
     }
 
     @Test
-    public void testLicenseFeatureEquals04() throws NoSuchMethodException, InstantiationException, IllegalAccessException, InvocationTargetException
+    public void testLicenseFeatureEquals04()
+        throws NoSuchMethodException, InstantiationException, IllegalAccessException, InvocationTargetException
     {
         Method fromString = License.Feature.class.getDeclaredMethod("fromString", String.class);
         fromString.setAccessible(true);
 
-        License.Feature feature1 = (License.Feature)fromString.invoke(null, "one" + (char)0x1F + "2");
-        License.Feature feature2 = (License.Feature)fromString.invoke(null, "three" + (char)0x1F + "5");
+        License.Feature feature1 = (License.Feature) fromString.invoke(null, "one" + (char) 0x1F + "2");
+        License.Feature feature2 = (License.Feature) fromString.invoke(null, "three" + (char) 0x1F + "5");
 
         assertNotSame("The objects should not be the same.", feature1, feature2);
         assertFalse("The objects should not be equal.", feature1.equals(feature2));

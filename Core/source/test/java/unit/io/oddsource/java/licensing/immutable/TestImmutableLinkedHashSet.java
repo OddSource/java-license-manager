@@ -18,15 +18,15 @@
 
 package io.oddsource.java.licensing.immutable;
 
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
+import static org.junit.Assert.*;
 
 import java.lang.reflect.Field;
 import java.util.HashSet;
 import java.util.LinkedHashSet;
 
-import static org.junit.Assert.*;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
 
 /**
  * Test class for ImmutableLinkedHashSet and ImmutableAbstractCollection.
@@ -53,7 +53,7 @@ public class TestImmutableLinkedHashSet
         {
             Field internalHashSet = this.set.getClass().getDeclaredField("internalSet");
             internalHashSet.setAccessible(true);
-            return (HashSet<String>)internalHashSet.get(this.set);
+            return (HashSet<String>) internalHashSet.get(this.set);
         }
         catch(Exception e)
         {
@@ -114,37 +114,37 @@ public class TestImmutableLinkedHashSet
         assertEquals("The hash code is not correct.", internalSet.hashCode(), hashCode);
     }
 
-    @Test(expected=UnsupportedOperationException.class)
+    @Test(expected = UnsupportedOperationException.class)
     public void testAddNotAllowed()
     {
         this.set.add("AnyString");
     }
 
-    @Test(expected=UnsupportedOperationException.class)
+    @Test(expected = UnsupportedOperationException.class)
     public void testAddAllNotAllowed()
     {
         this.set.addAll(new HashSet<String>());
     }
 
-    @Test(expected=UnsupportedOperationException.class)
+    @Test(expected = UnsupportedOperationException.class)
     public void testClearNotAllowed()
     {
         this.set.clear();
     }
 
-    @Test(expected=UnsupportedOperationException.class)
+    @Test(expected = UnsupportedOperationException.class)
     public void testRemoveNotAllowed()
     {
         this.set.remove("AnyString");
     }
 
-    @Test(expected=UnsupportedOperationException.class)
+    @Test(expected = UnsupportedOperationException.class)
     public void testRemoveAllNotAllowed()
     {
         this.set.removeAll(new HashSet<String>());
     }
 
-    @Test(expected=UnsupportedOperationException.class)
+    @Test(expected = UnsupportedOperationException.class)
     public void testRetainAllNotAllowed()
     {
         this.set.retainAll(new HashSet<String>());
@@ -189,7 +189,7 @@ public class TestImmutableLinkedHashSet
         assertFalse("The hash codes should not be equal.", test.hashCode() == this.set.hashCode());
     }
 
-    @Test(expected= ImmutableModifiedThroughReflectionError.class)
+    @Test(expected = ImmutableModifiedThroughReflectionError.class)
     public void testHashCode04()
     {
         this.getInternal().add("Test");
@@ -224,7 +224,7 @@ public class TestImmutableLinkedHashSet
         assertFalse("The sets should not be equal.", test.equals(this.set));
     }
 
-    @Test(expected= ImmutableModifiedThroughReflectionError.class)
+    @Test(expected = ImmutableModifiedThroughReflectionError.class)
     public void testEquals03()
     {
         this.getInternal().add("Test");
@@ -240,7 +240,7 @@ public class TestImmutableLinkedHashSet
         assertEquals("The sets should be equal.", this.set, test);
     }
 
-    @Test(expected= ImmutableModifiedThroughReflectionError.class)
+    @Test(expected = ImmutableModifiedThroughReflectionError.class)
     public void testClone02()
     {
         this.getInternal().add(null);
@@ -259,7 +259,7 @@ public class TestImmutableLinkedHashSet
         assertFalse("The set should not contain this string.", this.set.contains("YourString1"));
     }
 
-    @Test(expected= ImmutableModifiedThroughReflectionError.class)
+    @Test(expected = ImmutableModifiedThroughReflectionError.class)
     public void testContains03()
     {
         this.getInternal().add("Test");
@@ -286,7 +286,7 @@ public class TestImmutableLinkedHashSet
         assertFalse("The set should not contain all of these strings.", this.set.containsAll(test));
     }
 
-    @Test(expected= ImmutableModifiedThroughReflectionError.class)
+    @Test(expected = ImmutableModifiedThroughReflectionError.class)
     public void testContainsAll03()
     {
         this.getInternal().add(null);
@@ -303,11 +303,13 @@ public class TestImmutableLinkedHashSet
     @Test
     public void testIsEmpty02()
     {
-        assertTrue("The set should not be empty.",
-                new ImmutableLinkedHashSet<String>(new HashSet<String>()).isEmpty());
+        assertTrue(
+            "The set should not be empty.",
+            new ImmutableLinkedHashSet<String>(new HashSet<String>()).isEmpty()
+        );
     }
 
-    @Test(expected= ImmutableModifiedThroughReflectionError.class)
+    @Test(expected = ImmutableModifiedThroughReflectionError.class)
     public void testIsEmpty03()
     {
         this.getInternal().clear();
@@ -327,11 +329,11 @@ public class TestImmutableLinkedHashSet
 
             assertNotNull("None of the strings should be null.", string);
             assertTrue(
-                    "Expected MyString1 or YourString2 or HisString3 or HerString4 but got " + string + ".",
-                    string.equals("MyString1") ||
-                            string.equals("YourString2") ||
-                            string.equals("HisString3") ||
-                            string.equals("HerString4")
+                "Expected MyString1 or YourString2 or HisString3 or HerString4 but got " + string + ".",
+                "MyString1".equals(string) ||
+                "YourString2".equals(string) ||
+                "HisString3".equals(string) ||
+                "HerString4".equals(string)
             );
 
             i++;
@@ -349,11 +351,11 @@ public class TestImmutableLinkedHashSet
         {
             assertNotNull("None of the strings should be null.", string);
             assertTrue(
-                    "Expected MyString1 or YourString2 or HisString3 or HerString4 but got " + string + ".",
-                    string.equals("MyString1") ||
-                            string.equals("YourString2") ||
-                            string.equals("HisString3") ||
-                            string.equals("HerString4")
+                "Expected MyString1 or YourString2 or HisString3 or HerString4 but got " + string + ".",
+                "MyString1".equals(string) ||
+                "YourString2".equals(string) ||
+                "HisString3".equals(string) ||
+                "HerString4".equals(string)
             );
 
             i++;
@@ -362,7 +364,7 @@ public class TestImmutableLinkedHashSet
         assertEquals("The iterator should have iterated four times.", 4, i);
     }
 
-    @Test(expected= ImmutableModifiedThroughReflectionError.class)
+    @Test(expected = ImmutableModifiedThroughReflectionError.class)
     public void testIterator03()
     {
         this.getInternal().remove("MyString1");
@@ -385,7 +387,7 @@ public class TestImmutableLinkedHashSet
         assertEquals("The size is not correct.", 2, new ImmutableLinkedHashSet<String>(test).size());
     }
 
-    @Test(expected= ImmutableModifiedThroughReflectionError.class)
+    @Test(expected = ImmutableModifiedThroughReflectionError.class)
     public void testSize03()
     {
         this.getInternal().add(null);
@@ -414,7 +416,7 @@ public class TestImmutableLinkedHashSet
         assertEquals("The array length is not correct.", 2, array.length);
     }
 
-    @Test(expected= ImmutableModifiedThroughReflectionError.class)
+    @Test(expected = ImmutableModifiedThroughReflectionError.class)
     public void testToObjectArray03()
     {
         this.getInternal().add("Test");
@@ -445,7 +447,7 @@ public class TestImmutableLinkedHashSet
         assertEquals("The array length is not correct.", 2, array.length);
     }
 
-    @Test(expected= ImmutableModifiedThroughReflectionError.class)
+    @Test(expected = ImmutableModifiedThroughReflectionError.class)
     @SuppressWarnings("ToArrayCallWithZeroLengthArrayArgument")
     public void testToPrototypedArray03()
     {

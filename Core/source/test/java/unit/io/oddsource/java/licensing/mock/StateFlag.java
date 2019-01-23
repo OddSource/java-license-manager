@@ -20,7 +20,7 @@ package io.oddsource.java.licensing.mock;
 
 public class StateFlag
 {
-    public boolean state = false;
+    public boolean state;
 
     @Override
     public String toString()

@@ -18,13 +18,7 @@
 
 package io.oddsource.java.licensing;
 
-import io.oddsource.java.licensing.exception.ObjectTypeNotExpectedException;
-import org.apache.commons.io.output.ByteArrayOutputStream;
-import org.junit.After;
-import org.junit.AfterClass;
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.Test;
+import static org.junit.Assert.*;
 
 import java.io.ByteArrayInputStream;
 import java.io.ObjectInputStream;
@@ -32,7 +26,14 @@ import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.util.Arrays;
 
-import static org.junit.Assert.*;
+import org.apache.commons.io.output.ByteArrayOutputStream;
+import org.junit.After;
+import org.junit.AfterClass;
+import org.junit.Before;
+import org.junit.BeforeClass;
+import org.junit.Test;
+
+import io.oddsource.java.licensing.exception.ObjectTypeNotExpectedException;
 
 /**
  * Test class for ObjectSerializer.
@@ -86,7 +87,7 @@ public class TestObjectSerializer
         assertNotNull("The object should not be null.", input);
         assertEquals("The object is not the right kind of object.", MockTestObject1.class, input.getClass());
 
-        MockTestObject1 actual = (MockTestObject1)input;
+        MockTestObject1 actual = (MockTestObject1) input;
         assertFalse("The objects should not be the same object.", actual == object);
         assertEquals("The object is not correct.", object, actual);
     }
@@ -96,7 +97,7 @@ public class TestObjectSerializer
     {
         MockTestObject1 object = new MockTestObject1();
         object.coolTest = true;
-        Arrays.fill(object.myArray, (byte)12);
+        Arrays.fill(object.myArray, (byte) 12);
 
         byte[] data = this.serializer.writeObject(object);
 
@@ -111,7 +112,7 @@ public class TestObjectSerializer
         assertNotNull("The object should not be null.", input);
         assertEquals("The object is not the right kind of object.", MockTestObject1.class, input.getClass());
 
-        MockTestObject1 actual = (MockTestObject1)input;
+        MockTestObject1 actual = (MockTestObject1) input;
         assertFalse("The objects should not be the same object.", actual == object);
         assertEquals("The object is not correct.", object, actual);
     }
@@ -134,7 +135,7 @@ public class TestObjectSerializer
         assertNotNull("The object should not be null.", input);
         assertEquals("The object is not the right kind of object.", MockTestObject2.class, input.getClass());
 
-        MockTestObject2 actual = (MockTestObject2)input;
+        MockTestObject2 actual = (MockTestObject2) input;
         assertFalse("The objects should not be the same object.", actual == object);
         assertEquals("The object is not correct.", object, actual);
     }
@@ -159,12 +160,12 @@ public class TestObjectSerializer
         assertNotNull("The object should not be null.", input);
         assertEquals("The object is not the right kind of object.", MockTestObject2.class, input.getClass());
 
-        MockTestObject2 actual = (MockTestObject2)input;
+        MockTestObject2 actual = (MockTestObject2) input;
         assertFalse("The objects should not be the same object.", actual == object);
         assertEquals("The object is not correct.", object, actual);
     }
 
-    @Test(expected= ObjectTypeNotExpectedException.class)
+    @Test(expected = ObjectTypeNotExpectedException.class)
     public void testReadObject1() throws Exception
     {
         MockTestObject1 object = new MockTestObject1();
@@ -205,7 +206,7 @@ public class TestObjectSerializer
     {
         MockTestObject1 object = new MockTestObject1();
         object.coolTest = true;
-        Arrays.fill(object.myArray, (byte)12);
+        Arrays.fill(object.myArray, (byte) 12);
 
         ByteArrayOutputStream bytes = new ByteArrayOutputStream();
         ObjectOutputStream stream = new ObjectOutputStream(bytes);
@@ -222,7 +223,7 @@ public class TestObjectSerializer
         assertEquals("The returned object should be equal.", object, returned);
     }
 
-    @Test(expected=ObjectTypeNotExpectedException.class)
+    @Test(expected = ObjectTypeNotExpectedException.class)
     public void testReadObject4() throws Exception
     {
         MockTestObject2 object = new MockTestObject2();
@@ -299,7 +300,7 @@ public class TestObjectSerializer
     {
         MockTestObject1 object = new MockTestObject1();
         object.coolTest = true;
-        Arrays.fill(object.myArray, (byte)12);
+        Arrays.fill(object.myArray, (byte) 12);
 
         byte[] data = this.serializer.writeObject(object);
 
@@ -345,16 +346,18 @@ class MockTestObject1 implements Serializable
 {
     private static final long serialVersionUID = 1L;
 
-    boolean coolTest = false;
+    boolean coolTest;
 
-    byte[] myArray = new byte[] { (byte)2, (byte)3, (byte)5, (byte)7, (byte)11, (byte)13 };
+    byte[] myArray = new byte[] {(byte) 2, (byte) 3, (byte) 5, (byte) 7, (byte) 11, (byte) 13};
 
     @Override
     public boolean equals(Object o)
     {
-        if(o == null || !(o instanceof MockTestObject1 ))
+        if(o == null || !(o instanceof MockTestObject1))
+        {
             return false;
-        MockTestObject1 test = (MockTestObject1)o;
+        }
+        MockTestObject1 test = (MockTestObject1) o;
         return test.coolTest == this.coolTest && Arrays.equals(test.myArray, this.myArray);
     }
 
@@ -371,17 +374,19 @@ class MockTestObject2 implements Serializable
 
     String aString = "Hello, world";
 
-    char[] password = new char[] { 'a', 'p', 'a', 's', 's', 'w', 'o', 'r', 'd' };
+    char[] password = new char[] {'a', 'p', 'a', 's', 's', 'w', 'o', 'r', 'd'};
 
     @Override
     public boolean equals(Object o)
     {
-        if(o == null || !(o instanceof MockTestObject2 ))
+        if(o == null || !(o instanceof MockTestObject2))
+        {
             return false;
-        MockTestObject2 test = (MockTestObject2)o;
+        }
+        MockTestObject2 test = (MockTestObject2) o;
         return Arrays.equals(test.password, this.password) && (
-                (this.aString == null && test.aString == null) ||
-                (this.aString != null && this.aString.equals(test.aString))
+            (this.aString == null && test.aString == null) ||
+            (this.aString != null && this.aString.equals(test.aString))
         );
     }
 

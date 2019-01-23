@@ -18,19 +18,19 @@
 
 package io.oddsource.java.licensing;
 
-import org.apache.commons.codec.binary.Base64;
-import org.apache.commons.io.FileUtils;
-import org.easymock.EasyMock;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
+import static org.junit.Assert.*;
 
 import java.io.File;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.net.URL;
 
-import static org.junit.Assert.*;
+import org.apache.commons.codec.binary.Base64;
+import org.apache.commons.io.FileUtils;
+import org.easymock.EasyMock;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
 
 /**
  * Test class for FileLicenseProvider.
@@ -55,11 +55,12 @@ public class TestFileLicenseProvider
     public void testConstructor01()
     {
         assertSame("The class loader is not correct.",
-                   FileLicenseProvider.class.getClassLoader(), this.provider.getClassLoader());
+                   FileLicenseProvider.class.getClassLoader(), this.provider.getClassLoader()
+        );
         assertFalse("The classpath should be false.", this.provider.isFileOnClasspath());
     }
 
-    @Test(expected=IllegalArgumentException.class)
+    @Test(expected = IllegalArgumentException.class)
     public void testConstructor02()
     {
         this.provider = new FileLicenseProvider(null);
@@ -97,7 +98,7 @@ public class TestFileLicenseProvider
         assertFalse("fileOnClasspath should be false again.", this.provider.isFileOnClasspath());
     }
 
-    @Test(expected=IllegalArgumentException.class)
+    @Test(expected = IllegalArgumentException.class)
     public void testSetFilePrefix01()
     {
         assertEquals("The prefix should be blank.", "", this.provider.getFilePrefix());
@@ -120,7 +121,7 @@ public class TestFileLicenseProvider
         assertEquals("The prefix is not correct.", "", this.provider.getFilePrefix());
     }
 
-    @Test(expected=IllegalArgumentException.class)
+    @Test(expected = IllegalArgumentException.class)
     public void testSetFileSuffix01()
     {
         assertEquals("The suffix should be blank.", "", this.provider.getFileSuffix());
@@ -160,9 +161,11 @@ public class TestFileLicenseProvider
         File file = this.provider.getLicenseFile("file03");
 
         assertNotNull("The file should not null.", file);
-        assertEquals("The file name is not correct.",
-                     "prefix02" + System.getProperty("file.separator") + "file03.suffix",
-                     file.getPath());
+        assertEquals(
+            "The file name is not correct.",
+            "prefix02" + System.getProperty("file.separator") + "file03.suffix",
+            file.getPath()
+        );
     }
 
     @Test
@@ -227,7 +230,7 @@ public class TestFileLicenseProvider
         FileUtils.forceDelete(temp);
     }
 
-    @Test(expected=IllegalArgumentException.class)
+    @Test(expected = IllegalArgumentException.class)
     public void testGetLicenseData01()
     {
         this.provider.getLicenseData(null);
@@ -237,7 +240,7 @@ public class TestFileLicenseProvider
     public void testGetLicenseData02()
     {
         this.provider = EasyMock.createMockBuilder(FileLicenseProvider.class).
-                addMockedMethod("getLicenseFile").createStrictMock();
+            addMockedMethod("getLicenseFile").createStrictMock();
 
         EasyMock.expect(this.provider.getLicenseFile("test02")).andReturn(null);
         EasyMock.replay(this.provider);
@@ -251,7 +254,7 @@ public class TestFileLicenseProvider
     public void testGetLicenseData03()
     {
         this.provider = EasyMock.createMockBuilder(FileLicenseProvider.class).
-                addMockedMethod("getLicenseFile").createStrictMock();
+            addMockedMethod("getLicenseFile").createStrictMock();
 
         EasyMock.expect(this.provider.getLicenseFile("another03")).andReturn(new File("file03"));
         EasyMock.replay(this.provider);
@@ -268,7 +271,7 @@ public class TestFileLicenseProvider
         FileUtils.writeStringToFile(temp, "test get 04", "UTF-8");
 
         this.provider = EasyMock.createMockBuilder(FileLicenseProvider.class).
-                addMockedMethod("getLicenseFile").createStrictMock();
+            addMockedMethod("getLicenseFile").createStrictMock();
 
         EasyMock.expect(this.provider.getLicenseFile("test04")).andReturn(new File("testGetLicenseData04.lic"));
         EasyMock.replay(this.provider);
@@ -288,7 +291,7 @@ public class TestFileLicenseProvider
         FileUtils.writeByteArrayToFile(temp, Base64.encodeBase64("another get 05".getBytes()));
 
         this.provider = EasyMock.createMockBuilder(FileLicenseProvider.class).
-                addMockedMethod("getLicenseFile").createStrictMock();
+            addMockedMethod("getLicenseFile").createStrictMock();
 
         EasyMock.expect(this.provider.getLicenseFile("test05")).andReturn(new File("testGetLicenseData05.lic"));
         EasyMock.replay(this.provider);

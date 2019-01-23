@@ -18,7 +18,10 @@
 
 package io.oddsource.java.licensing;
 
-import io.oddsource.java.licensing.exception.InvalidSignatureException;
+import java.security.PrivateKey;
+import java.security.PublicKey;
+import java.util.Arrays;
+
 import org.apache.commons.codec.binary.Base64;
 import org.junit.After;
 import org.junit.AfterClass;
@@ -26,9 +29,7 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import java.security.PrivateKey;
-import java.security.PublicKey;
-import java.util.Arrays;
+import io.oddsource.java.licensing.exception.InvalidSignatureException;
 
 /**
  * Test class for DataSignatureManager.
@@ -124,60 +125,76 @@ public class TestDataSignatureManager
     @Test
     public void testSignature01()
     {
-        byte[] data = new byte[] { (byte)2, (byte)3, (byte)5, (byte)7, (byte)11, (byte)13, (byte)17 };
+        byte[] data = new byte[] {(byte) 2, (byte) 3, (byte) 5, (byte) 7, (byte) 11, (byte) 13, (byte) 17};
 
         byte[] signature = this.manager.signData(
-                TestDataSignatureManager.privateKey, data
+            TestDataSignatureManager.privateKey, data
         );
 
         this.manager.verifySignature(
-                TestDataSignatureManager.publicKey, data, signature
+            TestDataSignatureManager.publicKey, data, signature
         );
     }
 
-    @Test(expected= InvalidSignatureException.class)
+    @Test(expected = InvalidSignatureException.class)
     public void testSignature02()
     {
-        byte[] data = new byte[] { (byte)2, (byte)3, (byte)5, (byte)7, (byte)11, (byte)13, (byte)17 };
+        byte[] data = new byte[] {(byte) 2, (byte) 3, (byte) 5, (byte) 7, (byte) 11, (byte) 13, (byte) 17};
 
         byte[] signature = this.manager.signData(
-                TestDataSignatureManager.privateKey, data
+            TestDataSignatureManager.privateKey, data
         );
 
         data[4] = 76;
 
         this.manager.verifySignature(
-                TestDataSignatureManager.publicKey, data, signature
+            TestDataSignatureManager.publicKey, data, signature
         );
     }
 
     @Test
     public void testSignature03()
     {
-        byte[] data = Arrays.copyOf(new byte[] { (byte)19, (byte)23, (byte)29, (byte)31, (byte)37, (byte)41, (byte)43 }, 629383);
+        byte[] data = Arrays.copyOf(new byte[] {
+            (byte) 19,
+            (byte) 23,
+            (byte) 29,
+            (byte) 31,
+            (byte) 37,
+            (byte) 41,
+            (byte) 43,
+        }, 629383);
 
         byte[] signature = this.manager.signData(
-                TestDataSignatureManager.privateKey, data
+            TestDataSignatureManager.privateKey, data
         );
 
         this.manager.verifySignature(
-                TestDataSignatureManager.publicKey, data, signature
+            TestDataSignatureManager.publicKey, data, signature
         );
     }
 
-    @Test(expected=InvalidSignatureException.class)
+    @Test(expected = InvalidSignatureException.class)
     public void testSignature04()
     {
-        byte[] data = Arrays.copyOf(new byte[] { (byte)19, (byte)23, (byte)29, (byte)31, (byte)37, (byte)41, (byte)43 }, 629383);
+        byte[] data = Arrays.copyOf(new byte[] {
+            (byte) 19,
+            (byte) 23,
+            (byte) 29,
+            (byte) 31,
+            (byte) 37,
+            (byte) 41,
+            (byte) 43,
+        }, 629383);
 
         byte[] signature = this.manager.signData(
-                TestDataSignatureManager.privateKey, data
+            TestDataSignatureManager.privateKey, data
         );
 
         data[6983] = 76;
 
         this.manager.verifySignature(
-                TestDataSignatureManager.publicKey, data, signature
+            TestDataSignatureManager.publicKey, data, signature
         );
     }
 }

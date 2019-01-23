@@ -18,15 +18,15 @@
 
 package io.oddsource.java.licensing.immutable;
 
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
+import static org.junit.Assert.*;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-import static org.junit.Assert.*;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
 
 /**
  * Test class for ImmutableArrayList.
@@ -60,7 +60,7 @@ public class TestImmutableArrayList
         {
             Field internalHashSet = this.list.getClass().getDeclaredField("internalList");
             internalHashSet.setAccessible(true);
-            return (ArrayList<String>)internalHashSet.get(this.list);
+            return (ArrayList<String>) internalHashSet.get(this.list);
         }
         catch(Exception e)
         {
@@ -85,37 +85,37 @@ public class TestImmutableArrayList
         assertEquals("The hash code is not correct.", internalList.hashCode(), hashCode);
     }
 
-    @Test(expected=UnsupportedOperationException.class)
+    @Test(expected = UnsupportedOperationException.class)
     public void testAddNotAllowed()
     {
         this.list.add(2, "Test");
     }
 
-    @Test(expected=UnsupportedOperationException.class)
+    @Test(expected = UnsupportedOperationException.class)
     public void testAddAllNotAllowed()
     {
         this.list.addAll(2, Arrays.asList("Test1", "Test2", "Test3"));
     }
 
-    @Test(expected=UnsupportedOperationException.class)
+    @Test(expected = UnsupportedOperationException.class)
     public void testRemoveNotAllowed()
     {
         this.list.remove("MyString1");
     }
 
-    @Test(expected=UnsupportedOperationException.class)
+    @Test(expected = UnsupportedOperationException.class)
     public void testRemoveByIntNotAllowed()
     {
         this.list.remove(1);
     }
 
-    @Test(expected=UnsupportedOperationException.class)
+    @Test(expected = UnsupportedOperationException.class)
     public void testRemoveAllNotAllowed()
     {
         this.list.removeAll(Arrays.asList("MyString1", "HerString4"));
     }
 
-    @Test(expected=UnsupportedOperationException.class)
+    @Test(expected = UnsupportedOperationException.class)
     public void testSetNotAllowed()
     {
         this.list.set(1, "MyString1");
@@ -130,7 +130,7 @@ public class TestImmutableArrayList
         assertEquals("The lists should be equal.", this.list, test);
     }
 
-    @Test(expected= ImmutableModifiedThroughReflectionError.class)
+    @Test(expected = ImmutableModifiedThroughReflectionError.class)
     public void testClone02()
     {
         this.getInternal().remove(2);
@@ -149,13 +149,13 @@ public class TestImmutableArrayList
         assertEquals("The value is not correct.", "HerString4", this.list.get(3));
     }
 
-    @Test(expected=IndexOutOfBoundsException.class)
+    @Test(expected = IndexOutOfBoundsException.class)
     public void testGet03()
     {
         this.list.get(4);
     }
 
-    @Test(expected= ImmutableModifiedThroughReflectionError.class)
+    @Test(expected = ImmutableModifiedThroughReflectionError.class)
     public void testGet04()
     {
         this.getInternal().add(null);
@@ -180,7 +180,7 @@ public class TestImmutableArrayList
         assertEquals("The index is not correct.", -1, this.list.indexOf("HisString4"));
     }
 
-    @Test(expected= ImmutableModifiedThroughReflectionError.class)
+    @Test(expected = ImmutableModifiedThroughReflectionError.class)
     public void testIndexOf04()
     {
         this.getInternal().add("Test");
@@ -205,7 +205,7 @@ public class TestImmutableArrayList
         assertEquals("The index is not correct.", -1, this.list.lastIndexOf("HisString4"));
     }
 
-    @Test(expected= ImmutableModifiedThroughReflectionError.class)
+    @Test(expected = ImmutableModifiedThroughReflectionError.class)
     public void testLastIndexOf04()
     {
         this.getInternal().remove("HerString4");
@@ -218,7 +218,7 @@ public class TestImmutableArrayList
     {
         int i = 0;
 
-        String[] array = new String[] { "MyString1", "YourString2", "HisString3", "HerString4" };
+        String[] array = new String[] {"MyString1", "YourString2", "HisString3", "HerString4"};
 
         ImmutableListIterator<String> iterator = this.list.listIterator();
         while(iterator.hasNext())
@@ -241,7 +241,7 @@ public class TestImmutableArrayList
     {
         int i = 0;
 
-        String[] array = new String[] { "MyString1", "YourString2", "HisString3", "HerString4" };
+        String[] array = new String[] {"MyString1", "YourString2", "HisString3", "HerString4"};
 
         for(String string : this.list)
         {
@@ -251,7 +251,7 @@ public class TestImmutableArrayList
         }
     }
 
-    @Test(expected= ImmutableModifiedThroughReflectionError.class)
+    @Test(expected = ImmutableModifiedThroughReflectionError.class)
     public void testListIterator103()
     {
         this.getInternal().remove("MyString1");
@@ -263,7 +263,7 @@ public class TestImmutableArrayList
     {
         int i = 3;
 
-        String[] array = new String[] { "MyString1", "YourString2", "HisString3", "HerString4" };
+        String[] array = new String[] {"MyString1", "YourString2", "HisString3", "HerString4"};
 
         ImmutableListIterator<String> iterator = this.list.listIterator(4);
         while(iterator.hasPrevious())
@@ -281,7 +281,7 @@ public class TestImmutableArrayList
         }
     }
 
-    @Test(expected= ImmutableModifiedThroughReflectionError.class)
+    @Test(expected = ImmutableModifiedThroughReflectionError.class)
     public void testListIterator202()
     {
         this.getInternal().remove("MyString1");
@@ -310,7 +310,7 @@ public class TestImmutableArrayList
         assertEquals("String 2 is not correct.", "HerString4", test.get(1));
     }
 
-    @Test(expected= ImmutableModifiedThroughReflectionError.class)
+    @Test(expected = ImmutableModifiedThroughReflectionError.class)
     public void testSubList03()
     {
         this.getInternal().add("Test");

@@ -33,15 +33,24 @@
 
     <suppress files="exception/[A-Za-z0-9]+\.java" checks="MultipleStringLiterals" />
 
+    <suppress files="source/test" checks="AnonInnerLength" />
     <suppress files="source/test" checks="AvoidStarImport" />
     <suppress files="source/test" checks="AvoidStaticImport" />
+    <suppress files="source/test" checks="DeclarationOrder" />
     <suppress files="source/test" checks="FinalLocalVariable" />
     <suppress files="source/test" checks="FinalParameters" />
+    <suppress files="source/test" checks="IllegalCatch" />
     <suppress files="source/test" checks="IllegalThrows" />
     <suppress files="source/test" checks="JavadocMethod" />
     <suppress files="source/test" checks="JavadocPackage" />
     <suppress files="source/test" checks="JavadocType" />
+    <suppress files="source/test" checks="JavadocVariable" />
     <suppress files="source/test" checks="MagicNumber" />
+    <suppress files="source/test" checks="MethodLength" />
     <suppress files="source/test" checks="MissingCtor" />
     <suppress files="source/test" checks="MultipleStringLiterals" />
+    <suppress files="source/test" checks="OneTopLevelClass" />
+    <suppress files="source/test" checks="OuterTypeNumber" />
+    <suppress files="source/test" checks="VariableDeclarationUsageDistance" />
+    <suppress files="source/test" checks="VisibilityModifier" />
 </suppressions>

@@ -18,14 +18,14 @@
 
 package io.oddsource.java.licensing;
 
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
+import static org.junit.Assert.*;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 
-import static org.junit.Assert.*;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
 
 public class TestLicensingCharsets
 {
@@ -43,7 +43,7 @@ public class TestLicensingCharsets
 
     @Test
     public void testConstructionForbidden()
-            throws IllegalAccessException, InstantiationException, NoSuchMethodException
+        throws IllegalAccessException, InstantiationException, NoSuchMethodException
     {
         Constructor<LicensingCharsets> constructor = LicensingCharsets.class.getDeclaredConstructor();
         constructor.setAccessible(true);
@@ -57,7 +57,11 @@ public class TestLicensingCharsets
         {
             Throwable cause = e.getCause();
             assertNotNull("Expected cause for InvocationTargetException, but got no cause.", cause);
-            assertSame("Expected exception java.lang.RuntimeException, but got " + cause.getClass(), AssertionError.class, cause.getClass());
+            assertSame(
+                "Expected exception java.lang.RuntimeException, but got " + cause.getClass(),
+                AssertionError.class,
+                cause.getClass()
+            );
             assertEquals("The message was incorrect.", "This class cannot be instantiated.", cause.getMessage());
         }
     }

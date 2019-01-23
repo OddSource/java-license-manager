@@ -18,12 +18,12 @@
 
 package io.oddsource.java.licensing;
 
+import static org.junit.Assert.*;
+
 import org.easymock.EasyMock;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-
-import static org.junit.Assert.*;
 
 /**
  * Test class for DeserializingLicenseProvider.
@@ -36,7 +36,7 @@ public class TestDeserializingLicenseProvider
     public void setUp()
     {
         this.provider = EasyMock.createMockBuilder(DeserializingLicenseProvider.class).
-                addMockedMethod("getLicenseData").createStrictMock();
+            addMockedMethod("getLicenseData").createStrictMock();
     }
 
     @After
@@ -59,8 +59,8 @@ public class TestDeserializingLicenseProvider
     @Test
     public void testGetLicense02()
     {
-        byte[] licenseContent = new byte[] { 0x1F };
-        byte[] signatureContent = new byte[] { 0x2F };
+        byte[] licenseContent = new byte[] {0x1F};
+        byte[] signatureContent = new byte[] {0x2F};
         SignedLicense license = new SignedLicense(licenseContent, signatureContent);
         byte[] serialized = new ObjectSerializer().writeObject(license);
 
@@ -77,8 +77,8 @@ public class TestDeserializingLicenseProvider
     @Test
     public void testGetLicense03()
     {
-        byte[] licenseContent = new byte[] { 0x3F };
-        byte[] signatureContent = new byte[] { 0x4F };
+        byte[] licenseContent = new byte[] {0x3F};
+        byte[] signatureContent = new byte[] {0x4F};
         SignedLicense license = new SignedLicense(licenseContent, signatureContent);
         byte[] serialized = new ObjectSerializer().writeObject(license);
 

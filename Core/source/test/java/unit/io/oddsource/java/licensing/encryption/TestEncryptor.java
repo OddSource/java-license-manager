@@ -18,16 +18,17 @@
 
 package io.oddsource.java.licensing.encryption;
 
-import io.oddsource.java.licensing.exception.FailedToDecryptException;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
+import static org.junit.Assert.*;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
-import static org.junit.Assert.*;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
+
+import io.oddsource.java.licensing.exception.FailedToDecryptException;
 
 /**
  * Test class for Encryptor.
@@ -48,7 +49,7 @@ public class TestEncryptor
 
     @Test
     public void testConstructionForbidden()
-            throws IllegalAccessException, InstantiationException, NoSuchMethodException
+        throws IllegalAccessException, InstantiationException, NoSuchMethodException
     {
         Constructor<Encryptor> constructor = Encryptor.class.getDeclaredConstructor();
         constructor.setAccessible(true);
@@ -62,7 +63,11 @@ public class TestEncryptor
         {
             Throwable cause = e.getCause();
             assertNotNull("Expected cause for InvocationTargetException, but got no cause.", cause);
-            assertSame("Expected exception java.lang.RuntimeException, but got " + cause.getClass(), AssertionError.class, cause.getClass());
+            assertSame(
+                "Expected exception java.lang.RuntimeException, but got " + cause.getClass(),
+                AssertionError.class,
+                cause.getClass()
+            );
             assertEquals("The message was incorrect.", "This class cannot be instantiated.", cause.getMessage());
         }
     }
@@ -71,7 +76,7 @@ public class TestEncryptor
     {
         Method pad = Encryptor.class.getDeclaredMethod("pad", byte[].class, int.class);
         pad.setAccessible(true);
-        return (byte[])pad.invoke(null, toPad.getBytes(), length);
+        return (byte[]) pad.invoke(null, toPad.getBytes(), length);
     }
 
     @Test
@@ -87,7 +92,7 @@ public class TestEncryptor
         assertNotNull("The padded string should not be null.", padded);
         assertEquals("The padded string has the wrong length.", toPad.length() + 1, padded.length);
         assertEquals("The padded string should actually just be identical.", toPad, paddedString);
-        assertEquals("The last byte is wrong.", 1, (int)padded[padded.length - 1]);
+        assertEquals("The last byte is wrong.", 1, (int) padded[padded.length - 1]);
     }
 
     private void testPad2(int length) throws Exception
@@ -98,7 +103,7 @@ public class TestEncryptor
 
         assertNotNull("The padded string should not be null.", padded);
         assertEquals("The padded string has the wrong length.", length + 1, padded.length);
-        assertEquals("The last byte is wrong.", length - toPad.length() + 1, (int)padded[padded.length - 1]);
+        assertEquals("The last byte is wrong.", length - toPad.length() + 1, (int) padded[padded.length - 1]);
     }
 
     @Test
@@ -148,15 +153,15 @@ public class TestEncryptor
     public void testUnPad1() throws Exception
     {
         byte[] tokens = {
-                '1', '2', '3', '4', '5', '6', '7', '8', '9', '0',
-                '1', '2', '3', '4', '5', '6', '7', '8', '9', '0', (byte)1
+            '1', '2', '3', '4', '5', '6', '7', '8', '9', '0',
+            '1', '2', '3', '4', '5', '6', '7', '8', '9', '0', (byte) 1,
         };
         String toUnPad = new String(tokens);
 
         Method pad = Encryptor.class.getDeclaredMethod("unPad", byte[].class);
         pad.setAccessible(true);
 
-        byte[] unPadded = (byte[])pad.invoke(null, toUnPad.getBytes());
+        byte[] unPadded = (byte[]) pad.invoke(null, toUnPad.getBytes());
         String unPaddedString = new String(unPadded);
 
         assertNotNull("The unPadded string should not be null.", unPadded);
@@ -167,13 +172,13 @@ public class TestEncryptor
     @SuppressWarnings("PrimitiveArrayArgumentToVariableArgMethod")
     public void testUnPad2() throws Exception
     {
-        byte[] tokens = { 'g', '1', 'n', 'g', 'e', 'r', (byte)1 };
+        byte[] tokens = {'g', '1', 'n', 'g', 'e', 'r', (byte) 1};
         String toUnPad = new String(tokens);
 
         Method pad = Encryptor.class.getDeclaredMethod("unPad", byte[].class);
         pad.setAccessible(true);
 
-        byte[] unPadded = (byte[])pad.invoke(null, toUnPad.getBytes());
+        byte[] unPadded = (byte[]) pad.invoke(null, toUnPad.getBytes());
         String unPaddedString = new String(unPadded);
 
         assertNotNull("The unPadded string should not be null.", unPadded);
@@ -190,7 +195,7 @@ public class TestEncryptor
         Method pad = Encryptor.class.getDeclaredMethod("unPad", byte[].class);
         pad.setAccessible(true);
 
-        byte[] unPadded = (byte[])pad.invoke(null, padded);
+        byte[] unPadded = (byte[]) pad.invoke(null, padded);
         String unPaddedString = new String(unPadded);
 
         assertNotNull("The unPadded string should not be null.", unPadded);
@@ -247,8 +252,10 @@ public class TestEncryptor
 
         String encrypted = Encryptor.encrypt(toEncrypt);
         assertNotNull("The encrypted string should not be null.", encrypted);
-        assertTrue("The encrypted string should have length greater than the original string.",
-                encrypted.length() > toEncrypt.length());
+        assertTrue(
+            "The encrypted string should have length greater than the original string.",
+            encrypted.length() > toEncrypt.length()
+        );
     }
 
     // Test for difference/encryptability
@@ -259,8 +266,10 @@ public class TestEncryptor
 
         String encrypted = Encryptor.encrypt(toEncrypt, "myCoolPassword".toCharArray());
         assertNotNull("The encrypted string should not be null.", encrypted);
-        assertTrue("The encrypted string should have length greater than the original string.",
-                encrypted.length() > toEncrypt.length());
+        assertTrue(
+            "The encrypted string should have length greater than the original string.",
+            encrypted.length() > toEncrypt.length()
+        );
     }
 
     // Test for repeatability
@@ -268,15 +277,15 @@ public class TestEncryptor
     public void testEncrypt2()
     {
         String toEncrypt = "aoeugalogeual9o87gu3l2'r3ghsproguhSNoehusNOEhusntoehoUZTOHEUNT<>" +
-                "H<(>*JGJCROEHunt.huaahsnoeuhs,cr.a,g.ulreo8gukchrseunhaonteihaorceugaroscuh" +
-                ".nsphilraeugil98g'l38rgph's23cnhps    .c,huiscraoeha/l-iuh.p-sihtaosntiha.,edo" +
-                "guoeuar/oe-suihbtnaoseihtenoatnuaoehik/eolrkl=alhil.,]'ry3c012]cp5/239cpyhl" +
-                ".',-huilreoh/eho/ik0hceo/ikcrih.,0/igc34yyr2/34gy8[p90.8icgeurlxhkelocugxu0" +
-                "egoi/crleohil/p',hy/1c'gy029348y[.p,90gcileo;hl/GLRCDHIRCH)($*:(?YC{>)(i8e9" +
-                "8cloraihl'hy34/l'cg809[i8u09/10ch32clr5hps'th,.tsnuihaeokc8gao[e09ig8caoelc" +
-                "huitnsoeabitnoeudh/lroeuceucog8xxgp,0ldynst43htnys5hhy543tsnh65crl234hyig8o" +
-                "eu90[euo8icgrheoistahoeaehosnuthoelrcigoeu[09icglerpuhdtnoseudh,ocilc0oeu78" +
-                "90[e8oi2349cg5hcl234h5l/r2c43/lyr.cpg,lrcioghersueusih";
+                           "H<(>*JGJCROEHunt.huaahsnoeuhs,cr.a,g.ulreo8gukchrseunhaonteihaorceugaroscuh" +
+                           ".nsphilraeugil98g'l38rgph's23cnhps    .c,huiscraoeha/l-iuh.p-sihtaosntiha.,edo" +
+                           "guoeuar/oe-suihbtnaoseihtenoatnuaoehik/eolrkl=alhil.,]'ry3c012]cp5/239cpyhl" +
+                           ".',-huilreoh/eho/ik0hceo/ikcrih.,0/igc34yyr2/34gy8[p90.8icgeurlxhkelocugxu0" +
+                           "egoi/crleohil/p',hy/1c'gy029348y[.p,90gcileo;hl/GLRCDHIRCH)($*:(?YC{>)(i8e9" +
+                           "8cloraihl'hy34/l'cg809[i8u09/10ch32clr5hps'th,.tsnuihaeokc8gao[e09ig8caoelc" +
+                           "huitnsoeabitnoeudh/lroeuceucog8xxgp,0ldynst43htnys5hhy543tsnh65crl234hyig8o" +
+                           "eu90[euo8icgrheoistahoeaehosnuthoelrcigoeu[09icglerpuhdtnoseudh,ocilc0oeu78" +
+                           "90[e8oi2349cg5hcl234h5l/r2c43/lyr.cpg,lrcioghersueusih";
 
         String encrypted1 = Encryptor.encrypt(toEncrypt);
         String encrypted2 = Encryptor.encrypt(toEncrypt);
@@ -301,15 +310,15 @@ public class TestEncryptor
     public void testPasswordBasedEncrypt2()
     {
         String toEncrypt = "aoeugalogeual9o87gu3l2'r3ghsproguhSNoehusNOEhusntoehoUZTOHEUNT<>" +
-                "H<(>*JGJCROEHunt.huaahsnoeuhs,cr.a,g.ulreo8gukchrseunhaonteihaorceugaroscuh" +
-                ".nsphilraeugil98g'l38rgph's23cnhps    .c,huiscraoeha/l-iuh.p-sihtaosntiha.,edo" +
-                "guoeuar/oe-suihbtnaoseihtenoatnuaoehik/eolrkl=alhil.,]'ry3c012]cp5/239cpyhl" +
-                ".',-huilreoh/eho/ik0hceo/ikcrih.,0/igc34yyr2/34gy8[p90.8icgeurlxhkelocugxu0" +
-                "egoi/crleohil/p',hy/1c'gy029348y[.p,90gcileo;hl/GLRCDHIRCH)($*:(?YC{>)(i8e9" +
-                "8cloraihl'hy34/l'cg809[i8u09/10ch32clr5hps'th,.tsnuihaeokc8gao[e09ig8caoelc" +
-                "huitnsoeabitnoeudh/lroeuceucog8xxgp,0ldynst43htnys5hhy543tsnh65crl234hyig8o" +
-                "eu90[euo8icgrheoistahoeaehosnuthoelrcigoeu[09icglerpuhdtnoseudh,ocilc0oeu78" +
-                "90[e8oi2349cg5hcl234h5l/r2c43/lyr.cpg,lrcioghersueusih";
+                           "H<(>*JGJCROEHunt.huaahsnoeuhs,cr.a,g.ulreo8gukchrseunhaonteihaorceugaroscuh" +
+                           ".nsphilraeugil98g'l38rgph's23cnhps    .c,huiscraoeha/l-iuh.p-sihtaosntiha.,edo" +
+                           "guoeuar/oe-suihbtnaoseihtenoatnuaoehik/eolrkl=alhil.,]'ry3c012]cp5/239cpyhl" +
+                           ".',-huilreoh/eho/ik0hceo/ikcrih.,0/igc34yyr2/34gy8[p90.8icgeurlxhkelocugxu0" +
+                           "egoi/crleohil/p',hy/1c'gy029348y[.p,90gcileo;hl/GLRCDHIRCH)($*:(?YC{>)(i8e9" +
+                           "8cloraihl'hy34/l'cg809[i8u09/10ch32clr5hps'th,.tsnuihaeokc8gao[e09ig8caoelc" +
+                           "huitnsoeabitnoeudh/lroeuceucog8xxgp,0ldynst43htnys5hhy543tsnh65crl234hyig8o" +
+                           "eu90[euo8icgrheoistahoeaehosnuthoelrcigoeu[09icglerpuhdtnoseudh,ocilc0oeu78" +
+                           "90[e8oi2349cg5hcl234h5l/r2c43/lyr.cpg,lrcioghersueusih";
 
         String encrypted1 = Encryptor.encrypt(toEncrypt, "myOtherPassword2".toCharArray());
         String encrypted2 = Encryptor.encrypt(toEncrypt, "myOtherPassword2".toCharArray());
@@ -333,7 +342,9 @@ public class TestEncryptor
     @Test
     public void testEncrypt3()
     {
-        String expected = "NSARPhey360gZ2xTOaswGn6lWCd01poo1AW8o0Oobudbf2MNe38lX21EpHEFGl-MKgZnPZKsSHrDFXjL1CvtWqQ2JN6RuMKW0iht1TacVKE";
+        String expected =
+            "NSARPhey360gZ2xTOaswGn6lWCd01poo1AW8o0Oobudbf2MNe38lX21EpHEFGl" +
+            "-MKgZnPZKsSHrDFXjL1CvtWqQ2JN6RuMKW0iht1TacVKE";
 
         String toEncrypt = "testAPasswordThatIsLongerThanThePaddingLengthToPreventRandomness";
 
@@ -346,7 +357,9 @@ public class TestEncryptor
     @Test
     public void testPasswordBasedEncrypt3()
     {
-        String expected = "YPEXhIzBx1VzkbqMwaS2QpMPQJCY9kALXLYY0HFWRCSpRobyCrAGLtwNPnEKDW_TKMSRzf7BAUHFueySb_dh2tISTe8zx-uZ_WG-c06x2Ns";
+        String expected =
+            "YPEXhIzBx1VzkbqMwaS2QpMPQJCY9kALXLYY0HFWRCSpRobyCrAGLtwNPnEKDW_TKMSRzf7BAUHFueySb_dh2tISTe8zx-uZ_WG" +
+            "-c06x2Ns";
 
         String toEncrypt = "testAPasswordThatIsLongerThanThePaddingLengthToPreventRandomness";
 
@@ -384,10 +397,13 @@ public class TestEncryptor
         assertEquals("The decrypted string should equal the original string.", toEncrypt, decrypted);
 
         // wrong password
-        try {
+        try
+        {
             Encryptor.decrypt(encrypted, "MyDecryptPassword1".toCharArray());
             fail("Expected FailedToDecryptException, but no exception thrown.");
-        } catch(FailedToDecryptException ignore) {
+        }
+        catch(FailedToDecryptException ignore)
+        {
 
         }
     }
@@ -421,10 +437,13 @@ public class TestEncryptor
         assertEquals("The decrypted string should equal the original string.", toEncrypt, decrypted);
 
         // wrong password
-        try {
+        try
+        {
             Encryptor.decrypt(encrypted, "YourDecryptPassword2".toCharArray());
             fail("Expected FailedToDecryptException, but no exception thrown.");
-        } catch(FailedToDecryptException ignore) {
+        }
+        catch(FailedToDecryptException ignore)
+        {
 
         }
     }
@@ -458,10 +477,13 @@ public class TestEncryptor
         assertEquals("The decrypted string should equal the original string.", toEncrypt, decrypted);
 
         // wrong password
-        try {
+        try
+        {
             Encryptor.decrypt(encrypted, "hisDecryptPassword3".toCharArray());
             fail("Expected FailedToDecryptException, but no exception thrown.");
-        } catch(FailedToDecryptException ignore) {
+        }
+        catch(FailedToDecryptException ignore)
+        {
 
         }
     }
@@ -470,15 +492,15 @@ public class TestEncryptor
     public void testDecrypt4()
     {
         String toEncrypt = "aoeugalogeual9o87gu3l2'r3ghsproguhSNoehusNOEhusntoehoUZTOHEUNT<>" +
-                "H<(>*JGJCROEHunt.huaahsnoeuhs,cr.a,g.ulreo8gukchrseunhaonteihaorceugaroscuh" +
-                ".nsphilraeugil98g'l38rgph's23cnhps    .c,huiscraoeha/l-iuh.p-sihtaosntiha.,edo" +
-                "guoeuar/oe-suihbtnaoseihtenoatnuaoehik/eolrkl=alhil.,]'ry3c012]cp5/239cpyhl" +
-                ".',-huilreoh/eho/ik0hceo/ikcrih.,0/igc34yyr2/34gy8[p90.8icgeurlxhkelocugxu0" +
-                "egoi/crleohil/p',hy/1c'gy029348y[.p,90gcileo;hl/GLRCDHIRCH)($*:(?YC{>)(i8e9" +
-                "8cloraihl'hy34/l'cg809[i8u09/10ch32clr5hps'th,.tsnuihaeokc8gao[e09ig8caoelc" +
-                "huitnsoeabitnoeudh/lroeuceucog8xxgp,0ldynst43htnys5hhy543tsnh65crl234hyig8o" +
-                "eu90[euo8icgrheoistahoeaehosnuthoelrcigoeu[09icglerpuhdtnoseudh,ocilc0oeu78" +
-                "90[e8oi2349cg5hcl234h5l/r2c43/lyr.cpg,lrcioghersueusih";
+                           "H<(>*JGJCROEHunt.huaahsnoeuhs,cr.a,g.ulreo8gukchrseunhaonteihaorceugaroscuh" +
+                           ".nsphilraeugil98g'l38rgph's23cnhps    .c,huiscraoeha/l-iuh.p-sihtaosntiha.,edo" +
+                           "guoeuar/oe-suihbtnaoseihtenoatnuaoehik/eolrkl=alhil.,]'ry3c012]cp5/239cpyhl" +
+                           ".',-huilreoh/eho/ik0hceo/ikcrih.,0/igc34yyr2/34gy8[p90.8icgeurlxhkelocugxu0" +
+                           "egoi/crleohil/p',hy/1c'gy029348y[.p,90gcileo;hl/GLRCDHIRCH)($*:(?YC{>)(i8e9" +
+                           "8cloraihl'hy34/l'cg809[i8u09/10ch32clr5hps'th,.tsnuihaeokc8gao[e09ig8caoelc" +
+                           "huitnsoeabitnoeudh/lroeuceucog8xxgp,0ldynst43htnys5hhy543tsnh65crl234hyig8o" +
+                           "eu90[euo8icgrheoistahoeaehosnuthoelrcigoeu[09icglerpuhdtnoseudh,ocilc0oeu78" +
+                           "90[e8oi2349cg5hcl234h5l/r2c43/lyr.cpg,lrcioghersueusih";
 
         String encrypted = Encryptor.encrypt(toEncrypt);
         assertNotNull("The encrypted string should not be null.", encrypted);
@@ -493,15 +515,15 @@ public class TestEncryptor
     public void testPasswordBasedDecrypt4()
     {
         String toEncrypt = "aoeugalogeual9o87gu3l2'r3ghsproguhSNoehusNOEhusntoehoUZTOHEUNT<>" +
-                "H<(>*JGJCROEHunt.huaahsnoeuhs,cr.a,g.ulreo8gukchrseunhaonteihaorceugaroscuh" +
-                ".nsphilraeugil98g'l38rgph's23cnhps    .c,huiscraoeha/l-iuh.p-sihtaosntiha.,edo" +
-                "guoeuar/oe-suihbtnaoseihtenoatnuaoehik/eolrkl=alhil.,]'ry3c012]cp5/239cpyhl" +
-                ".',-huilreoh/eho/ik0hceo/ikcrih.,0/igc34yyr2/34gy8[p90.8icgeurlxhkelocugxu0" +
-                "egoi/crleohil/p',hy/1c'gy029348y[.p,90gcileo;hl/GLRCDHIRCH)($*:(?YC{>)(i8e9" +
-                "8cloraihl'hy34/l'cg809[i8u09/10ch32clr5hps'th,.tsnuihaeokc8gao[e09ig8caoelc" +
-                "huitnsoeabitnoeudh/lroeuceucog8xxgp,0ldynst43htnys5hhy543tsnh65crl234hyig8o" +
-                "eu90[euo8icgrheoistahoeaehosnuthoelrcigoeu[09icglerpuhdtnoseudh,ocilc0oeu78" +
-                "90[e8oi2349cg5hcl234h5l/r2c43/lyr.cpg,lrcioghersueusih";
+                           "H<(>*JGJCROEHunt.huaahsnoeuhs,cr.a,g.ulreo8gukchrseunhaonteihaorceugaroscuh" +
+                           ".nsphilraeugil98g'l38rgph's23cnhps    .c,huiscraoeha/l-iuh.p-sihtaosntiha.,edo" +
+                           "guoeuar/oe-suihbtnaoseihtenoatnuaoehik/eolrkl=alhil.,]'ry3c012]cp5/239cpyhl" +
+                           ".',-huilreoh/eho/ik0hceo/ikcrih.,0/igc34yyr2/34gy8[p90.8icgeurlxhkelocugxu0" +
+                           "egoi/crleohil/p',hy/1c'gy029348y[.p,90gcileo;hl/GLRCDHIRCH)($*:(?YC{>)(i8e9" +
+                           "8cloraihl'hy34/l'cg809[i8u09/10ch32clr5hps'th,.tsnuihaeokc8gao[e09ig8caoelc" +
+                           "huitnsoeabitnoeudh/lroeuceucog8xxgp,0ldynst43htnys5hhy543tsnh65crl234hyig8o" +
+                           "eu90[euo8icgrheoistahoeaehosnuthoelrcigoeu[09icglerpuhdtnoseudh,ocilc0oeu78" +
+                           "90[e8oi2349cg5hcl234h5l/r2c43/lyr.cpg,lrcioghersueusih";
 
         String encrypted = Encryptor.encrypt(toEncrypt, "herdecryptpassword3".toCharArray());
         assertNotNull("The encrypted string should not be null.", encrypted);
@@ -513,10 +535,13 @@ public class TestEncryptor
         assertEquals("The decrypted string should equal the original string.", toEncrypt, decrypted);
 
         // wrong password
-        try {
+        try
+        {
             Encryptor.decrypt(encrypted, "herDecryptPassword3".toCharArray());
             fail("Expected FailedToDecryptException, but no exception thrown.");
-        } catch(FailedToDecryptException ignore) {
+        }
+        catch(FailedToDecryptException ignore)
+        {
 
         }
     }

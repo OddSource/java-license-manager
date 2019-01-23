@@ -18,8 +18,13 @@
 
 package io.oddsource.java.licensing;
 
-public class MockLicenseHelper
+public final class MockLicenseHelper
 {
+    private MockLicenseHelper()
+    {
+
+    }
+
     public static License deserialize(byte[] data)
     {
         return License.deserialize(data);

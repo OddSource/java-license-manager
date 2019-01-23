@@ -18,17 +18,18 @@
 
 package io.oddsource.java.licensing.encryption;
 
-import io.oddsource.java.licensing.exception.KeyNotFoundException;
+import static org.junit.Assert.*;
+
+import java.io.File;
+import java.io.IOException;
+
 import org.apache.commons.io.FileUtils;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
 
-import java.io.File;
-import java.io.IOException;
-
-import static org.junit.Assert.*;
+import io.oddsource.java.licensing.exception.KeyNotFoundException;
 
 /**
  * Test class for FilePublicKeyDataProvider.
@@ -54,7 +55,9 @@ public class TestFilePublicKeyDataProvider
         File file = new File(fileName);
 
         if(file.exists())
+        {
             FileUtils.forceDelete(file);
+        }
 
         FilePublicKeyDataProvider provider = new FilePublicKeyDataProvider(fileName);
 
@@ -71,7 +74,9 @@ public class TestFilePublicKeyDataProvider
         File file = new File(fileName);
 
         if(file.exists())
+        {
             FileUtils.forceDelete(file);
+        }
 
         FilePublicKeyDataProvider provider = new FilePublicKeyDataProvider(file);
 
@@ -89,7 +94,9 @@ public class TestFilePublicKeyDataProvider
         File file = new File(fileName);
 
         if(file.exists())
+        {
             FileUtils.forceDelete(file);
+        }
 
         FilePublicKeyDataProvider provider = new FilePublicKeyDataProvider(file);
 
@@ -113,9 +120,11 @@ public class TestFilePublicKeyDataProvider
         file = file.getCanonicalFile();
 
         if(file.exists())
+        {
             FileUtils.forceDelete(file);
+        }
 
-        byte[] data = new byte[] { 0x01, 0x71, 0x33 };
+        byte[] data = new byte[] {0x01, 0x71, 0x33};
 
         FileUtils.writeByteArrayToFile(file, data);
 
@@ -150,9 +159,11 @@ public class TestFilePublicKeyDataProvider
         File file = new File(fileName);
 
         if(file.exists())
+        {
             FileUtils.forceDelete(file);
+        }
 
-        byte[] data = new byte[] { 0x01, 0x71, 0x33 };
+        byte[] data = new byte[] {0x01, 0x71, 0x33};
 
         FileUtils.writeByteArrayToFile(file, data);
 
@@ -178,9 +189,11 @@ public class TestFilePublicKeyDataProvider
         File file = new File(fileName);
 
         if(file.exists())
+        {
             FileUtils.forceDelete(file);
+        }
 
-        byte[] data = new byte[] { 0x51, 0x12, 0x23 };
+        byte[] data = new byte[] {0x51, 0x12, 0x23};
 
         FileUtils.writeByteArrayToFile(file, data);
 

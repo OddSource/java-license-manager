@@ -18,15 +18,15 @@
 
 package io.oddsource.java.licensing.immutable;
 
+import static org.junit.Assert.*;
+
+import java.util.TreeSet;
+
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
-
-import java.util.TreeSet;
-
-import static org.junit.Assert.*;
 
 /**
  * Test class for ImmutableIterator.
@@ -72,7 +72,7 @@ public class TestImmutableIterator
 
     }
 
-    @Test(expected=UnsupportedOperationException.class)
+    @Test(expected = UnsupportedOperationException.class)
     public void testRemoveNotAllowed()
     {
         this.iterator.remove();
@@ -83,7 +83,7 @@ public class TestImmutableIterator
     {
         this.valid.valid = true;
 
-        String[] array = new String[] { "HerString4", "HisString3", "MyString1", "YourString2" };
+        String[] array = new String[] {"HerString4", "HisString3", "MyString1", "YourString2"};
         int i = 0;
 
         while(this.iterator.hasNext())
@@ -95,27 +95,30 @@ public class TestImmutableIterator
         }
     }
 
-    @Test(expected= ImmutableModifiedThroughReflectionError.class)
+    @Test(expected = ImmutableModifiedThroughReflectionError.class)
     public void testNext02()
     {
         this.valid.valid = false;
         this.iterator.hasNext();
     }
 
-    @Test(expected= ImmutableModifiedThroughReflectionError.class)
+    @Test(expected = ImmutableModifiedThroughReflectionError.class)
     public void testNext03()
     {
         this.valid.valid = false;
         this.iterator.next();
     }
 
-    @Test(expected= ImmutableModifiedThroughReflectionError.class)
+    @Test(expected = ImmutableModifiedThroughReflectionError.class)
     public void testNext04()
     {
-        try {
+        try
+        {
             this.valid.valid = true;
             this.iterator.hasNext();
-        } catch(Throwable t) {
+        }
+        catch(Throwable t)
+        {
             t.printStackTrace();
             fail(t.toString());
         }
@@ -123,17 +126,20 @@ public class TestImmutableIterator
         this.iterator.next();
     }
 
-    @Test(expected= ImmutableModifiedThroughReflectionError.class)
+    @Test(expected = ImmutableModifiedThroughReflectionError.class)
     public void testNext05()
     {
-        try {
+        try
+        {
             this.valid.valid = true;
             this.iterator.hasNext();
             this.iterator.next();
             this.iterator.hasNext();
             this.iterator.next();
             this.iterator.hasNext();
-        } catch(Throwable t) {
+        }
+        catch(Throwable t)
+        {
             t.printStackTrace();
             fail(t.toString());
         }

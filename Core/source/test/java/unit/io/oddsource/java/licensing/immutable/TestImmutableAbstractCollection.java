@@ -39,10 +39,11 @@ public class TestImmutableAbstractCollection
 
     }
 
-    @Test(expected=IllegalArgumentException.class)
+    @Test(expected = IllegalArgumentException.class)
     public void testConstruct01()
     {
-        new ImmutableAbstractCollection<String>(null) {
+        new ImmutableAbstractCollection<String>(null)
+        {
             private static final long serialVersionUID = 1L;
         };
     }

@@ -18,11 +18,11 @@
 
 package io.oddsource.java.licensing;
 
+import static org.junit.Assert.assertArrayEquals;
+
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-
-import static org.junit.Assert.*;
 
 /**
  * Test class for SignedLicense.
@@ -34,7 +34,7 @@ public class TestSignedLicense
     @Before
     public void setUp()
     {
-        this.license = new SignedLicense(new byte[]{ 0x29, 0x7F, 0x3C }, new byte[]{ 0x01, 0x02, 0x77, 0x40, 0x0F });
+        this.license = new SignedLicense(new byte[] {0x29, 0x7F, 0x3C}, new byte[] {0x01, 0x02, 0x77, 0x40, 0x0F});
     }
 
     @After
@@ -46,15 +46,17 @@ public class TestSignedLicense
     @Test
     public void testLicenseContent()
     {
-        assertArrayEquals("The license content is not correct.", new byte[]{ 0x29, 0x7F, 0x3C },
-                          this.license.getLicenseContent());
+        assertArrayEquals("The license content is not correct.", new byte[] {0x29, 0x7F, 0x3C},
+                          this.license.getLicenseContent()
+        );
     }
 
     @Test
     public void testSignatureContent()
     {
-        assertArrayEquals("The signature content is not correct.", new byte[]{ 0x01, 0x02, 0x77, 0x40, 0x0F },
-                          this.license.getSignatureContent());
+        assertArrayEquals("The signature content is not correct.", new byte[] {0x01, 0x02, 0x77, 0x40, 0x0F},
+                          this.license.getSignatureContent()
+        );
     }
 
     @Test
@@ -67,8 +69,10 @@ public class TestSignedLicense
         SignedLicense signedLicense = new ObjectSerializer().readObject(SignedLicense.class, data);
 
         assertArrayEquals("The license content is not correct.",
-                          this.license.getLicenseContent(), signedLicense.getLicenseContent());
+                          this.license.getLicenseContent(), signedLicense.getLicenseContent()
+        );
         assertArrayEquals("The signature content is not correct.",
-                          this.license.getSignatureContent(), signedLicense.getSignatureContent());
+                          this.license.getSignatureContent(), signedLicense.getSignatureContent()
+        );
     }
 }

@@ -32,21 +32,40 @@ public class ObjectDeserializationException extends RuntimeException
 {
     private static final long serialVersionUID = 1L;
 
+    /**
+     * Constructor.
+     */
     public ObjectDeserializationException()
     {
         super("An error occurred while reading the object from the byte array.");
     }
 
+    /**
+     * Constructor.
+     *
+     * @param message The message
+     */
     public ObjectDeserializationException(final String message)
     {
         super(message);
     }
 
+    /**
+     * Constructor.
+     *
+     * @param cause The cause
+     */
     public ObjectDeserializationException(final Throwable cause)
     {
         super("An error occurred while reading the object from the byte array.", cause);
     }
 
+    /**
+     * Constructor.
+     *
+     * @param message The message
+     * @param cause The cause
+     */
     public ObjectDeserializationException(final String message, final Throwable cause)
     {
         super(message, cause);

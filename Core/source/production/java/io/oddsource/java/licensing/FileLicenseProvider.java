@@ -41,15 +41,15 @@ import org.apache.commons.io.FileUtils;
  */
 public class FileLicenseProvider extends DeserializingLicenseProvider
 {
-    protected ClassLoader classLoader;
+    private final ClassLoader classLoader;
 
     private String filePrefix = "";
 
     private String fileSuffix = "";
 
-    private boolean fileOnClasspath = false;
+    private boolean fileOnClasspath;
 
-    private boolean base64Encoded = false;
+    private boolean base64Encoded;
 
     /**
      * Constructs a file-based license provider with the same class loader as the loader of this class and
@@ -101,21 +101,21 @@ public class FileLicenseProvider extends DeserializingLicenseProvider
             return null;
         }
 
+        byte[] data = null;
         try
         {
-            byte[] data = FileUtils.readFileToByteArray(file);
+            data = FileUtils.readFileToByteArray(file);
 
             if(this.isBase64Encoded())
             {
                 data = Base64.decodeBase64(data);
             }
-
-            return data;
         }
-        catch(final IOException e)
+        catch(final IOException ignore)
         {
-            return null;
         }
+
+        return data;
     }
 
     /**
@@ -129,6 +129,8 @@ public class FileLicenseProvider extends DeserializingLicenseProvider
     protected File getLicenseFile(final Object context)
     {
         String fileName = this.getFilePrefix() + context.toString() + this.getFileSuffix();
+
+        File file = null;
 
         if(this.isFileOnClasspath())
         {
@@ -146,13 +148,18 @@ public class FileLicenseProvider extends DeserializingLicenseProvider
             {
                 try
                 {
-                    return new File(url.toURI());
+                    file = new File(url.toURI());
                 }
                 catch(final URISyntaxException e)
                 {
-                    return new File(url.getPath());
+                    file = new File(url.getPath());
                 }
             }
+        }
+
+        if(file != null)
+        {
+            return file;
         }
 
         return fileName == null ? null : new File(fileName);
@@ -268,5 +275,10 @@ public class FileLicenseProvider extends DeserializingLicenseProvider
     public void setBase64Encoded(final boolean base64Encoded)
     {
         this.base64Encoded = base64Encoded;
+    }
+
+    ClassLoader getClassLoader()
+    {
+        return this.classLoader;
     }
 }

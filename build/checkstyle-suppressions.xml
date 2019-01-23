@@ -1,0 +1,45 @@
+<?xml version="1.0"?>
+<!--
+
+    Copyright © 2010-2019 OddSource Code (license@oddsource.io)
+
+    Licensed under the Apache License, Version 2.0 (the "License");
+    you may not use this file except in compliance with the License.
+    You may obtain a copy of the License at
+
+        http://www.apache.org/licenses/LICENSE-2.0
+
+    Unless required by applicable law or agreed to in writing, software
+    distributed under the License is distributed on an "AS IS" BASIS,
+    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    See the License for the specific language governing permissions and
+    limitations under the License.
+
+-->
+<!DOCTYPE suppressions PUBLIC
+    "-//Puppy Crawl//DTD Suppressions 1.0//EN"
+    "http://www.puppycrawl.com/dtds/suppressions_1_0.dtd">
+<suppressions>
+    <suppress files="DefaultLicenseValidator" checks="MultipleStringLiterals" />
+    <suppress files="ImmutableAbstractCollection.java" checks="NoWhitespaceBefore" lines="180" />
+    <suppress files="ImmutableAbstractCollection.java" checks="VisibilityModifier" lines="43" />
+    <suppress files="ImmutableArrayList.java" checks="SuperClone" />
+    <suppress files="ImmutableLinkedHashSet.java" checks="SuperClone" />
+    <suppress files="LicenseManager.java" checks="NoWhitespaceAfter" lines="144" />
+    <suppress files="License.java" checks="SuperClone" />
+    <suppress files="ObjectSerializer.java" checks="NoWhitespaceBefore" lines="67" />
+
+    <suppress files="exception/[A-Za-z0-9]+\.java" checks="MultipleStringLiterals" />
+
+    <suppress files="source/test" checks="AvoidStarImport" />
+    <suppress files="source/test" checks="AvoidStaticImport" />
+    <suppress files="source/test" checks="FinalLocalVariable" />
+    <suppress files="source/test" checks="FinalParameters" />
+    <suppress files="source/test" checks="IllegalThrows" />
+    <suppress files="source/test" checks="JavadocMethod" />
+    <suppress files="source/test" checks="JavadocPackage" />
+    <suppress files="source/test" checks="JavadocType" />
+    <suppress files="source/test" checks="MagicNumber" />
+    <suppress files="source/test" checks="MissingCtor" />
+    <suppress files="source/test" checks="MultipleStringLiterals" />
+</suppressions>

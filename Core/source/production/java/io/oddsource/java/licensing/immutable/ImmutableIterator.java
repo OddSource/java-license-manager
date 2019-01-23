@@ -23,6 +23,8 @@ import java.util.Iterator;
 /**
  * Wraps an iterator such that it cannot be modified.
  *
+ * @param <E> Any object
+ *
  * @author Nick Williams
  * @version 1.0.0
  * @since 1.0.0

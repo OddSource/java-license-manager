@@ -31,21 +31,40 @@ public class ObjectSerializationException extends RuntimeException
 {
     private static final long serialVersionUID = 1L;
 
+    /**
+     * Constructor.
+     */
     public ObjectSerializationException()
     {
         super("An I/O error occurred while writing the object to the byte array.");
     }
 
+    /**
+     * Constructor.
+     *
+     * @param message The message
+     */
     public ObjectSerializationException(final String message)
     {
         super(message);
     }
 
+    /**
+     * Constructor.
+     *
+     * @param cause The cause
+     */
     public ObjectSerializationException(final Throwable cause)
     {
         super("An I/O error occurred while writing the object to the byte array.", cause);
     }
 
+    /**
+     * Constructor.
+     *
+     * @param message The message
+     * @param cause The cause
+     */
     public ObjectSerializationException(final String message, final Throwable cause)
     {
         super(message, cause);

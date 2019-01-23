@@ -33,21 +33,40 @@ public class ExpiredLicenseException extends InvalidLicenseException
 {
     private static final long serialVersionUID = 1L;
 
+    /**
+     * Constructor.
+     */
     public ExpiredLicenseException()
     {
         super("The license has expired.");
     }
 
+    /**
+     * Constructor.
+     *
+     * @param message The message
+     */
     public ExpiredLicenseException(final String message)
     {
         super(message);
     }
 
+    /**
+     * Constructor.
+     *
+     * @param cause The cause
+     */
     public ExpiredLicenseException(final Throwable cause)
     {
         super("The license has expired.", cause);
     }
 
+    /**
+     * Constructor.
+     *
+     * @param message The message
+     * @param cause The cause
+     */
     public ExpiredLicenseException(final String message, final Throwable cause)
     {
         super(message, cause);

@@ -29,6 +29,8 @@ import java.util.Set;
  * prevent tampering with via reflection, but this is well worth it if your goal
  * is security and you truly need an unmodifiable set.
  *
+ * @param <E> Any object
+ *
  * @author Nick Williams
  * @version 1.5.0
  * @since 1.0.0

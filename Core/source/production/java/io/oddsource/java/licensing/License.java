@@ -31,15 +31,39 @@ import io.oddsource.java.licensing.immutable.ImmutableLinkedHashSet;
  * This object is not created directly. For instructions on creating licenses, see the documentation for
  * {@link License.Builder}.
  *
- * @author Nick Williams
- * @version 1.7.0
  * @see License.Builder
  * @see License.Feature
+ * @author Nick Williams
+ * @version 1.7.0
  * @since 1.0.0
  */
 public final class License implements Serializable, Cloneable
 {
     private final static long serialVersionUID = -5844818190125277296L;
+
+    private final static short licensePartsLength = 9;
+
+    private final static short licensePartsProductKey = 0;
+
+    private final static short licensePartsHolder = 1;
+
+    private final static short licensePartsIssuer = 2;
+
+    private final static short licensePartsSubject = 3;
+
+    private final static short licensePartsIssueDate = 4;
+
+    private final static short licensePartsGoodAfterDate = 5;
+
+    private final static short licensePartsGoodBeforeDate = 6;
+
+    private final static short licensePartsNumberOfLicenses = 7;
+
+    private final static short licensePartsFeatures = 8;
+
+    private final static String licenseStringRepresentationSeparator = "][";
+
+    private final static String featureExpirationSeparator = new String(new char[]{0x1F});
 
     private final String productKey;
 
@@ -84,24 +108,25 @@ public final class License implements Serializable, Cloneable
      */
     private License(final String[] parts)
     {
-        if(parts == null || parts.length != 9)
+        if(parts == null || parts.length != License.licensePartsLength)
         {
             throw new IllegalArgumentException("There should be exactly nine parts to the serialized license.");
         }
 
-        this.productKey = parts[0] == null ? "" : parts[0];
-        this.holder = parts[1] == null ? "" : parts[1];
-        this.issuer = parts[2] == null ? "" : parts[2];
-        this.subject = parts[3] == null ? "" : parts[3];
-        this.issueDate = Long.parseLong(parts[4]);
-        this.goodAfterDate = Long.parseLong(parts[5]);
-        this.goodBeforeDate = Long.parseLong(parts[6]);
-        this.numberOfLicenses = Integer.parseInt(parts[7]);
+        this.productKey = parts[License.licensePartsProductKey] == null ? "" : parts[License.licensePartsProductKey];
+        this.holder = parts[License.licensePartsHolder] == null ? "" : parts[License.licensePartsHolder];
+        this.issuer = parts[License.licensePartsIssuer] == null ? "" : parts[License.licensePartsIssuer];
+        this.subject = parts[License.licensePartsSubject] == null ? "" : parts[License.licensePartsSubject];
+        this.issueDate = Long.parseLong(parts[License.licensePartsIssueDate]);
+        this.goodAfterDate = Long.parseLong(parts[License.licensePartsGoodAfterDate]);
+        this.goodBeforeDate = Long.parseLong(parts[License.licensePartsGoodBeforeDate]);
+        this.numberOfLicenses = Integer.parseInt(parts[License.licensePartsNumberOfLicenses]);
 
+        final String featuresPart = parts[License.licensePartsFeatures];
         final Set<License.Feature> features = new LinkedHashSet<>();
-        if(parts[8] != null && parts[8].trim().length() > 0)
+        if(featuresPart != null && featuresPart.trim().length() > 0)
         {
-            for(final String feature : parts[8].split(", "))
+            for(final String feature : featuresPart.split(", "))
             {
                 features.add(License.Feature.fromString(feature));
             }
@@ -198,7 +223,7 @@ public final class License implements Serializable, Cloneable
 
     /**
      * Returns the millisecond timestamp for the date after which this license is valid (usually equal or close to the
-     * issue date, but this is not required.)
+     * issue date, but this is not required).
      *
      * @return the date after which this license is valid.
      */
@@ -559,14 +584,14 @@ public final class License implements Serializable, Cloneable
     {
         //noinspection StringBufferReplaceableByString
         return new StringBuilder().append('[').
-            append(this.productKey == null ? "" : this.productKey).append("][").
-            append(this.holder == null ? "" : this.holder).append("][").
-            append(this.issuer == null ? "" : this.issuer).append("][").
-            append(this.subject == null ? "" : this.subject).append("][").
-            append(this.issueDate).append("][").
-            append(this.goodAfterDate).append("][").
-            append(this.goodBeforeDate).append("][").
-            append(this.numberOfLicenses).append(']').
+            append(this.productKey == null ? "" : this.productKey).append(License.licenseStringRepresentationSeparator).
+            append(this.holder == null ? "" : this.holder).append(License.licenseStringRepresentationSeparator).
+            append(this.issuer == null ? "" : this.issuer).append(License.licenseStringRepresentationSeparator).
+            append(this.subject == null ? "" : this.subject).append(License.licenseStringRepresentationSeparator).
+            append(this.issueDate).append(License.licenseStringRepresentationSeparator).
+            append(this.goodAfterDate).append(License.licenseStringRepresentationSeparator).
+            append(this.goodBeforeDate).append(License.licenseStringRepresentationSeparator).
+            append(this.numberOfLicenses).append(License.licenseStringRepresentationSeparator).
             append(this.features).toString();
     }
 
@@ -605,10 +630,10 @@ public final class License implements Serializable, Cloneable
      * This object is not created directly. For instructions on using features, see the documentation for
      * {@link License.Builder}.
      *
-     * @author Nick Williams
-     * @version 1.2.0
      * @see License
      * @see License.Builder
+     * @author Nick Williams
+     * @version 1.2.0
      * @since 1.0.0
      */
     public static final class Feature implements Cloneable, Serializable, FeatureObject
@@ -652,10 +677,10 @@ public final class License implements Serializable, Cloneable
         {
             if(input == null)
             {
-                throw new IllegalArgumentException("The input argument did not contain exactly two parts.");
+                throw new IllegalArgumentException("The input argument cannot be null.");
             }
 
-            final String[] parts = input.split("" + (char) 0x1F);
+            final String[] parts = input.split(License.featureExpirationSeparator);
             if(parts.length != 2)
             {
                 throw new IllegalArgumentException("The input argument did not contain exactly two parts.");
@@ -716,14 +741,14 @@ public final class License implements Serializable, Cloneable
         }
 
         /**
-         * Generates a string representation of this feature (name and expiration date separated by 0x1F.
+         * Generates a string representation of this feature (name and expiration date separated by 0x1F).
          *
          * @return the string representation of this feature.
          */
         @Override
         public final String toString()
         {
-            return this.name + (char) 0x1F + this.goodBeforeDate;
+            return this.name + License.featureExpirationSeparator + this.goodBeforeDate;
         }
 
         /**
@@ -763,6 +788,11 @@ public final class License implements Serializable, Cloneable
         private long goodBeforeDate;
 
         private int numberOfLicenses = Integer.MAX_VALUE;
+
+        private Builder()
+        {
+
+        }
 
         /**
          * Sets the product key for this license. The productKey, {@link #withIssuer(String) issuer},
@@ -820,8 +850,7 @@ public final class License implements Serializable, Cloneable
 
         /**
          * Sets the subject for this license. The {@link #withProductKey(String) productKey}, {@link #withIssuer(String)
-         * issuer},
-         * {@link #withHolder(String) holder}, and subject are symbolically named; they are interchangeable
+         * issuer}, {@link #withHolder(String) holder}, and subject are symbolically named; they are interchangeable
          * and can be used to hold any number of pieces of information. For example, one might use the holder to store
          * a
          * hardware ID, or the subject to store a product name and version combination.
@@ -851,7 +880,7 @@ public final class License implements Serializable, Cloneable
 
         /**
          * Sets the valid date (millisecond timestamp) for this license (usually the equal or close to the issue date,
-         * but that is not required.)
+         * but that is not required).
          *
          * @param goodAfterDate The date after which this license is valid
          *
@@ -902,13 +931,6 @@ public final class License implements Serializable, Cloneable
             return this;
         }
 
-        @Deprecated
-        @SuppressWarnings("unused")
-        public Builder withFeature(final String featureName)
-        {
-            return this.addFeature(featureName);
-        }
-
         /**
          * Adds a feature to this license with the specified expiration date (millisecond timestamp).
          *
@@ -923,13 +945,6 @@ public final class License implements Serializable, Cloneable
             return this;
         }
 
-        @Deprecated
-        @SuppressWarnings("unused")
-        public Builder withFeature(final String featureName, final long goodBeforeDate)
-        {
-            return this.addFeature(featureName, goodBeforeDate);
-        }
-
         /**
          * Adds the existing feature object to this license.
          *
@@ -937,17 +952,11 @@ public final class License implements Serializable, Cloneable
          *
          * @return the builder instance.
          */
+        @SuppressWarnings("UnusedReturnValue")
         public Builder addFeature(final License.Feature feature)
         {
             this.features.add(feature);
             return this;
-        }
-
-        @Deprecated
-        @SuppressWarnings("unused")
-        public Builder withFeature(final License.Feature feature)
-        {
-            return this.addFeature(feature);
         }
 
         /**

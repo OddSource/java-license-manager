@@ -30,21 +30,40 @@ public class CorruptSignatureException extends RuntimeException
 {
     private static final long serialVersionUID = 1L;
 
+    /**
+     * Constructor.
+     */
     public CorruptSignatureException()
     {
         super("The signature provided is corrupt or not a signature.");
     }
 
+    /**
+     * Constructor.
+     *
+     * @param message The message
+     */
     public CorruptSignatureException(final String message)
     {
         super(message);
     }
 
+    /**
+     * Constructor.
+     *
+     * @param cause The cause
+     */
     public CorruptSignatureException(final Throwable cause)
     {
         super("The signature provided is corrupt or not a signature.", cause);
     }
 
+    /**
+     * Constructor.
+     *
+     * @param message The message
+     * @param cause The cause
+     */
     public CorruptSignatureException(final String message, final Throwable cause)
     {
         super(message, cause);

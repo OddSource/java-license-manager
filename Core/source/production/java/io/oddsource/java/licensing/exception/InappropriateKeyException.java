@@ -31,21 +31,40 @@ public class InappropriateKeyException extends RuntimeException
 {
     private static final long serialVersionUID = 1L;
 
+    /**
+     * Constructor.
+     */
     public InappropriateKeyException()
     {
         super("The specified key is inappropriate for the cipher.");
     }
 
+    /**
+     * Constructor.
+     *
+     * @param message The message
+     */
     public InappropriateKeyException(final String message)
     {
         super(message);
     }
 
+    /**
+     * Constructor.
+     *
+     * @param cause The cause
+     */
     public InappropriateKeyException(final Throwable cause)
     {
         super("The specified key is inappropriate for the cipher.", cause);
     }
 
+    /**
+     * Constructor.
+     *
+     * @param message The message
+     * @param cause The cause
+     */
     public InappropriateKeyException(final String message, final Throwable cause)
     {
         super(message, cause);

@@ -30,32 +30,64 @@ public class ObjectTypeNotExpectedException extends ObjectDeserializationExcepti
 {
     private static final long serialVersionUID = 1L;
 
+    /**
+     * Constructor.
+     */
     public ObjectTypeNotExpectedException()
     {
         super("The type of object read did not match the type expected.");
     }
 
+    /**
+     * Constructor.
+     *
+     * @param message The message
+     */
     public ObjectTypeNotExpectedException(final String message)
     {
         super(message);
     }
 
+    /**
+     * Constructor.
+     *
+     * @param expectedType The expected type
+     * @param encounteredType The encountered type
+     */
     public ObjectTypeNotExpectedException(final String expectedType, final String encounteredType)
     {
         super("While deserializing an object of expected type \"" + expectedType + "\", got an object of type \"" +
               encounteredType + "\" instead.");
     }
 
+    /**
+     * Constructor.
+     *
+     * @param cause The cause.
+     */
     public ObjectTypeNotExpectedException(final Throwable cause)
     {
         super("The type of object read did not match the type expected.", cause);
     }
 
+    /**
+     * Constructor.
+     *
+     * @param message The message
+     * @param cause The cause
+     */
     public ObjectTypeNotExpectedException(final String message, final Throwable cause)
     {
         super(message, cause);
     }
 
+    /**
+     * Constructor.
+     *
+     * @param expectedType The expected type
+     * @param encounteredType The encountered type
+     * @param cause The cause
+     */
     public ObjectTypeNotExpectedException(
         final String expectedType,
         final String encounteredType,

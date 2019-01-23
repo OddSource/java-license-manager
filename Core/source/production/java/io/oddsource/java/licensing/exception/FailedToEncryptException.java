@@ -32,21 +32,40 @@ public class FailedToEncryptException extends RuntimeException
 {
     private static final long serialVersionUID = 1L;
 
+    /**
+     * Constructor.
+     */
     public FailedToEncryptException()
     {
         super("Failed to decrypt the data. Either the password was incorrect or the data was corrupt.");
     }
 
+    /**
+     * Constructor.
+     *
+     * @param message The message
+     */
     public FailedToEncryptException(final String message)
     {
         super(message);
     }
 
+    /**
+     * Constructor.
+     *
+     * @param cause The cause
+     */
     public FailedToEncryptException(final Throwable cause)
     {
         super("Failed to decrypt the data. Either the password was incorrect or the data was corrupt.", cause);
     }
 
+    /**
+     * Constructor.
+     *
+     * @param message The message
+     * @param cause The cause
+     */
     public FailedToEncryptException(final String message, final Throwable cause)
     {
         super(message, cause);

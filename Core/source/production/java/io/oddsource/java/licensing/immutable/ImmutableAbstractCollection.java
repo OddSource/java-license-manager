@@ -27,6 +27,8 @@ import java.util.Collection;
  * prevent tampering with via reflection, but this is well worth it if your goal
  * is security and you truly need an unmodifiable collection.
  *
+ * @param <E> Any object
+ *
  * @author Nick Williams
  * @version 1.0.0
  * @since 1.0.0
@@ -34,9 +36,11 @@ import java.util.Collection;
 public abstract class ImmutableAbstractCollection<E> extends ValidObject
     implements Immutable, Collection<E>, Serializable
 {
+    protected final static String modificationProhibited = "This collection cannot be modified.";
+
     private final static long serialVersionUID = -4187794066638697055L;
 
-    final Collection<E> internalCollection;
+    protected final Collection<E> internalCollection;
 
     private final int internalSize;
 
@@ -191,36 +195,36 @@ public abstract class ImmutableAbstractCollection<E> extends ValidObject
     @Override
     public final boolean add(final E e)
     {
-        throw new UnsupportedOperationException("This collection cannot be modified.");
+        throw new UnsupportedOperationException(ImmutableAbstractCollection.modificationProhibited);
     }
 
     @Override
     public final boolean addAll(final Collection<? extends E> c)
     {
-        throw new UnsupportedOperationException("This collection cannot be modified.");
+        throw new UnsupportedOperationException(ImmutableAbstractCollection.modificationProhibited);
     }
 
     @Override
     public final void clear()
     {
-        throw new UnsupportedOperationException("This collection cannot be modified.");
+        throw new UnsupportedOperationException(ImmutableAbstractCollection.modificationProhibited);
     }
 
     @Override
     public final boolean remove(final Object o)
     {
-        throw new UnsupportedOperationException("This collection cannot be modified.");
+        throw new UnsupportedOperationException(ImmutableAbstractCollection.modificationProhibited);
     }
 
     @Override
     public final boolean removeAll(final Collection<?> c)
     {
-        throw new UnsupportedOperationException("This collection cannot be modified.");
+        throw new UnsupportedOperationException(ImmutableAbstractCollection.modificationProhibited);
     }
 
     @Override
     public final boolean retainAll(final Collection<?> c)
     {
-        throw new UnsupportedOperationException("This collection cannot be modified.");
+        throw new UnsupportedOperationException(ImmutableAbstractCollection.modificationProhibited);
     }
 }

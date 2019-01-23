@@ -35,5 +35,5 @@ public interface LicenseProvider
      *
      * @return the signed license object.
      */
-    SignedLicense getLicense(Object context);
+    public abstract SignedLicense getLicense(Object context);
 }

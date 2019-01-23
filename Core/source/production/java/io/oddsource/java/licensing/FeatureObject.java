@@ -28,5 +28,10 @@ package io.oddsource.java.licensing;
  */
 public interface FeatureObject
 {
-    String getName();
+    /**
+     * Returns the name of this feature.
+     *
+     * @return The name
+     */
+    public abstract String getName();
 }

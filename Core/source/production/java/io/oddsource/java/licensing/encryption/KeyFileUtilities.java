@@ -41,10 +41,27 @@ import io.oddsource.java.licensing.exception.InappropriateKeySpecificationExcept
  * @version 1.0.0
  * @since 1.0.0
  */
-public class KeyFileUtilities
+public final class KeyFileUtilities
 {
+    /**
+     * The standard key algorithm used for all of our keys.
+     */
     public static final String keyAlgorithm = "RSA";
 
+    private KeyFileUtilities()
+    {
+        throw new AssertionError("This class cannot be instantiated.");
+    }
+
+    /**
+     * Encrypts and writes the private key to this file.
+     *
+     * @param privateKey The private key
+     * @param file The file
+     * @param passphrase The passphrase with which to protect the key
+     *
+     * @throws IOException if writing fails.
+     */
     protected static void writeEncryptedPrivateKey(
         final PrivateKey privateKey,
         final File file,
@@ -56,34 +73,71 @@ public class KeyFileUtilities
         FileUtils.writeByteArrayToFile(file, KeyFileUtilities.writeEncryptedPrivateKey(privateKey, passphrase));
     }
 
-    protected static void writeEncryptedPublicKey(final PublicKey publicKey, final File file, final char[] passphrase)
-        throws IOException
-    {
-        FileUtils.writeByteArrayToFile(file, KeyFileUtilities.writeEncryptedPublicKey(publicKey, passphrase));
-    }
-
-    protected static PrivateKey readEncryptedPrivateKey(final File file, final char[] passphrase) throws IOException
-    {
-        return KeyFileUtilities.readEncryptedPrivateKey(FileUtils.readFileToByteArray(file), passphrase);
-    }
-
-    protected static PublicKey readEncryptedPublicKey(final File file, final char[] passphrase) throws IOException
-    {
-        return KeyFileUtilities.readEncryptedPublicKey(FileUtils.readFileToByteArray(file), passphrase);
-    }
-
+    /**
+     * Encrypts and writes the private key to a byte array and returns it.
+     *
+     * @param privateKey The private key
+     * @param passphrase The passphrase with which to protect the key
+     *
+     * @return the encrypted private key bytes.
+     */
     protected static byte[] writeEncryptedPrivateKey(final PrivateKey privateKey, final char[] passphrase)
     {
         final PKCS8EncodedKeySpec pkcs8EncodedKeySpec = new PKCS8EncodedKeySpec(privateKey.getEncoded());
         return Encryptor.encryptRaw(pkcs8EncodedKeySpec.getEncoded(), passphrase);
     }
 
+    /**
+     * Encrypts and writes the public key to this file.
+     *
+     * @param publicKey The public key
+     * @param file The file
+     * @param passphrase The passphrase with which to protect the key
+     *
+     * @throws IOException if writing fails.
+     */
+    protected static void writeEncryptedPublicKey(final PublicKey publicKey, final File file, final char[] passphrase)
+        throws IOException
+    {
+        FileUtils.writeByteArrayToFile(file, KeyFileUtilities.writeEncryptedPublicKey(publicKey, passphrase));
+    }
+
+    /**
+     * Encrypts and writes the public key to a byte array and returns it.
+     *
+     * @param publicKey The public key
+     * @param passphrase The passphrase with which to protect the key
+     *
+     * @return the encrypted public key bytes.
+     */
     protected static byte[] writeEncryptedPublicKey(final PublicKey publicKey, final char[] passphrase)
     {
         final X509EncodedKeySpec x509EncodedKeySpec = new X509EncodedKeySpec(publicKey.getEncoded());
         return Encryptor.encryptRaw(x509EncodedKeySpec.getEncoded(), passphrase);
     }
 
+    /**
+     * Reads and decrypts the encrypted private key from this file.
+     *
+     * @param file The file
+     * @param passphrase The passphrase with which the key was protected
+     *
+     * @return the read, decrypted private key.
+     * @throws IOException if reading fails.
+     */
+    protected static PrivateKey readEncryptedPrivateKey(final File file, final char[] passphrase) throws IOException
+    {
+        return KeyFileUtilities.readEncryptedPrivateKey(FileUtils.readFileToByteArray(file), passphrase);
+    }
+
+    /**
+     * Reads and decrypts the encrypted private key from the provided bytes.
+     *
+     * @param fileContents The encrypted key bytes
+     * @param passphrase The passphrase with which the key was protected
+     *
+     * @return the decrypted private key.
+     */
     public static PrivateKey readEncryptedPrivateKey(final byte[] fileContents, final char[] passphrase)
     {
         final PKCS8EncodedKeySpec privateKeySpec = new PKCS8EncodedKeySpec(
@@ -104,6 +158,29 @@ public class KeyFileUtilities
         }
     }
 
+    /**
+     * Reads and decrypts the encrypted public key from this file.
+     *
+     * @param file The file
+     * @param passphrase The passphrase with which the key was protected
+     *
+     * @return the read, decrypted public key.
+     *
+     * @throws IOException if reading fails.
+     */
+    protected static PublicKey readEncryptedPublicKey(final File file, final char[] passphrase) throws IOException
+    {
+        return KeyFileUtilities.readEncryptedPublicKey(FileUtils.readFileToByteArray(file), passphrase);
+    }
+
+    /**
+     * Reads and decrypts the encrypted public key from the provided bytes.
+     *
+     * @param fileContents The encrypted key bytes
+     * @param passphrase The passphrase with which the key was protected
+     *
+     * @return the decrypted public key.
+     */
     public static PublicKey readEncryptedPublicKey(final byte[] fileContents, final char[] passphrase)
     {
         final X509EncodedKeySpec publicKeySpec = new X509EncodedKeySpec(Encryptor.decryptRaw(fileContents, passphrase));
@@ -120,10 +197,5 @@ public class KeyFileUtilities
         {
             throw new InappropriateKeySpecificationException(e);
         }
-    }
-
-    private KeyFileUtilities()
-    {
-        throw new RuntimeException("This class cannot be instantiated.");
     }
 }

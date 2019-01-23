@@ -59,15 +59,19 @@ import io.oddsource.java.licensing.exception.ObjectTypeNotExpectedException;
  * called and cannot be disabled. For more information on how it works, see the JavaDoc for the
  * {@link LicenseSecurityManager}.
  *
- * @author Nick Williams
- * @version 1.0.2
  * @see LicenseSecurityManager
  * @see InsecureEnvironmentError
+ * @author Nick Williams
+ * @version 1.0.2
  * @since 1.0.0
  */
 public final class LicenseManager
 {
-    private static LicenseManager instance = null;
+    private static final int defaultCacheTimeInMillis = 10 * 1000;
+
+    private static final int millisecondsPerMinute = 60 * 1000;
+
+    private static LicenseManager instance;
 
     private final PublicKeyDataProvider publicKeyDataProvider;
 
@@ -119,7 +123,9 @@ public final class LicenseManager
                                        LicenseManagerProperties.getPublicKeyPasswordProvider() :
                                        LicenseManagerProperties.getLicensePasswordProvider();
         this.licenseValidator = LicenseManagerProperties.getLicenseValidator();
-        this.cacheTimeInMilliseconds = cacheTimeInMinutes < 1 ? (10 * 1000) : (cacheTimeInMinutes * 60 * 1000);
+        this.cacheTimeInMilliseconds = cacheTimeInMinutes < 1 ?
+                                       LicenseManager.defaultCacheTimeInMillis :
+                                       (cacheTimeInMinutes * LicenseManager.millisecondsPerMinute);
     }
 
     /**
@@ -423,10 +429,8 @@ public final class LicenseManager
      * @throws FailedToDecryptException if the license or signature could not be decrypted.
      * @throws ObjectTypeNotExpectedException if the license data was tampered with.
      */
-    public final License getLicense(final Object context) throws KeyNotFoundException, AlgorithmNotSupportedException,
-                                                                 InappropriateKeySpecificationException,
-                                                                 InappropriateKeyException, CorruptSignatureException,
-                                                                 InvalidSignatureException, FailedToDecryptException
+    public final License getLicense(final Object context)
+        throws KeyNotFoundException, CorruptSignatureException, InvalidSignatureException, FailedToDecryptException
     {
         if(context == null)
         {
@@ -504,16 +508,13 @@ public final class LicenseManager
         throws AlgorithmNotSupportedException, InappropriateKeyException, CorruptSignatureException,
                InvalidSignatureException
     {
-        final PublicKey key;
-        {
-            final char[] password = this.publicKeyPasswordProvider.getPassword();
-            final byte[] keyData = this.publicKeyDataProvider.getEncryptedPublicKeyData();
+        final char[] password = this.publicKeyPasswordProvider.getPassword();
+        final byte[] keyData = this.publicKeyDataProvider.getEncryptedPublicKeyData();
 
-            key = KeyFileUtilities.readEncryptedPublicKey(keyData, password);
+        final PublicKey key = KeyFileUtilities.readEncryptedPublicKey(keyData, password);
 
-            Arrays.fill(password, '\u0000');
-            Arrays.fill(keyData, (byte) 0);
-        }
+        Arrays.fill(password, '\u0000');
+        Arrays.fill(keyData, (byte) 0);
 
         new DataSignatureManager().verifySignature(
             key, signedLicense.getLicenseContent(), signedLicense.getSignatureContent()
@@ -541,25 +542,20 @@ public final class LicenseManager
      */
     public final License decryptAndVerifyLicense(final SignedLicense signedLicense)
     {
-        final License license;
-        {
-            final byte[] unencrypted;
-            {
-                this.verifyLicenseSignature(signedLicense);
+        this.verifyLicenseSignature(signedLicense);
 
-                final char[] password = this.licensePasswordProvider.getPassword();
-                final byte[] encrypted = signedLicense.getLicenseContent();
+        final char[] password = this.licensePasswordProvider.getPassword();
+        final byte[] encrypted = signedLicense.getLicenseContent();
 
-                unencrypted = Encryptor.decryptRaw(encrypted, password);
+        final byte[] unencrypted = Encryptor.decryptRaw(encrypted, password);
 
-                Arrays.fill(password, '\u0000');
-                Arrays.fill(encrypted, (byte) 0);
-            }
+        Arrays.fill(password, '\u0000');
+        Arrays.fill(encrypted, (byte) 0);
 
-            license = License.deserialize(unencrypted);
+        final License license = License.deserialize(unencrypted);
 
-            Arrays.fill(unencrypted, (byte) 0);
-        }
+        Arrays.fill(unencrypted, (byte) 0);
+
         return license;
     }
 

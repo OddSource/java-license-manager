@@ -35,6 +35,14 @@ import io.oddsource.java.licensing.exception.InvalidLicenseException;
 public class DefaultLicenseValidator implements LicenseValidator
 {
     /**
+     * Constructor.
+     */
+    public DefaultLicenseValidator()
+    {
+
+    }
+
+    /**
      * Ensures the current date is between the license's good-after and good-before dates (the license
      * has taken effect and hasn't expired).
      *
@@ -66,11 +74,26 @@ public class DefaultLicenseValidator implements LicenseValidator
         }
     }
 
+    /**
+     * Gets a description for the given license, usually for displaying in some user interface.
+     *
+     * @param license The license
+     *
+     * @return the description.
+     */
     public String getLicenseDescription(final License license)
     {
         return license.getSubject() + " license for " + license.getHolder();
     }
 
+    /**
+     * Gets a formatted date from the given milliseconds since January 1, 1970, 00:00:00 GMT, usually for displaying in
+     * some user interface.
+     *
+     * @param time The milliseconds since January 1, 1970, 00:00:00 GMT
+     *
+     * @return the formatted date.
+     */
     public String getFormattedDate(final long time)
     {
         return new SimpleDateFormat("EEE, d MMM yyyy HH:mm:ss z (Z)").format(new Date(time));

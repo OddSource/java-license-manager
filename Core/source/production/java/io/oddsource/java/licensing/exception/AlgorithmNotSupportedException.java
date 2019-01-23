@@ -31,21 +31,40 @@ public class AlgorithmNotSupportedException extends RuntimeException
 {
     private static final long serialVersionUID = 1L;
 
+    /**
+     * Constructor.
+     */
     public AlgorithmNotSupportedException()
     {
         super("The specified algorithm is not supported on this system.");
     }
 
+    /**
+     * Constructor.
+     *
+     * @param algorithm The algorithm
+     */
     public AlgorithmNotSupportedException(final String algorithm)
     {
         super("The algorithm \"" + algorithm + "\" is not supported on this system.");
     }
 
+    /**
+     * Constructor.
+     *
+     * @param cause The cause
+     */
     public AlgorithmNotSupportedException(final Throwable cause)
     {
         super(cause);
     }
 
+    /**
+     * Constructor.
+     *
+     * @param algorithm The algorithm
+     * @param cause The cause
+     */
     public AlgorithmNotSupportedException(final String algorithm, final Throwable cause)
     {
         super("The algorithm \"" + algorithm + "\" is not supported on this system.", cause);

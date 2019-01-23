@@ -44,6 +44,14 @@ public final class LicenseManagerProperties
     private static int cacheTimeInMinutes;
 
     /**
+     * This class cannot be instantiated.
+     */
+    private LicenseManagerProperties()
+    {
+        throw new AssertionError("This class cannot be instantiated.");
+    }
+
+    /**
      * Sets the provider of the data for the public key companion to the private key used to sign the license
      * object.<br />
      * <br />
@@ -151,13 +159,5 @@ public final class LicenseManagerProperties
     static int getCacheTimeInMinutes()
     {
         return cacheTimeInMinutes;
-    }
-
-    /**
-     * This class cannot be instantiated.
-     */
-    private LicenseManagerProperties()
-    {
-        throw new RuntimeException("This class cannot be instantiated.");
     }
 }

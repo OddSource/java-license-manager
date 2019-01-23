@@ -46,5 +46,5 @@ public interface LicenseValidator
      *     exception is encouraged.
      * @throws ExpiredLicenseException when the license is expired.
      */
-    void validateLicense(License license) throws InvalidLicenseException;
+    public abstract void validateLicense(License license) throws InvalidLicenseException;
 }

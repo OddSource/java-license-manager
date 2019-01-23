@@ -29,6 +29,8 @@ import java.util.List;
  * prevent tampering with via reflection, but this is well worth it if your goal
  * is security and you truly need an unmodifiable list.
  *
+ * @param <E> Any object
+ *
  * @author Nick Williams
  * @version 1.0.0
  * @since 1.0.0
@@ -130,24 +132,24 @@ public final class ImmutableArrayList<E> extends ImmutableAbstractCollection<E>
     @Override
     public final void add(final int index, final E e)
     {
-        throw new UnsupportedOperationException("This list cannot be modified.");
+        throw new UnsupportedOperationException(ImmutableAbstractCollection.modificationProhibited);
     }
 
     @Override
     public final boolean addAll(final int index, final Collection<? extends E> c)
     {
-        throw new UnsupportedOperationException("This list cannot be modified.");
+        throw new UnsupportedOperationException(ImmutableAbstractCollection.modificationProhibited);
     }
 
     @Override
     public final E remove(final int index)
     {
-        throw new UnsupportedOperationException("This list cannot be modified.");
+        throw new UnsupportedOperationException(ImmutableAbstractCollection.modificationProhibited);
     }
 
     @Override
     public final E set(final int index, final E e)
     {
-        throw new UnsupportedOperationException("This list cannot be modified.");
+        throw new UnsupportedOperationException(ImmutableAbstractCollection.modificationProhibited);
     }
 }

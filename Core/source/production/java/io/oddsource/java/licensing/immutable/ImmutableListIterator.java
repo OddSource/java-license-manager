@@ -23,6 +23,8 @@ import java.util.ListIterator;
 /**
  * Wraps a list iterator such that it cannot be modified.
  *
+ * @param <E> Any object
+ *
  * @author Nick Williams
  * @version 1.0.0
  * @since x.x.x
@@ -102,18 +104,18 @@ public final class ImmutableListIterator<E> implements Immutable, ListIterator<E
     @Override
     public void add(final E e)
     {
-        throw new UnsupportedOperationException("This iterator cannot be modified.");
+        throw new UnsupportedOperationException(ImmutableAbstractCollection.modificationProhibited);
     }
 
     @Override
     public void remove()
     {
-        throw new UnsupportedOperationException("This iterator cannot be modified.");
+        throw new UnsupportedOperationException(ImmutableAbstractCollection.modificationProhibited);
     }
 
     @Override
     public void set(final E e)
     {
-        throw new UnsupportedOperationException("This iterator cannot be modified.");
+        throw new UnsupportedOperationException(ImmutableAbstractCollection.modificationProhibited);
     }
 }

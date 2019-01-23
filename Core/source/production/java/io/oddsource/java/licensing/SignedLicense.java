@@ -22,8 +22,7 @@ import java.io.Serializable;
 import java.util.Arrays;
 
 /**
- * This class contains the encrypted license content and the signature for the
- * encrypted license content.
+ * This class contains the encrypted license content and the signature for the encrypted license content.
  *
  * @author Nick Williams
  * @version 1.0.0
@@ -37,6 +36,12 @@ public final class SignedLicense implements Serializable
 
     private final byte[] signatureContent;
 
+    /**
+     * Constructor.
+     *
+     * @param licenseContent The license content
+     * @param signatureContent The signature for the license content
+     */
     public SignedLicense(final byte[] licenseContent, final byte[] signatureContent)
     {
         this.licenseContent = Arrays.copyOf(licenseContent, licenseContent.length);

@@ -33,7 +33,7 @@ import io.oddsource.java.licensing.exception.AlgorithmNotSupportedException;
  * @version 1.0.0
  * @since 1.0.0
  */
-public class Hasher
+public final class Hasher
 {
     /**
      * The algorithm we use to hash strings.
@@ -44,6 +44,14 @@ public class Hasher
      * The salt that we use to hash strings.
      */
     private static final String salt = "j4KgU305PZp't.\"%ordAY7q*?z9%8]amNL(0Wx5eG49b1sRj(^;8Kg2w0EoM";
+
+    /**
+     * This class cannot be instantiated.
+     */
+    private Hasher()
+    {
+        throw new RuntimeException("This class cannot be instantiated.");
+    }
 
     /**
      * Calculate the SHA-512 message digest hash of the
@@ -71,13 +79,5 @@ public class Hasher
         {
             throw new AlgorithmNotSupportedException(Hasher.algorithm, e);
         }
-    }
-
-    /**
-     * This class cannot be instantiated.
-     */
-    private Hasher()
-    {
-        throw new RuntimeException("This class cannot be instantiated.");
     }
 }

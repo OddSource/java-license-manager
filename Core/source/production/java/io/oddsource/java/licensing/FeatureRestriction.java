@@ -39,7 +39,17 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 public @interface FeatureRestriction
 {
+    /**
+     * The enum value.
+     *
+     * @return the value.
+     */
     String[] value();
 
+    /**
+     * The operand that applies to this feature restriction.
+     *
+     * @return the operand.
+     */
     FeatureRestrictionOperand operand() default FeatureRestrictionOperand.AND;
 }

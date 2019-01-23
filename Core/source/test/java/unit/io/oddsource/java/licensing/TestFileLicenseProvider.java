@@ -55,7 +55,7 @@ public class TestFileLicenseProvider
     public void testConstructor01()
     {
         assertSame("The class loader is not correct.",
-                   FileLicenseProvider.class.getClassLoader(), this.provider.classLoader);
+                   FileLicenseProvider.class.getClassLoader(), this.provider.getClassLoader());
         assertFalse("The classpath should be false.", this.provider.isFileOnClasspath());
     }
 
@@ -73,7 +73,7 @@ public class TestFileLicenseProvider
 
         this.provider = new FileLicenseProvider(classLoader);
 
-        assertSame("The class loader is not correct.", classLoader, this.provider.classLoader);
+        assertSame("The class loader is not correct.", classLoader, this.provider.getClassLoader());
         assertTrue("The classpath flag should be true.", this.provider.isFileOnClasspath());
     }
 

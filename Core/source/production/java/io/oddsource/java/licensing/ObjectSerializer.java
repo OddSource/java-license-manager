@@ -41,12 +41,21 @@ import io.oddsource.java.licensing.exception.ObjectTypeNotExpectedException;
 public final class ObjectSerializer
 {
     /**
+     * Constructor.
+     */
+    public ObjectSerializer()
+    {
+
+    }
+
+    /**
      * Deserializes an object of the specified type from the provided byte stream.
      *
      * @param expectedType The type that is expected to be retrieved from {@code byteStream} (must implement {@link
      *     Serializable})
      * @param byteStream The byte stream to retrieve the object from (it must contain exactly one object, of the
      *     exact type passed to {@code expectedType})
+     * @param <T> Any serializable object type
      *
      * @return the requested unserialized object, presumably in the stream.
      *

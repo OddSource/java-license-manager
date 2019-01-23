@@ -40,6 +40,25 @@ import io.oddsource.java.licensing.exception.InvalidSignatureException;
  */
 public final class DataSignatureManager
 {
+    /**
+     * Constructs a data signature manager.
+     */
+    public DataSignatureManager()
+    {
+
+    }
+
+    /**
+     * Signs the given data using the provided private key and returns the signature bytes.
+     *
+     * @param key The private key with which to sign the data
+     * @param data The data to sign
+     *
+     * @return the signature content.
+     *
+     * @throws AlgorithmNotSupportedException if the signature algorithm is not supported.
+     * @throws InappropriateKeyException if the key is not a proper key for signing.
+     */
     public final byte[] signData(final PrivateKey key, final byte[] data)
         throws AlgorithmNotSupportedException, InappropriateKeyException
     {
@@ -51,7 +70,7 @@ public final class DataSignatureManager
         }
         catch(final InvalidKeyException e)
         {
-            throw new InappropriateKeyException("While initializing the signature object with the public key.", e);
+            throw new InappropriateKeyException("Failed to initialize the signature object with the private key.", e);
         }
 
         try
@@ -60,7 +79,7 @@ public final class DataSignatureManager
         }
         catch(final SignatureException e)
         {
-            throw new RuntimeException("This should never happen.", e);
+            throw new RuntimeException("Programming error on signature.update(data) (sign).", e);
         }
 
         try
@@ -69,10 +88,22 @@ public final class DataSignatureManager
         }
         catch(final SignatureException e)
         {
-            throw new RuntimeException("This should never happen.", e);
+            throw new RuntimeException("Programming error on signature.sign().", e);
         }
     }
 
+    /**
+     * Verifies the given signature on the given data using the given public key.
+     *
+     * @param key The public key with which to verify the signature
+     * @param data The data that was signed
+     * @param signatureContent The signature to verify
+     *
+     * @throws AlgorithmNotSupportedException if the signature algorithm is not supported.
+     * @throws InappropriateKeyException if the key is not a proper key for signature verification.
+     * @throws CorruptSignatureException if the signature was corrupt.
+     * @throws InvalidSignatureException if the signature was not valid.
+     */
     public final void verifySignature(final PublicKey key, final byte[] data, final byte[] signatureContent)
         throws AlgorithmNotSupportedException, InappropriateKeyException, CorruptSignatureException,
                InvalidSignatureException
@@ -85,7 +116,7 @@ public final class DataSignatureManager
         }
         catch(final InvalidKeyException e)
         {
-            throw new InappropriateKeyException("While initializing the signature object with the public key.", e);
+            throw new InappropriateKeyException("Failed to initialize the signature object with the public key.", e);
         }
 
         try
@@ -94,7 +125,7 @@ public final class DataSignatureManager
         }
         catch(final SignatureException e)
         {
-            throw new RuntimeException("This should never happen.", e);
+            throw new RuntimeException("Programming error on signature.update(data) (verify).", e);
         }
 
         try
@@ -106,12 +137,11 @@ public final class DataSignatureManager
         }
         catch(final SignatureException e)
         {
-            throw new CorruptSignatureException("While verifying the signature.", e);
+            throw new CorruptSignatureException("The license signature is corrupt.", e);
         }
     }
 
-    @SuppressWarnings("FinalPrivateMethod")
-    private final Signature getSignature()
+    private Signature getSignature()
     {
         try
         {

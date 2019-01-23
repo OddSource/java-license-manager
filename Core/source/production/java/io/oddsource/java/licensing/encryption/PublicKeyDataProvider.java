@@ -48,5 +48,5 @@ public interface PublicKeyDataProvider
      * @throws KeyNotFoundException if the key data could not be retrieved; an acceptable message or chained cause
      *     must be provided.
      */
-    public byte[] getEncryptedPublicKeyData() throws KeyNotFoundException;
+    public abstract byte[] getEncryptedPublicKeyData() throws KeyNotFoundException;
 }

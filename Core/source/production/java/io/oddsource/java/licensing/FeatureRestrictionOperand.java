@@ -27,6 +27,13 @@ package io.oddsource.java.licensing;
  */
 public enum FeatureRestrictionOperand
 {
+    /**
+     * This means the listed feature restrictions are all-or-nothing.
+     */
     AND,
+
+    /**
+     * This means the listed feature restrictions are any.
+     */
     OR,
 }

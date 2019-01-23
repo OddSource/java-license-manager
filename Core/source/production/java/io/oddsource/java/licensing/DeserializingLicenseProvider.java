@@ -44,6 +44,13 @@ public abstract class DeserializingLicenseProvider implements LicenseProvider
         return data == null ? null : this.deserializeLicense(data);
     }
 
+    /**
+     * Deserializes and returns the decrypted license content and signature from the provided bytes.
+     *
+     * @param data The license bytes
+     *
+     * @return the signed license object.
+     */
     public final SignedLicense deserializeLicense(final byte[] data)
     {
         return new ObjectSerializer().readObject(SignedLicense.class, data);

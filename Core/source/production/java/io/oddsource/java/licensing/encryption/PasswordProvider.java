@@ -59,5 +59,5 @@ public interface PasswordProvider
      *
      * @return the password in character array form.
      */
-    public char[] getPassword();
+    public abstract char[] getPassword();
 }

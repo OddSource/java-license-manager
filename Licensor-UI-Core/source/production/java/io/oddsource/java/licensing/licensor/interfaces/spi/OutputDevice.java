@@ -26,7 +26,21 @@ import java.io.IOError;
  */
 public interface OutputDevice
 {
-    public void outputMessage(String message) throws IOError;
+    /**
+     * Outputs an informational message to the output device.
+     *
+     * @param message The message
+     *
+     * @throws IOError if an I/O error occurs while outputting the message.
+     */
+    public abstract void outputMessage(String message) throws IOError;
 
-    public void outputErrorMessage(String message) throws IOError;
+    /**
+     * Outputs an error message to the output device.
+     *
+     * @param message The message
+     *
+     * @throws IOError if an I/O error occurs while outputting the message.
+     */
+    public abstract void outputErrorMessage(String message) throws IOError;
 }

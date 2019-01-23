@@ -32,21 +32,13 @@ public abstract class AbstractPasswordPrompter implements PasswordPrompter
      *
      * @param password1 The entered password
      * @param password2 The confirmed password
+     *
      * @return {@code true} if the passwords match, {@code false} otherwise.
      */
     @Override
-    public boolean passwordsMatch(char[] password1, char[] password2)
+    public boolean passwordsMatch(final char[] password1, final char[] password2)
     {
-        if(password1.length != password2.length)
-            return false;
-
-        for(int i = 0; i < password1.length; i++)
-        {
-            if(password1[i] != password2[i])
-                return false;
-        }
-
-        return true;
+        return Arrays.equals(password1, password2);
     }
 
     /**
@@ -59,21 +51,30 @@ public abstract class AbstractPasswordPrompter implements PasswordPrompter
      *
      * @param minLength The minimum legal length for the password
      * @param maxLength The maximum legal length for the password
-     * @param promptMessage The message to prompt for the password initially (the message should not include format specifiers)
-     * @param promptConfirmMessage The message to prompt to confirm the password (the message should not include format specifiers)
-     * @param lengthError The message to display if the password does not meet the minimum or maximum length requirements (the message should not include format specifiers)
-     * @param matchError The message to display if the two entered passwords do not match (the message should not include format specifiers)
+     * @param promptMessage The message to prompt for the password initially (the message should not include format
+     *     specifiers)
+     * @param promptConfirmMessage The message to prompt to confirm the password (the message should not include
+     *     format specifiers)
+     * @param lengthError The message to display if the password does not meet the minimum or maximum length
+     *     requirements (the message should not include format specifiers)
+     * @param matchError The message to display if the two entered passwords do not match (the message should not
+     *     include format specifiers)
      * @param device The device that should be used to output messages and errors
+     *
      * @return the valid, confirmed password entered by the user.
+     *
      * @throws IOError if an I/O error occurs.
      */
     @Override
-    public char[] promptForValidPassword(int minLength, int maxLength, String promptMessage,
-                                         String promptConfirmMessage, String lengthError, String matchError,
-                                         OutputDevice device)
-            throws IOError
+    public char[] promptForValidPassword(
+        final int minLength, final int maxLength, final String promptMessage,
+        final String promptConfirmMessage, final String lengthError, final String matchError,
+        final OutputDevice device
+    )
+        throws IOError
     {
-        char[] password1 = null, password2 = null;
+        char[] password1 = null;
+        char[] password2 = null;
         boolean passwordVerified = false;
 
         try
@@ -102,9 +103,13 @@ public abstract class AbstractPasswordPrompter implements PasswordPrompter
         finally
         {
             if(password1 != null)
+            {
                 Arrays.fill(password1, '\u0000');
+            }
             if(password2 != null)
+            {
                 Arrays.fill(password2, '\u0000');
+            }
         }
     }
 }

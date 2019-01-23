@@ -37,7 +37,7 @@ import io.oddsource.java.licensing.exception.InappropriateKeySpecificationExcept
  * A class of utility methods for reading and writing private and public keys
  * to files.
  *
- * @author Nicholas Williamo
+ * @author Nicholas Williams
  * @version 1.0.0
  * @since 1.0.0
  */
@@ -45,7 +45,11 @@ public class KeyFileUtilities
 {
     public static final String keyAlgorithm = "RSA";
 
-    protected static void writeEncryptedPrivateKey(final PrivateKey privateKey, final File file, final char[] passphrase)
+    protected static void writeEncryptedPrivateKey(
+        final PrivateKey privateKey,
+        final File file,
+        final char[] passphrase
+    )
         throws IOException
     {
 
@@ -82,7 +86,9 @@ public class KeyFileUtilities
 
     public static PrivateKey readEncryptedPrivateKey(final byte[] fileContents, final char[] passphrase)
     {
-        final PKCS8EncodedKeySpec privateKeySpec = new PKCS8EncodedKeySpec(Encryptor.decryptRaw(fileContents, passphrase));
+        final PKCS8EncodedKeySpec privateKeySpec = new PKCS8EncodedKeySpec(
+            Encryptor.decryptRaw(fileContents, passphrase)
+        );
 
         try
         {

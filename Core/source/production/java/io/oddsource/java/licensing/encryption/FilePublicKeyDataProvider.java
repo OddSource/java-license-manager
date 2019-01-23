@@ -84,13 +84,16 @@ public class FilePublicKeyDataProvider implements PublicKeyDataProvider
         }
         catch(final FileNotFoundException e)
         {
-            throw new KeyNotFoundException("The public key file [" + this.publicKeyFile.getPath() +
-                                           "] does not exist.");
+            throw new KeyNotFoundException(
+                "The public key file [" + this.publicKeyFile.getPath() + "] does not exist."
+            );
         }
         catch(final IOException e)
         {
-            throw new KeyNotFoundException("Could not read from the public key file [" +
-                                           this.publicKeyFile.getPath() + "].", e);
+            throw new KeyNotFoundException(
+                "Could not read from the public key file [" + this.publicKeyFile.getPath() + "].",
+                e
+            );
         }
     }
 

@@ -43,8 +43,7 @@ public class Hasher
     /**
      * The salt that we use to hash strings.
      */
-    private static final String salt =
-        "j4KgU305PZp't.\"%ordAY7q*?z9%8]amNL(0Wx5eG49b1sRj(^;8Kg2w0EoM";
+    private static final String salt = "j4KgU305PZp't.\"%ordAY7q*?z9%8]amNL(0Wx5eG49b1sRj(^;8Kg2w0EoM";
 
     /**
      * Calculate the SHA-512 message digest hash of the

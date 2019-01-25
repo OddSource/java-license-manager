@@ -18,20 +18,34 @@ package io.oddsource.java.licensing.samples;
 import io.oddsource.java.licensing.encryption.PasswordProvider;
 
 /**
- * A sample implementation of the {@link PasswordProvider} interface.
+ * A sample implementation of the {@link PasswordProvider} interface. The License Manager user interfaces can generate
+ * this code for you.
  *
  * @author Nick Williams
- * @since 1.0.0
  * @version 1.0.0
  * @see PasswordProvider
+ * @since 1.0.0
  */
 @SuppressWarnings("unused")
-public class SamplePasswordProvider implements PasswordProvider
+public final class SamplePasswordProvider implements PasswordProvider
 {
+    /**
+     * Constructor.
+     */
+    public SamplePasswordProvider()
+    {
+
+    }
+
+    /**
+     * Returns the password.
+     *
+     * @return The password
+     */
     public char[] getPassword()
     {
         return new char[] {
-            's', 'a', 'm', 'p', 'l', 'e', 'K', 'e', 'y', '1', '9', '8', '4'
+            's', 'a', 'm', 'p', 'l', 'e', 'K', 'e', 'y', '1', '9', '8', '4',
         };
     }
 }

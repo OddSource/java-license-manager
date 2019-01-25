@@ -15,23 +15,33 @@
  */
 package io.oddsource.java.licensing.samples;
 
-import io.oddsource.java.licensing.encryption.PrivateKeyDataProvider;
-import io.oddsource.java.licensing.exception.KeyNotFoundException;
-import org.apache.commons.io.IOUtils;
-
 import java.io.IOException;
 
+import org.apache.commons.io.IOUtils;
+
+import io.oddsource.java.licensing.encryption.PrivateKeyDataProvider;
+import io.oddsource.java.licensing.exception.KeyNotFoundException;
+
 /**
- * A sample implementation of the {@link PrivateKeyDataProvider} interface.
+ * A sample implementation of the {@link PrivateKeyDataProvider} interface that retrieves the private key from a file.
+ * The License Manager user interfaces can generate this code for you.
  *
  * @author Nick Williams
- * @since 1.0.0
  * @version 1.0.0
  * @see PrivateKeyDataProvider
+ * @since 1.0.0
  */
 @SuppressWarnings("unused")
-public class SampleFilePrivateKeyDataProvider implements PrivateKeyDataProvider
+public final class SampleFilePrivateKeyDataProvider implements PrivateKeyDataProvider
 {
+    /**
+     * Constructor.
+     */
+    public SampleFilePrivateKeyDataProvider()
+    {
+
+    }
+
     /**
      * This method returns the data from the file containing the encrypted
      * private key from the public/private key pair. The contract for this
@@ -39,14 +49,16 @@ public class SampleFilePrivateKeyDataProvider implements PrivateKeyDataProvider
      * in the source code itself.
      *
      * @return the encrypted file contents from the private key file.
-     * @throws KeyNotFoundException if the key data could not be retrieved; an acceptable message or chained cause must be provided.
+     *
+     * @throws KeyNotFoundException if the key data could not be retrieved; an acceptable message or chained cause
+     *     must be provided.
      */
     public byte[] getEncryptedPrivateKeyData() throws KeyNotFoundException
     {
         try
         {
             return IOUtils.toByteArray(
-                    this.getClass().getResourceAsStream("sample.private.key")
+                SampleFilePrivateKeyDataProvider.class.getResourceAsStream("sample.private.key")
             );
         }
         catch(IOException e)

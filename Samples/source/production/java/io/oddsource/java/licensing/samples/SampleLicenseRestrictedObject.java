@@ -19,25 +19,39 @@ import io.oddsource.java.licensing.FeatureRestriction;
 import io.oddsource.java.licensing.FeatureRestrictionOperand;
 
 /**
- * 
- * @author Nicholas
+ * Gives some examples of how to use the {@code @FeatureRestriction} annotation.
+ *
+ * @author Nicholas Williams
+ * @version 1.0.0
+ * @since 1.0.0
  */
 @FeatureRestriction("FEATURE1")
 @SuppressWarnings("unused")
 public class SampleLicenseRestrictedObject
 {
+    /**
+     * Constructor.
+     */
     public SampleLicenseRestrictedObject()
     {
 
     }
 
+    /**
+     * Demonstrates using {@code @FeatureRestriction} to require that both features be licensed in order to invoke
+     * this method.
+     */
     @FeatureRestriction({"FEATURE2", "FEATURE3"})
     public void furtherRestrictedFeature()
     {
 
     }
 
-    @FeatureRestriction(value={"FEATURE2", "FEATURE3"}, operand=FeatureRestrictionOperand.OR)
+    /**
+     * Demonstrates using {@code @FeatureRestriction} to require that at least one of these features be licensed in
+     * order to invoke this method.
+     */
+    @FeatureRestriction(value = {"FEATURE2", "FEATURE3"}, operand = FeatureRestrictionOperand.OR)
     public void furtherLessRestrictedFeature()
     {
 

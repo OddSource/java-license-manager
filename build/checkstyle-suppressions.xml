@@ -38,6 +38,9 @@
     <suppress files="LicenseSecurityManager.java" checks="ReturnCount" lines="103" />
     <suppress files="ObjectSerializer.java" checks="NoWhitespaceBefore" lines="64" />
     <suppress files="RSA2048NotSupportedException.java" checks="AbbreviationAsWordInName" lines="27" />
+    <suppress files="SampleEmbeddedPrivateKeyDataProvider.java" checks="MagicNumber" />
+    <suppress files="SampleEmbeddedPrivateKeyDataProvider.java" checks="MethodLength" />
+    <suppress files="SampleEmbeddedPublicKeyDataProvider.java" checks="MagicNumber" />
 
     <suppress files="exception/[A-Za-z0-9]+\.java" checks="MultipleStringLiterals" />
 

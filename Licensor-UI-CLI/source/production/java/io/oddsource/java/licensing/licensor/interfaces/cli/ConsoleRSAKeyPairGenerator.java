@@ -15,8 +15,6 @@
  */
 package io.oddsource.java.licensing.licensor.interfaces.cli;
 
-import static io.oddsource.java.licensing.encryption.RSAKeyPairGeneratorInterface.GeneratedClassDescriptor;
-
 import java.io.File;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
@@ -49,10 +47,10 @@ import io.oddsource.java.licensing.licensor.interfaces.cli.spi.TextInterfaceDevi
  * A command-line tool for generating a public/private key pair. Usage is as follows.<br />
  * <br />
  * To view usage and help:<br />
- * <code>java io.oddsource.java.licensing.text ConsoleRSAKeyPairGenerator -help</code><br />
+ * {@code java io.oddsource.java.licensing.text ConsoleRSAKeyPairGenerator -help}<br />
  * <br />
  * To use interactive mode:<br />
- * <code>java io.oddsource.java.licensing.text ConsoleRSAKeyPairGenerator -interactive</code><br />
+ * {@code java io.oddsource.java.licensing.text ConsoleRSAKeyPairGenerator -interactive}<br />
  * <br />
  * To specify all options at the command line:<br />
  * <code>java io.oddsource.java.licensing.text ConsoleRSAKeyPairGenerator -password &lt;password&gt; -private
@@ -68,12 +66,15 @@ import io.oddsource.java.licensing.licensor.interfaces.cli.spi.TextInterfaceDevi
  * @version 1.0.0
  * @since 1.0.0
  */
+@SuppressWarnings("Duplicates")
 public class ConsoleRSAKeyPairGenerator
 {
     private static final int CLI_WIDTH = 105;
 
-    private static final String USAGE = " ConsoleRSAKeyPairGenerator -help\r\n" +
-                                        " ConsoleRSAKeyPairGenerator -interactive\r\n" +
+    private static final String LF = System.getProperty("line.separator");
+
+    private static final String USAGE = " ConsoleRSAKeyPairGenerator -help" + LF +
+                                        " ConsoleRSAKeyPairGenerator -interactive" + LF +
                                         " ConsoleRSAKeyPairGenerator -password <password> -private <file|class name> " +
                                         "-public <file|class name> [-privatePassword <password>] [-classes " +
                                         "-passwordClass <class name> -privatePasswordClass <class name> " +
@@ -136,16 +137,53 @@ public class ConsoleRSAKeyPairGenerator
              "ignored unless generating classes)").
         required(false).hasArg(true).build();
 
+    private static final short ERROR_CODE_FILE_OVERWRITE = 81;
+
+    private static final short ERROR_CODE_RSA_NOT_SUPPORTED = 51;
+
+    private static final short ERROR_CODE_2048_BIT_NOT_SUPPORTED = 52;
+
+    private static final short ERROR_CODE_KEY_ALGORITHM_NOT_SUPPORTED = 41;
+
+    private static final short ERROR_CODE_INVALID_KEY = 42;
+
+    private static final short ERROR_CODE_INVALID_KEY_SPEC = 43;
+
+    private static final short ERROR_CODE_INTERRUPTED = 44;
+
+    private static final short ERROR_CODE_IO = 21;
+
+    private static final short ERROR_CODE_UNKNOWN = -1;
+
+    private static final short PERIODS_DELAY_MILLISECONDS = 25;
+
+    private static final short THREAD_DELAY_MILLISECONDS = 50;
+
+    private static final short MIN_PASSWORD_LENGTH = 6;
+
+    private static final short MAX_PASSWORD_LENGTH = 32;
+
+    private static final short HELP_DISPLAY_LEFT_PAD = 1;
+
+    private static final short HELP_DISPLAY_DESC_PAD = 3;
+
     private final RSAKeyPairGeneratorInterface generator;
 
     private final TextInterfaceDevice device;
 
     private final CommandLineParser cliParser;
 
-    protected CommandLine cli = null;
+    private CommandLine cli;
 
-    protected boolean interactive = false;
+    private boolean interactive;
 
+    /**
+     * Constructor.
+     *
+     * @param generator The underlying key pair generator
+     * @param textInterfaceDevice The text interface device
+     * @param cliParser The CLI parser
+     */
     protected ConsoleRSAKeyPairGenerator(
         final RSAKeyPairGeneratorInterface generator,
         final TextInterfaceDevice textInterfaceDevice,
@@ -157,6 +195,11 @@ public class ConsoleRSAKeyPairGenerator
         this.cliParser = cliParser;
     }
 
+    /**
+     * Prints a new line.
+     *
+     * @throws Throwable only if {@code super} does.
+     */
     @Override
     protected void finalize() throws Throwable
     {
@@ -164,6 +207,52 @@ public class ConsoleRSAKeyPairGenerator
         this.device.printOutLn();
     }
 
+    /**
+     * Gets the CLI.
+     *
+     * @return the CLI.
+     */
+    protected CommandLine getCli()
+    {
+        return this.cli;
+    }
+
+    /**
+     * Sets the CLI (used for testing).
+     *
+     * @param cli The CLI
+     */
+    void setCli(final CommandLine cli)
+    {
+        this.cli = cli;
+    }
+
+    /**
+     * Checks whether this is an interactive shell.
+     *
+     * @return {@code true} if it's interactive.
+     */
+    protected boolean isInteractive()
+    {
+        return this.interactive;
+    }
+
+    /**
+     * Sets whether this is an interactive shell (used for testing).
+     *
+     * @param interactive Whether this is an interactive shell
+     */
+    @SuppressWarnings("SameParameterValue")
+    void setInteractive(final boolean interactive)
+    {
+        this.interactive = interactive;
+    }
+
+    /**
+     * Processes the supplied command line arguments.
+     *
+     * @param arguments The arguments supplied on the command line when invoking the program.
+     */
     protected void processCommandLineOptions(final String[] arguments)
     {
         final Options firstParseOptions = new Options();
@@ -211,7 +300,17 @@ public class ConsoleRSAKeyPairGenerator
     {
         final OutputStreamWriter streamWriter = new OutputStreamWriter(this.device.out(), LicensingCharsets.UTF_8);
         final PrintWriter printWriter = new PrintWriter(streamWriter);
-        formatter.printHelp(printWriter, CLI_WIDTH, USAGE, null, options, 1, 3, null, false);
+        formatter.printHelp(
+            printWriter,
+            ConsoleRSAKeyPairGenerator.CLI_WIDTH,
+            ConsoleRSAKeyPairGenerator.USAGE,
+            null,
+            options,
+            ConsoleRSAKeyPairGenerator.HELP_DISPLAY_LEFT_PAD,
+            ConsoleRSAKeyPairGenerator.HELP_DISPLAY_DESC_PAD,
+            null,
+            false
+        );
         printWriter.close();
         try
         {
@@ -223,6 +322,11 @@ public class ConsoleRSAKeyPairGenerator
         }
     }
 
+    /**
+     * Displays a prompt and gathers a choice selection about generating classes or saving key files.
+     *
+     * @return {@code true} to generate compilable Java code with embedded keys, {@code false} to save them to files.
+     */
     protected boolean promptToGenerateClasses()
     {
         this.device.printOutLn("Would you like to...");
@@ -234,6 +338,12 @@ public class ConsoleRSAKeyPairGenerator
         return input != null && input.trim().equals("2");
     }
 
+    /**
+     * Displays a prompt and gathers a choice selection about using the same password or different passwords for each
+     * key.
+     *
+     * @return {@code true} to use different passwords, {@code false} to use just one.
+     */
     protected boolean promptToUseDifferentPasswords()
     {
         this.device.printOutLn("Would you like to...");
@@ -245,6 +355,13 @@ public class ConsoleRSAKeyPairGenerator
         return input != null && input.trim().equals("2");
     }
 
+    /**
+     * Prompts for user input using the specified message and returns the data entered by the user.
+     *
+     * @param message The prompt message
+     *
+     * @return The user input
+     */
     protected String promptForString(final String message)
     {
         final String input = this.device.readLine(message);
@@ -253,6 +370,13 @@ public class ConsoleRSAKeyPairGenerator
         return input != null && input.trim().length() > 0 ? input.trim() : null;
     }
 
+    /**
+     * Checks whether the file exists. If it does, prompts the user whether it should be overwritten.
+     *
+     * @param fileName The name of the file to check
+     * @return {@code true} if the file does not exist or exists but the user agrees to overwrite it, {@code false} if
+     *     the file exists and either it cannot be overwritten or the user declines to overwrite it.
+     */
     protected boolean checkAndPromptToOverwriteFile(final String fileName)
     {
         final File file = new File(fileName);
@@ -281,170 +405,19 @@ public class ConsoleRSAKeyPairGenerator
                     filePath
                 ).
                     trim();
-                return answer.length() == 0 || answer.equalsIgnoreCase("y") || answer.equalsIgnoreCase("yes");
+                return answer.length() == 0 || "y".equalsIgnoreCase(answer) || "yes".equalsIgnoreCase(answer);
             }
         }
 
         return true;
     }
 
-    protected class KeyPairGeneratorInternal
+    private void doInteractivePromptForPasswords(final KeyPairGeneratorInternal internal)
     {
-        boolean generateClasses;
-        boolean useDifferentPasswords;
-        char[] password;
-        char[] privatePassword;
-        String privateOutputStore, privateClassPackage, publicOutputStore, publicClassPackage;
-        String passwordClass, passwordPackage, privatePasswordClass, privatePasswordPackage;
-
-        public void doGenerateAndSaveKeyPair() throws InterruptedException, IOException
-        {
-            device.printOut("Generating RSA key pair, 2048-bit long modulus");
-            Periods periods = new Periods(25, device.out());
-            new Thread(periods).start();
-            Thread.sleep(50);
-
-            final KeyPair keyPair = generator.generateKeyPair();
-
-            periods.stop();
-            device.printOutLn("+++");
-            device.printOutLn();
-
-            device.printOut("Key pair generated. Encrypting keys with 128-bit AES security");
-            periods = new Periods(25, device.out());
-            new Thread(periods).start();
-            Thread.sleep(50);
-
-            if(this.generateClasses)
-            {
-                this.doGenerateClasses(keyPair, periods);
-            }
-            else
-            {
-                this.doGenerateFiles(keyPair, periods);
-            }
-
-            Arrays.fill(this.password, '\u0000');
-            if(this.useDifferentPasswords)
-            {
-                Arrays.fill(this.privatePassword, '\u0000');
-            }
-        }
-
-        public void doGenerateClasses(final KeyPair keyPair, final Periods periods)
-        {
-            final GeneratedClassDescriptor privateDescriptor = new GeneratedClassDescriptor().
-                setClassName(this.privateOutputStore).setPackageName(this.privateClassPackage);
-
-            final GeneratedClassDescriptor publicDescriptor = new GeneratedClassDescriptor().
-                setClassName(this.publicOutputStore).setPackageName(this.publicClassPackage);
-
-            if(this.useDifferentPasswords)
-            {
-                generator.saveKeyPairToProviders(keyPair, privateDescriptor, publicDescriptor,
-                                                 this.privatePassword, this.password
-                );
-            }
-            else
-            {
-                generator.saveKeyPairToProviders(keyPair, privateDescriptor, publicDescriptor, this.password);
-            }
-
-            final GeneratedClassDescriptor passwordDescriptor = new GeneratedClassDescriptor().
-                setClassName(this.passwordClass).setPackageName(this.passwordPackage);
-
-            final GeneratedClassDescriptor privatePasswordDescriptor = new GeneratedClassDescriptor().
-                setClassName(this.privatePasswordClass).setPackageName(this.privatePasswordPackage);
-
-            if(this.passwordClass != null)
-            {
-                generator.savePasswordToProvider(this.password, passwordDescriptor);
-            }
-
-            if(this.useDifferentPasswords && this.privatePasswordClass != null)
-            {
-                generator.savePasswordToProvider(this.privatePassword, privatePasswordDescriptor);
-            }
-
-            periods.stop();
-            device.printOutLn("+++");
-            device.printOutLn();
-
-            device.printOutLn("Private key provider:");
-            device.printOutLn();
-            device.printOutLn(privateDescriptor.getJavaFileContents());
-            device.printOutLn();
-
-            device.printOutLn("Public key provider:");
-            device.printOutLn();
-            device.printOutLn(publicDescriptor.getJavaFileContents());
-
-            if(this.passwordClass != null)
-            {
-                device.printOutLn();
-                device.printOutLn(this.useDifferentPasswords ?
-                                  "Public key password provider:" :
-                                  "Key password provider:");
-                device.printOutLn();
-                device.printOutLn(passwordDescriptor.getJavaFileContents());
-            }
-
-            if(this.useDifferentPasswords && this.privatePasswordClass != null)
-            {
-                device.printOutLn();
-                device.printOutLn("Private key password provider:");
-                device.printOutLn();
-                device.printOutLn(privatePasswordDescriptor.getJavaFileContents());
-            }
-        }
-
-        public void doGenerateFiles(final KeyPair keyPair, final Periods periods) throws IOException
-        {
-            if(ConsoleRSAKeyPairGenerator.this.interactive)
-            {
-                if(!ConsoleRSAKeyPairGenerator.this.checkAndPromptToOverwriteFile(this.privateOutputStore) ||
-                   !ConsoleRSAKeyPairGenerator.this.checkAndPromptToOverwriteFile(this.publicOutputStore))
-                {
-                    device.exit(81);
-                    return;
-                }
-            }
-            else
-            {
-
-            }
-
-            if(this.useDifferentPasswords)
-            {
-                generator.saveKeyPairToFiles(keyPair, this.privateOutputStore, this.publicOutputStore,
-                                             this.privatePassword, this.password
-                );
-            }
-            else
-            {
-                generator.saveKeyPairToFiles(keyPair, this.privateOutputStore, this.publicOutputStore,
-                                             this.password
-                );
-            }
-
-            periods.stop();
-            device.printOutLn("+++");
-            device.printOutLn();
-
-            device.printOutLn("Private key written to " + this.privateOutputStore);
-            device.printOutLn("Public key written to " + this.publicOutputStore);
-        }
-    }
-
-    protected void doInteractive() throws Exception
-    {
-        final KeyPairGeneratorInternal internal = new KeyPairGeneratorInternal();
-
-        internal.generateClasses = this.promptToGenerateClasses();
         internal.useDifferentPasswords = this.promptToUseDifferentPasswords();
-        internal.password = this.device.promptForValidPassword(6, 32,
-                                                               internal.useDifferentPasswords ? "the public key" :
-                                                               "both keys"
+        internal.password = this.device.promptForValidPassword(
+            ConsoleRSAKeyPairGenerator.MIN_PASSWORD_LENGTH, ConsoleRSAKeyPairGenerator.MAX_PASSWORD_LENGTH,
+            internal.useDifferentPasswords ? "the public key" : "both keys"
         );
         this.device.printOutLn("Passwords match.");
         if(internal.useDifferentPasswords)
@@ -453,7 +426,10 @@ public class ConsoleRSAKeyPairGenerator
         }
         if(internal.useDifferentPasswords)
         {
-            internal.privatePassword = this.device.promptForValidPassword(6, 32, "the private key");
+            internal.privatePassword = this.device.promptForValidPassword(
+                ConsoleRSAKeyPairGenerator.MIN_PASSWORD_LENGTH, ConsoleRSAKeyPairGenerator.MAX_PASSWORD_LENGTH,
+                "the private key"
+            );
             this.device.printOutLn("Passwords match.");
         }
         else
@@ -461,34 +437,53 @@ public class ConsoleRSAKeyPairGenerator
             internal.privatePassword = null;
         }
         this.device.printOutLn();
+    }
 
+    private void doInteractivePromptForStorageMechanism(final KeyPairGeneratorInternal internal)
+    {
         while(internal.publicOutputStore == null)
         {
-            internal.publicOutputStore = this.promptForString(internal.generateClasses ?
-                                                              "Please enter the name of a Java class to embed the " +
-                                                              "public key in: " :
-                                                              "Please enter the name of a file to store the public " +
-                                                              "key in: ");
+            internal.publicOutputStore = this.promptForString(
+                internal.generateClasses ?
+                "Please enter the name of a Java class to embed the public key in: " :
+                "Please enter the name of a file to store the public key in: "
+            );
         }
 
-        internal.publicClassPackage = internal.generateClasses ?
-                                      this.promptForString("Enter an optional package name for the public key class: "
-                                      ) :
-                                      null;
+        internal.publicClassPackage =
+            internal.generateClasses ?
+            this.promptForString("Enter an optional package name for the public key class: "):
+            null;
 
         while(internal.privateOutputStore == null)
         {
-            internal.privateOutputStore = this.promptForString(internal.generateClasses ?
-                                                               "Please enter the name of a Java class to embed the " +
-                                                               "private key in: " :
-                                                               "Please enter the name of a file to store the private " +
-                                                               "key in: ");
+            internal.privateOutputStore = this.promptForString(
+                internal.generateClasses ?
+                "Please enter the name of a Java class to embed the private key in: " :
+                "Please enter the name of a file to store the private key in: "
+            );
         }
 
-        internal.privateClassPackage = internal.generateClasses ?
-                                       this.promptForString("Enter an optional package name for the private key " +
-                                                            "class: ") :
-                                       null;
+        internal.privateClassPackage =
+            internal.generateClasses ?
+            this.promptForString("Enter an optional package name for the private key class: "):
+            null;
+    }
+
+    /**
+     * Manages all the work of prompting for instructions and executing key generation and storage.
+     *
+     * @throws Exception if basically anything goes wrong.
+     */
+    protected void doInteractive() throws Exception
+    {
+        final KeyPairGeneratorInternal internal = new KeyPairGeneratorInternal();
+
+        internal.generateClasses = this.promptToGenerateClasses();
+
+        this.doInteractivePromptForPasswords(internal);
+
+        this.doInteractivePromptForStorageMechanism(internal);
 
         if(internal.generateClasses)
         {
@@ -522,8 +517,18 @@ public class ConsoleRSAKeyPairGenerator
         internal.doGenerateAndSaveKeyPair();
     }
 
+    /**
+     * Manages all the work of executing key generation and storage based on flags passed in to the command.
+     *
+     * @throws Exception if basically anything goes wrong.
+     */
     protected void doCommandLine() throws Exception
     {
+        if(this.cli == null)
+        {
+            throw new IllegalStateException("doCommandLine called before processCommandLineOptions!");
+        }
+
         final KeyPairGeneratorInternal internal = new KeyPairGeneratorInternal();
 
         internal.generateClasses = this.cli.hasOption("classes");
@@ -560,82 +565,101 @@ public class ConsoleRSAKeyPairGenerator
         internal.doGenerateAndSaveKeyPair();
     }
 
-    public void run(final String[] arguments)
+    private void runDoWork(final String[] arguments) throws Exception
     {
         this.processCommandLineOptions(arguments);
 
+        if(this.interactive)
+        {
+            this.device.printOutLn("Using interactive mode...");
+            this.device.printOutLn();
+            this.doInteractive();
+        }
+        else
+        {
+            this.doCommandLine();
+        }
+    }
+
+    private void runHandleException(final RSA2048NotSupportedException e)
+    {
+        this.device.printErrLn(e.getLocalizedMessage());
+        if(e.getCause() != null && e.getCause() instanceof NoSuchAlgorithmException)
+        {
+            this.device.exit(ConsoleRSAKeyPairGenerator.ERROR_CODE_RSA_NOT_SUPPORTED);
+        }
+        else
+        {
+            this.device.exit(ConsoleRSAKeyPairGenerator.ERROR_CODE_2048_BIT_NOT_SUPPORTED);
+        }
+    }
+
+    private void runHandleException(final IOException e)
+    {
+        this.device.printErrLn(
+            "An error occurred writing the key files to the file system. Analyze the error below to determine " +
+            "what went wrong and fix it!"
+        );
+        this.device.printErrLn(e.toString());
+        e.printStackTrace();
+        this.device.exit(ConsoleRSAKeyPairGenerator.ERROR_CODE_IO);
+    }
+
+    /**
+     * Processes command line arguments and invokes command-line mode or interactive mode.
+     *
+     * @param arguments The command line arguments
+     */
+    public void run(final String[] arguments)
+    {
         try
         {
-            if(this.interactive)
-            {
-                this.device.printOutLn("Using interactive mode...");
-                this.device.printOutLn();
-                this.doInteractive();
-            }
-            else
-            {
-                this.doCommandLine();
-            }
+            this.runDoWork(arguments);
         }
         catch(final RSA2048NotSupportedException e)
         {
-            this.device.printErrLn(e.getLocalizedMessage());
-            if(e.getCause() != null && e.getCause() instanceof NoSuchAlgorithmException)
-            {
-                this.device.exit(51);
-            }
-            else
-            {
-                this.device.exit(52);
-            }
-            return;
+            this.runHandleException(e);
         }
         catch(final AlgorithmNotSupportedException e)
         {
             this.device.printErrLn(e.getLocalizedMessage() + " Contact your system administrator for assistance.");
-            this.device.exit(41);
-            return;
+            this.device.exit(ConsoleRSAKeyPairGenerator.ERROR_CODE_KEY_ALGORITHM_NOT_SUPPORTED);
         }
         catch(final InappropriateKeyException e)
         {
             this.device.printErrLn(e.getLocalizedMessage() + " Contact your system administrator for assistance.");
-            this.device.exit(42);
-            return;
+            this.device.exit(ConsoleRSAKeyPairGenerator.ERROR_CODE_INVALID_KEY);
         }
         catch(final InappropriateKeySpecificationException e)
         {
             this.device.printErrLn(e.getLocalizedMessage() + " Contact your system administrator for assistance.");
-            this.device.exit(43);
-            return;
+            this.device.exit(ConsoleRSAKeyPairGenerator.ERROR_CODE_INVALID_KEY_SPEC);
         }
         catch(final InterruptedException e)
         {
-            // in theory, this error wouldn't actually get reached in this circumstance,
-            // but we'll catch it just in case
+            // In theory, this error won't actually get reached in this circumstance, but we'll catch it just in case.
             this.device.printErrLn("The system was interrupted while waiting for events to complete.");
-            this.device.exit(44);
-            return;
+            this.device.exit(ConsoleRSAKeyPairGenerator.ERROR_CODE_INTERRUPTED);
         }
         catch(final IOException e)
         {
-            this.device.printErrLn("An error occurred writing the key files to the file system. Analyze the error " +
-                                   "below to determine what went wrong and fix it!");
-            this.device.printErrLn(e.toString());
-            e.printStackTrace();
-            this.device.exit(21);
-            return;
+            this.runHandleException(e);
         }
-        catch(final Throwable t)
+        catch(final Exception t)
         {
             this.device.printErrLn(t.toString());
             t.printStackTrace();
-            this.device.exit(-1);
-            return;
+            this.device.exit(ConsoleRSAKeyPairGenerator.ERROR_CODE_UNKNOWN);
         }
 
         this.device.exit(0);
     }
 
+    /**
+     * The entry point method for this command.
+     *
+     * @param arguments The command line arguments
+     */
     public static void main(final String... arguments)
     {
         final TextInterfaceDevice device = TextInterfaceDevice.CONSOLE;
@@ -643,5 +667,217 @@ public class ConsoleRSAKeyPairGenerator
         ConsoleUtilities.configureInterfaceDevice(device);
 
         new ConsoleRSAKeyPairGenerator(new RSAKeyPairGenerator(), device, new DefaultParser()).run(arguments);
+    }
+
+    /**
+     * An internal key pair generator used as a helper class.
+     */
+    private final class KeyPairGeneratorInternal
+    {
+        private boolean generateClasses;
+
+        private boolean useDifferentPasswords;
+
+        private char[] password;
+
+        private char[] privatePassword;
+
+        private String privateOutputStore;
+
+        private String privateClassPackage;
+
+        private String publicOutputStore;
+
+        private String publicClassPackage;
+
+        private String passwordClass;
+
+        private String passwordPackage;
+
+        private String privatePasswordClass;
+
+        private String privatePasswordPackage;
+
+        private KeyPairGeneratorInternal()
+        {
+
+        }
+
+        /**
+         * Generates and saves the key pair, displaying periods as the keys generate to indicate that the program has
+         * not frozen (it can take some time to generate keys).
+         *
+         * @throws InterruptedException if execution is interrupted.
+         * @throws IOException if an I/O error occurs.
+         */
+        public void doGenerateAndSaveKeyPair() throws InterruptedException, IOException
+        {
+            device.printOut("Generating RSA key pair, 2048-bit long modulus");
+            Periods periods = new Periods(ConsoleRSAKeyPairGenerator.PERIODS_DELAY_MILLISECONDS, device.out());
+            new Thread(periods).start();
+            Thread.sleep(ConsoleRSAKeyPairGenerator.THREAD_DELAY_MILLISECONDS);
+
+            final KeyPair keyPair = generator.generateKeyPair();
+
+            periods.stop();
+            device.printOutLn("+++");
+            device.printOutLn();
+
+            device.printOut("Key pair generated. Encrypting keys with 128-bit AES security");
+            periods = new Periods(ConsoleRSAKeyPairGenerator.PERIODS_DELAY_MILLISECONDS, device.out());
+            new Thread(periods).start();
+            Thread.sleep(ConsoleRSAKeyPairGenerator.THREAD_DELAY_MILLISECONDS);
+
+            if(this.generateClasses)
+            {
+                this.doGenerateClasses(keyPair, periods);
+            }
+            else
+            {
+                this.doGenerateFiles(keyPair, periods);
+            }
+
+            Arrays.fill(this.password, '\u0000');
+            if(this.useDifferentPasswords)
+            {
+                Arrays.fill(this.privatePassword, '\u0000');
+            }
+        }
+
+        private void doGenerateClasses(
+            final RSAKeyPairGeneratorInterface.GeneratedClassDescriptor privateDescriptor,
+            final RSAKeyPairGeneratorInterface.GeneratedClassDescriptor publicDescriptor,
+            final RSAKeyPairGeneratorInterface.GeneratedClassDescriptor passwordDescriptor,
+            final RSAKeyPairGeneratorInterface.GeneratedClassDescriptor privatePasswordDescriptor
+        )
+        {
+            final TextInterfaceDevice device = ConsoleRSAKeyPairGenerator.this.device;
+            device.printOutLn("+++");
+            device.printOutLn();
+
+            device.printOutLn("Private key provider:");
+            device.printOutLn();
+            device.printOutLn(privateDescriptor.getJavaFileContents());
+            device.printOutLn();
+
+            device.printOutLn("Public key provider:");
+            device.printOutLn();
+            device.printOutLn(publicDescriptor.getJavaFileContents());
+
+            if(this.passwordClass != null)
+            {
+                device.printOutLn();
+                device.printOutLn(this.useDifferentPasswords ?
+                                  "Public key password provider:" :
+                                  "Key password provider:");
+                device.printOutLn();
+                device.printOutLn(passwordDescriptor.getJavaFileContents());
+            }
+
+            if(this.useDifferentPasswords && this.privatePasswordClass != null)
+            {
+                device.printOutLn();
+                device.printOutLn("Private key password provider:");
+                device.printOutLn();
+                device.printOutLn(privatePasswordDescriptor.getJavaFileContents());
+            }
+        }
+
+        /**
+         * Generates classes from the given key pair, displaying periods as the classes generate to indicate that the
+         * program has not frozen.
+         *
+         * @param keyPair The recently-generated key pair
+         * @param periods The periods display tool
+         */
+        public void doGenerateClasses(final KeyPair keyPair, final Periods periods)
+        {
+            final RSAKeyPairGeneratorInterface.GeneratedClassDescriptor privateDescriptor =
+                new RSAKeyPairGeneratorInterface.GeneratedClassDescriptor().
+                    setClassName(this.privateOutputStore).setPackageName(this.privateClassPackage);
+
+            final RSAKeyPairGeneratorInterface.GeneratedClassDescriptor publicDescriptor =
+                new RSAKeyPairGeneratorInterface.GeneratedClassDescriptor().
+                    setClassName(this.publicOutputStore).setPackageName(this.publicClassPackage);
+
+            if(this.useDifferentPasswords)
+            {
+                ConsoleRSAKeyPairGenerator.this.generator.saveKeyPairToProviders(
+                    keyPair, privateDescriptor, publicDescriptor, this.privatePassword, this.password
+                );
+            }
+            else
+            {
+                ConsoleRSAKeyPairGenerator.this.generator.saveKeyPairToProviders(
+                    keyPair, privateDescriptor, publicDescriptor, this.password
+                );
+            }
+
+            final RSAKeyPairGeneratorInterface.GeneratedClassDescriptor passwordDescriptor =
+                new RSAKeyPairGeneratorInterface.GeneratedClassDescriptor().
+                    setClassName(this.passwordClass).setPackageName(this.passwordPackage);
+
+            final RSAKeyPairGeneratorInterface.GeneratedClassDescriptor privatePasswordDescriptor =
+                new RSAKeyPairGeneratorInterface.GeneratedClassDescriptor().
+                    setClassName(this.privatePasswordClass).setPackageName(this.privatePasswordPackage);
+
+            if(this.passwordClass != null)
+            {
+                ConsoleRSAKeyPairGenerator.this.generator.savePasswordToProvider(this.password, passwordDescriptor);
+            }
+
+            if(this.useDifferentPasswords && this.privatePasswordClass != null)
+            {
+                ConsoleRSAKeyPairGenerator.this.generator.savePasswordToProvider(
+                    this.privatePassword, privatePasswordDescriptor
+                );
+            }
+
+            periods.stop();
+
+            this.doGenerateClasses(privateDescriptor, publicDescriptor, passwordDescriptor, privatePasswordDescriptor);
+        }
+
+        /**
+         * Saves the key pair to public and private key files, displaying periods as the files save to indicate that
+         * the program has not frozen.
+         *
+         * @param keyPair The recently-generated key pair
+         * @param periods The Periods display tool
+         *
+         * @throws IOException if an I/O error occurs.
+         */
+        public void doGenerateFiles(final KeyPair keyPair, final Periods periods) throws IOException
+        {
+            if(ConsoleRSAKeyPairGenerator.this.interactive)
+            {
+                if(!ConsoleRSAKeyPairGenerator.this.checkAndPromptToOverwriteFile(this.privateOutputStore) ||
+                   !ConsoleRSAKeyPairGenerator.this.checkAndPromptToOverwriteFile(this.publicOutputStore))
+                {
+                    device.exit(ConsoleRSAKeyPairGenerator.ERROR_CODE_FILE_OVERWRITE);
+                    return;
+                }
+            }
+
+            if(this.useDifferentPasswords)
+            {
+                generator.saveKeyPairToFiles(
+                    keyPair, this.privateOutputStore, this.publicOutputStore, this.privatePassword, this.password
+                );
+            }
+            else
+            {
+                generator.saveKeyPairToFiles(
+                    keyPair, this.privateOutputStore, this.publicOutputStore, this.password
+                );
+            }
+
+            periods.stop();
+            device.printOutLn("+++");
+            device.printOutLn();
+
+            device.printOutLn("Private key written to " + this.privateOutputStore);
+            device.printOutLn("Public key written to " + this.publicOutputStore);
+        }
     }
 }

@@ -271,7 +271,7 @@ public class TestConsoleLicenseGenerator
 
         this.console.processCommandLineOptions(new String[] { "-config", "config.properties" });
 
-        assertNotNull("There should be a cli value.", this.console.cli);
+        assertNotNull("There should be a cli value.", this.console.getCli());
     }
 
     @Test
@@ -281,7 +281,7 @@ public class TestConsoleLicenseGenerator
 
         this.console.processCommandLineOptions(new String[] { "-license", "license.properties" });
 
-        assertNotNull("There should be a cli value.", this.console.cli);
+        assertNotNull("There should be a cli value.", this.console.getCli());
     }
 
     @Test
@@ -293,7 +293,7 @@ public class TestConsoleLicenseGenerator
                 new String[] { "-config", "config.properties", "-license", "license.properties" }
         );
 
-        assertNotNull("There should be a cli value.", this.console.cli);
+        assertNotNull("There should be a cli value.", this.console.getCli());
     }
 
     private void resetLicenseCreator()
@@ -348,15 +348,17 @@ public class TestConsoleLicenseGenerator
         if(file.exists())
             FileUtils.forceDelete(file);
 
-        this.console.cli = EasyMock.createMockBuilder(CommandLine.class).withConstructor().
+        this.console.setCli(
+            EasyMock.createMockBuilder(CommandLine.class).withConstructor().
                 addMockedMethod("hasOption", String.class).
                 addMockedMethod("getOptionValue", String.class).
-                createStrictMock();
+                createStrictMock()
+        );
 
-        EasyMock.expect(this.console.cli.hasOption("config")).andReturn(true);
-        EasyMock.expect(this.console.cli.getOptionValue("config")).andReturn(fileName);
+        EasyMock.expect(this.console.getCli().hasOption("config")).andReturn(true);
+        EasyMock.expect(this.console.getCli().getOptionValue("config")).andReturn(fileName);
 
-        EasyMock.replay(this.console.cli, this.device);
+        EasyMock.replay(this.console.getCli(), this.device);
 
         try
         {
@@ -368,7 +370,7 @@ public class TestConsoleLicenseGenerator
         {
             this.resetLicenseCreator();
 
-            EasyMock.verify(this.console.cli);
+            EasyMock.verify(this.console.getCli());
         }
     }
 
@@ -390,15 +392,17 @@ public class TestConsoleLicenseGenerator
         assertTrue("The file should be writable.", file.canWrite());
         assertFalse("The file should not be readable.", file.canRead());
 
-        this.console.cli = EasyMock.createMockBuilder(CommandLine.class).withConstructor().
+        this.console.setCli(
+            EasyMock.createMockBuilder(CommandLine.class).withConstructor().
                 addMockedMethod("hasOption", String.class).
                 addMockedMethod("getOptionValue", String.class).
-                createStrictMock();
+                createStrictMock()
+        );
 
-        EasyMock.expect(this.console.cli.hasOption("config")).andReturn(true);
-        EasyMock.expect(this.console.cli.getOptionValue("config")).andReturn(fileName);
+        EasyMock.expect(this.console.getCli().hasOption("config")).andReturn(true);
+        EasyMock.expect(this.console.getCli().getOptionValue("config")).andReturn(fileName);
 
-        EasyMock.replay(this.console.cli, this.device);
+        EasyMock.replay(this.console.getCli(), this.device);
 
         try
         {
@@ -412,7 +416,7 @@ public class TestConsoleLicenseGenerator
 
             FileUtils.forceDelete(file);
 
-            EasyMock.verify(this.console.cli);
+            EasyMock.verify(this.console.getCli());
         }
     }
 
@@ -433,15 +437,17 @@ public class TestConsoleLicenseGenerator
             "UTF-8"
         );
 
-        this.console.cli = EasyMock.createMockBuilder(CommandLine.class).withConstructor().
+        this.console.setCli(
+            EasyMock.createMockBuilder(CommandLine.class).withConstructor().
                 addMockedMethod("hasOption", String.class).
                 addMockedMethod("getOptionValue", String.class).
-                createStrictMock();
+                createStrictMock()
+        );
 
-        EasyMock.expect(this.console.cli.hasOption("config")).andReturn(true);
-        EasyMock.expect(this.console.cli.getOptionValue("config")).andReturn(fileName);
+        EasyMock.expect(this.console.getCli().hasOption("config")).andReturn(true);
+        EasyMock.expect(this.console.getCli().getOptionValue("config")).andReturn(fileName);
 
-        EasyMock.replay(this.console.cli, this.device);
+        EasyMock.replay(this.console.getCli(), this.device);
 
         try
         {
@@ -455,7 +461,7 @@ public class TestConsoleLicenseGenerator
 
             FileUtils.forceDelete(file);
 
-            EasyMock.verify(this.console.cli);
+            EasyMock.verify(this.console.getCli());
         }
     }
 
@@ -479,15 +485,17 @@ public class TestConsoleLicenseGenerator
             "UTF-8"
         );
 
-        this.console.cli = EasyMock.createMockBuilder(CommandLine.class).withConstructor().
+        this.console.setCli(
+            EasyMock.createMockBuilder(CommandLine.class).withConstructor().
                 addMockedMethod("hasOption", String.class).
                 addMockedMethod("getOptionValue", String.class).
-                createStrictMock();
+                createStrictMock()
+        );
 
-        EasyMock.expect(this.console.cli.hasOption("config")).andReturn(true);
-        EasyMock.expect(this.console.cli.getOptionValue("config")).andReturn(fileName);
+        EasyMock.expect(this.console.getCli().hasOption("config")).andReturn(true);
+        EasyMock.expect(this.console.getCli().getOptionValue("config")).andReturn(fileName);
 
-        EasyMock.replay(this.console.cli, this.device);
+        EasyMock.replay(this.console.getCli(), this.device);
 
         try
         {
@@ -513,7 +521,7 @@ public class TestConsoleLicenseGenerator
             FileUtils.forceDelete(file);
             FileUtils.forceDelete(keyFile);
 
-            EasyMock.verify(this.console.cli);
+            EasyMock.verify(this.console.getCli());
         }
     }
 
@@ -536,15 +544,17 @@ public class TestConsoleLicenseGenerator
             "UTF-8"
         );
 
-        this.console.cli = EasyMock.createMockBuilder(CommandLine.class).withConstructor().
+        this.console.setCli(
+            EasyMock.createMockBuilder(CommandLine.class).withConstructor().
                 addMockedMethod("hasOption", String.class).
                 addMockedMethod("getOptionValue", String.class).
-                createStrictMock();
+                createStrictMock()
+        );
 
-        EasyMock.expect(this.console.cli.hasOption("config")).andReturn(true);
-        EasyMock.expect(this.console.cli.getOptionValue("config")).andReturn(fileName);
+        EasyMock.expect(this.console.getCli().hasOption("config")).andReturn(true);
+        EasyMock.expect(this.console.getCli().getOptionValue("config")).andReturn(fileName);
 
-        EasyMock.replay(this.console.cli, this.device);
+        EasyMock.replay(this.console.getCli(), this.device);
 
         try
         {
@@ -562,7 +572,7 @@ public class TestConsoleLicenseGenerator
             FileUtils.forceDelete(file);
             FileUtils.forceDelete(keyFile);
 
-            EasyMock.verify(this.console.cli);
+            EasyMock.verify(this.console.getCli());
         }
     }
 
@@ -585,15 +595,17 @@ public class TestConsoleLicenseGenerator
             "UTF-8"
         );
 
-        this.console.cli = EasyMock.createMockBuilder(CommandLine.class).withConstructor().
+        this.console.setCli(
+            EasyMock.createMockBuilder(CommandLine.class).withConstructor().
                 addMockedMethod("hasOption", String.class).
                 addMockedMethod("getOptionValue", String.class).
-                createStrictMock();
+                createStrictMock()
+        );
 
-        EasyMock.expect(this.console.cli.hasOption("config")).andReturn(true);
-        EasyMock.expect(this.console.cli.getOptionValue("config")).andReturn(fileName);
+        EasyMock.expect(this.console.getCli().hasOption("config")).andReturn(true);
+        EasyMock.expect(this.console.getCli().getOptionValue("config")).andReturn(fileName);
 
-        EasyMock.replay(this.console.cli, this.device);
+        EasyMock.replay(this.console.getCli(), this.device);
 
         try
         {
@@ -611,7 +623,7 @@ public class TestConsoleLicenseGenerator
             FileUtils.forceDelete(file);
             FileUtils.forceDelete(keyFile);
 
-            EasyMock.verify(this.console.cli);
+            EasyMock.verify(this.console.getCli());
         }
     }
 
@@ -632,15 +644,17 @@ public class TestConsoleLicenseGenerator
             "UTF-8"
         );
 
-        this.console.cli = EasyMock.createMockBuilder(CommandLine.class).withConstructor().
+        this.console.setCli(
+            EasyMock.createMockBuilder(CommandLine.class).withConstructor().
                 addMockedMethod("hasOption", String.class).
                 addMockedMethod("getOptionValue", String.class).
-                createStrictMock();
+                createStrictMock()
+        );
 
-        EasyMock.expect(this.console.cli.hasOption("config")).andReturn(true);
-        EasyMock.expect(this.console.cli.getOptionValue("config")).andReturn(fileName);
+        EasyMock.expect(this.console.getCli().hasOption("config")).andReturn(true);
+        EasyMock.expect(this.console.getCli().getOptionValue("config")).andReturn(fileName);
 
-        EasyMock.replay(this.console.cli, this.device);
+        EasyMock.replay(this.console.getCli(), this.device);
 
         try
         {
@@ -663,7 +677,7 @@ public class TestConsoleLicenseGenerator
 
             FileUtils.forceDelete(file);
 
-            EasyMock.verify(this.console.cli);
+            EasyMock.verify(this.console.getCli());
         }
     }
 
@@ -675,13 +689,15 @@ public class TestConsoleLicenseGenerator
         File keyFile = new File("testInitializeLicenseCreator08.key");
         FileUtils.writeStringToFile(keyFile, "aKey", "UTF-8");
 
-        this.console.cli = EasyMock.createMockBuilder(CommandLine.class).withConstructor().
+        this.console.setCli(
+            EasyMock.createMockBuilder(CommandLine.class).withConstructor().
                 addMockedMethod("hasOption", String.class).
                 addMockedMethod("getOptionValue", String.class).
-                createStrictMock();
+                createStrictMock()
+        );
 
-        EasyMock.expect(this.console.cli.hasOption("config")).andReturn(true);
-        EasyMock.expect(this.console.cli.getOptionValue("config")).andReturn("  ");
+        EasyMock.expect(this.console.getCli().hasOption("config")).andReturn(true);
+        EasyMock.expect(this.console.getCli().getOptionValue("config")).andReturn("  ");
 
         this.device.printOutLn("Would you like to...");
         EasyMock.expectLastCall();
@@ -731,7 +747,7 @@ public class TestConsoleLicenseGenerator
         this.device.printOutLn();
         EasyMock.expectLastCall();
 
-        EasyMock.replay(this.console.cli, this.device);
+        EasyMock.replay(this.console.getCli(), this.device);
 
         try
         {
@@ -753,7 +769,7 @@ public class TestConsoleLicenseGenerator
 
             FileUtils.forceDelete(keyFile);
 
-            EasyMock.verify(this.console.cli);
+            EasyMock.verify(this.console.getCli());
         }
     }
 
@@ -762,12 +778,14 @@ public class TestConsoleLicenseGenerator
     {
         this.resetLicenseCreator();
 
-        this.console.cli = EasyMock.createMockBuilder(CommandLine.class).withConstructor().
+        this.console.setCli(
+            EasyMock.createMockBuilder(CommandLine.class).withConstructor().
                 addMockedMethod("hasOption", String.class).
                 addMockedMethod("getOptionValue", String.class).
-                createStrictMock();
+                createStrictMock()
+        );
 
-        EasyMock.expect(this.console.cli.hasOption("config")).andReturn(false);
+        EasyMock.expect(this.console.getCli().hasOption("config")).andReturn(false);
 
         this.device.printOutLn("Would you like to...");
         EasyMock.expectLastCall();
@@ -809,7 +827,7 @@ public class TestConsoleLicenseGenerator
         this.device.printOutLn();
         EasyMock.expectLastCall();
 
-        EasyMock.replay(this.console.cli, this.device);
+        EasyMock.replay(this.console.getCli(), this.device);
 
         try
         {
@@ -827,7 +845,7 @@ public class TestConsoleLicenseGenerator
         {
             this.resetLicenseCreator();
 
-            EasyMock.verify(this.console.cli);
+            EasyMock.verify(this.console.getCli());
         }
     }
 
@@ -841,15 +859,17 @@ public class TestConsoleLicenseGenerator
         if(file.exists())
             FileUtils.forceDelete(file);
 
-        this.console.cli = EasyMock.createMockBuilder(CommandLine.class).withConstructor().
+        this.console.setCli(
+            EasyMock.createMockBuilder(CommandLine.class).withConstructor().
                 addMockedMethod("hasOption", String.class).
                 addMockedMethod("getOptionValue", String.class).
-                createStrictMock();
+                createStrictMock()
+        );
 
-        EasyMock.expect(this.console.cli.hasOption("license")).andReturn(true);
-        EasyMock.expect(this.console.cli.getOptionValue("license")).andReturn(fileName);
+        EasyMock.expect(this.console.getCli().hasOption("license")).andReturn(true);
+        EasyMock.expect(this.console.getCli().getOptionValue("license")).andReturn(fileName);
 
-        EasyMock.replay(this.console.cli, this.device);
+        EasyMock.replay(this.console.getCli(), this.device);
 
         try
         {
@@ -861,7 +881,7 @@ public class TestConsoleLicenseGenerator
         {
             this.resetLicenseCreator();
 
-            EasyMock.verify(this.console.cli);
+            EasyMock.verify(this.console.getCli());
         }
     }
 
@@ -883,15 +903,17 @@ public class TestConsoleLicenseGenerator
         assertTrue("The file should be writable.", file.canWrite());
         assertFalse("The file should not be readable.", file.canRead());
 
-        this.console.cli = EasyMock.createMockBuilder(CommandLine.class).withConstructor().
+        this.console.setCli(
+            EasyMock.createMockBuilder(CommandLine.class).withConstructor().
                 addMockedMethod("hasOption", String.class).
                 addMockedMethod("getOptionValue", String.class).
-                createStrictMock();
+                createStrictMock()
+        );
 
-        EasyMock.expect(this.console.cli.hasOption("license")).andReturn(true);
-        EasyMock.expect(this.console.cli.getOptionValue("license")).andReturn(fileName);
+        EasyMock.expect(this.console.getCli().hasOption("license")).andReturn(true);
+        EasyMock.expect(this.console.getCli().getOptionValue("license")).andReturn(fileName);
 
-        EasyMock.replay(this.console.cli, this.device);
+        EasyMock.replay(this.console.getCli(), this.device);
 
         try
         {
@@ -905,7 +927,7 @@ public class TestConsoleLicenseGenerator
 
             FileUtils.forceDelete(file);
 
-            EasyMock.verify(this.console.cli);
+            EasyMock.verify(this.console.getCli());
         }
     }
 
@@ -925,18 +947,20 @@ public class TestConsoleLicenseGenerator
 
         Capture<String> capture = EasyMock.newCapture();
 
-        this.console.cli = EasyMock.createMockBuilder(CommandLine.class).withConstructor().
+        this.console.setCli(
+            EasyMock.createMockBuilder(CommandLine.class).withConstructor().
                 addMockedMethod("hasOption", String.class).
                 addMockedMethod("getOptionValue", String.class).
-                createStrictMock();
+                createStrictMock()
+        );
 
-        EasyMock.expect(this.console.cli.hasOption("license")).andReturn(true);
-        EasyMock.expect(this.console.cli.getOptionValue("license")).andReturn(fileName);
+        EasyMock.expect(this.console.getCli().hasOption("license")).andReturn(true);
+        EasyMock.expect(this.console.getCli().getOptionValue("license")).andReturn(fileName);
 
         this.device.printOut(EasyMock.capture(capture));
         EasyMock.expectLastCall();
 
-        EasyMock.replay(this.console.cli, this.device);
+        EasyMock.replay(this.console.getCli(), this.device);
 
         LicenseCreatorProperties.setPrivateKeyDataProvider(new MockEmbeddedPrivateKeyDataProvider());
         LicenseCreatorProperties.setPrivateKeyPasswordProvider(passwordProvider);
@@ -978,7 +1002,7 @@ public class TestConsoleLicenseGenerator
 
             FileUtils.forceDelete(file);
 
-            EasyMock.verify(this.console.cli);
+            EasyMock.verify(this.console.getCli());
         }
     }
 
@@ -1004,18 +1028,20 @@ public class TestConsoleLicenseGenerator
 
         Capture<String> capture = EasyMock.newCapture();
 
-        this.console.cli = EasyMock.createMockBuilder(CommandLine.class).withConstructor().
+        this.console.setCli(
+            EasyMock.createMockBuilder(CommandLine.class).withConstructor().
                 addMockedMethod("hasOption", String.class).
                 addMockedMethod("getOptionValue", String.class).
-                createStrictMock();
+                createStrictMock()
+        );
 
-        EasyMock.expect(this.console.cli.hasOption("license")).andReturn(true);
-        EasyMock.expect(this.console.cli.getOptionValue("license")).andReturn(fileName);
+        EasyMock.expect(this.console.getCli().hasOption("license")).andReturn(true);
+        EasyMock.expect(this.console.getCli().getOptionValue("license")).andReturn(fileName);
 
         this.device.printOut(EasyMock.capture(capture));
         EasyMock.expectLastCall();
 
-        EasyMock.replay(this.console.cli, this.device);
+        EasyMock.replay(this.console.getCli(), this.device);
 
         LicenseCreatorProperties.setPrivateKeyDataProvider(new MockEmbeddedPrivateKeyDataProvider());
         LicenseCreatorProperties.setPrivateKeyPasswordProvider(passwordProvider);
@@ -1057,7 +1083,7 @@ public class TestConsoleLicenseGenerator
 
             FileUtils.forceDelete(file);
 
-            EasyMock.verify(this.console.cli);
+            EasyMock.verify(this.console.getCli());
         }
     }
 
@@ -1088,18 +1114,20 @@ public class TestConsoleLicenseGenerator
 
         Capture<String> capture = EasyMock.newCapture();
 
-        this.console.cli = EasyMock.createMockBuilder(CommandLine.class).withConstructor().
+        this.console.setCli(
+            EasyMock.createMockBuilder(CommandLine.class).withConstructor().
                 addMockedMethod("hasOption", String.class).
                 addMockedMethod("getOptionValue", String.class).
-                createStrictMock();
+                createStrictMock()
+        );
 
-        EasyMock.expect(this.console.cli.hasOption("license")).andReturn(true);
-        EasyMock.expect(this.console.cli.getOptionValue("license")).andReturn(fileName);
+        EasyMock.expect(this.console.getCli().hasOption("license")).andReturn(true);
+        EasyMock.expect(this.console.getCli().getOptionValue("license")).andReturn(fileName);
 
         this.device.printOut(EasyMock.capture(capture));
         EasyMock.expectLastCall();
 
-        EasyMock.replay(this.console.cli, this.device);
+        EasyMock.replay(this.console.getCli(), this.device);
 
         LicenseCreatorProperties.setPrivateKeyDataProvider(new MockEmbeddedPrivateKeyDataProvider());
         LicenseCreatorProperties.setPrivateKeyPasswordProvider(passwordProvider);
@@ -1152,7 +1180,7 @@ public class TestConsoleLicenseGenerator
 
             FileUtils.forceDelete(file);
 
-            EasyMock.verify(this.console.cli);
+            EasyMock.verify(this.console.getCli());
         }
     }
 
@@ -1186,15 +1214,17 @@ public class TestConsoleLicenseGenerator
                                           "io.oddsource.java.licensing.features.FINAL_FEATURE_03=\r\n" +
                                           "io.oddsource.java.licensing.licenseFile=" + licenseFileName + "\r\n");
 
-        this.console.cli = EasyMock.createMockBuilder(CommandLine.class).withConstructor().
+        this.console.setCli(
+            EasyMock.createMockBuilder(CommandLine.class).withConstructor().
                 addMockedMethod("hasOption", String.class).
                 addMockedMethod("getOptionValue", String.class).
-                createStrictMock();
+                createStrictMock()
+        );
 
-        EasyMock.expect(this.console.cli.hasOption("license")).andReturn(true);
-        EasyMock.expect(this.console.cli.getOptionValue("license")).andReturn(fileName);
+        EasyMock.expect(this.console.getCli().hasOption("license")).andReturn(true);
+        EasyMock.expect(this.console.getCli().getOptionValue("license")).andReturn(fileName);
 
-        EasyMock.replay(this.console.cli, this.device);
+        EasyMock.replay(this.console.getCli(), this.device);
 
         LicenseCreatorProperties.setPrivateKeyDataProvider(new MockEmbeddedPrivateKeyDataProvider());
         LicenseCreatorProperties.setPrivateKeyPasswordProvider(passwordProvider);
@@ -1244,7 +1274,7 @@ public class TestConsoleLicenseGenerator
             FileUtils.forceDelete(file);
             FileUtils.forceDelete(licenseFile);
 
-            EasyMock.verify(this.console.cli);
+            EasyMock.verify(this.console.getCli());
         }
     }
 
@@ -1257,13 +1287,15 @@ public class TestConsoleLicenseGenerator
 
         Capture<String> capture = EasyMock.newCapture();
 
-        this.console.cli = EasyMock.createMockBuilder(CommandLine.class).withConstructor().
+        this.console.setCli(
+            EasyMock.createMockBuilder(CommandLine.class).withConstructor().
                 addMockedMethod("hasOption", String.class).
                 addMockedMethod("getOptionValue", String.class).
-                createStrictMock();
+                createStrictMock()
+        );
 
-        EasyMock.expect(this.console.cli.hasOption("license")).andReturn(true);
-        EasyMock.expect(this.console.cli.getOptionValue("license")).andReturn("  ");
+        EasyMock.expect(this.console.getCli().hasOption("license")).andReturn(true);
+        EasyMock.expect(this.console.getCli().getOptionValue("license")).andReturn("  ");
 
         EasyMock.expect(this.device.readLine("Please enter a product key for this license (you can leave this " +
                                              "blank): ")).
@@ -1327,7 +1359,7 @@ public class TestConsoleLicenseGenerator
         this.device.printOutLn(EasyMock.capture(capture));
         EasyMock.expectLastCall();
 
-        EasyMock.replay(this.console.cli, this.device);
+        EasyMock.replay(this.console.getCli(), this.device);
 
         LicenseCreatorProperties.setPrivateKeyDataProvider(new MockEmbeddedPrivateKeyDataProvider());
         LicenseCreatorProperties.setPrivateKeyPasswordProvider(passwordProvider);
@@ -1367,7 +1399,7 @@ public class TestConsoleLicenseGenerator
         {
             this.resetLicenseCreator();
 
-            EasyMock.verify(this.console.cli);
+            EasyMock.verify(this.console.getCli());
         }
     }
 
@@ -1380,12 +1412,14 @@ public class TestConsoleLicenseGenerator
 
         Capture<String> capture = EasyMock.newCapture();
 
-        this.console.cli = EasyMock.createMockBuilder(CommandLine.class).withConstructor().
+        this.console.setCli(
+            EasyMock.createMockBuilder(CommandLine.class).withConstructor().
                 addMockedMethod("hasOption", String.class).
                 addMockedMethod("getOptionValue", String.class).
-                createStrictMock();
+                createStrictMock()
+        );
 
-        EasyMock.expect(this.console.cli.hasOption("license")).andReturn(false);
+        EasyMock.expect(this.console.getCli().hasOption("license")).andReturn(false);
 
         EasyMock.expect(this.device.readLine("Please enter a product key for this license (you can leave this " +
                                              "blank): ")).
@@ -1449,7 +1483,7 @@ public class TestConsoleLicenseGenerator
         this.device.printOutLn(EasyMock.capture(capture));
         EasyMock.expectLastCall();
 
-        EasyMock.replay(this.console.cli, this.device);
+        EasyMock.replay(this.console.getCli(), this.device);
 
         LicenseCreatorProperties.setPrivateKeyDataProvider(new MockEmbeddedPrivateKeyDataProvider());
         LicenseCreatorProperties.setPrivateKeyPasswordProvider(passwordProvider);
@@ -1489,7 +1523,7 @@ public class TestConsoleLicenseGenerator
         {
             this.resetLicenseCreator();
 
-            EasyMock.verify(this.console.cli);
+            EasyMock.verify(this.console.getCli());
         }
     }
 
@@ -1503,12 +1537,14 @@ public class TestConsoleLicenseGenerator
 
         Capture<String> capture = EasyMock.newCapture();
 
-        this.console.cli = EasyMock.createMockBuilder(CommandLine.class).withConstructor().
+        this.console.setCli(
+            EasyMock.createMockBuilder(CommandLine.class).withConstructor().
                 addMockedMethod("hasOption", String.class).
                 addMockedMethod("getOptionValue", String.class).
-                createStrictMock();
+                createStrictMock()
+        );
 
-        EasyMock.expect(this.console.cli.hasOption("license")).andReturn(false);
+        EasyMock.expect(this.console.getCli().hasOption("license")).andReturn(false);
 
         EasyMock.expect(this.device.readLine("Please enter a product key for this license (you can leave this " +
                                              "blank): ")).
@@ -1592,7 +1628,7 @@ public class TestConsoleLicenseGenerator
         this.device.printOutLn(EasyMock.capture(capture));
         EasyMock.expectLastCall();
 
-        EasyMock.replay(this.console.cli, this.device);
+        EasyMock.replay(this.console.getCli(), this.device);
 
         LicenseCreatorProperties.setPrivateKeyDataProvider(new MockEmbeddedPrivateKeyDataProvider());
         LicenseCreatorProperties.setPrivateKeyPasswordProvider(passwordProvider);
@@ -1643,7 +1679,7 @@ public class TestConsoleLicenseGenerator
         {
             this.resetLicenseCreator();
 
-            EasyMock.verify(this.console.cli);
+            EasyMock.verify(this.console.getCli());
         }
     }
 
@@ -1660,12 +1696,14 @@ public class TestConsoleLicenseGenerator
         if(licenseFile.exists())
             FileUtils.forceDelete(licenseFile);
 
-        this.console.cli = EasyMock.createMockBuilder(CommandLine.class).withConstructor().
+        this.console.setCli(
+            EasyMock.createMockBuilder(CommandLine.class).withConstructor().
                 addMockedMethod("hasOption", String.class).
                 addMockedMethod("getOptionValue", String.class).
-                createStrictMock();
+                createStrictMock()
+        );
 
-        EasyMock.expect(this.console.cli.hasOption("license")).andReturn(false);
+        EasyMock.expect(this.console.getCli().hasOption("license")).andReturn(false);
 
         EasyMock.expect(this.device.readLine("Please enter a product key for this license (you can leave this " +
                                              "blank): ")).
@@ -1748,7 +1786,7 @@ public class TestConsoleLicenseGenerator
         this.device.printOutLn();
         EasyMock.expectLastCall();
 
-        EasyMock.replay(this.console.cli, this.device);
+        EasyMock.replay(this.console.getCli(), this.device);
 
         LicenseCreatorProperties.setPrivateKeyDataProvider(new MockEmbeddedPrivateKeyDataProvider());
         LicenseCreatorProperties.setPrivateKeyPasswordProvider(passwordProvider);
@@ -1797,7 +1835,7 @@ public class TestConsoleLicenseGenerator
 
             FileUtils.forceDelete(licenseFile);
 
-            EasyMock.verify(this.console.cli);
+            EasyMock.verify(this.console.getCli());
         }
     }
 

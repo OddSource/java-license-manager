@@ -20,6 +20,12 @@
     "-//Puppy Crawl//DTD Suppressions 1.0//EN"
     "http://www.puppycrawl.com/dtds/suppressions_1_0.dtd">
 <suppressions>
+    <suppress files="AbstractTextInterfaceDevice.java" checks="MultipleStringLiterals" />
+    <suppress files="ConsoleLicenseGenerator.java" checks="MultipleStringLiterals" />
+    <suppress files="ConsoleLicenseGenerator.java" checks="IllegalCatch" lines="932-981" />
+    <suppress files="ConsoleLicenseGenerator.java" checks="NoWhitespaceBefore" lines="568" />
+    <suppress files="ConsoleRSAKeyPairGenerator.java" checks="MultipleStringLiterals" />
+    <suppress files="ConsoleRSAKeyPairGenerator.java" checks="IllegalCatch" lines="613-656" />
     <suppress files="DefaultLicenseValidator" checks="MultipleStringLiterals" />
     <suppress files="ImmutableAbstractCollection.java" checks="NoWhitespaceBefore" lines="177" />
     <suppress files="ImmutableAbstractCollection.java" checks="VisibilityModifier" lines="40" />

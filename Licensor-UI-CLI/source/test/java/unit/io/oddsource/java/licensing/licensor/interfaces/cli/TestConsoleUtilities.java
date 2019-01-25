@@ -24,6 +24,9 @@ import org.junit.Test;
 
 import static org.junit.Assert.*;
 
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
+
 /**
  * Test class for ConsoleUtilities.
  */
@@ -42,9 +45,28 @@ public class TestConsoleUtilities
     }
 
     @Test
-    public void testConstruction()
+    public void testConstructionForbidden()
+        throws IllegalAccessException, InstantiationException, NoSuchMethodException
     {
-        new ConsoleUtilities();
+        Constructor<ConsoleUtilities> constructor = ConsoleUtilities.class.getDeclaredConstructor();
+        constructor.setAccessible(true);
+
+        try
+        {
+            constructor.newInstance();
+            fail("Expected exception java.lang.reflect.InvocationTargetException, but got no exception.");
+        }
+        catch(InvocationTargetException e)
+        {
+            Throwable cause = e.getCause();
+            assertNotNull("Expected cause for InvocationTargetException, but got no cause.", cause);
+            assertSame(
+                "Expected exception java.lang.RuntimeException, but got " + cause.getClass(),
+                AssertionError.class,
+                cause.getClass()
+            );
+            assertEquals("The message was incorrect.", "This class cannot be instantiated.", cause.getMessage());
+        }
     }
 
     @Test

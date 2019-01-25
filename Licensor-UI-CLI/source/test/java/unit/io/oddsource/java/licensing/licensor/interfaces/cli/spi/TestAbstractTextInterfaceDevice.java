@@ -64,7 +64,6 @@ public class TestAbstractTextInterfaceDevice
     {
         EasyMock.replay(this.device, this.inputStream, this.outputStream, this.errorStream);
 
-        assertSame("The input stream is not correct (1).", this.inputStream, this.device.in);
         assertSame("The input stream is not correct (2).", this.inputStream, this.device.in());
     }
 
@@ -73,7 +72,6 @@ public class TestAbstractTextInterfaceDevice
     {
         EasyMock.replay(this.device, this.inputStream, this.outputStream, this.errorStream);
 
-        assertSame("The output stream is not correct (1).", this.outputStream, this.device.out);
         assertSame("The output stream is not correct (2).", this.outputStream, this.device.out());
     }
 
@@ -82,7 +80,6 @@ public class TestAbstractTextInterfaceDevice
     {
         EasyMock.replay(this.device, this.inputStream, this.outputStream, this.errorStream);
 
-        assertSame("The error output stream is not correct (1).", this.errorStream, this.device.err);
         assertSame("The error output stream is not correct (2).", this.errorStream, this.device.err());
     }
 

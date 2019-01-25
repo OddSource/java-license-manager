@@ -25,7 +25,6 @@ import io.oddsource.java.mock.MockPermissiveSecurityManager;
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
 import org.apache.commons.cli.DefaultParser;
-import org.apache.commons.cli.ParseException;
 import org.apache.commons.io.FileUtils;
 import org.easymock.Capture;
 import org.easymock.EasyMock;
@@ -68,6 +67,7 @@ public class TestConsoleRSAKeyPairGenerator
 
         this.console = new ConsoleRSAKeyPairGenerator(this.generator, this.device, new DefaultParser()) {
             @Override
+            @SuppressWarnings("MethodDoesntCallSuperMethod")
             protected void finalize()
             {
 
@@ -82,7 +82,7 @@ public class TestConsoleRSAKeyPairGenerator
     }
 
     @Test
-    public void testProcessCommandLineOptions01() throws ParseException
+    public void testProcessCommandLineOptions01()
     {
         ByteArrayOutputStream stream = new ByteArrayOutputStream();
         PrintStream printer = new PrintStream(stream);
@@ -134,7 +134,7 @@ public class TestConsoleRSAKeyPairGenerator
     }
 
     @Test
-    public void testProcessCommandLineOptions02() throws ParseException
+    public void testProcessCommandLineOptions02()
     {
         ByteArrayOutputStream stream = new ByteArrayOutputStream();
         PrintStream printer = new PrintStream(stream);
@@ -188,26 +188,26 @@ public class TestConsoleRSAKeyPairGenerator
     }
 
     @Test
-    public void testProcessCommandLineOptions03() throws ParseException
+    public void testProcessCommandLineOptions03()
     {
         EasyMock.replay(this.generator, this.device);
 
         this.console.processCommandLineOptions(new String[] { "-interactive" });
 
-        assertNull("There should be no cli value.", this.console.cli);
-        assertTrue("The interactive flag should be true.", this.console.interactive);
+        assertNull("There should be no cli value.", this.console.getCli());
+        assertTrue("The interactive flag should be true.", this.console.isInteractive());
     }
 
     @Test
-    public void testProcessCommandLineOptions04() throws ParseException
+    public void testProcessCommandLineOptions04()
     {
         EasyMock.replay(this.generator, this.device);
 
         this.console.processCommandLineOptions(
                 new String[] { "-private", "private.key", "-public", "public.key", "-password", "myPassword01" });
 
-        assertNotNull("There should be a cli value.", this.console.cli);
-        assertFalse("The interactive flag should be false.", this.console.interactive);
+        assertNotNull("There should be a cli value.", this.console.getCli());
+        assertFalse("The interactive flag should be false.", this.console.isInteractive());
     }
 
     @Test
@@ -586,10 +586,12 @@ public class TestConsoleRSAKeyPairGenerator
         String privateFileName = "testDoInteractive01Private.key";
         String publicFileName = "testDoInteractive01Public.key";
 
-        this.console.cli = EasyMock.createMockBuilder(CommandLine.class).withConstructor().
+        this.console.setCli(
+            EasyMock.createMockBuilder(CommandLine.class).withConstructor().
                 addMockedMethod("hasOption", String.class).
                 addMockedMethod("getOptionValue", String.class).
-                createMock();
+                createMock()
+        );
 
         PrivateKey privateKey = EasyMock.createMock(PrivateKey.class);
         PublicKey publicKey = EasyMock.createMock(PublicKey.class);
@@ -671,7 +673,7 @@ public class TestConsoleRSAKeyPairGenerator
         EasyMock.expectLastCall();
         this.device.printOutLn("Public key written to " + publicFileName);
 
-        EasyMock.replay(this.generator, this.device, this.console.cli, privateKey, publicKey);
+        EasyMock.replay(this.generator, this.device, this.console.getCli(), privateKey, publicKey);
 
         try
         {
@@ -683,7 +685,7 @@ public class TestConsoleRSAKeyPairGenerator
         }
         finally
         {
-            EasyMock.verify(this.console.cli, privateKey, publicKey);
+            EasyMock.verify(this.console.getCli(), privateKey, publicKey);
         }
     }
 
@@ -695,10 +697,12 @@ public class TestConsoleRSAKeyPairGenerator
         String privateFileName = "testDoInteractive01Private.key";
         String publicFileName = "testDoInteractive01Public.key";
 
-        this.console.cli = EasyMock.createMockBuilder(CommandLine.class).withConstructor().
+        this.console.setCli(
+            EasyMock.createMockBuilder(CommandLine.class).withConstructor().
                 addMockedMethod("hasOption", String.class).
                 addMockedMethod("getOptionValue", String.class).
-                createMock();
+                createMock()
+        );
 
         PrivateKey privateKey = EasyMock.createMock(PrivateKey.class);
         PublicKey publicKey = EasyMock.createMock(PublicKey.class);
@@ -791,7 +795,7 @@ public class TestConsoleRSAKeyPairGenerator
         EasyMock.expectLastCall();
         this.device.printOutLn("Public key written to " + publicFileName);
 
-        EasyMock.replay(this.generator, this.device, this.console.cli, privateKey, publicKey);
+        EasyMock.replay(this.generator, this.device, this.console.getCli(), privateKey, publicKey);
 
         try
         {
@@ -806,7 +810,7 @@ public class TestConsoleRSAKeyPairGenerator
         }
         finally
         {
-            EasyMock.verify(this.console.cli, privateKey, publicKey);
+            EasyMock.verify(this.console.getCli(), privateKey, publicKey);
         }
     }
 
@@ -815,10 +819,12 @@ public class TestConsoleRSAKeyPairGenerator
     {
         ByteArrayOutputStream stream = new ByteArrayOutputStream();
 
-        this.console.cli = EasyMock.createMockBuilder(CommandLine.class).withConstructor().
+        this.console.setCli(
+            EasyMock.createMockBuilder(CommandLine.class).withConstructor().
                 addMockedMethod("hasOption", String.class).
                 addMockedMethod("getOptionValue", String.class).
-                createMock();
+                createMock()
+        );
 
         PrivateKey privateKey = EasyMock.createMock(PrivateKey.class);
         PublicKey publicKey = EasyMock.createMock(PublicKey.class);
@@ -958,7 +964,7 @@ public class TestConsoleRSAKeyPairGenerator
         this.device.printOutLn("publicPasswordContents01");
         EasyMock.expectLastCall();
 
-        EasyMock.replay(this.generator, this.device, this.console.cli, privateKey, publicKey);
+        EasyMock.replay(this.generator, this.device, this.console.getCli(), privateKey, publicKey);
 
         try
         {
@@ -978,7 +984,7 @@ public class TestConsoleRSAKeyPairGenerator
         }
         finally
         {
-            EasyMock.verify(this.console.cli, privateKey, publicKey);
+            EasyMock.verify(this.console.getCli(), privateKey, publicKey);
         }
     }
 
@@ -987,10 +993,12 @@ public class TestConsoleRSAKeyPairGenerator
     {
         ByteArrayOutputStream stream = new ByteArrayOutputStream();
 
-        this.console.cli = EasyMock.createMockBuilder(CommandLine.class).withConstructor().
+        this.console.setCli(
+            EasyMock.createMockBuilder(CommandLine.class).withConstructor().
                 addMockedMethod("hasOption", String.class).
                 addMockedMethod("getOptionValue", String.class).
-                createMock();
+                createMock()
+        );
 
         PrivateKey privateKey = EasyMock.createMock(PrivateKey.class);
         PublicKey publicKey = EasyMock.createMock(PublicKey.class);
@@ -1177,7 +1185,7 @@ public class TestConsoleRSAKeyPairGenerator
         this.device.printOutLn("privatePasswordContents02");
         EasyMock.expectLastCall();
 
-        EasyMock.replay(this.generator, this.device, this.console.cli, privateKey, publicKey);
+        EasyMock.replay(this.generator, this.device, this.console.getCli(), privateKey, publicKey);
 
         try
         {
@@ -1204,7 +1212,7 @@ public class TestConsoleRSAKeyPairGenerator
         }
         finally
         {
-            EasyMock.verify(this.console.cli, privateKey, publicKey);
+            EasyMock.verify(this.console.getCli(), privateKey, publicKey);
         }
     }
 
@@ -1216,22 +1224,24 @@ public class TestConsoleRSAKeyPairGenerator
         String privateFileName = "testDoCommandLine01Private.key";
         String publicFileName = "testDoCommandLine01Public.key";
 
-        this.console.cli = EasyMock.createMockBuilder(CommandLine.class).withConstructor().
+        this.console.setCli(
+            EasyMock.createMockBuilder(CommandLine.class).withConstructor().
                 addMockedMethod("hasOption", String.class).
                 addMockedMethod("getOptionValue", String.class).
-                createMock();
+                createMock()
+        );
 
         PrivateKey privateKey = EasyMock.createMock(PrivateKey.class);
         PublicKey publicKey = EasyMock.createMock(PublicKey.class);
         KeyPair keyPair = new KeyPair(publicKey, privateKey);
 
-        EasyMock.expect(this.console.cli.hasOption("classes")).andReturn(false);
-        EasyMock.expect(this.console.cli.hasOption("privatePassword")).andReturn(false);
-        EasyMock.expect(this.console.cli.getOptionValue("password")).andReturn("keyPassword01");
-        EasyMock.expect(this.console.cli.getOptionValue("public")).andReturn(publicFileName);
-        EasyMock.expect(this.console.cli.getOptionValue("publicPackage")).andReturn(null);
-        EasyMock.expect(this.console.cli.getOptionValue("private")).andReturn(privateFileName);
-        EasyMock.expect(this.console.cli.getOptionValue("privatePackage")).andReturn(null);
+        EasyMock.expect(this.console.getCli().hasOption("classes")).andReturn(false);
+        EasyMock.expect(this.console.getCli().hasOption("privatePassword")).andReturn(false);
+        EasyMock.expect(this.console.getCli().getOptionValue("password")).andReturn("keyPassword01");
+        EasyMock.expect(this.console.getCli().getOptionValue("public")).andReturn(publicFileName);
+        EasyMock.expect(this.console.getCli().getOptionValue("publicPackage")).andReturn(null);
+        EasyMock.expect(this.console.getCli().getOptionValue("private")).andReturn(privateFileName);
+        EasyMock.expect(this.console.getCli().getOptionValue("privatePackage")).andReturn(null);
 
         this.device.printOut("Generating RSA key pair, 2048-bit long modulus");
         EasyMock.expectLastCall();
@@ -1273,7 +1283,7 @@ public class TestConsoleRSAKeyPairGenerator
         EasyMock.expectLastCall();
         this.device.printOutLn("Public key written to " + publicFileName);
 
-        EasyMock.replay(this.generator, this.device, this.console.cli, privateKey, publicKey);
+        EasyMock.replay(this.generator, this.device, this.console.getCli(), privateKey, publicKey);
 
         try
         {
@@ -1285,7 +1295,7 @@ public class TestConsoleRSAKeyPairGenerator
         }
         finally
         {
-            EasyMock.verify(this.console.cli, privateKey, publicKey);
+            EasyMock.verify(this.console.getCli(), privateKey, publicKey);
         }
     }
 
@@ -1297,23 +1307,25 @@ public class TestConsoleRSAKeyPairGenerator
         String privateFileName = "testDoCommandLine02Private.key";
         String publicFileName = "testDoCommandLine02Public.key";
 
-        this.console.cli = EasyMock.createMockBuilder(CommandLine.class).withConstructor().
+        this.console.setCli(
+            EasyMock.createMockBuilder(CommandLine.class).withConstructor().
                 addMockedMethod("hasOption", String.class).
                 addMockedMethod("getOptionValue", String.class).
-                createMock();
+                createMock()
+        );
 
         PrivateKey privateKey = EasyMock.createMock(PrivateKey.class);
         PublicKey publicKey = EasyMock.createMock(PublicKey.class);
         KeyPair keyPair = new KeyPair(publicKey, privateKey);
 
-        EasyMock.expect(this.console.cli.hasOption("classes")).andReturn(false);
-        EasyMock.expect(this.console.cli.hasOption("privatePassword")).andReturn(true);
-        EasyMock.expect(this.console.cli.getOptionValue("password")).andReturn("publicPassword02");
-        EasyMock.expect(this.console.cli.getOptionValue("privatePassword")).andReturn("privatePassword02");
-        EasyMock.expect(this.console.cli.getOptionValue("public")).andReturn(publicFileName);
-        EasyMock.expect(this.console.cli.getOptionValue("publicPackage")).andReturn(null);
-        EasyMock.expect(this.console.cli.getOptionValue("private")).andReturn(privateFileName);
-        EasyMock.expect(this.console.cli.getOptionValue("privatePackage")).andReturn(null);
+        EasyMock.expect(this.console.getCli().hasOption("classes")).andReturn(false);
+        EasyMock.expect(this.console.getCli().hasOption("privatePassword")).andReturn(true);
+        EasyMock.expect(this.console.getCli().getOptionValue("password")).andReturn("publicPassword02");
+        EasyMock.expect(this.console.getCli().getOptionValue("privatePassword")).andReturn("privatePassword02");
+        EasyMock.expect(this.console.getCli().getOptionValue("public")).andReturn(publicFileName);
+        EasyMock.expect(this.console.getCli().getOptionValue("publicPackage")).andReturn(null);
+        EasyMock.expect(this.console.getCli().getOptionValue("private")).andReturn(privateFileName);
+        EasyMock.expect(this.console.getCli().getOptionValue("privatePackage")).andReturn(null);
 
         this.device.printOut("Generating RSA key pair, 2048-bit long modulus");
         EasyMock.expectLastCall();
@@ -1359,7 +1371,7 @@ public class TestConsoleRSAKeyPairGenerator
         EasyMock.expectLastCall();
         this.device.printOutLn("Public key written to " + publicFileName);
 
-        EasyMock.replay(this.generator, this.device, this.console.cli, privateKey, publicKey);
+        EasyMock.replay(this.generator, this.device, this.console.getCli(), privateKey, publicKey);
 
         try
         {
@@ -1374,7 +1386,7 @@ public class TestConsoleRSAKeyPairGenerator
         }
         finally
         {
-            EasyMock.verify(this.console.cli, privateKey, publicKey);
+            EasyMock.verify(this.console.getCli(), privateKey, publicKey);
         }
     }
 
@@ -1383,24 +1395,26 @@ public class TestConsoleRSAKeyPairGenerator
     {
         ByteArrayOutputStream stream = new ByteArrayOutputStream();
 
-        this.console.cli = EasyMock.createMockBuilder(CommandLine.class).withConstructor().
+        this.console.setCli(
+            EasyMock.createMockBuilder(CommandLine.class).withConstructor().
                 addMockedMethod("hasOption", String.class).
                 addMockedMethod("getOptionValue", String.class).
-                createMock();
+                createMock()
+        );
 
         PrivateKey privateKey = EasyMock.createMock(PrivateKey.class);
         PublicKey publicKey = EasyMock.createMock(PublicKey.class);
         KeyPair keyPair = new KeyPair(publicKey, privateKey);
 
-        EasyMock.expect(this.console.cli.hasOption("classes")).andReturn(true);
-        EasyMock.expect(this.console.cli.hasOption("privatePassword")).andReturn(false);
-        EasyMock.expect(this.console.cli.getOptionValue("password")).andReturn("keyPassword03");
-        EasyMock.expect(this.console.cli.getOptionValue("public")).andReturn("PublicKey01");
-        EasyMock.expect(this.console.cli.getOptionValue("publicPackage")).andReturn("com.example.licensing.public");
-        EasyMock.expect(this.console.cli.getOptionValue("private")).andReturn("PrivateKey01");
-        EasyMock.expect(this.console.cli.getOptionValue("privatePackage")).andReturn("com.example.licensing.private");
-        EasyMock.expect(this.console.cli.getOptionValue("passwordClass")).andReturn("KeyPassword01");
-        EasyMock.expect(this.console.cli.getOptionValue("passwordPackage")).andReturn("com.example.licensing.public");
+        EasyMock.expect(this.console.getCli().hasOption("classes")).andReturn(true);
+        EasyMock.expect(this.console.getCli().hasOption("privatePassword")).andReturn(false);
+        EasyMock.expect(this.console.getCli().getOptionValue("password")).andReturn("keyPassword03");
+        EasyMock.expect(this.console.getCli().getOptionValue("public")).andReturn("PublicKey01");
+        EasyMock.expect(this.console.getCli().getOptionValue("publicPackage")).andReturn("com.example.licensing.public");
+        EasyMock.expect(this.console.getCli().getOptionValue("private")).andReturn("PrivateKey01");
+        EasyMock.expect(this.console.getCli().getOptionValue("privatePackage")).andReturn("com.example.licensing.private");
+        EasyMock.expect(this.console.getCli().getOptionValue("passwordClass")).andReturn("KeyPassword01");
+        EasyMock.expect(this.console.getCli().getOptionValue("passwordPackage")).andReturn("com.example.licensing.public");
 
         this.device.printOut("Generating RSA key pair, 2048-bit long modulus");
         EasyMock.expectLastCall();
@@ -1482,7 +1496,7 @@ public class TestConsoleRSAKeyPairGenerator
         this.device.printOutLn("publicPasswordContents01");
         EasyMock.expectLastCall();
 
-        EasyMock.replay(this.generator, this.device, this.console.cli, privateKey, publicKey);
+        EasyMock.replay(this.generator, this.device, this.console.getCli(), privateKey, publicKey);
 
         try
         {
@@ -1502,7 +1516,7 @@ public class TestConsoleRSAKeyPairGenerator
         }
         finally
         {
-            EasyMock.verify(this.console.cli, privateKey, publicKey);
+            EasyMock.verify(this.console.getCli(), privateKey, publicKey);
         }
     }
 
@@ -1511,27 +1525,29 @@ public class TestConsoleRSAKeyPairGenerator
     {
         ByteArrayOutputStream stream = new ByteArrayOutputStream();
 
-        this.console.cli = EasyMock.createMockBuilder(CommandLine.class).withConstructor().
+        this.console.setCli(
+            EasyMock.createMockBuilder(CommandLine.class).withConstructor().
                 addMockedMethod("hasOption", String.class).
                 addMockedMethod("getOptionValue", String.class).
-                createMock();
+                createMock()
+        );
 
         PrivateKey privateKey = EasyMock.createMock(PrivateKey.class);
         PublicKey publicKey = EasyMock.createMock(PublicKey.class);
         KeyPair keyPair = new KeyPair(publicKey, privateKey);
 
-        EasyMock.expect(this.console.cli.hasOption("classes")).andReturn(true);
-        EasyMock.expect(this.console.cli.hasOption("privatePassword")).andReturn(true);
-        EasyMock.expect(this.console.cli.getOptionValue("password")).andReturn("publicPassword04");
-        EasyMock.expect(this.console.cli.getOptionValue("privatePassword")).andReturn("privatePassword04");
-        EasyMock.expect(this.console.cli.getOptionValue("public")).andReturn("PublicKey02");
-        EasyMock.expect(this.console.cli.getOptionValue("publicPackage")).andReturn("com.example.licensing.public");
-        EasyMock.expect(this.console.cli.getOptionValue("private")).andReturn("PrivateKey02");
-        EasyMock.expect(this.console.cli.getOptionValue("privatePackage")).andReturn("com.example.licensing.private");
-        EasyMock.expect(this.console.cli.getOptionValue("passwordClass")).andReturn("PublicPassword02");
-        EasyMock.expect(this.console.cli.getOptionValue("passwordPackage")).andReturn("com.example.licensing.public");
-        EasyMock.expect(this.console.cli.getOptionValue("privatePasswordClass")).andReturn("PrivatePassword02");
-        EasyMock.expect(this.console.cli.getOptionValue("privatePasswordPackage")).andReturn("com.example.licensing.private");
+        EasyMock.expect(this.console.getCli().hasOption("classes")).andReturn(true);
+        EasyMock.expect(this.console.getCli().hasOption("privatePassword")).andReturn(true);
+        EasyMock.expect(this.console.getCli().getOptionValue("password")).andReturn("publicPassword04");
+        EasyMock.expect(this.console.getCli().getOptionValue("privatePassword")).andReturn("privatePassword04");
+        EasyMock.expect(this.console.getCli().getOptionValue("public")).andReturn("PublicKey02");
+        EasyMock.expect(this.console.getCli().getOptionValue("publicPackage")).andReturn("com.example.licensing.public");
+        EasyMock.expect(this.console.getCli().getOptionValue("private")).andReturn("PrivateKey02");
+        EasyMock.expect(this.console.getCli().getOptionValue("privatePackage")).andReturn("com.example.licensing.private");
+        EasyMock.expect(this.console.getCli().getOptionValue("passwordClass")).andReturn("PublicPassword02");
+        EasyMock.expect(this.console.getCli().getOptionValue("passwordPackage")).andReturn("com.example.licensing.public");
+        EasyMock.expect(this.console.getCli().getOptionValue("privatePasswordClass")).andReturn("PrivatePassword02");
+        EasyMock.expect(this.console.getCli().getOptionValue("privatePasswordPackage")).andReturn("com.example.licensing.private");
 
         this.device.printOut("Generating RSA key pair, 2048-bit long modulus");
         EasyMock.expectLastCall();
@@ -1641,7 +1657,7 @@ public class TestConsoleRSAKeyPairGenerator
         this.device.printOutLn("privatePasswordContents02");
         EasyMock.expectLastCall();
 
-        EasyMock.replay(this.generator, this.device, this.console.cli, privateKey, publicKey);
+        EasyMock.replay(this.generator, this.device, this.console.getCli(), privateKey, publicKey);
 
         try
         {
@@ -1668,7 +1684,7 @@ public class TestConsoleRSAKeyPairGenerator
         }
         finally
         {
-            EasyMock.verify(this.console.cli, privateKey, publicKey);
+            EasyMock.verify(this.console.getCli(), privateKey, publicKey);
         }
     }
 
@@ -1698,7 +1714,7 @@ public class TestConsoleRSAKeyPairGenerator
 
         try
         {
-            this.console.interactive = true;
+            this.console.setInteractive(true);
             this.console.run(arguments);
         }
         finally

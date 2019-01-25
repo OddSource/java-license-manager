@@ -11,6 +11,9 @@ Changelog
   ``ImmutableModifiedThroughReflectionError``
 - [MAJOR] ``InsecureEnvironmentException`` has been renamed to ``InsecureEnvironmentError``
 - [MAJOR] Removed methods in ``License.Builder`` previously marked as deprecated
+- [MAJOR] The properties for the private key properties file and license-generate properties file used by the CLI have
+  changed. The properties were previously prefixed with ``net.nicholaswilliams.java.licensing``. They are now prefixed
+  with ``io.oddsource.java.licensing``.
 - [MINOR] Codified explicit code style rules
 - [MINOR] Configured mandatory license header check in Maven build
 - [MINOR] Fixed #3: License Manager should now run under Java 10

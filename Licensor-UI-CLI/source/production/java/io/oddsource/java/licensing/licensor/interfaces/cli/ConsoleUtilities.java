@@ -24,8 +24,13 @@ import io.oddsource.java.licensing.licensor.interfaces.cli.spi.TextInterfaceDevi
  * @version 1.0.0
  * @since 1.0.0
  */
-class ConsoleUtilities
+final class ConsoleUtilities
 {
+    private ConsoleUtilities()
+    {
+        throw new AssertionError("This class cannot be instantiated.");
+    }
+
     /**
      * Sets up a shutdown hook to ensure that the text device always exits to a newline.
      *

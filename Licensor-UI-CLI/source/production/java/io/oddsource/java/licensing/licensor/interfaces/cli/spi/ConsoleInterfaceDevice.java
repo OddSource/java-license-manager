@@ -40,6 +40,9 @@ public class ConsoleInterfaceDevice extends AbstractTextInterfaceDevice
 
     private final Runtime runtime;
 
+    /**
+     * Constructor.
+     */
     public ConsoleInterfaceDevice()
     {
         super(System.in, System.out, System.err);

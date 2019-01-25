@@ -17,7 +17,9 @@ package io.oddsource.java.licensing;
 
 import java.io.FileDescriptor;
 import java.lang.reflect.AccessibleObject;
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Member;
+import java.lang.reflect.Method;
 import java.net.InetAddress;
 import java.security.AccessControlException;
 import java.security.BasicPermission;
@@ -172,13 +174,31 @@ final class LicenseSecurityManager extends SecurityManager
         }
     }
 
-    @Override
+    /**
+     * This was deprecated in Java 8 and removed in Java 11. It is kept here for backwards compatibility with Java 8,
+     * but {@code @Override} has been removed, and reflection used, so that this can compile on Java 11.
+     *
+     * @param reflectionClass Deprecated
+     * @param memberAccessType Deprecated
+     */
     @Deprecated
     public void checkMemberAccess(final Class<?> reflectionClass, final int memberAccessType)
     {
         if(this.next != null)
         {
-            this.next.checkMemberAccess(reflectionClass, memberAccessType);
+            try
+            {
+                final Method method = this.next.getClass().getMethod("checkMemberAccess", Class.class, int.class);
+                method.invoke(this.next, reflectionClass, memberAccessType);
+            }
+            catch(InvocationTargetException e)
+            {
+                throw LicenseSecurityManager.convertToSecurityException(e);
+            }
+            catch(IllegalAccessException | NoSuchMethodException ignore)
+            {
+
+            }
         }
     }
 
@@ -470,23 +490,53 @@ final class LicenseSecurityManager extends SecurityManager
         }
     }
 
-    @Override
+    /**
+     * This was deprecated in Java 8 and removed in Java 11. It is kept here for backwards compatibility with Java 8,
+     * but {@code @Override} has been removed, and reflection used, so that this can compile on Java 11.
+     */
     @Deprecated
     public void checkSystemClipboardAccess()
     {
         if(this.next != null)
         {
-            this.next.checkSystemClipboardAccess();
+            try
+            {
+                final Method method = this.next.getClass().getMethod("checkSystemClipboardAccess");
+                method.invoke(this.next);
+            }
+            catch(InvocationTargetException e)
+            {
+                throw LicenseSecurityManager.convertToSecurityException(e);
+            }
+            catch(IllegalAccessException | NoSuchMethodException ignore)
+            {
+
+            }
         }
     }
 
-    @Override
+    /**
+     * This was deprecated in Java 8 and removed in Java 11. It is kept here for backwards compatibility with Java 8,
+     * but {@code @Override} has been removed, and reflection used, so that this can compile on Java 11.
+     */
     @Deprecated
     public void checkAwtEventQueueAccess()
     {
         if(this.next != null)
         {
-            this.next.checkAwtEventQueueAccess();
+            try
+            {
+                final Method method = this.next.getClass().getMethod("checkAwtEventQueueAccess");
+                method.invoke(this.next);
+            }
+            catch(InvocationTargetException e)
+            {
+                throw LicenseSecurityManager.convertToSecurityException(e);
+            }
+            catch(IllegalAccessException | NoSuchMethodException ignore)
+            {
+
+            }
         }
     }
 
@@ -517,11 +567,33 @@ final class LicenseSecurityManager extends SecurityManager
         }
     }
 
-    @Override
+    /**
+     * This was deprecated in Java 8 and removed in Java 11. It is kept here for backwards compatibility with Java 8,
+     * but {@code @Override} has been removed, and reflection used, so that this can compile on Java 11.
+     *
+     * @param window Deprecated
+     */
     @Deprecated
     public boolean checkTopLevelWindow(final Object window)
     {
-        return this.next == null || this.next.checkTopLevelWindow(window);
+        if(this.next == null)
+        {
+            return true;
+        }
+
+        try
+        {
+            final Method method = this.next.getClass().getMethod("checkTopLevelWindow", Object.class);
+            return (boolean) method.invoke(this.next, window);
+        }
+        catch(InvocationTargetException e)
+        {
+            throw LicenseSecurityManager.convertToSecurityException(e);
+        }
+        catch(IllegalAccessException | NoSuchMethodException ignore)
+        {
+            return true;
+        }
     }
 
     @Override
@@ -534,6 +606,16 @@ final class LicenseSecurityManager extends SecurityManager
     public Object getSecurityContext()
     {
         return this.next != null ? this.next.getSecurityContext() : super.getSecurityContext();
+    }
+
+    private static SecurityException convertToSecurityException(final InvocationTargetException e)
+    {
+        final Throwable target = e.getTargetException();
+        if(target instanceof SecurityException)
+        {
+            return (SecurityException) target;
+        }
+        return new SecurityException(e);
     }
 
     static final class ObjectReflectionPermission extends BasicPermission

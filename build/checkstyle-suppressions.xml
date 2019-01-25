@@ -34,8 +34,8 @@
     <suppress files="License.java" checks="SuperClone" />
     <suppress files="LicenseCreator.java" checks="NoWhitespaceAfter" lines="87" />
     <suppress files="LicenseManager.java" checks="NoWhitespaceAfter" lines="141" />
-    <suppress files="LicenseSecurityManager.java" checks="MethodLength" lines="103" />
-    <suppress files="LicenseSecurityManager.java" checks="ReturnCount" lines="103" />
+    <suppress files="LicenseSecurityManager.java" checks="MethodLength" lines="105-160" />
+    <suppress files="LicenseSecurityManager.java" checks="ReturnCount" lines="105-160" />
     <suppress files="ObjectSerializer.java" checks="NoWhitespaceBefore" lines="64" />
     <suppress files="RSA2048NotSupportedException.java" checks="AbbreviationAsWordInName" lines="27" />
     <suppress files="SampleEmbeddedPrivateKeyDataProvider.java" checks="MagicNumber" />

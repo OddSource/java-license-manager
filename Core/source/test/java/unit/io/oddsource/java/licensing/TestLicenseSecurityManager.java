@@ -75,7 +75,6 @@ public class TestLicenseSecurityManager
             "The security manager should not be suitable.",
             LicenseSecurityManager.securityManagerIsSuitableReplacement(new SecurityManager()
             {
-                @Override
                 @SuppressWarnings("deprecation")
                 public void checkMemberAccess(Class<?> reflectionClass, int memberAccessType)
                 {
@@ -115,7 +114,6 @@ public class TestLicenseSecurityManager
             "The security manager should not be suitable.",
             LicenseSecurityManager.securityManagerIsSuitableReplacement(new SecurityManager()
             {
-                @Override
                 @SuppressWarnings("deprecation")
                 public void checkMemberAccess(Class<?> reflectionClass, int memberAccessType)
                 {
@@ -167,7 +165,6 @@ public class TestLicenseSecurityManager
             "The security manager should not be suitable.",
             LicenseSecurityManager.securityManagerIsSuitableReplacement(new SecurityManager()
             {
-                @Override
                 @SuppressWarnings("deprecation")
                 public void checkMemberAccess(Class<?> reflectionClass, int memberAccessType)
                 {
@@ -225,7 +222,6 @@ public class TestLicenseSecurityManager
             "The security manager should be suitable.",
             LicenseSecurityManager.securityManagerIsSuitableReplacement(new SecurityManager()
             {
-                @Override
                 @SuppressWarnings("deprecation")
                 public void checkMemberAccess(Class<?> reflectionClass, int memberAccessType)
                 {

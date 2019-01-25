@@ -41,6 +41,7 @@ import io.oddsource.java.licensing.mock.MockFeatureObject;
 /**
  * Test class for LicenseManager.
  */
+@SuppressWarnings("EmptyMethod")
 public class TestLicenseManager
 {
     private static final char[] keyPassword = "testLicenseManagerPassword".toCharArray();

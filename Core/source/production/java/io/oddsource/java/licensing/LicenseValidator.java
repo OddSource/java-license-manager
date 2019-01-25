@@ -30,6 +30,7 @@ import io.oddsource.java.licensing.exception.InvalidLicenseException;
  * @version 1.0.1
  * @since 1.0.0
  */
+@SuppressWarnings({"UnusedReturnValue", "unused"})
 public interface LicenseValidator
 {
     /**

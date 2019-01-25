@@ -33,6 +33,7 @@ import io.oddsource.java.licensing.licensor.exception.RSA2048NotSupportedExcepti
  * @version 1.0.0
  * @since 1.0.0
  */
+@SuppressWarnings({"UnusedReturnValue", "unused"})
 public interface RSAKeyPairGeneratorInterface
 {
     /**

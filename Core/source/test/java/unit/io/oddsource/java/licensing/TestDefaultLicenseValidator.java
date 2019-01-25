@@ -31,6 +31,7 @@ import io.oddsource.java.licensing.exception.InvalidLicenseException;
 /**
  * Test class for DefaultLicenseValidator (restored).
  */
+@SuppressWarnings("EmptyMethod")
 public class TestDefaultLicenseValidator
 {
     private DefaultLicenseValidator validator;

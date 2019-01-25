@@ -19,7 +19,7 @@ import io.oddsource.java.licensing.FeatureObject;
 
 public class MockFeatureObject implements FeatureObject
 {
-    private String name;
+    private final String name;
 
     public MockFeatureObject(String name)
     {

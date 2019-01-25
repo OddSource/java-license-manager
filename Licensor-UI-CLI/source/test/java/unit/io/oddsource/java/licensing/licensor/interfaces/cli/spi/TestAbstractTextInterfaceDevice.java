@@ -17,7 +17,6 @@ package io.oddsource.java.licensing.licensor.interfaces.cli.spi;
 
 import static org.junit.Assert.*;
 
-import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.io.PrintStream;
 
@@ -42,7 +41,7 @@ public class TestAbstractTextInterfaceDevice
     private PrintStream errorStream;
 
     @Before
-    public void setUp() throws FileNotFoundException
+    public void setUp()
     {
         this.inputStream = EasyMock.createStrictMock(InputStream.class);
         this.outputStream = EasyMock.createStrictMock(PrintStream.class);

@@ -28,15 +28,16 @@ import org.junit.Test;
 /**
  * Test class for ImmutableListIterator.
  */
+@SuppressWarnings("EmptyMethod")
 public class TestImmutableListIterator
 {
-    private ImmutableListIterator<String> iterator;
+    final private ImmutableListIterator<String> iterator;
 
-    private MockValidObject valid;
+    final private MockValidObject valid;
 
     public TestImmutableListIterator()
     {
-        ArrayList<String> temp = new ArrayList<String>();
+        ArrayList<String> temp = new ArrayList<>();
         temp.add("MyString1");
         temp.add("YourString2");
         temp.add("HisString3");
@@ -44,16 +45,16 @@ public class TestImmutableListIterator
 
         this.valid = new MockValidObject();
 
-        this.iterator = new ImmutableListIterator<String>(temp.listIterator(), this.valid);
+        this.iterator = new ImmutableListIterator<>(temp.listIterator(), this.valid);
     }
 
     @BeforeClass
-    public static void setUpClass() throws Exception
+    public static void setUpClass()
     {
     }
 
     @AfterClass
-    public static void tearDownClass() throws Exception
+    public static void tearDownClass()
     {
     }
 
@@ -106,6 +107,7 @@ public class TestImmutableListIterator
         }
     }
 
+    @SuppressWarnings("ResultOfMethodCallIgnored")
     @Test(expected = ImmutableModifiedThroughReflectionError.class)
     public void testNext02()
     {
@@ -113,6 +115,7 @@ public class TestImmutableListIterator
         this.iterator.hasNext();
     }
 
+    @SuppressWarnings("ResultOfMethodCallIgnored")
     @Test(expected = ImmutableModifiedThroughReflectionError.class)
     public void testNext03()
     {
@@ -120,6 +123,7 @@ public class TestImmutableListIterator
         this.iterator.hasNext();
     }
 
+    @SuppressWarnings("ResultOfMethodCallIgnored")
     @Test(expected = ImmutableModifiedThroughReflectionError.class)
     public void testNext04()
     {
@@ -137,6 +141,7 @@ public class TestImmutableListIterator
         this.iterator.next();
     }
 
+    @SuppressWarnings("ResultOfMethodCallIgnored")
     @Test(expected = ImmutableModifiedThroughReflectionError.class)
     public void testNext05()
     {

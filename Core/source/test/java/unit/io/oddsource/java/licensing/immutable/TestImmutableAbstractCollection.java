@@ -22,6 +22,7 @@ import org.junit.Test;
 /**
  * Test class for ImmutableAbstractCollection.
  */
+@SuppressWarnings("EmptyMethod")
 public class TestImmutableAbstractCollection
 {
     @Before

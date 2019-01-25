@@ -25,6 +25,7 @@ import java.util.IllegalFormatException;
  * @version 1.0.0
  * @since 1.0.0
  */
+@SuppressWarnings({"UnusedReturnValue", "unused"})
 public interface PasswordPrompter
 {
     /**

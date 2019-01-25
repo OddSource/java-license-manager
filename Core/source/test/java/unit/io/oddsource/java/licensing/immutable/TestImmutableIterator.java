@@ -28,15 +28,16 @@ import org.junit.Test;
 /**
  * Test class for ImmutableIterator.
  */
+@SuppressWarnings("EmptyMethod")
 public class TestImmutableIterator
 {
-    private ImmutableIterator<String> iterator;
+    final private ImmutableIterator<String> iterator;
 
-    private MockValidObject valid;
+    final private MockValidObject valid;
 
     public TestImmutableIterator()
     {
-        TreeSet<String> temp = new TreeSet<String>();
+        TreeSet<String> temp = new TreeSet<>();
         temp.add("MyString1");
         temp.add("YourString2");
         temp.add("HisString3");
@@ -44,16 +45,16 @@ public class TestImmutableIterator
 
         this.valid = new MockValidObject();
 
-        this.iterator = new ImmutableIterator<String>(temp.iterator(), this.valid);
+        this.iterator = new ImmutableIterator<>(temp.iterator(), this.valid);
     }
 
     @BeforeClass
-    public static void setUpClass() throws Exception
+    public static void setUpClass()
     {
     }
 
     @AfterClass
-    public static void tearDownClass() throws Exception
+    public static void tearDownClass()
     {
     }
 
@@ -92,6 +93,7 @@ public class TestImmutableIterator
         }
     }
 
+    @SuppressWarnings("ResultOfMethodCallIgnored")
     @Test(expected = ImmutableModifiedThroughReflectionError.class)
     public void testNext02()
     {
@@ -106,6 +108,7 @@ public class TestImmutableIterator
         this.iterator.next();
     }
 
+    @SuppressWarnings("ResultOfMethodCallIgnored")
     @Test(expected = ImmutableModifiedThroughReflectionError.class)
     public void testNext04()
     {
@@ -123,6 +126,7 @@ public class TestImmutableIterator
         this.iterator.next();
     }
 
+    @SuppressWarnings("ResultOfMethodCallIgnored")
     @Test(expected = ImmutableModifiedThroughReflectionError.class)
     public void testNext05()
     {

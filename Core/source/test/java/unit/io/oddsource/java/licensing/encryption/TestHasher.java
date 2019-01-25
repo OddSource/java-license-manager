@@ -27,6 +27,7 @@ import org.junit.Test;
 /**
  * Test class for Hasher.
  */
+@SuppressWarnings("EmptyMethod")
 public class TestHasher
 {
     @Before
@@ -67,9 +68,9 @@ public class TestHasher
     }
 
     @Test
-    public void testHashSameStrings() throws Exception
+    public void testHashSameStrings()
     {
-        String unhashed = "myteststring";
+        String unhashed = "myTestString";
 
         String enc1 = Hasher.hash(unhashed);
         String enc2 = Hasher.hash(unhashed);
@@ -79,9 +80,9 @@ public class TestHasher
         assertNotNull("The second encrypted string was null.", enc2);
         assertNotNull("The third encrypted string was null.", enc3);
 
-        assertFalse("The first encrypted string was not encrypted properly.", enc1.equals(unhashed));
-        assertFalse("The second encrypted string was not encrypted properly.", enc2.equals(unhashed));
-        assertFalse("The third encrypted string was not encrypted properly.", enc3.equals(unhashed));
+        assertNotEquals("The first encrypted string was not encrypted properly.", enc1, unhashed);
+        assertNotEquals("The second encrypted string was not encrypted properly.", enc2, unhashed);
+        assertNotEquals("The third encrypted string was not encrypted properly.", enc3, unhashed);
 
         assertEquals("The first and second encrypted strings do not match.", enc1, enc2);
         assertEquals("The first and third encrypted strings do not match.", enc1, enc3);
@@ -89,10 +90,10 @@ public class TestHasher
     }
 
     @Test
-    public void testHashDifferentString() throws Exception
+    public void testHashDifferentString()
     {
-        String unhashed1 = "myteststring1";
-        String unhashed2 = "myteststring2";
+        String unhashed1 = "myTestString1";
+        String unhashed2 = "myTestString2";
 
         String encrypted1 = Hasher.hash(unhashed1);
         String encrypted2 = Hasher.hash(unhashed2);
@@ -100,9 +101,10 @@ public class TestHasher
         assertNotNull("The first encrypted string was null.", encrypted1);
         assertNotNull("The second encrypted string was null.", encrypted2);
 
-        assertFalse(
+        assertNotEquals(
             "The first encrypted string matches the second encrypted string, and it shouldn't.",
-            encrypted1.equals(encrypted2)
+            encrypted1,
+            encrypted2
         );
     }
 }

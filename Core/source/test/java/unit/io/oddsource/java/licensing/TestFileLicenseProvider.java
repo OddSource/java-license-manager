@@ -32,6 +32,7 @@ import org.junit.Test;
 /**
  * Test class for FileLicenseProvider.
  */
+@SuppressWarnings("EmptyMethod")
 public class TestFileLicenseProvider
 {
     private FileLicenseProvider provider;

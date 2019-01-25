@@ -18,6 +18,7 @@ package io.oddsource.java.licensing.mock;
 import io.oddsource.java.licensing.exception.KeyNotFoundException;
 import io.oddsource.java.licensing.licensor.encryption.PrivateKeyDataProvider;
 
+@SuppressWarnings("Duplicates")
 public final class MockEmbeddedPrivateKeyDataProvider implements PrivateKeyDataProvider
 {
     @Override

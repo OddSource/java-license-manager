@@ -365,6 +365,7 @@ public final class Encryptor
      *
      * @see Encryptor#unPad(byte[])
      */
+    @SuppressWarnings("SameParameterValue")
     private static byte[] pad(final byte[] bytes, final int length)
     {
         if(bytes.length >= length)

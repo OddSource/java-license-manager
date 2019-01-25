@@ -39,7 +39,7 @@ import io.oddsource.java.licensing.licensor.interfaces.spi.PasswordPrompter;
  * @version 1.0.0
  * @since 1.0.0
  */
-@SuppressWarnings("UnusedReturnValue")
+@SuppressWarnings({"UnusedReturnValue", "unused"})
 public interface TextInterfaceDevice extends PasswordPrompter, Flushable, OutputDevice
 {
     /**

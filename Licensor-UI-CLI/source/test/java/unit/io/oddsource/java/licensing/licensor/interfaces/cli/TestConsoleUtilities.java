@@ -31,6 +31,7 @@ import io.oddsource.java.licensing.licensor.interfaces.cli.spi.TextInterfaceDevi
 /**
  * Test class for ConsoleUtilities.
  */
+@SuppressWarnings("EmptyMethod")
 public class TestConsoleUtilities
 {
     @Before

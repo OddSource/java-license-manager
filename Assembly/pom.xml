@@ -101,7 +101,9 @@
                 <configuration>
                     <finalName>${project.groupId}-${project.version}</finalName>
                     <windowtitle><![CDATA[${project.parent.name} ${project.version} API Documentation]]></windowtitle>
-                    <doctitle><![CDATA[<h2>${project.parent.name} ${project.version} API Documentation</h2>]]></doctitle>
+                    <doctitle>
+                        <![CDATA[<h2>${project.parent.name} ${project.version} API Documentation</h2>]]>
+                    </doctitle>
                     <archive>
                         <addMavenDescriptor>true</addMavenDescriptor>
                         <compress>true</compress>

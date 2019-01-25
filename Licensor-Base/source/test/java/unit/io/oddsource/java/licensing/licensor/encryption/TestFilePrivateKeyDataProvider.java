@@ -30,6 +30,7 @@ import io.oddsource.java.licensing.exception.KeyNotFoundException;
 /**
  * Test class for FilePrivateKeyDataProvider.
  */
+@SuppressWarnings("EmptyMethod")
 public class TestFilePrivateKeyDataProvider
 {
     @Before

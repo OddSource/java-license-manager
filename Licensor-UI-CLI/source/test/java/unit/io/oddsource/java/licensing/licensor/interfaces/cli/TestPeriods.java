@@ -28,6 +28,7 @@ import org.junit.Test;
 /**
  * Test class for Periods.
  */
+@SuppressWarnings("EmptyMethod")
 public class TestPeriods
 {
     private Periods periods;

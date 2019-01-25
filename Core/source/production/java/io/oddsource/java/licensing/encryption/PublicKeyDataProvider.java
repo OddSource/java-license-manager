@@ -27,6 +27,7 @@ import io.oddsource.java.licensing.exception.KeyNotFoundException;
  * @version 1.0.0
  * @since 1.0.0
  */
+@SuppressWarnings({"UnusedReturnValue", "unused"})
 public interface PublicKeyDataProvider
 {
     /**

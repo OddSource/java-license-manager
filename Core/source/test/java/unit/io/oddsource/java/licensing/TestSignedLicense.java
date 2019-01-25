@@ -24,6 +24,7 @@ import org.junit.Test;
 /**
  * Test class for SignedLicense.
  */
+@SuppressWarnings("EmptyMethod")
 public class TestSignedLicense
 {
     private SignedLicense license;

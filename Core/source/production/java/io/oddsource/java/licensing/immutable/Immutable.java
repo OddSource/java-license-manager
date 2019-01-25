@@ -22,6 +22,7 @@ package io.oddsource.java.licensing.immutable;
  * @version 1.0.0
  * @since 1.0.0
  */
+@SuppressWarnings("unused")
 public interface Immutable
 {
 

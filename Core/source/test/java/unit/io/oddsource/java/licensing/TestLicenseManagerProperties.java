@@ -27,6 +27,7 @@ import org.junit.Test;
 /**
  * Test class for LicenseManagerProperties.
  */
+@SuppressWarnings("EmptyMethod")
 public class TestLicenseManagerProperties
 {
     @Before

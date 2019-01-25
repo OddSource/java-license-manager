@@ -28,19 +28,20 @@ import org.junit.Test;
 /**
  * Test class for ImmutableLinkedHashSet and ImmutableAbstractCollection.
  */
+@SuppressWarnings("EmptyMethod")
 public class TestImmutableLinkedHashSet
 {
-    private ImmutableLinkedHashSet<String> set;
+    final private ImmutableLinkedHashSet<String> set;
 
     public TestImmutableLinkedHashSet()
     {
-        LinkedHashSet<String> temp = new LinkedHashSet<String>();
+        LinkedHashSet<String> temp = new LinkedHashSet<>();
         temp.add("MyString1");
         temp.add("YourString2");
         temp.add("HisString3");
         temp.add("HerString4");
 
-        this.set = new ImmutableLinkedHashSet<String>(temp);
+        this.set = new ImmutableLinkedHashSet<>(temp);
     }
 
     @SuppressWarnings("unchecked")
@@ -120,7 +121,7 @@ public class TestImmutableLinkedHashSet
     @Test(expected = UnsupportedOperationException.class)
     public void testAddAllNotAllowed()
     {
-        this.set.addAll(new HashSet<String>());
+        this.set.addAll(new HashSet<>());
     }
 
     @Test(expected = UnsupportedOperationException.class)
@@ -161,13 +162,13 @@ public class TestImmutableLinkedHashSet
     @Test
     public void testHashCode02()
     {
-        HashSet<String> temp = new HashSet<String>();
+        HashSet<String> temp = new HashSet<>();
         temp.add("MyString1");
         temp.add("YourString2");
         temp.add("HisString3");
         temp.add("HerString4");
 
-        ImmutableLinkedHashSet<String> test = new ImmutableLinkedHashSet<String>(temp);
+        ImmutableLinkedHashSet<String> test = new ImmutableLinkedHashSet<>(temp);
 
         assertEquals("The hash codes should be equal.", test.hashCode(), this.set.hashCode());
     }
@@ -175,17 +176,18 @@ public class TestImmutableLinkedHashSet
     @Test
     public void testHashCode03()
     {
-        HashSet<String> temp = new HashSet<String>();
+        HashSet<String> temp = new HashSet<>();
         temp.add("MyString1");
         temp.add("YourString2");
         temp.add("HisString3");
         temp.add("HerString5");
 
-        ImmutableLinkedHashSet<String> test = new ImmutableLinkedHashSet<String>(temp);
+        ImmutableLinkedHashSet<String> test = new ImmutableLinkedHashSet<>(temp);
 
-        assertFalse("The hash codes should not be equal.", test.hashCode() == this.set.hashCode());
+        assertNotEquals("The hash codes should not be equal.", test.hashCode(), this.set.hashCode());
     }
 
+    @SuppressWarnings("ResultOfMethodCallIgnored")
     @Test(expected = ImmutableModifiedThroughReflectionError.class)
     public void testHashCode04()
     {
@@ -196,13 +198,13 @@ public class TestImmutableLinkedHashSet
     @Test
     public void testEquals01()
     {
-        HashSet<String> temp = new HashSet<String>();
+        HashSet<String> temp = new HashSet<>();
         temp.add("MyString1");
         temp.add("YourString2");
         temp.add("HisString3");
         temp.add("HerString4");
 
-        ImmutableLinkedHashSet<String> test = new ImmutableLinkedHashSet<String>(temp);
+        ImmutableLinkedHashSet<String> test = new ImmutableLinkedHashSet<>(temp);
 
         assertEquals("The sets should be equal.", test, this.set);
     }
@@ -210,17 +212,18 @@ public class TestImmutableLinkedHashSet
     @Test
     public void testEquals02()
     {
-        HashSet<String> temp = new HashSet<String>();
+        HashSet<String> temp = new HashSet<>();
         temp.add("MyString1");
         temp.add("YourString2");
         temp.add("HisString3");
         temp.add("HerString5");
 
-        ImmutableLinkedHashSet<String> test = new ImmutableLinkedHashSet<String>(temp);
+        ImmutableLinkedHashSet<String> test = new ImmutableLinkedHashSet<>(temp);
 
-        assertFalse("The sets should not be equal.", test.equals(this.set));
+        assertNotEquals("The sets should not be equal.", test, this.set);
     }
 
+    @SuppressWarnings({"EqualsWithItself", "ResultOfMethodCallIgnored"})
     @Test(expected = ImmutableModifiedThroughReflectionError.class)
     public void testEquals03()
     {
@@ -233,7 +236,7 @@ public class TestImmutableLinkedHashSet
     {
         ImmutableLinkedHashSet<String> test = this.set.clone();
 
-        assertFalse("The sets should not be the same objects.", test == this.set);
+        assertNotSame("The sets should not be the same objects.", test, this.set);
         assertEquals("The sets should be equal.", this.set, test);
     }
 
@@ -256,6 +259,7 @@ public class TestImmutableLinkedHashSet
         assertFalse("The set should not contain this string.", this.set.contains("YourString1"));
     }
 
+    @SuppressWarnings("ResultOfMethodCallIgnored")
     @Test(expected = ImmutableModifiedThroughReflectionError.class)
     public void testContains03()
     {
@@ -266,7 +270,7 @@ public class TestImmutableLinkedHashSet
     @Test
     public void testContainsAll01()
     {
-        HashSet<String> test = new HashSet<String>();
+        HashSet<String> test = new HashSet<>();
         test.add("MyString1");
         test.add("YourString2");
 
@@ -276,13 +280,14 @@ public class TestImmutableLinkedHashSet
     @Test
     public void testContainsAll02()
     {
-        HashSet<String> test = new HashSet<String>();
+        HashSet<String> test = new HashSet<>();
         test.add("MyString1");
         test.add("YourString3");
 
         assertFalse("The set should not contain all of these strings.", this.set.containsAll(test));
     }
 
+    @SuppressWarnings("CollectionAddedToSelf")
     @Test(expected = ImmutableModifiedThroughReflectionError.class)
     public void testContainsAll03()
     {
@@ -302,10 +307,11 @@ public class TestImmutableLinkedHashSet
     {
         assertTrue(
             "The set should not be empty.",
-            new ImmutableLinkedHashSet<String>(new HashSet<String>()).isEmpty()
+            new ImmutableLinkedHashSet<>(new HashSet<>()).isEmpty()
         );
     }
 
+    @SuppressWarnings("ResultOfMethodCallIgnored")
     @Test(expected = ImmutableModifiedThroughReflectionError.class)
     public void testIsEmpty03()
     {
@@ -377,11 +383,11 @@ public class TestImmutableLinkedHashSet
     @Test
     public void testSize02()
     {
-        HashSet<String> test = new HashSet<String>();
+        HashSet<String> test = new HashSet<>();
         test.add("MyString1");
         test.add("YourString2");
 
-        assertEquals("The size is not correct.", 2, new ImmutableLinkedHashSet<String>(test).size());
+        assertEquals("The size is not correct.", 2, new ImmutableLinkedHashSet<>(test).size());
     }
 
     @Test(expected = ImmutableModifiedThroughReflectionError.class)
@@ -403,11 +409,11 @@ public class TestImmutableLinkedHashSet
     @Test
     public void testToObjectArray02()
     {
-        HashSet<String> test = new HashSet<String>();
+        HashSet<String> test = new HashSet<>();
         test.add("MyString1");
         test.add("HisString3");
 
-        Object[] array = new ImmutableLinkedHashSet<String>(test).toArray();
+        Object[] array = new ImmutableLinkedHashSet<>(test).toArray();
 
         assertNotNull("The array should not be null.", array);
         assertEquals("The array length is not correct.", 2, array.length);
@@ -421,7 +427,6 @@ public class TestImmutableLinkedHashSet
     }
 
     @Test
-    @SuppressWarnings("ToArrayCallWithZeroLengthArrayArgument")
     public void testToPrototypedArray01()
     {
         String[] array = this.set.toArray(new String[0]);
@@ -431,21 +436,19 @@ public class TestImmutableLinkedHashSet
     }
 
     @Test
-    @SuppressWarnings("ToArrayCallWithZeroLengthArrayArgument")
     public void testToPrototypedArray02()
     {
-        HashSet<String> test = new HashSet<String>();
+        HashSet<String> test = new HashSet<>();
         test.add("MyString1");
         test.add("HisString3");
 
-        String[] array = new ImmutableLinkedHashSet<String>(test).toArray(new String[0]);
+        String[] array = new ImmutableLinkedHashSet<>(test).toArray(new String[0]);
 
         assertNotNull("The array should not be null.", array);
         assertEquals("The array length is not correct.", 2, array.length);
     }
 
     @Test(expected = ImmutableModifiedThroughReflectionError.class)
-    @SuppressWarnings("ToArrayCallWithZeroLengthArrayArgument")
     public void testToPrototypedArray03()
     {
         this.getInternal().add(null);

@@ -31,8 +31,10 @@ import io.oddsource.java.licensing.exception.InvalidSignatureException;
 /**
  * Test class for DataSignatureManager.
  */
+@SuppressWarnings("EmptyMethod")
 public class TestDataSignatureManager
 {
+    @SuppressWarnings("SpellCheckingInspection")
     private static final String privateKeyString = "rO0ABXNyABRqYXZhLnNlY3VyaXR5LktleVJlcL35T7OImqVDAgAETAAJYWxnb3Jpd" +
                                                    "GhtdAASTGphdmEvbGFuZy9TdHJpbmc7WwAHZW5jb2RlZHQAAltCTAAGZm9ybWF0cQ" +
                                                    "B+AAFMAAR0eXBldAAbTGphdmEvc2VjdXJpdHkvS2V5UmVwJFR5cGU7eHB0AANSU0F" +
@@ -65,6 +67,7 @@ public class TestDataSignatureManager
                                                    "XlSZXAkVHlwZQAAAAAAAAAAEgAAeHIADmphdmEubGFuZy5FbnVtAAAAAAAAAAASAA" +
                                                    "B4cHQAB1BSSVZBVEU=";
 
+    @SuppressWarnings("SpellCheckingInspection")
     private static final String publicKeyString = "rO0ABXNyABRqYXZhLnNlY3VyaXR5LktleVJlcL35T7OImqVDAgAETAAJYWxnb3JpdG" +
                                                   "htdAASTGphdmEvbGFuZy9TdHJpbmc7WwAHZW5jb2RlZHQAAltCTAAGZm9ybWF0cQB+" +
                                                   "AAFMAAR0eXBldAAbTGphdmEvc2VjdXJpdHkvS2V5UmVwJFR5cGU7eHB0AANSU0F1cg" +
@@ -98,12 +101,12 @@ public class TestDataSignatureManager
     }
 
     @BeforeClass
-    public static void setUpClass() throws Exception
+    public static void setUpClass()
     {
     }
 
     @AfterClass
-    public static void tearDownClass() throws Exception
+    public static void tearDownClass()
     {
     }
 

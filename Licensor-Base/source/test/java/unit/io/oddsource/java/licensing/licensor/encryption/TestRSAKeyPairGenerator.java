@@ -54,11 +54,12 @@ import io.oddsource.java.licensing.encryption.PublicKeyDataProvider;
 /**
  * Test class for RSAKeyPairGenerator.
  */
+@SuppressWarnings("EmptyMethod")
 public class TestRSAKeyPairGenerator
 {
     private static KeyPair reusableKeyPair;
 
-    private RSAKeyPairGenerator generator;
+    private final RSAKeyPairGenerator generator;
 
     public TestRSAKeyPairGenerator()
     {
@@ -935,7 +936,7 @@ class MockJavaClassObject extends SimpleJavaFileObject
 
 class MockCharSequenceJavaFileObject extends SimpleJavaFileObject
 {
-    private CharSequence content;
+    private final CharSequence content;
 
     public MockCharSequenceJavaFileObject(String className, CharSequence content)
     {

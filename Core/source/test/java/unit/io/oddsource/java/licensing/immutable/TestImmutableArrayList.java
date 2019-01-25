@@ -28,6 +28,7 @@ import org.junit.Test;
 /**
  * Test class for ImmutableArrayList.
  */
+@SuppressWarnings("EmptyMethod")
 public class TestImmutableArrayList
 {
     private ImmutableArrayList<String> list;
@@ -35,13 +36,13 @@ public class TestImmutableArrayList
     @Before
     public void setUp()
     {
-        ArrayList<String> temp = new ArrayList<String>();
+        ArrayList<String> temp = new ArrayList<>();
         temp.add("MyString1");
         temp.add("YourString2");
         temp.add("HisString3");
         temp.add("HerString4");
 
-        this.list = new ImmutableArrayList<String>(temp);
+        this.list = new ImmutableArrayList<>(temp);
     }
 
     @After
@@ -123,7 +124,7 @@ public class TestImmutableArrayList
     {
         ImmutableArrayList<String> test = this.list.clone();
 
-        assertFalse("The lists should not be the same objects.", test == this.list);
+        assertNotSame("The lists should not be the same objects.", test, this.list);
         assertEquals("The lists should be equal.", this.list, test);
     }
 
@@ -146,12 +147,14 @@ public class TestImmutableArrayList
         assertEquals("The value is not correct.", "HerString4", this.list.get(3));
     }
 
+    @SuppressWarnings("ResultOfMethodCallIgnored")
     @Test(expected = IndexOutOfBoundsException.class)
     public void testGet03()
     {
         this.list.get(4);
     }
 
+    @SuppressWarnings("ResultOfMethodCallIgnored")
     @Test(expected = ImmutableModifiedThroughReflectionError.class)
     public void testGet04()
     {
@@ -210,7 +213,6 @@ public class TestImmutableArrayList
     }
 
     @Test
-    @SuppressWarnings("WhileLoopReplaceableByForEach")
     public void testListIterator101()
     {
         int i = 0;
@@ -290,7 +292,7 @@ public class TestImmutableArrayList
     {
         ImmutableArrayList<String> test = this.list.subList(1, 3);
 
-        assertFalse("The objects should be different.", test == this.list);
+        assertNotSame("The objects should be different.", test, this.list);
         assertEquals("The list is the wrong side.", 2, test.size());
         assertEquals("String 1 is not correct.", "YourString2", test.get(0));
         assertEquals("String 2 is not correct.", "HisString3", test.get(1));
@@ -301,7 +303,7 @@ public class TestImmutableArrayList
     {
         ImmutableArrayList<String> test = this.list.subList(2, 4);
 
-        assertFalse("The objects should be different.", test == this.list);
+        assertNotSame("The objects should be different.", test, this.list);
         assertEquals("The list is the wrong side.", 2, test.size());
         assertEquals("String 1 is not correct.", "HisString3", test.get(0));
         assertEquals("String 2 is not correct.", "HerString4", test.get(1));

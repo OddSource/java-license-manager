@@ -102,7 +102,7 @@ public class TestLicenseCreator
         TestLicenseCreator.encryptedPrivateKey = outputStream.toByteArray();
     }
 
-    private LicenseCreator creator;
+    private final LicenseCreator creator;
 
     public TestLicenseCreator()
     {

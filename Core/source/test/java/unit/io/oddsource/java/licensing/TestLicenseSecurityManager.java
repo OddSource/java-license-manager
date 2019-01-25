@@ -44,6 +44,7 @@ import io.oddsource.java.licensing.mock.StateFlag;
 /**
  * Test class for LicenseSecurityManager.
  */
+@SuppressWarnings("EmptyMethod")
 public class TestLicenseSecurityManager
 {
     private LicenseSecurityManager manager;

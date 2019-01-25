@@ -24,6 +24,7 @@ import org.junit.Test;
 /**
  * Test class for ConsoleInterfaceDevice.
  */
+@SuppressWarnings("EmptyMethod")
 public class TestConsoleInterfaceDevice
 {
     private ConsoleInterfaceDevice device;

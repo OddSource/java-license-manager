@@ -38,13 +38,6 @@ final class ConsoleUtilities
      */
     public static void configureInterfaceDevice(final TextInterfaceDevice interfaceDevice)
     {
-        interfaceDevice.registerShutdownHook(new Thread(new Runnable()
-        {
-            @Override
-            public void run()
-            {
-                interfaceDevice.printOutLn();
-            }
-        }));
+        interfaceDevice.registerShutdownHook(new Thread(interfaceDevice::printOutLn));
     }
 }

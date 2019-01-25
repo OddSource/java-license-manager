@@ -35,9 +35,10 @@ import io.oddsource.java.licensing.exception.ObjectTypeNotExpectedException;
 /**
  * Test class for ObjectSerializer.
  */
+@SuppressWarnings("EmptyMethod")
 public class TestObjectSerializer
 {
-    ObjectSerializer serializer;
+    final ObjectSerializer serializer;
 
     public TestObjectSerializer()
     {
@@ -45,12 +46,12 @@ public class TestObjectSerializer
     }
 
     @BeforeClass
-    public static void setUpClass() throws Exception
+    public static void setUpClass()
     {
     }
 
     @AfterClass
-    public static void tearDownClass() throws Exception
+    public static void tearDownClass()
     {
     }
 
@@ -74,7 +75,7 @@ public class TestObjectSerializer
         byte[] data = this.serializer.writeObject(object);
 
         assertNotNull("The array should not be null.", data);
-        assertTrue("The array shoudl not be empty.", data.length > 0);
+        assertTrue("The array should not be empty.", data.length > 0);
 
         ByteArrayInputStream bytes = new ByteArrayInputStream(data);
         ObjectInputStream stream = new ObjectInputStream(bytes);
@@ -85,7 +86,7 @@ public class TestObjectSerializer
         assertEquals("The object is not the right kind of object.", MockTestObject1.class, input.getClass());
 
         MockTestObject1 actual = (MockTestObject1) input;
-        assertFalse("The objects should not be the same object.", actual == object);
+        assertNotSame("The objects should not be the same object.", actual, object);
         assertEquals("The object is not correct.", object, actual);
     }
 
@@ -99,7 +100,7 @@ public class TestObjectSerializer
         byte[] data = this.serializer.writeObject(object);
 
         assertNotNull("The array should not be null.", data);
-        assertTrue("The array shoudl not be empty.", data.length > 0);
+        assertTrue("The array should not be empty.", data.length > 0);
 
         ByteArrayInputStream bytes = new ByteArrayInputStream(data);
         ObjectInputStream stream = new ObjectInputStream(bytes);
@@ -110,7 +111,7 @@ public class TestObjectSerializer
         assertEquals("The object is not the right kind of object.", MockTestObject1.class, input.getClass());
 
         MockTestObject1 actual = (MockTestObject1) input;
-        assertFalse("The objects should not be the same object.", actual == object);
+        assertNotSame("The objects should not be the same object.", actual, object);
         assertEquals("The object is not correct.", object, actual);
     }
 
@@ -122,7 +123,7 @@ public class TestObjectSerializer
         byte[] data = this.serializer.writeObject(object);
 
         assertNotNull("The array should not be null.", data);
-        assertTrue("The array shoudl not be empty.", data.length > 0);
+        assertTrue("The array should not be empty.", data.length > 0);
 
         ByteArrayInputStream bytes = new ByteArrayInputStream(data);
         ObjectInputStream stream = new ObjectInputStream(bytes);
@@ -133,7 +134,7 @@ public class TestObjectSerializer
         assertEquals("The object is not the right kind of object.", MockTestObject2.class, input.getClass());
 
         MockTestObject2 actual = (MockTestObject2) input;
-        assertFalse("The objects should not be the same object.", actual == object);
+        assertNotSame("The objects should not be the same object.", actual, object);
         assertEquals("The object is not correct.", object, actual);
     }
 
@@ -147,7 +148,7 @@ public class TestObjectSerializer
         byte[] data = this.serializer.writeObject(object);
 
         assertNotNull("The array should not be null.", data);
-        assertTrue("The array shoudl not be empty.", data.length > 0);
+        assertTrue("The array should not be empty.", data.length > 0);
 
         ByteArrayInputStream bytes = new ByteArrayInputStream(data);
         ObjectInputStream stream = new ObjectInputStream(bytes);
@@ -158,7 +159,7 @@ public class TestObjectSerializer
         assertEquals("The object is not the right kind of object.", MockTestObject2.class, input.getClass());
 
         MockTestObject2 actual = (MockTestObject2) input;
-        assertFalse("The objects should not be the same object.", actual == object);
+        assertNotSame("The objects should not be the same object.", actual, object);
         assertEquals("The object is not correct.", object, actual);
     }
 
@@ -194,7 +195,7 @@ public class TestObjectSerializer
         MockTestObject1 returned = this.serializer.readObject(MockTestObject1.class, data);
 
         assertNotNull("The returned object should not be null.", returned);
-        assertFalse("The returned object should not be the same.", returned == object);
+        assertNotSame("The returned object should not be the same.", returned, object);
         assertEquals("The returned object should be equal.", object, returned);
     }
 
@@ -216,7 +217,7 @@ public class TestObjectSerializer
         MockTestObject1 returned = this.serializer.readObject(MockTestObject1.class, data);
 
         assertNotNull("The returned object should not be null.", returned);
-        assertFalse("The returned object should not be the same.", returned == object);
+        assertNotSame("The returned object should not be the same.", returned, object);
         assertEquals("The returned object should be equal.", object, returned);
     }
 
@@ -252,7 +253,7 @@ public class TestObjectSerializer
         MockTestObject2 returned = this.serializer.readObject(MockTestObject2.class, data);
 
         assertNotNull("The returned object should not be null.", returned);
-        assertFalse("The returned object should not be the same.", returned == object);
+        assertNotSame("The returned object should not be the same.", returned, object);
         assertEquals("The returned object should be equal.", object, returned);
     }
 
@@ -274,7 +275,7 @@ public class TestObjectSerializer
         MockTestObject2 returned = this.serializer.readObject(MockTestObject2.class, data);
 
         assertNotNull("The returned object should not be null.", returned);
-        assertFalse("The returned object should not be the same.", returned == object);
+        assertNotSame("The returned object should not be the same.", returned, object);
         assertEquals("The returned object should be equal.", object, returned);
     }
 
@@ -288,7 +289,7 @@ public class TestObjectSerializer
         MockTestObject1 returned = this.serializer.readObject(MockTestObject1.class, data);
 
         assertNotNull("The object should not be null.", returned);
-        assertFalse("The object should not be the same.", returned == object);
+        assertNotSame("The object should not be the same.", returned, object);
         assertEquals("The object should be equal.", object, returned);
     }
 
@@ -304,7 +305,7 @@ public class TestObjectSerializer
         MockTestObject1 returned = this.serializer.readObject(MockTestObject1.class, data);
 
         assertNotNull("The object should not be null.", returned);
-        assertFalse("The object should not be the same.", returned == object);
+        assertNotSame("The object should not be the same.", returned, object);
         assertEquals("The object should be equal.", object, returned);
     }
 
@@ -318,7 +319,7 @@ public class TestObjectSerializer
         MockTestObject2 returned = this.serializer.readObject(MockTestObject2.class, data);
 
         assertNotNull("The object should not be null.", returned);
-        assertFalse("The object should not be the same.", returned == object);
+        assertNotSame("The object should not be the same.", returned, object);
         assertEquals("The object should be equal.", object, returned);
     }
 
@@ -334,7 +335,7 @@ public class TestObjectSerializer
         MockTestObject2 returned = this.serializer.readObject(MockTestObject2.class, data);
 
         assertNotNull("The object should not be null.", returned);
-        assertFalse("The object should not be the same.", returned == object);
+        assertNotSame("The object should not be the same.", returned, object);
         assertEquals("The object should be equal.", object, returned);
     }
 }
@@ -345,12 +346,12 @@ class MockTestObject1 implements Serializable
 
     boolean coolTest;
 
-    byte[] myArray = new byte[] {(byte) 2, (byte) 3, (byte) 5, (byte) 7, (byte) 11, (byte) 13};
+    final byte[] myArray = new byte[] {(byte) 2, (byte) 3, (byte) 5, (byte) 7, (byte) 11, (byte) 13};
 
     @Override
     public boolean equals(Object o)
     {
-        if(o == null || !(o instanceof MockTestObject1))
+        if(!(o instanceof MockTestObject1))
         {
             return false;
         }
@@ -359,6 +360,7 @@ class MockTestObject1 implements Serializable
     }
 
     @Override
+    @SuppressWarnings("EmptyMethod")
     public int hashCode()
     {
         return super.hashCode();
@@ -371,12 +373,12 @@ class MockTestObject2 implements Serializable
 
     String aString = "Hello, world";
 
-    char[] password = new char[] {'a', 'p', 'a', 's', 's', 'w', 'o', 'r', 'd'};
+    final char[] password = new char[] {'a', 'p', 'a', 's', 's', 'w', 'o', 'r', 'd'};
 
     @Override
     public boolean equals(Object o)
     {
-        if(o == null || !(o instanceof MockTestObject2))
+        if(!(o instanceof MockTestObject2))
         {
             return false;
         }
@@ -388,6 +390,7 @@ class MockTestObject2 implements Serializable
     }
 
     @Override
+    @SuppressWarnings("EmptyMethod")
     public int hashCode()
     {
         return super.hashCode();

@@ -30,6 +30,7 @@ import io.oddsource.java.licensing.exception.FailedToDecryptException;
 /**
  * Test class for Encryptor.
  */
+@SuppressWarnings("EmptyMethod")
 public class TestEncryptor
 {
     @Before
@@ -273,6 +274,7 @@ public class TestEncryptor
     @Test
     public void testEncrypt2()
     {
+        @SuppressWarnings("SpellCheckingInspection")
         String toEncrypt = "aoeugalogeual9o87gu3l2'r3ghsproguhSNoehusNOEhusntoehoUZTOHEUNT<>" +
                            "H<(>*JGJCROEHunt.huaahsnoeuhs,cr.a,g.ulreo8gukchrseunhaonteihaorceugaroscuh" +
                            ".nsphilraeugil98g'l38rgph's23cnhps    .c,huiscraoeha/l-iuh.p-sihtaosntiha.,edo" +
@@ -306,6 +308,7 @@ public class TestEncryptor
     @Test
     public void testPasswordBasedEncrypt2()
     {
+        @SuppressWarnings("SpellCheckingInspection")
         String toEncrypt = "aoeugalogeual9o87gu3l2'r3ghsproguhSNoehusNOEhusntoehoUZTOHEUNT<>" +
                            "H<(>*JGJCROEHunt.huaahsnoeuhs,cr.a,g.ulreo8gukchrseunhaonteihaorceugaroscuh" +
                            ".nsphilraeugil98g'l38rgph's23cnhps    .c,huiscraoeha/l-iuh.p-sihtaosntiha.,edo" +
@@ -329,16 +332,17 @@ public class TestEncryptor
 
         assertEquals("The encrypted string is not the same.", encrypted1, encrypted2);
         assertEquals("The encrypted string is not the same.", encrypted3, encrypted4);
-        assertFalse("The encrypted string is not the same.", encrypted1.equals(encrypted3));
-        assertFalse("The encrypted string is not the same.", encrypted1.equals(encrypted4));
-        assertFalse("The encrypted string is not the same.", encrypted2.equals(encrypted3));
-        assertFalse("The encrypted string is not the same.", encrypted2.equals(encrypted4));
+        assertNotEquals("The encrypted string is not the same.", encrypted1, encrypted3);
+        assertNotEquals("The encrypted string is not the same.", encrypted1, encrypted4);
+        assertNotEquals("The encrypted string is not the same.", encrypted2, encrypted3);
+        assertNotEquals("The encrypted string is not the same.", encrypted2, encrypted4);
     }
 
     // Test for expectation
     @Test
     public void testEncrypt3()
     {
+        @SuppressWarnings("SpellCheckingInspection")
         String expected =
             "NSARPhey360gZ2xTOaswGn6lWCd01poo1AW8o0Oobudbf2MNe38lX21EpHEFGl" +
             "-MKgZnPZKsSHrDFXjL1CvtWqQ2JN6RuMKW0iht1TacVKE";
@@ -354,6 +358,7 @@ public class TestEncryptor
     @Test
     public void testPasswordBasedEncrypt3()
     {
+        @SuppressWarnings("SpellCheckingInspection")
         String expected =
             "YPEXhIzBx1VzkbqMwaS2QpMPQJCY9kALXLYY0HFWRCSpRobyCrAGLtwNPnEKDW_TKMSRzf7BAUHFueySb_dh2tISTe8zx-uZ_WG" +
             "-c06x2Ns";
@@ -375,7 +380,7 @@ public class TestEncryptor
 
         String decrypted = Encryptor.decrypt(encrypted);
         assertNotNull("The decrypted string should not be null.", decrypted);
-        assertFalse("The decrypted string should not equal the encrypted string.", encrypted.equals(decrypted));
+        assertNotEquals("The decrypted string should not equal the encrypted string.", encrypted, decrypted);
         assertEquals("The decrypted string should equal the original string.", toEncrypt, decrypted);
     }
 
@@ -390,7 +395,7 @@ public class TestEncryptor
         // right password
         String decrypted = Encryptor.decrypt(encrypted, "myDecryptPassword1".toCharArray());
         assertNotNull("The decrypted string should not be null.", decrypted);
-        assertFalse("The decrypted string should not equal the encrypted string.", encrypted.equals(decrypted));
+        assertNotEquals("The decrypted string should not equal the encrypted string.", encrypted, decrypted);
         assertEquals("The decrypted string should equal the original string.", toEncrypt, decrypted);
 
         // wrong password
@@ -415,7 +420,7 @@ public class TestEncryptor
 
         String decrypted = Encryptor.decrypt(encrypted);
         assertNotNull("The decrypted string should not be null.", decrypted);
-        assertFalse("The decrypted string should not equal the encrypted string.", encrypted.equals(decrypted));
+        assertNotEquals("The decrypted string should not equal the encrypted string.", encrypted, decrypted);
         assertEquals("The decrypted string should equal the original string.", toEncrypt, decrypted);
     }
 
@@ -430,7 +435,7 @@ public class TestEncryptor
         // right password
         String decrypted = Encryptor.decrypt(encrypted, "yourDecryptPassword2".toCharArray());
         assertNotNull("The decrypted string should not be null.", decrypted);
-        assertFalse("The decrypted string should not equal the encrypted string.", encrypted.equals(decrypted));
+        assertNotEquals("The decrypted string should not equal the encrypted string.", encrypted, decrypted);
         assertEquals("The decrypted string should equal the original string.", toEncrypt, decrypted);
 
         // wrong password
@@ -455,7 +460,7 @@ public class TestEncryptor
 
         String decrypted = Encryptor.decrypt(encrypted);
         assertNotNull("The decrypted string should not be null.", decrypted);
-        assertFalse("The decrypted string should not equal the encrypted string.", encrypted.equals(decrypted));
+        assertNotEquals("The decrypted string should not equal the encrypted string.", encrypted, decrypted);
         assertEquals("The decrypted string should equal the original string.", toEncrypt, decrypted);
     }
 
@@ -464,19 +469,19 @@ public class TestEncryptor
     {
         String toEncrypt = "testAPasswordThatIsLongerThanThePaddingLengthToPreventRandomness";
 
-        String encrypted = Encryptor.encrypt(toEncrypt, "hisdecryptpassword3".toCharArray());
+        String encrypted = Encryptor.encrypt(toEncrypt, "hisDecryptPassword3".toCharArray());
         assertNotNull("The encrypted string should not be null.", encrypted);
 
         // right password
-        String decrypted = Encryptor.decrypt(encrypted, "hisdecryptpassword3".toCharArray());
+        String decrypted = Encryptor.decrypt(encrypted, "hisDecryptPassword3".toCharArray());
         assertNotNull("The decrypted string should not be null.", decrypted);
-        assertFalse("The decrypted string should not equal the encrypted string.", encrypted.equals(decrypted));
+        assertNotEquals("The decrypted string should not equal the encrypted string.", encrypted, decrypted);
         assertEquals("The decrypted string should equal the original string.", toEncrypt, decrypted);
 
         // wrong password
         try
         {
-            Encryptor.decrypt(encrypted, "hisDecryptPassword3".toCharArray());
+            Encryptor.decrypt(encrypted, "hisDecryptPassword3".toLowerCase().toCharArray());
             fail("Expected FailedToDecryptException, but no exception thrown.");
         }
         catch(FailedToDecryptException ignore)
@@ -488,6 +493,7 @@ public class TestEncryptor
     @Test
     public void testDecrypt4()
     {
+        @SuppressWarnings("SpellCheckingInspection")
         String toEncrypt = "aoeugalogeual9o87gu3l2'r3ghsproguhSNoehusNOEhusntoehoUZTOHEUNT<>" +
                            "H<(>*JGJCROEHunt.huaahsnoeuhs,cr.a,g.ulreo8gukchrseunhaonteihaorceugaroscuh" +
                            ".nsphilraeugil98g'l38rgph's23cnhps    .c,huiscraoeha/l-iuh.p-sihtaosntiha.,edo" +
@@ -504,13 +510,14 @@ public class TestEncryptor
 
         String decrypted = Encryptor.decrypt(encrypted);
         assertNotNull("The decrypted string should not be null.", decrypted);
-        assertFalse("The decrypted string should not equal the encrypted string.", encrypted.equals(decrypted));
+        assertNotEquals("The decrypted string should not equal the encrypted string.", encrypted, decrypted);
         assertEquals("The decrypted string should equal the original string.", toEncrypt, decrypted);
     }
 
     @Test
     public void testPasswordBasedDecrypt4()
     {
+        @SuppressWarnings("SpellCheckingInspection")
         String toEncrypt = "aoeugalogeual9o87gu3l2'r3ghsproguhSNoehusNOEhusntoehoUZTOHEUNT<>" +
                            "H<(>*JGJCROEHunt.huaahsnoeuhs,cr.a,g.ulreo8gukchrseunhaonteihaorceugaroscuh" +
                            ".nsphilraeugil98g'l38rgph's23cnhps    .c,huiscraoeha/l-iuh.p-sihtaosntiha.,edo" +
@@ -522,19 +529,19 @@ public class TestEncryptor
                            "eu90[euo8icgrheoistahoeaehosnuthoelrcigoeu[09icglerpuhdtnoseudh,ocilc0oeu78" +
                            "90[e8oi2349cg5hcl234h5l/r2c43/lyr.cpg,lrcioghersueusih";
 
-        String encrypted = Encryptor.encrypt(toEncrypt, "herdecryptpassword3".toCharArray());
+        String encrypted = Encryptor.encrypt(toEncrypt, "herDecryptPassword3".toCharArray());
         assertNotNull("The encrypted string should not be null.", encrypted);
 
         // right password
-        String decrypted = Encryptor.decrypt(encrypted, "herdecryptpassword3".toCharArray());
+        String decrypted = Encryptor.decrypt(encrypted, "herDecryptPassword3".toCharArray());
         assertNotNull("The decrypted string should not be null.", decrypted);
-        assertFalse("The decrypted string should not equal the encrypted string.", encrypted.equals(decrypted));
+        assertNotEquals("The decrypted string should not equal the encrypted string.", encrypted, decrypted);
         assertEquals("The decrypted string should equal the original string.", toEncrypt, decrypted);
 
         // wrong password
         try
         {
-            Encryptor.decrypt(encrypted, "herDecryptPassword3".toCharArray());
+            Encryptor.decrypt(encrypted, "herDecryptPassword3".toLowerCase().toCharArray());
             fail("Expected FailedToDecryptException, but no exception thrown.");
         }
         catch(FailedToDecryptException ignore)

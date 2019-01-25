@@ -31,6 +31,7 @@ import io.oddsource.java.licensing.mock.MockFeatureObject;
 /**
  * Test class for License.
  */
+@SuppressWarnings("EmptyMethod")
 public class TestLicense
 {
     private License license;
@@ -66,8 +67,7 @@ public class TestLicense
 
         try
         {
-            String[] argument = null;
-            constructor.newInstance(new Object[] {argument});
+            constructor.newInstance(new Object[] {null});
             fail("Expected exception IllegalArgumentException.");
         }
         catch(InvocationTargetException e)
@@ -189,11 +189,15 @@ public class TestLicense
         ImmutableLinkedHashSet<License.Feature> features = this.license.getFeatures();
 
         assertEquals("The size of the features is not correct.", 2, features.size());
-        assertNotNull("Feature 1 is missing.", features.get(0));
-        assertEquals("Feature 1 is not correct.", "nickFeature1", features.get(0).getName());
-        assertNotNull("Feature 2 is missing.", features.get(1));
-        assertEquals("Feature 2 is not correct.", "allisonFeature2", features.get(1).getName());
-        assertEquals("Feature 2 is not correct.", 2348917325000L, features.get(1).getGoodBeforeDate());
+
+        License.Feature feature = features.get(0);
+        assertNotNull("Feature 1 is missing.", feature);
+        assertEquals("Feature 1 is not correct.", "nickFeature1", feature.getName());
+
+        feature = features.get(1);
+        assertNotNull("Feature 2 is missing.", feature);
+        assertEquals("Feature 2 is not correct.", "allisonFeature2", feature.getName());
+        assertEquals("Feature 2 is not correct.", 2348917325000L, feature.getGoodBeforeDate());
     }
 
     @Test
@@ -398,17 +402,16 @@ public class TestLicense
     }
 
     @Test
-    @SuppressWarnings("ObjectEqualsNull")
+    @SuppressWarnings({"ObjectEqualsNull"})
     public void testEqualsWithNullObject01()
     {
-        assertFalse("The objects should not be equal.", this.license.equals(null));
+        assertNotEquals("The objects should not be equal.", null, this.license);
     }
 
     @Test
-    @SuppressWarnings("EqualsBetweenInconvertibleTypes")
     public void testEqualsWithNonLicense01()
     {
-        assertFalse("The objects should not be equal.", this.license.equals("Hello"));
+        assertNotEquals("The objects should not be equal.", "Hello", this.license);
     }
 
     @Test
@@ -459,7 +462,7 @@ public class TestLicense
             build();
 
         assertNotSame("The objects should not be the same.", this.license, duplicate);
-        assertTrue("The objects should be equal.", this.license.equals(duplicate));
+        assertEquals("The objects should be equal.", this.license, duplicate);
         assertEquals("The hash codes should match.", this.license.hashCode(), duplicate.hashCode());
     }
 
@@ -480,8 +483,8 @@ public class TestLicense
             build();
 
         assertNotSame("The objects should not be the same.", this.license, duplicate);
-        assertFalse("The objects should not be equal.", this.license.equals(duplicate));
-        assertFalse("The hash codes should not match.", this.license.hashCode() == duplicate.hashCode());
+        assertNotEquals("The objects should not be equal.", this.license, duplicate);
+        assertNotEquals("The hash codes should not match.", this.license.hashCode(), duplicate.hashCode());
     }
 
     @Test
@@ -501,8 +504,8 @@ public class TestLicense
             build();
 
         assertNotSame("The objects should not be the same.", this.license, duplicate);
-        assertFalse("The objects should not be equal.", this.license.equals(duplicate));
-        assertFalse("The hash codes should not match.", this.license.hashCode() == duplicate.hashCode());
+        assertNotEquals("The objects should not be equal.", this.license, duplicate);
+        assertNotEquals("The hash codes should not match.", this.license.hashCode(), duplicate.hashCode());
     }
 
     @Test
@@ -522,8 +525,8 @@ public class TestLicense
             build();
 
         assertNotSame("The objects should not be the same.", this.license, duplicate);
-        assertFalse("The objects should not be equal.", this.license.equals(duplicate));
-        assertFalse("The hash codes should not match.", this.license.hashCode() == duplicate.hashCode());
+        assertNotEquals("The objects should not be equal.", this.license, duplicate);
+        assertNotEquals("The hash codes should not match.", this.license.hashCode(), duplicate.hashCode());
     }
 
     @Test
@@ -543,8 +546,8 @@ public class TestLicense
             build();
 
         assertNotSame("The objects should not be the same.", this.license, duplicate);
-        assertFalse("The objects should not be equal.", this.license.equals(duplicate));
-        assertFalse("The hash codes should not match.", this.license.hashCode() == duplicate.hashCode());
+        assertNotEquals("The objects should not be equal.", this.license, duplicate);
+        assertNotEquals("The hash codes should not match.", this.license.hashCode(), duplicate.hashCode());
     }
 
     @Test
@@ -564,8 +567,8 @@ public class TestLicense
             build();
 
         assertNotSame("The objects should not be the same.", this.license, duplicate);
-        assertFalse("The objects should not be equal.", this.license.equals(duplicate));
-        assertFalse("The hash codes should not match.", this.license.hashCode() == duplicate.hashCode());
+        assertNotEquals("The objects should not be equal.", this.license, duplicate);
+        assertNotEquals("The hash codes should not match.", this.license.hashCode(), duplicate.hashCode());
     }
 
     @Test
@@ -585,8 +588,8 @@ public class TestLicense
             build();
 
         assertNotSame("The objects should not be the same.", this.license, duplicate);
-        assertFalse("The objects should not be equal.", this.license.equals(duplicate));
-        assertFalse("The hash codes should not match.", this.license.hashCode() == duplicate.hashCode());
+        assertNotEquals("The objects should not be equal.", this.license, duplicate);
+        assertNotEquals("The hash codes should not match.", this.license.hashCode(), duplicate.hashCode());
     }
 
     @Test
@@ -606,8 +609,8 @@ public class TestLicense
             build();
 
         assertNotSame("The objects should not be the same.", this.license, duplicate);
-        assertFalse("The objects should not be equal.", this.license.equals(duplicate));
-        assertFalse("The hash codes should not match.", this.license.hashCode() == duplicate.hashCode());
+        assertNotEquals("The objects should not be equal.", this.license, duplicate);
+        assertNotEquals("The hash codes should not match.", this.license.hashCode(), duplicate.hashCode());
     }
 
     @Test
@@ -627,8 +630,8 @@ public class TestLicense
             build();
 
         assertNotSame("The objects should not be the same.", this.license, duplicate);
-        assertFalse("The objects should not be equal.", this.license.equals(duplicate));
-        assertFalse("The hash codes should not match.", this.license.hashCode() == duplicate.hashCode());
+        assertNotEquals("The objects should not be equal.", this.license, duplicate);
+        assertNotEquals("The hash codes should not match.", this.license.hashCode(), duplicate.hashCode());
     }
 
     @Test
@@ -648,8 +651,8 @@ public class TestLicense
             build();
 
         assertNotSame("The objects should not be the same.", this.license, duplicate);
-        assertFalse("The objects should not be equal.", this.license.equals(duplicate));
-        assertFalse("The hash codes should not match.", this.license.hashCode() == duplicate.hashCode());
+        assertNotEquals("The objects should not be equal.", this.license, duplicate);
+        assertNotEquals("The hash codes should not match.", this.license.hashCode(), duplicate.hashCode());
     }
 
     @Test
@@ -669,8 +672,8 @@ public class TestLicense
             build();
 
         assertNotSame("The objects should not be the same.", this.license, duplicate);
-        assertFalse("The objects should not be equal.", this.license.equals(duplicate));
-        assertFalse("The hash codes should not match.", this.license.hashCode() == duplicate.hashCode());
+        assertNotEquals("The objects should not be equal.", this.license, duplicate);
+        assertNotEquals("The hash codes should not match.", this.license.hashCode(), duplicate.hashCode());
     }
 
     @Test
@@ -679,8 +682,8 @@ public class TestLicense
         License simple = new License.Builder().build();
 
         assertNotSame("The objects should not be the same.", this.license, simple);
-        assertFalse("The objects should not be equal.", this.license.equals(simple));
-        assertFalse("The hash codes should not match.", this.license.hashCode() == simple.hashCode());
+        assertNotEquals("The objects should not be equal.", this.license, simple);
+        assertNotEquals("The hash codes should not match.", this.license.hashCode(), simple.hashCode());
     }
 
     @Test
@@ -755,8 +758,10 @@ public class TestLicense
         assertEquals("The number of features is not correct.", 4, license.getFeatures().size());
         assertTrue("Feature 1 is missing.", license.hasLicenseForAllFeatures("fordFeature1"));
         assertTrue("Feature 2 is missing.", license.hasLicenseForAllFeatures("chevyFeature2"));
-        assertNotNull("Feature 3 is missing.", license.getFeatures().get(2));
-        assertEquals("Feature 3 is missing.", "hondaFeature3", license.getFeatures().get(2).getName());
+
+        License.Feature feature = license.getFeatures().get(2);
+        assertNotNull("Feature 3 is missing.", feature);
+        assertEquals("Feature 3 is missing.", "hondaFeature3", feature.getName());
         assertFalse("Feature 3 should be expired.", license.hasLicenseForAllFeatures("hondaFeature3"));
         assertTrue("Feature 4 is missing.", license.hasLicenseForAllFeatures("toyotaFeature4"));
     }
@@ -778,8 +783,7 @@ public class TestLicense
     }
 
     @Test
-    public void testLicenseFeatureFromString01()
-        throws NoSuchMethodException, InstantiationException, IllegalAccessException
+    public void testLicenseFeatureFromString01() throws NoSuchMethodException, IllegalAccessException
     {
         Method fromString = License.Feature.class.getDeclaredMethod("fromString", String.class);
         fromString.setAccessible(true);
@@ -797,8 +801,7 @@ public class TestLicense
     }
 
     @Test
-    public void testLicenseFeatureFromString02()
-        throws NoSuchMethodException, InstantiationException, IllegalAccessException
+    public void testLicenseFeatureFromString02() throws NoSuchMethodException, IllegalAccessException
     {
         Method fromString = License.Feature.class.getDeclaredMethod("fromString", String.class);
         fromString.setAccessible(true);
@@ -816,8 +819,7 @@ public class TestLicense
     }
 
     @Test
-    public void testLicenseFeatureConstructor03()
-        throws NoSuchMethodException, InstantiationException, IllegalAccessException
+    public void testLicenseFeatureConstructor03() throws NoSuchMethodException, IllegalAccessException
     {
         Method fromString = License.Feature.class.getDeclaredMethod("fromString", String.class);
         fromString.setAccessible(true);
@@ -837,32 +839,31 @@ public class TestLicense
     @Test
     @SuppressWarnings("ObjectEqualsNull")
     public void testLicenseFeatureEquals01()
-        throws NoSuchMethodException, InstantiationException, IllegalAccessException, InvocationTargetException
+        throws NoSuchMethodException, IllegalAccessException, InvocationTargetException
     {
         Method fromString = License.Feature.class.getDeclaredMethod("fromString", String.class);
         fromString.setAccessible(true);
 
         License.Feature feature1 = (License.Feature) fromString.invoke(null, "one" + (char) 0x1F + "2");
 
-        assertFalse("Equals should return false.", feature1.equals(null));
+        assertNotEquals("Equals should return false.", null, feature1);
     }
 
     @Test
-    @SuppressWarnings("EqualsBetweenInconvertibleTypes")
     public void testLicenseFeatureEquals02()
-        throws NoSuchMethodException, InstantiationException, IllegalAccessException, InvocationTargetException
+        throws NoSuchMethodException, IllegalAccessException, InvocationTargetException
     {
         Method fromString = License.Feature.class.getDeclaredMethod("fromString", String.class);
         fromString.setAccessible(true);
 
         License.Feature feature1 = (License.Feature) fromString.invoke(null, "one" + (char) 0x1F + "2");
 
-        assertFalse("Equals should return false.", feature1.equals("one" + (char) 0x1F + "2"));
+        assertNotEquals("Equals should return false.", feature1, "one" + (char) 0x1F + "2");
     }
 
     @Test
     public void testLicenseFeatureEquals03()
-        throws NoSuchMethodException, InstantiationException, IllegalAccessException, InvocationTargetException
+        throws NoSuchMethodException, IllegalAccessException, InvocationTargetException
     {
         Method fromString = License.Feature.class.getDeclaredMethod("fromString", String.class);
         fromString.setAccessible(true);
@@ -877,7 +878,7 @@ public class TestLicense
 
     @Test
     public void testLicenseFeatureEquals04()
-        throws NoSuchMethodException, InstantiationException, IllegalAccessException, InvocationTargetException
+        throws NoSuchMethodException, IllegalAccessException, InvocationTargetException
     {
         Method fromString = License.Feature.class.getDeclaredMethod("fromString", String.class);
         fromString.setAccessible(true);
@@ -886,7 +887,7 @@ public class TestLicense
         License.Feature feature2 = (License.Feature) fromString.invoke(null, "three" + (char) 0x1F + "5");
 
         assertNotSame("The objects should not be the same.", feature1, feature2);
-        assertFalse("The objects should not be equal.", feature1.equals(feature2));
-        assertFalse("The hash codes should not be equal.", feature1.hashCode() == feature2.hashCode());
+        assertNotEquals("The objects should not be equal.", feature1, feature2);
+        assertNotEquals("The hash codes should not be equal.", feature1.hashCode(), feature2.hashCode());
     }
 }

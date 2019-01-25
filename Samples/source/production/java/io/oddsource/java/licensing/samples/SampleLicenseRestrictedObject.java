@@ -26,7 +26,7 @@ import io.oddsource.java.licensing.FeatureRestrictionOperand;
  * @since 1.0.0
  */
 @FeatureRestriction("FEATURE1")
-@SuppressWarnings("unused")
+@SuppressWarnings({"unused", "EmptyMethod"})
 public class SampleLicenseRestrictedObject
 {
     /**

@@ -15,17 +15,18 @@
  */
 package io.oddsource.java.licensing.licensor.interfaces.cli;
 
-import io.oddsource.java.licensing.licensor.interfaces.cli.spi.TextInterfaceDevice;
+import static org.junit.Assert.*;
+
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
+
 import org.easymock.Capture;
 import org.easymock.EasyMock;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import static org.junit.Assert.*;
-
-import java.lang.reflect.Constructor;
-import java.lang.reflect.InvocationTargetException;
+import io.oddsource.java.licensing.licensor.interfaces.cli.spi.TextInterfaceDevice;
 
 /**
  * Test class for ConsoleUtilities.

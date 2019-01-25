@@ -15,6 +15,29 @@
  */
 package io.oddsource.java.licensing.licensor.interfaces.cli;
 
+import static org.junit.Assert.*;
+
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.PrintStream;
+import java.lang.reflect.Field;
+import java.util.Date;
+import java.util.HashMap;
+
+import org.apache.commons.cli.CommandLine;
+import org.apache.commons.cli.CommandLineParser;
+import org.apache.commons.cli.DefaultParser;
+import org.apache.commons.codec.binary.Base64;
+import org.apache.commons.io.FileUtils;
+import org.easymock.Capture;
+import org.easymock.EasyMock;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Ignore;
+import org.junit.Test;
+
 import io.oddsource.java.licensing.License;
 import io.oddsource.java.licensing.MockLicenseHelper;
 import io.oddsource.java.licensing.ObjectSerializer;
@@ -35,29 +58,6 @@ import io.oddsource.java.licensing.mock.MockEmbeddedPrivateKeyDataProvider;
 import io.oddsource.java.licensing.mock.MockFilePrivateKeyDataProvider;
 import io.oddsource.java.licensing.mock.MockPasswordProvider;
 import io.oddsource.java.mock.MockPermissiveSecurityManager;
-import org.apache.commons.cli.CommandLine;
-import org.apache.commons.cli.CommandLineParser;
-import org.apache.commons.cli.DefaultParser;
-import org.apache.commons.cli.ParseException;
-import org.apache.commons.codec.binary.Base64;
-import org.apache.commons.io.FileUtils;
-import org.easymock.Capture;
-import org.easymock.EasyMock;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Ignore;
-import org.junit.Test;
-
-import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.PrintStream;
-import java.lang.reflect.Field;
-import java.util.Date;
-import java.util.HashMap;
-
-import static org.junit.Assert.*;
 
 /**
  * Test class for ConsoleLicenseGenerator.
@@ -75,8 +75,10 @@ public class TestConsoleLicenseGenerator
     {
         this.device = EasyMock.createMock(TextInterfaceDevice.class);
 
-        this.console = new ConsoleLicenseGenerator(this.device, new DefaultParser()) {
+        this.console = new ConsoleLicenseGenerator(this.device, new DefaultParser())
+        {
             @Override
+            @SuppressWarnings("MethodDoesntCallSuperMethod")
             protected void finalize()
             {
 
@@ -91,7 +93,7 @@ public class TestConsoleLicenseGenerator
     }
 
     @Test
-    public void testProcessCommandLineOptions01() throws ParseException
+    public void testProcessCommandLineOptions01()
     {
         ByteArrayOutputStream stream = new ByteArrayOutputStream();
         PrintStream printer = new PrintStream(stream);
@@ -102,7 +104,7 @@ public class TestConsoleLicenseGenerator
 
         EasyMock.replay(this.device);
 
-        this.console.processCommandLineOptions(new String[] { "-help" });
+        this.console.processCommandLineOptions(new String[] {"-help"});
 
         String output = stream.toString();
 
@@ -116,14 +118,24 @@ public class TestConsoleLicenseGenerator
             " ConsoleLicenseGenerator -license <file>" + LF +
             " ConsoleLicenseGenerator -config <file> -license <file>" + LF +
             LF +
-            " The ConsoleLicenseGenerator expects to be passed the path to two properties files, or one of them, or" + LF +
-            "        neither. The \"config\" properties file contains information necessary to generate all licenses" + LF +
-            "        (key paths, passwords, etc.) and generally will not need to change. The \"license\" properties file" + LF +
-            "        contains all of the information you need to generate this particular license. See the Javadoc API" + LF +
+            " The ConsoleLicenseGenerator expects to be passed the path to two properties files, or one of them, or" +
+            LF +
+            "        neither. The \"config\" properties file contains information necessary to generate all licenses" +
+            LF +
+            "        (key paths, passwords, etc.) and generally will not need to change. The \"license\" properties " +
+            "file" +
+            LF +
+            "        contains all of the information you need to generate this particular license. See the Javadoc " +
+            "API" +
+            LF +
             "        documentation for information about the contents of these two files." + LF +
             LF +
-            " If you do not specify the \"config\" properties file, you will be prompted to provide the values that were" + LF +
-            "        expected in that file. Likewise, if you do not specify the \"license\" properties file, you will be" + LF +
+            " If you do not specify the \"config\" properties file, you will be prompted to provide the values that " +
+            "were" +
+            LF +
+            "        expected in that file. Likewise, if you do not specify the \"license\" properties file, you will" +
+            " be" +
+            LF +
             "        prompted to provide the values that were expected in that file." + LF +
             " -config <file>    Specify the .properties file that configures this generator" + LF +
             " -help             Display this help message" + LF +
@@ -133,7 +145,7 @@ public class TestConsoleLicenseGenerator
     }
 
     @Test
-    public void testProcessCommandLineOptions02() throws ParseException
+    public void testProcessCommandLineOptions02()
     {
         ByteArrayOutputStream stream = new ByteArrayOutputStream();
         PrintStream printer = new PrintStream(stream);
@@ -146,7 +158,7 @@ public class TestConsoleLicenseGenerator
 
         EasyMock.replay(this.device);
 
-        this.console.processCommandLineOptions(new String[] { "-badOption" });
+        this.console.processCommandLineOptions(new String[] {"-badOption"});
 
         String output = stream.toString();
 
@@ -160,14 +172,24 @@ public class TestConsoleLicenseGenerator
             " ConsoleLicenseGenerator -license <file>" + LF +
             " ConsoleLicenseGenerator -config <file> -license <file>" + LF +
             LF +
-            " The ConsoleLicenseGenerator expects to be passed the path to two properties files, or one of them, or" + LF +
-            "        neither. The \"config\" properties file contains information necessary to generate all licenses" + LF +
-            "        (key paths, passwords, etc.) and generally will not need to change. The \"license\" properties file" + LF +
-            "        contains all of the information you need to generate this particular license. See the Javadoc API" + LF +
+            " The ConsoleLicenseGenerator expects to be passed the path to two properties files, or one of them, or" +
+            LF +
+            "        neither. The \"config\" properties file contains information necessary to generate all licenses" +
+            LF +
+            "        (key paths, passwords, etc.) and generally will not need to change. The \"license\" properties " +
+            "file" +
+            LF +
+            "        contains all of the information you need to generate this particular license. See the Javadoc " +
+            "API" +
+            LF +
             "        documentation for information about the contents of these two files." + LF +
             LF +
-            " If you do not specify the \"config\" properties file, you will be prompted to provide the values that were" + LF +
-            "        expected in that file. Likewise, if you do not specify the \"license\" properties file, you will be" + LF +
+            " If you do not specify the \"config\" properties file, you will be prompted to provide the values that " +
+            "were" +
+            LF +
+            "        expected in that file. Likewise, if you do not specify the \"license\" properties file, you will" +
+            " be" +
+            LF +
             "        prompted to provide the values that were expected in that file." + LF +
             " -config <file>    Specify the .properties file that configures this generator" + LF +
             " -help             Display this help message" + LF +
@@ -177,7 +199,7 @@ public class TestConsoleLicenseGenerator
     }
 
     @Test
-    public void testProcessCommandLineOptions03() throws ParseException
+    public void testProcessCommandLineOptions03()
     {
         ByteArrayOutputStream stream = new ByteArrayOutputStream();
         PrintStream printer = new PrintStream(stream);
@@ -190,7 +212,7 @@ public class TestConsoleLicenseGenerator
 
         EasyMock.replay(this.device);
 
-        this.console.processCommandLineOptions(new String[] { "-config" });
+        this.console.processCommandLineOptions(new String[] {"-config"});
 
         String output = stream.toString();
 
@@ -204,14 +226,24 @@ public class TestConsoleLicenseGenerator
             " ConsoleLicenseGenerator -license <file>" + LF +
             " ConsoleLicenseGenerator -config <file> -license <file>" + LF +
             LF +
-            " The ConsoleLicenseGenerator expects to be passed the path to two properties files, or one of them, or" + LF +
-            "        neither. The \"config\" properties file contains information necessary to generate all licenses" + LF +
-            "        (key paths, passwords, etc.) and generally will not need to change. The \"license\" properties file" + LF +
-            "        contains all of the information you need to generate this particular license. See the Javadoc API" + LF +
+            " The ConsoleLicenseGenerator expects to be passed the path to two properties files, or one of them, or" +
+            LF +
+            "        neither. The \"config\" properties file contains information necessary to generate all licenses" +
+            LF +
+            "        (key paths, passwords, etc.) and generally will not need to change. The \"license\" properties " +
+            "file" +
+            LF +
+            "        contains all of the information you need to generate this particular license. See the Javadoc " +
+            "API" +
+            LF +
             "        documentation for information about the contents of these two files." + LF +
             LF +
-            " If you do not specify the \"config\" properties file, you will be prompted to provide the values that were" + LF +
-            "        expected in that file. Likewise, if you do not specify the \"license\" properties file, you will be" + LF +
+            " If you do not specify the \"config\" properties file, you will be prompted to provide the values that " +
+            "were" +
+            LF +
+            "        expected in that file. Likewise, if you do not specify the \"license\" properties file, you will" +
+            " be" +
+            LF +
             "        prompted to provide the values that were expected in that file." + LF +
             " -config <file>    Specify the .properties file that configures this generator" + LF +
             " -help             Display this help message" + LF +
@@ -221,7 +253,7 @@ public class TestConsoleLicenseGenerator
     }
 
     @Test
-    public void testProcessCommandLineOptions04() throws ParseException
+    public void testProcessCommandLineOptions04()
     {
         ByteArrayOutputStream stream = new ByteArrayOutputStream();
         PrintStream printer = new PrintStream(stream);
@@ -234,7 +266,7 @@ public class TestConsoleLicenseGenerator
 
         EasyMock.replay(this.device);
 
-        this.console.processCommandLineOptions(new String[] { "-license" });
+        this.console.processCommandLineOptions(new String[] {"-license"});
 
         String output = stream.toString();
 
@@ -248,14 +280,24 @@ public class TestConsoleLicenseGenerator
             " ConsoleLicenseGenerator -license <file>" + LF +
             " ConsoleLicenseGenerator -config <file> -license <file>" + LF +
             LF +
-            " The ConsoleLicenseGenerator expects to be passed the path to two properties files, or one of them, or" + LF +
-            "        neither. The \"config\" properties file contains information necessary to generate all licenses" + LF +
-            "        (key paths, passwords, etc.) and generally will not need to change. The \"license\" properties file" + LF +
-            "        contains all of the information you need to generate this particular license. See the Javadoc API" + LF +
+            " The ConsoleLicenseGenerator expects to be passed the path to two properties files, or one of them, or" +
+            LF +
+            "        neither. The \"config\" properties file contains information necessary to generate all licenses" +
+            LF +
+            "        (key paths, passwords, etc.) and generally will not need to change. The \"license\" properties " +
+            "file" +
+            LF +
+            "        contains all of the information you need to generate this particular license. See the Javadoc " +
+            "API" +
+            LF +
             "        documentation for information about the contents of these two files." + LF +
             LF +
-            " If you do not specify the \"config\" properties file, you will be prompted to provide the values that were" + LF +
-            "        expected in that file. Likewise, if you do not specify the \"license\" properties file, you will be" + LF +
+            " If you do not specify the \"config\" properties file, you will be prompted to provide the values that " +
+            "were" +
+            LF +
+            "        expected in that file. Likewise, if you do not specify the \"license\" properties file, you will" +
+            " be" +
+            LF +
             "        prompted to provide the values that were expected in that file." + LF +
             " -config <file>    Specify the .properties file that configures this generator" + LF +
             " -help             Display this help message" + LF +
@@ -265,32 +307,32 @@ public class TestConsoleLicenseGenerator
     }
 
     @Test
-    public void testProcessCommandLineOptions05() throws ParseException
+    public void testProcessCommandLineOptions05()
     {
         EasyMock.replay(this.device);
 
-        this.console.processCommandLineOptions(new String[] { "-config", "config.properties" });
+        this.console.processCommandLineOptions(new String[] {"-config", "config.properties"});
 
         assertNotNull("There should be a cli value.", this.console.getCli());
     }
 
     @Test
-    public void testProcessCommandLineOptions06() throws ParseException
+    public void testProcessCommandLineOptions06()
     {
         EasyMock.replay(this.device);
 
-        this.console.processCommandLineOptions(new String[] { "-license", "license.properties" });
+        this.console.processCommandLineOptions(new String[] {"-license", "license.properties"});
 
         assertNotNull("There should be a cli value.", this.console.getCli());
     }
 
     @Test
-    public void testProcessCommandLineOptions07() throws ParseException
+    public void testProcessCommandLineOptions07()
     {
         EasyMock.replay(this.device);
 
         this.console.processCommandLineOptions(
-                new String[] { "-config", "config.properties", "-license", "license.properties" }
+            new String[] {"-config", "config.properties", "-license", "license.properties"}
         );
 
         assertNotNull("There should be a cli value.", this.console.getCli());
@@ -316,7 +358,7 @@ public class TestConsoleLicenseGenerator
         {
             Field field = LicenseCreatorProperties.class.getDeclaredField("privateKeyDataProvider");
             field.setAccessible(true);
-            return (PrivateKeyDataProvider)field.get(null);
+            return (PrivateKeyDataProvider) field.get(null);
         }
         catch(Exception e)
         {
@@ -330,7 +372,7 @@ public class TestConsoleLicenseGenerator
         {
             Field field = LicenseCreatorProperties.class.getDeclaredField("privateKeyPasswordProvider");
             field.setAccessible(true);
-            return (PasswordProvider)field.get(null);
+            return (PasswordProvider) field.get(null);
         }
         catch(Exception e)
         {
@@ -346,7 +388,9 @@ public class TestConsoleLicenseGenerator
         String fileName = "testInitializeLicenseCreator01.properties";
         File file = new File(fileName);
         if(file.exists())
+        {
             FileUtils.forceDelete(file);
+        }
 
         this.console.setCli(
             EasyMock.createMockBuilder(CommandLine.class).withConstructor().
@@ -365,7 +409,9 @@ public class TestConsoleLicenseGenerator
             this.console.initializeLicenseCreator();
             fail("Expected exception FileNotFoundException.");
         }
-        catch(FileNotFoundException ignore) { }
+        catch(FileNotFoundException ignore)
+        {
+        }
         finally
         {
             this.resetLicenseCreator();
@@ -384,7 +430,9 @@ public class TestConsoleLicenseGenerator
         File file = new File(fileName);
         file = file.getCanonicalFile();
         if(file.exists())
+        {
             FileUtils.forceDelete(file);
+        }
 
         FileUtils.writeStringToFile(file, "test", "UTF-8");
 
@@ -409,7 +457,9 @@ public class TestConsoleLicenseGenerator
             this.console.initializeLicenseCreator();
             fail("Expected exception IOException.");
         }
-        catch(IOException ignore) { }
+        catch(IOException ignore)
+        {
+        }
         finally
         {
             this.resetLicenseCreator();
@@ -428,7 +478,9 @@ public class TestConsoleLicenseGenerator
         String fileName = "testInitializeLicenseCreator03.properties";
         File file = new File(fileName);
         if(file.exists())
+        {
             FileUtils.forceDelete(file);
+        }
 
         FileUtils.writeStringToFile(
             file,
@@ -454,7 +506,9 @@ public class TestConsoleLicenseGenerator
             this.console.initializeLicenseCreator();
             fail("Expected exception FileNotFoundException.");
         }
-        catch(FileNotFoundException e) { }
+        catch(FileNotFoundException expected)
+        {
+        }
         finally
         {
             this.resetLicenseCreator();
@@ -473,7 +527,9 @@ public class TestConsoleLicenseGenerator
         String fileName = "testInitializeLicenseCreator04.properties";
         File file = new File(fileName);
         if(file.exists())
+        {
             FileUtils.forceDelete(file);
+        }
 
         File keyFile = new File("testInitializeLicenseCreator04.key");
         FileUtils.writeStringToFile(keyFile, "aKey", "UTF-8");
@@ -505,7 +561,8 @@ public class TestConsoleLicenseGenerator
             assertNotNull("The key provider should not be null.", key);
             assertSame("The key provider is not correct.", FilePrivateKeyDataProvider.class, key.getClass());
             assertEquals("The file is not correct.", keyFile.getAbsolutePath(),
-                         ((FilePrivateKeyDataProvider)key).getPrivateKeyFile().getAbsolutePath());
+                         ((FilePrivateKeyDataProvider) key).getPrivateKeyFile().getAbsolutePath()
+            );
 
             PasswordProvider password = this.getPasswordProvider();
             assertNotNull("The password provider should not be null.", password);
@@ -533,7 +590,9 @@ public class TestConsoleLicenseGenerator
         String fileName = "testInitializeLicenseCreator05.properties";
         File file = new File(fileName);
         if(file.exists())
+        {
             FileUtils.forceDelete(file);
+        }
 
         File keyFile = new File("testInitializeLicenseCreator05.key");
         FileUtils.writeStringToFile(keyFile, "aKey", "UTF-8");
@@ -561,7 +620,9 @@ public class TestConsoleLicenseGenerator
             this.console.initializeLicenseCreator();
             fail("Expected exception RuntimeException.");
         }
-        catch(RuntimeException ignore) { }
+        catch(RuntimeException ignore)
+        {
+        }
         finally
         {
             LicenseCreatorProperties.setPrivateKeyDataProvider(null);
@@ -584,7 +645,9 @@ public class TestConsoleLicenseGenerator
         String fileName = "testInitializeLicenseCreator06.properties";
         File file = new File(fileName);
         if(file.exists())
+        {
             FileUtils.forceDelete(file);
+        }
 
         File keyFile = new File("testInitializeLicenseCreator06.key");
         FileUtils.writeStringToFile(keyFile, "aKey", "UTF-8");
@@ -612,7 +675,9 @@ public class TestConsoleLicenseGenerator
             this.console.initializeLicenseCreator();
             fail("Expected exception RuntimeException.");
         }
-        catch(RuntimeException ignore) { }
+        catch(RuntimeException ignore)
+        {
+        }
         finally
         {
             LicenseCreatorProperties.setPrivateKeyDataProvider(null);
@@ -635,12 +700,16 @@ public class TestConsoleLicenseGenerator
         String fileName = "testInitializeLicenseCreator07.properties";
         File file = new File(fileName);
         if(file.exists())
+        {
             FileUtils.forceDelete(file);
+        }
 
         FileUtils.writeStringToFile(
             file,
-            "io.oddsource.java.licensing.privateKeyProvider=io.oddsource.java.licensing.mock.MockFilePrivateKeyDataProvider\r\n" +
-            "io.oddsource.java.licensing.privateKeyPasswordProvider=io.oddsource.java.licensing.mock.MockPasswordProvider",
+            "io.oddsource.java.licensing.privateKeyProvider=io.oddsource.java.licensing.mock" +
+            ".MockFilePrivateKeyDataProvider\r\n" +
+            "io.oddsource.java.licensing.privateKeyPasswordProvider=io.oddsource.java.licensing.mock" +
+            ".MockPasswordProvider",
             "UTF-8"
         );
 
@@ -743,7 +812,7 @@ public class TestConsoleLicenseGenerator
         EasyMock.expectLastCall();
         EasyMock.expect(this.device.readLine("Please enter the fully-qualified class name for the " +
                                              "PasswordProvider implementation: ")).
-                andReturn("io.oddsource.java.licensing.mock.MockPasswordProvider");
+            andReturn("io.oddsource.java.licensing.mock.MockPasswordProvider");
         this.device.printOutLn();
         EasyMock.expectLastCall();
 
@@ -757,7 +826,8 @@ public class TestConsoleLicenseGenerator
             assertNotNull("The key provider should not be null.", key);
             assertSame("The key provider is not correct.", FilePrivateKeyDataProvider.class, key.getClass());
             assertEquals("The file is not correct.", keyFile.getAbsolutePath(),
-                         ((FilePrivateKeyDataProvider)key).getPrivateKeyFile().getAbsolutePath());
+                         ((FilePrivateKeyDataProvider) key).getPrivateKeyFile().getAbsolutePath()
+            );
 
             PasswordProvider password = this.getPasswordProvider();
             assertNotNull("The password provider should not be null.", password);
@@ -806,7 +876,7 @@ public class TestConsoleLicenseGenerator
         EasyMock.expectLastCall();
         EasyMock.expect(this.device.readLine("Please enter the fully-qualified class name for the " +
                                              "PrivateKeyDataProvider implementation: ")).
-                andReturn("io.oddsource.java.licensing.mock.MockEmbeddedPrivateKeyDataProvider");
+            andReturn("io.oddsource.java.licensing.mock.MockEmbeddedPrivateKeyDataProvider");
         this.device.printOutLn();
         EasyMock.expectLastCall();
 
@@ -823,7 +893,7 @@ public class TestConsoleLicenseGenerator
         this.device.printOutLn();
         EasyMock.expectLastCall();
         EasyMock.expect(this.device.readPassword("Invalid password. Please type the password for the private key: ")).
-                andReturn("testPassword09".toCharArray());
+            andReturn("testPassword09".toCharArray());
         this.device.printOutLn();
         EasyMock.expectLastCall();
 
@@ -857,7 +927,9 @@ public class TestConsoleLicenseGenerator
         String fileName = "testGenerateLicense01.properties";
         File file = new File(fileName);
         if(file.exists())
+        {
             FileUtils.forceDelete(file);
+        }
 
         this.console.setCli(
             EasyMock.createMockBuilder(CommandLine.class).withConstructor().
@@ -876,7 +948,9 @@ public class TestConsoleLicenseGenerator
             this.console.generateLicense();
             fail("Expected exception FileNotFoundException.");
         }
-        catch(FileNotFoundException ignore) { }
+        catch(FileNotFoundException ignore)
+        {
+        }
         finally
         {
             this.resetLicenseCreator();
@@ -895,7 +969,9 @@ public class TestConsoleLicenseGenerator
         File file = new File(fileName);
         file = file.getCanonicalFile();
         if(file.exists())
+        {
             FileUtils.forceDelete(file);
+        }
 
         FileUtils.writeStringToFile(file, "test", "UTF-8");
 
@@ -920,7 +996,9 @@ public class TestConsoleLicenseGenerator
             this.console.generateLicense();
             fail("Expected exception IOException.");
         }
-        catch(IOException ignore) { }
+        catch(IOException ignore)
+        {
+        }
         finally
         {
             this.resetLicenseCreator();
@@ -941,7 +1019,9 @@ public class TestConsoleLicenseGenerator
         String fileName = "testGenerateLicense03.properties";
         File file = new File(fileName);
         if(file.exists())
+        {
             FileUtils.forceDelete(file);
+        }
 
         FileUtils.writeStringToFile(file, "", "UTF-8");
 
@@ -981,7 +1061,7 @@ public class TestConsoleLicenseGenerator
             assertNotNull("The signed license should not be null.", signed);
 
             License license = MockLicenseHelper.deserialize(Encryptor.decryptRaw(
-                    signed.getLicenseContent(), passwordProvider.getPassword()
+                signed.getLicenseContent(), passwordProvider.getPassword()
             ));
 
             assertNotNull("The license is not correct.", license);
@@ -1016,7 +1096,9 @@ public class TestConsoleLicenseGenerator
         String fileName = "testGenerateLicense04.properties";
         File file = new File(fileName);
         if(file.exists())
+        {
             FileUtils.forceDelete(file);
+        }
 
         FileUtils.writeStringToFile(
             file,
@@ -1062,7 +1144,7 @@ public class TestConsoleLicenseGenerator
             assertNotNull("The signed license should not be null.", signed);
 
             License license = MockLicenseHelper.deserialize(Encryptor.decryptRaw(
-                    signed.getLicenseContent(), "somePassword04".toCharArray()
+                signed.getLicenseContent(), "somePassword04".toCharArray()
             ));
 
             assertNotNull("The license is not correct.", license);
@@ -1098,7 +1180,9 @@ public class TestConsoleLicenseGenerator
         String fileName = "testGenerateLicense05.properties";
         File file = new File(fileName);
         if(file.exists())
+        {
             FileUtils.forceDelete(file);
+        }
 
         FileUtils.writeStringToFile(file, "io.oddsource.java.licensing.password=anotherPassword05\r\n" +
                                           "io.oddsource.java.licensing.productKey=6575-TH0T-SNL5-7XGG-1099-1040\r\n" +
@@ -1110,7 +1194,8 @@ public class TestConsoleLicenseGenerator
                                           "io.oddsource.java.licensing.goodBeforeDate=2012-06-30 23:59:59\r\n" +
                                           "io.oddsource.java.licensing.numberOfLicenses=83\r\n" +
                                           "io.oddsource.java.licensing.features.MY_FEATURE_01=\r\n" +
-                                          "io.oddsource.java.licensing.features.ANOTHER_FEATURE_02=2012-06-15 23:59:59\r\n");
+                                          "io.oddsource.java.licensing.features.ANOTHER_FEATURE_02=2012-06-15 " +
+                                          "23:59:59\r\n");
 
         Capture<String> capture = EasyMock.newCapture();
 
@@ -1148,7 +1233,7 @@ public class TestConsoleLicenseGenerator
             assertNotNull("The signed license should not be null.", signed);
 
             License license = MockLicenseHelper.deserialize(Encryptor.decryptRaw(
-                    signed.getLicenseContent(), "anotherPassword05".toCharArray()
+                signed.getLicenseContent(), "anotherPassword05".toCharArray()
             ));
 
             assertNotNull("The license is not correct.", license);
@@ -1157,22 +1242,37 @@ public class TestConsoleLicenseGenerator
             assertEquals("The holder is not correct.", "myHolder01", license.getHolder());
             assertEquals("The issuer is not correct.", "yourIssuer02", license.getIssuer());
             assertEquals("The subject is not correct.", "aSubject03", license.getSubject());
-            assertEquals("The issue date is not correct.", new Date(112, 4, 1, 22, 21, 20).getTime(), license.getIssueDate());
-            assertEquals("The good after date is not correct.", new Date(112, 5, 1, 0, 0, 0).getTime(), license.getGoodAfterDate());
-            assertEquals("The good before date is not correct.", new Date(112, 5, 30, 23, 59, 59).getTime(), license.getGoodBeforeDate());
+            assertEquals(
+                "The issue date is not correct.",
+                new Date(112, 4, 1, 22, 21, 20).getTime(),
+                license.getIssueDate()
+            );
+            assertEquals(
+                "The good after date is not correct.",
+                new Date(112, 5, 1, 0, 0, 0).getTime(),
+                license.getGoodAfterDate()
+            );
+            assertEquals(
+                "The good before date is not correct.",
+                new Date(112, 5, 30, 23, 59, 59).getTime(),
+                license.getGoodBeforeDate()
+            );
             assertEquals("The number of licenses is not correct.", 83, license.getNumberOfLicenses());
             assertEquals("The number of features is not correct.", 2, license.getFeatures().size());
 
-            HashMap<String, License.Feature> map = new HashMap<String, License.Feature>();
+            HashMap<String, License.Feature> map = new HashMap<>();
             for(License.Feature feature : license.getFeatures())
+            {
                 map.put(feature.getName(), feature);
+            }
 
             assertNotNull("Feature 1 should not be null.", map.get("MY_FEATURE_01"));
             assertEquals("Feature 1 is not correct.", -1L, map.get("MY_FEATURE_01").getGoodBeforeDate());
 
             assertNotNull("Feature 2 should not be null.", map.get("ANOTHER_FEATURE_02"));
             assertEquals("Feature 2 is not correct.", new Date(112, 5, 15, 23, 59, 59).getTime(),
-                         map.get("ANOTHER_FEATURE_02").getGoodBeforeDate());
+                         map.get("ANOTHER_FEATURE_02").getGoodBeforeDate()
+            );
         }
         finally
         {
@@ -1195,12 +1295,16 @@ public class TestConsoleLicenseGenerator
         String fileName = "testGenerateLicense06.properties";
         File file = new File(fileName);
         if(file.exists())
+        {
             FileUtils.forceDelete(file);
+        }
 
         String licenseFileName = "testGenerateLicense06.license";
         File licenseFile = new File(licenseFileName);
         if(licenseFile.exists())
+        {
             FileUtils.forceDelete(licenseFile);
+        }
 
         FileUtils.writeStringToFile(file, "io.oddsource.java.licensing.password=finalPassword06\r\n" +
                                           "io.oddsource.java.licensing.productKey=5565-1039-AF89-GGX7-TN31-14AL\r\n" +
@@ -1245,7 +1349,7 @@ public class TestConsoleLicenseGenerator
             assertNotNull("The signed license should not be null.", signed);
 
             License license = MockLicenseHelper.deserialize(Encryptor.decryptRaw(
-                    signed.getLicenseContent(), "finalPassword06".toCharArray()
+                signed.getLicenseContent(), "finalPassword06".toCharArray()
             ));
 
             assertNotNull("The license is not correct.", license);
@@ -1254,15 +1358,29 @@ public class TestConsoleLicenseGenerator
             assertEquals("The holder is not correct.", "someHolder01", license.getHolder());
             assertEquals("The issuer is not correct.", "coolIssuer02", license.getIssuer());
             assertEquals("The subject is not correct.", "lameSubject03", license.getSubject());
-            assertEquals("The issue date is not correct.", new Date(111, 6, 15, 15, 17, 19).getTime(), license.getIssueDate());
-            assertEquals("The good after date is not correct.", new Date(111, 8, 1, 0, 0, 0).getTime(), license.getGoodAfterDate());
-            assertEquals("The good before date is not correct.", new Date(111, 11, 31, 23, 59, 59).getTime(), license.getGoodBeforeDate());
+            assertEquals(
+                "The issue date is not correct.",
+                new Date(111, 6, 15, 15, 17, 19).getTime(),
+                license.getIssueDate()
+            );
+            assertEquals(
+                "The good after date is not correct.",
+                new Date(111, 8, 1, 0, 0, 0).getTime(),
+                license.getGoodAfterDate()
+            );
+            assertEquals(
+                "The good before date is not correct.",
+                new Date(111, 11, 31, 23, 59, 59).getTime(),
+                license.getGoodBeforeDate()
+            );
             assertEquals("The number of licenses is not correct.", 21, license.getNumberOfLicenses());
             assertEquals("The number of features is not correct.", 1, license.getFeatures().size());
 
-            HashMap<String, License.Feature> map = new HashMap<String, License.Feature>();
+            HashMap<String, License.Feature> map = new HashMap<>();
             for(License.Feature feature : license.getFeatures())
+            {
                 map.put(feature.getName(), feature);
+            }
 
             assertNotNull("Feature 1 should not be null.", map.get("FINAL_FEATURE_03"));
             assertEquals("Feature 1 is not correct.", -1L, map.get("FINAL_FEATURE_03").getGoodBeforeDate());
@@ -1299,49 +1417,49 @@ public class TestConsoleLicenseGenerator
 
         EasyMock.expect(this.device.readLine("Please enter a product key for this license (you can leave this " +
                                              "blank): ")).
-                andReturn(" ");
+            andReturn(" ");
         this.device.printOutLn();
         EasyMock.expectLastCall();
         EasyMock.expect(this.device.readLine("Please enter a holder for this license (you can leave this blank): ")).
-                andReturn(null);
+            andReturn(null);
         this.device.printOutLn();
         EasyMock.expectLastCall();
         EasyMock.expect(this.device.readLine("Please enter an issuer for this license (you can leave this blank): ")).
-                andReturn(" ");
+            andReturn(" ");
         this.device.printOutLn();
         EasyMock.expectLastCall();
         EasyMock.expect(this.device.readLine("Please enter a subject for this license (you can leave this blank): ")).
-                andReturn(null);
+            andReturn(null);
         this.device.printOutLn();
         EasyMock.expectLastCall();
         EasyMock.expect(this.device.readLine("Please enter an issue date for this license (YYYY-MM-DD hh:mm:ss " +
                                              "or blank): ")).
-                andReturn(" ");
+            andReturn(" ");
         this.device.printOutLn();
         EasyMock.expectLastCall();
         EasyMock.expect(this.device.readLine("Please enter an activation/good-after date for this license " +
                                              "(YYYY-MM-DD hh:mm:ss or blank): ")).
-                andReturn(null);
+            andReturn(null);
         this.device.printOutLn();
         EasyMock.expectLastCall();
         EasyMock.expect(this.device.readLine("Please enter an expiration date for this license " +
                                              "(YYYY-MM-DD hh:mm:ss or blank): ")).
-                andReturn(" ");
+            andReturn(" ");
         this.device.printOutLn();
         EasyMock.expectLastCall();
         EasyMock.expect(this.device.readLine("Please enter a number of seats/licenses for this license " +
                                              "(you can leave this blank): ")).
-                andReturn(null);
+            andReturn(null);
         this.device.printOutLn();
         EasyMock.expectLastCall();
         EasyMock.expect(this.device.readLine("Optionally enter the name/key of a feature you want to add to this " +
                                              "license (you can leave this blank): ")).
-                andReturn(" ");
+            andReturn(" ");
         this.device.printOutLn();
         EasyMock.expectLastCall();
         EasyMock.expect(this.device.promptForValidPassword(0, 32, "the license with (if left blank, will use the " +
                                                                   "private key password provider)")).
-                andReturn(null);
+            andReturn(null);
         this.device.printOutLn();
         EasyMock.expectLastCall();
         this.device.printOutLn("Would you like to...");
@@ -1380,7 +1498,7 @@ public class TestConsoleLicenseGenerator
             assertNotNull("The signed license should not be null.", signed);
 
             License license = MockLicenseHelper.deserialize(Encryptor.decryptRaw(
-                    signed.getLicenseContent(), passwordProvider.getPassword()
+                signed.getLicenseContent(), passwordProvider.getPassword()
             ));
 
             assertNotNull("The license is not correct.", license);
@@ -1423,49 +1541,49 @@ public class TestConsoleLicenseGenerator
 
         EasyMock.expect(this.device.readLine("Please enter a product key for this license (you can leave this " +
                                              "blank): ")).
-                andReturn(" ");
+            andReturn(" ");
         this.device.printOutLn();
         EasyMock.expectLastCall();
         EasyMock.expect(this.device.readLine("Please enter a holder for this license (you can leave this blank): ")).
-                andReturn(null);
+            andReturn(null);
         this.device.printOutLn();
         EasyMock.expectLastCall();
         EasyMock.expect(this.device.readLine("Please enter an issuer for this license (you can leave this blank): ")).
-                andReturn(" ");
+            andReturn(" ");
         this.device.printOutLn();
         EasyMock.expectLastCall();
         EasyMock.expect(this.device.readLine("Please enter a subject for this license (you can leave this blank): ")).
-                andReturn(null);
+            andReturn(null);
         this.device.printOutLn();
         EasyMock.expectLastCall();
         EasyMock.expect(this.device.readLine("Please enter an issue date for this license (YYYY-MM-DD hh:mm:ss " +
                                              "or blank): ")).
-                andReturn("abcdefg");
+            andReturn("abcdefg");
         this.device.printOutLn();
         EasyMock.expectLastCall();
         EasyMock.expect(this.device.readLine("Please enter an activation/good-after date for this license " +
                                              "(YYYY-MM-DD hh:mm:ss or blank): ")).
-                andReturn(null);
+            andReturn(null);
         this.device.printOutLn();
         EasyMock.expectLastCall();
         EasyMock.expect(this.device.readLine("Please enter an expiration date for this license " +
                                              "(YYYY-MM-DD hh:mm:ss or blank): ")).
-                andReturn(" ");
+            andReturn(" ");
         this.device.printOutLn();
         EasyMock.expectLastCall();
         EasyMock.expect(this.device.readLine("Please enter a number of seats/licenses for this license " +
                                              "(you can leave this blank): ")).
-                andReturn("gfedcba");
+            andReturn("gfedcba");
         this.device.printOutLn();
         EasyMock.expectLastCall();
         EasyMock.expect(this.device.readLine("Optionally enter the name/key of a feature you want to add to this " +
                                              "license (you can leave this blank): ")).
-                andReturn(" ");
+            andReturn(" ");
         this.device.printOutLn();
         EasyMock.expectLastCall();
         EasyMock.expect(this.device.promptForValidPassword(0, 32, "the license with (if left blank, will use the " +
                                                                   "private key password provider)")).
-                andReturn("somePassword04".toCharArray());
+            andReturn("somePassword04".toCharArray());
         this.device.printOutLn();
         EasyMock.expectLastCall();
         this.device.printOutLn("Would you like to...");
@@ -1504,7 +1622,7 @@ public class TestConsoleLicenseGenerator
             assertNotNull("The signed license should not be null.", signed);
 
             License license = MockLicenseHelper.deserialize(Encryptor.decryptRaw(
-                    signed.getLicenseContent(), "somePassword04".toCharArray()
+                signed.getLicenseContent(), "somePassword04".toCharArray()
             ));
 
             assertNotNull("The license is not correct.", license);
@@ -1548,69 +1666,69 @@ public class TestConsoleLicenseGenerator
 
         EasyMock.expect(this.device.readLine("Please enter a product key for this license (you can leave this " +
                                              "blank): ")).
-                andReturn("6575-TH0T-SNL5-7XGG-1099-1040");
+            andReturn("6575-TH0T-SNL5-7XGG-1099-1040");
         this.device.printOutLn();
         EasyMock.expectLastCall();
         EasyMock.expect(this.device.readLine("Please enter a holder for this license (you can leave this blank): ")).
-                andReturn("myHolder01");
+            andReturn("myHolder01");
         this.device.printOutLn();
         EasyMock.expectLastCall();
         EasyMock.expect(this.device.readLine("Please enter an issuer for this license (you can leave this blank): ")).
-                andReturn("yourIssuer02");
+            andReturn("yourIssuer02");
         this.device.printOutLn();
         EasyMock.expectLastCall();
         EasyMock.expect(this.device.readLine("Please enter a subject for this license (you can leave this blank): ")).
-                andReturn("aSubject03");
+            andReturn("aSubject03");
         this.device.printOutLn();
         EasyMock.expectLastCall();
         EasyMock.expect(this.device.readLine("Please enter an issue date for this license (YYYY-MM-DD hh:mm:ss " +
                                              "or blank): ")).
-                andReturn("2012-05-01 22:21:20");
+            andReturn("2012-05-01 22:21:20");
         this.device.printOutLn();
         EasyMock.expectLastCall();
         EasyMock.expect(this.device.readLine("Please enter an activation/good-after date for this license " +
                                              "(YYYY-MM-DD hh:mm:ss or blank): ")).
-                andReturn("2012-06-01 00:00:00");
+            andReturn("2012-06-01 00:00:00");
         this.device.printOutLn();
         EasyMock.expectLastCall();
         EasyMock.expect(this.device.readLine("Please enter an expiration date for this license " +
                                              "(YYYY-MM-DD hh:mm:ss or blank): ")).
-                andReturn("2012-06-30 23:59:59");
+            andReturn("2012-06-30 23:59:59");
         this.device.printOutLn();
         EasyMock.expectLastCall();
         EasyMock.expect(this.device.readLine("Please enter a number of seats/licenses for this license " +
                                              "(you can leave this blank): ")).
-                andReturn("83");
+            andReturn("83");
         this.device.printOutLn();
         EasyMock.expectLastCall();
         EasyMock.expect(this.device.readLine("Optionally enter the name/key of a feature you want to add to this " +
                                              "license (you can leave this blank): ")).
-                andReturn("MY_FEATURE_01");
+            andReturn("MY_FEATURE_01");
         this.device.printOutLn();
         EasyMock.expectLastCall();
         EasyMock.expect(this.device.readLine("Optionally enter an expiration date for feature [MY_FEATURE_01] " +
                                              "(YYYY-MM-DD hh:mm:ss or blank): ")).
-                andReturn(" ");
+            andReturn(" ");
         this.device.printOutLn();
         EasyMock.expectLastCall();
         EasyMock.expect(this.device.readLine("Enter another feature to add to this license (you can leave " +
                                              "this blank): ")).
-                andReturn("ANOTHER_FEATURE_02");
+            andReturn("ANOTHER_FEATURE_02");
         this.device.printOutLn();
         EasyMock.expectLastCall();
         EasyMock.expect(this.device.readLine("Optionally enter an expiration date for feature [ANOTHER_FEATURE_02] " +
                                              "(YYYY-MM-DD hh:mm:ss or blank): ")).
-                andReturn("2012-06-15 23:59:59");
+            andReturn("2012-06-15 23:59:59");
         this.device.printOutLn();
         EasyMock.expectLastCall();
         EasyMock.expect(this.device.readLine("Enter another feature to add to this license (you can leave " +
                                              "this blank): ")).
-                andReturn("    ");
+            andReturn("    ");
         this.device.printOutLn();
         EasyMock.expectLastCall();
         EasyMock.expect(this.device.promptForValidPassword(0, 32, "the license with (if left blank, will use the " +
                                                                   "private key password provider)")).
-                andReturn("anotherPassword05".toCharArray());
+            andReturn("anotherPassword05".toCharArray());
         this.device.printOutLn();
         EasyMock.expectLastCall();
         this.device.printOutLn("Would you like to...");
@@ -1649,7 +1767,7 @@ public class TestConsoleLicenseGenerator
             assertNotNull("The signed license should not be null.", signed);
 
             License license = MockLicenseHelper.deserialize(Encryptor.decryptRaw(
-                    signed.getLicenseContent(), "anotherPassword05".toCharArray()
+                signed.getLicenseContent(), "anotherPassword05".toCharArray()
             ));
 
             assertNotNull("The license is not correct.", license);
@@ -1658,22 +1776,37 @@ public class TestConsoleLicenseGenerator
             assertEquals("The holder is not correct.", "myHolder01", license.getHolder());
             assertEquals("The issuer is not correct.", "yourIssuer02", license.getIssuer());
             assertEquals("The subject is not correct.", "aSubject03", license.getSubject());
-            assertEquals("The issue date is not correct.", new Date(112, 4, 1, 22, 21, 20).getTime(), license.getIssueDate());
-            assertEquals("The good after date is not correct.", new Date(112, 5, 1, 0, 0, 0).getTime(), license.getGoodAfterDate());
-            assertEquals("The good before date is not correct.", new Date(112, 5, 30, 23, 59, 59).getTime(), license.getGoodBeforeDate());
+            assertEquals(
+                "The issue date is not correct.",
+                new Date(112, 4, 1, 22, 21, 20).getTime(),
+                license.getIssueDate()
+            );
+            assertEquals(
+                "The good after date is not correct.",
+                new Date(112, 5, 1, 0, 0, 0).getTime(),
+                license.getGoodAfterDate()
+            );
+            assertEquals(
+                "The good before date is not correct.",
+                new Date(112, 5, 30, 23, 59, 59).getTime(),
+                license.getGoodBeforeDate()
+            );
             assertEquals("The number of licenses is not correct.", 83, license.getNumberOfLicenses());
             assertEquals("The number of features is not correct.", 2, license.getFeatures().size());
 
-            HashMap<String, License.Feature> map = new HashMap<String, License.Feature>();
+            HashMap<String, License.Feature> map = new HashMap<>();
             for(License.Feature feature : license.getFeatures())
+            {
                 map.put(feature.getName(), feature);
+            }
 
             assertNotNull("Feature 1 should not be null.", map.get("MY_FEATURE_01"));
             assertEquals("Feature 1 is not correct.", -1L, map.get("MY_FEATURE_01").getGoodBeforeDate());
 
             assertNotNull("Feature 2 should not be null.", map.get("ANOTHER_FEATURE_02"));
             assertEquals("Feature 2 is not correct.", new Date(112, 5, 15, 23, 59, 59).getTime(),
-                         map.get("ANOTHER_FEATURE_02").getGoodBeforeDate());
+                         map.get("ANOTHER_FEATURE_02").getGoodBeforeDate()
+            );
         }
         finally
         {
@@ -1694,7 +1827,9 @@ public class TestConsoleLicenseGenerator
         String licenseFileName = "testGenerateLicense10.license";
         File licenseFile = new File(licenseFileName);
         if(licenseFile.exists())
+        {
             FileUtils.forceDelete(licenseFile);
+        }
 
         this.console.setCli(
             EasyMock.createMockBuilder(CommandLine.class).withConstructor().
@@ -1707,59 +1842,59 @@ public class TestConsoleLicenseGenerator
 
         EasyMock.expect(this.device.readLine("Please enter a product key for this license (you can leave this " +
                                              "blank): ")).
-                andReturn("5565-1039-AF89-GGX7-TN31-14AL");
+            andReturn("5565-1039-AF89-GGX7-TN31-14AL");
         this.device.printOutLn();
         EasyMock.expectLastCall();
         EasyMock.expect(this.device.readLine("Please enter a holder for this license (you can leave this blank): ")).
-                andReturn("someHolder01");
+            andReturn("someHolder01");
         this.device.printOutLn();
         EasyMock.expectLastCall();
         EasyMock.expect(this.device.readLine("Please enter an issuer for this license (you can leave this blank): ")).
-                andReturn("coolIssuer02");
+            andReturn("coolIssuer02");
         this.device.printOutLn();
         EasyMock.expectLastCall();
         EasyMock.expect(this.device.readLine("Please enter a subject for this license (you can leave this blank): ")).
-                andReturn("lameSubject03");
+            andReturn("lameSubject03");
         this.device.printOutLn();
         EasyMock.expectLastCall();
         EasyMock.expect(this.device.readLine("Please enter an issue date for this license (YYYY-MM-DD hh:mm:ss " +
                                              "or blank): ")).
-                andReturn("2011-07-15 15:17:19");
+            andReturn("2011-07-15 15:17:19");
         this.device.printOutLn();
         EasyMock.expectLastCall();
         EasyMock.expect(this.device.readLine("Please enter an activation/good-after date for this license " +
                                              "(YYYY-MM-DD hh:mm:ss or blank): ")).
-                andReturn("2011-09-01 00:00:00");
+            andReturn("2011-09-01 00:00:00");
         this.device.printOutLn();
         EasyMock.expectLastCall();
         EasyMock.expect(this.device.readLine("Please enter an expiration date for this license " +
                                              "(YYYY-MM-DD hh:mm:ss or blank): ")).
-                andReturn("2011-12-31 23:59:59");
+            andReturn("2011-12-31 23:59:59");
         this.device.printOutLn();
         EasyMock.expectLastCall();
         EasyMock.expect(this.device.readLine("Please enter a number of seats/licenses for this license " +
                                              "(you can leave this blank): ")).
-                andReturn("21");
+            andReturn("21");
         this.device.printOutLn();
         EasyMock.expectLastCall();
         EasyMock.expect(this.device.readLine("Optionally enter the name/key of a feature you want to add to this " +
                                              "license (you can leave this blank): ")).
-                andReturn("FINAL_FEATURE_03");
+            andReturn("FINAL_FEATURE_03");
         this.device.printOutLn();
         EasyMock.expectLastCall();
         EasyMock.expect(this.device.readLine("Optionally enter an expiration date for feature [FINAL_FEATURE_03] " +
                                              "(YYYY-MM-DD hh:mm:ss or blank): ")).
-                andReturn(" ");
+            andReturn(" ");
         this.device.printOutLn();
         EasyMock.expectLastCall();
         EasyMock.expect(this.device.readLine("Enter another feature to add to this license (you can leave " +
                                              "this blank): ")).
-                andReturn(null);
+            andReturn(null);
         this.device.printOutLn();
         EasyMock.expectLastCall();
         EasyMock.expect(this.device.promptForValidPassword(0, 32, "the license with (if left blank, will use the " +
                                                                   "private key password provider)")).
-                andReturn("finalPassword06".toCharArray());
+            andReturn("finalPassword06".toCharArray());
         this.device.printOutLn();
         EasyMock.expectLastCall();
         this.device.printOutLn("Would you like to...");
@@ -1772,17 +1907,17 @@ public class TestConsoleLicenseGenerator
         this.device.printOutLn();
         EasyMock.expectLastCall();
         EasyMock.expect(this.device.readLine("Please enter the name of the file to save the license to: ")).
-                andReturn("");
+            andReturn("");
         this.device.printOutLn();
         EasyMock.expectLastCall();
         EasyMock.expect(this.device.readLine("Invalid file name. Please enter the name of the file to save the " +
                                              "license to: ")).
-                andReturn("   ");
+            andReturn("   ");
         this.device.printOutLn();
         EasyMock.expectLastCall();
         EasyMock.expect(this.device.readLine("Invalid file name. Please enter the name of the file to save the " +
                                              "license to: ")).
-                andReturn(licenseFileName);
+            andReturn(licenseFileName);
         this.device.printOutLn();
         EasyMock.expectLastCall();
 
@@ -1807,7 +1942,7 @@ public class TestConsoleLicenseGenerator
             assertNotNull("The signed license should not be null.", signed);
 
             License license = MockLicenseHelper.deserialize(Encryptor.decryptRaw(
-                    signed.getLicenseContent(), "finalPassword06".toCharArray()
+                signed.getLicenseContent(), "finalPassword06".toCharArray()
             ));
 
             assertNotNull("The license is not correct.", license);
@@ -1816,15 +1951,29 @@ public class TestConsoleLicenseGenerator
             assertEquals("The holder is not correct.", "someHolder01", license.getHolder());
             assertEquals("The issuer is not correct.", "coolIssuer02", license.getIssuer());
             assertEquals("The subject is not correct.", "lameSubject03", license.getSubject());
-            assertEquals("The issue date is not correct.", new Date(111, 6, 15, 15, 17, 19).getTime(), license.getIssueDate());
-            assertEquals("The good after date is not correct.", new Date(111, 8, 1, 0, 0, 0).getTime(), license.getGoodAfterDate());
-            assertEquals("The good before date is not correct.", new Date(111, 11, 31, 23, 59, 59).getTime(), license.getGoodBeforeDate());
+            assertEquals(
+                "The issue date is not correct.",
+                new Date(111, 6, 15, 15, 17, 19).getTime(),
+                license.getIssueDate()
+            );
+            assertEquals(
+                "The good after date is not correct.",
+                new Date(111, 8, 1, 0, 0, 0).getTime(),
+                license.getGoodAfterDate()
+            );
+            assertEquals(
+                "The good before date is not correct.",
+                new Date(111, 11, 31, 23, 59, 59).getTime(),
+                license.getGoodBeforeDate()
+            );
             assertEquals("The number of licenses is not correct.", 21, license.getNumberOfLicenses());
             assertEquals("The number of features is not correct.", 1, license.getFeatures().size());
 
-            HashMap<String, License.Feature> map = new HashMap<String, License.Feature>();
+            HashMap<String, License.Feature> map = new HashMap<>();
             for(License.Feature feature : license.getFeatures())
+            {
                 map.put(feature.getName(), feature);
+            }
 
             assertNotNull("Feature 1 should not be null.", map.get("FINAL_FEATURE_03"));
             assertEquals("Feature 1 is not correct.", -1L, map.get("FINAL_FEATURE_03").getGoodBeforeDate());
@@ -1843,14 +1992,14 @@ public class TestConsoleLicenseGenerator
     public void testRun01() throws Exception
     {
         this.console = EasyMock.createMockBuilder(ConsoleLicenseGenerator.class).
-                withConstructor(TextInterfaceDevice.class, CommandLineParser.class).
-                withArgs(this.device, new DefaultParser()).
-                addMockedMethod("processCommandLineOptions").
-                addMockedMethod("initializeLicenseCreator").
-                addMockedMethod("generateLicense").
-                createStrictMock();
+            withConstructor(TextInterfaceDevice.class, CommandLineParser.class).
+            withArgs(this.device, new DefaultParser()).
+            addMockedMethod("processCommandLineOptions").
+            addMockedMethod("initializeLicenseCreator").
+            addMockedMethod("generateLicense").
+            createStrictMock();
 
-        String[] arguments = new String[] { "help" };
+        String[] arguments = new String[] {"help"};
 
         this.console.processCommandLineOptions(arguments);
         EasyMock.expectLastCall();
@@ -1878,14 +2027,14 @@ public class TestConsoleLicenseGenerator
     public void testRun02() throws Exception
     {
         this.console = EasyMock.createMockBuilder(ConsoleLicenseGenerator.class).
-                withConstructor(TextInterfaceDevice.class, CommandLineParser.class).
-                withArgs(this.device, new DefaultParser()).
-                addMockedMethod("processCommandLineOptions").
-                addMockedMethod("initializeLicenseCreator").
-                addMockedMethod("generateLicense").
-                createStrictMock();
+            withConstructor(TextInterfaceDevice.class, CommandLineParser.class).
+            withArgs(this.device, new DefaultParser()).
+            addMockedMethod("processCommandLineOptions").
+            addMockedMethod("initializeLicenseCreator").
+            addMockedMethod("generateLicense").
+            createStrictMock();
 
-        String[] arguments = new String[] { "help" };
+        String[] arguments = new String[] {"help"};
 
         this.console.processCommandLineOptions(arguments);
         EasyMock.expectLastCall();
@@ -1913,14 +2062,14 @@ public class TestConsoleLicenseGenerator
     public void testRun03() throws Exception
     {
         this.console = EasyMock.createMockBuilder(ConsoleLicenseGenerator.class).
-                withConstructor(TextInterfaceDevice.class, CommandLineParser.class).
-                withArgs(this.device, new DefaultParser()).
-                addMockedMethod("processCommandLineOptions").
-                addMockedMethod("initializeLicenseCreator").
-                addMockedMethod("generateLicense").
-                createStrictMock();
+            withConstructor(TextInterfaceDevice.class, CommandLineParser.class).
+            withArgs(this.device, new DefaultParser()).
+            addMockedMethod("processCommandLineOptions").
+            addMockedMethod("initializeLicenseCreator").
+            addMockedMethod("generateLicense").
+            createStrictMock();
 
-        String[] arguments = new String[] { "help" };
+        String[] arguments = new String[] {"help"};
 
         this.console.processCommandLineOptions(arguments);
         EasyMock.expectLastCall();
@@ -1949,14 +2098,14 @@ public class TestConsoleLicenseGenerator
     public void testRun04() throws Exception
     {
         this.console = EasyMock.createMockBuilder(ConsoleLicenseGenerator.class).
-                withConstructor(TextInterfaceDevice.class, CommandLineParser.class).
-                withArgs(this.device, new DefaultParser()).
-                addMockedMethod("processCommandLineOptions").
-                addMockedMethod("initializeLicenseCreator").
-                addMockedMethod("generateLicense").
-                createStrictMock();
+            withConstructor(TextInterfaceDevice.class, CommandLineParser.class).
+            withArgs(this.device, new DefaultParser()).
+            addMockedMethod("processCommandLineOptions").
+            addMockedMethod("initializeLicenseCreator").
+            addMockedMethod("generateLicense").
+            createStrictMock();
 
-        String[] arguments = new String[] { "help" };
+        String[] arguments = new String[] {"help"};
 
         this.console.processCommandLineOptions(arguments);
         EasyMock.expectLastCall();
@@ -1984,14 +2133,14 @@ public class TestConsoleLicenseGenerator
     public void testRun05() throws Exception
     {
         this.console = EasyMock.createMockBuilder(ConsoleLicenseGenerator.class).
-                withConstructor(TextInterfaceDevice.class, CommandLineParser.class).
-                withArgs(this.device, new DefaultParser()).
-                addMockedMethod("processCommandLineOptions").
-                addMockedMethod("initializeLicenseCreator").
-                addMockedMethod("generateLicense").
-                createStrictMock();
+            withConstructor(TextInterfaceDevice.class, CommandLineParser.class).
+            withArgs(this.device, new DefaultParser()).
+            addMockedMethod("processCommandLineOptions").
+            addMockedMethod("initializeLicenseCreator").
+            addMockedMethod("generateLicense").
+            createStrictMock();
 
-        String[] arguments = new String[] { "help" };
+        String[] arguments = new String[] {"help"};
 
         this.console.processCommandLineOptions(arguments);
         EasyMock.expectLastCall();
@@ -2019,14 +2168,14 @@ public class TestConsoleLicenseGenerator
     public void testRun06() throws Exception
     {
         this.console = EasyMock.createMockBuilder(ConsoleLicenseGenerator.class).
-                withConstructor(TextInterfaceDevice.class, CommandLineParser.class).
-                withArgs(this.device, new DefaultParser()).
-                addMockedMethod("processCommandLineOptions").
-                addMockedMethod("initializeLicenseCreator").
-                addMockedMethod("generateLicense").
-                createStrictMock();
+            withConstructor(TextInterfaceDevice.class, CommandLineParser.class).
+            withArgs(this.device, new DefaultParser()).
+            addMockedMethod("processCommandLineOptions").
+            addMockedMethod("initializeLicenseCreator").
+            addMockedMethod("generateLicense").
+            createStrictMock();
 
-        String[] arguments = new String[] { "help" };
+        String[] arguments = new String[] {"help"};
 
         this.console.processCommandLineOptions(arguments);
         EasyMock.expectLastCall();
@@ -2056,14 +2205,14 @@ public class TestConsoleLicenseGenerator
     public void testRun07() throws Exception
     {
         this.console = EasyMock.createMockBuilder(ConsoleLicenseGenerator.class).
-                withConstructor(TextInterfaceDevice.class, CommandLineParser.class).
-                withArgs(this.device, new DefaultParser()).
-                addMockedMethod("processCommandLineOptions").
-                addMockedMethod("initializeLicenseCreator").
-                addMockedMethod("generateLicense").
-                createStrictMock();
+            withConstructor(TextInterfaceDevice.class, CommandLineParser.class).
+            withArgs(this.device, new DefaultParser()).
+            addMockedMethod("processCommandLineOptions").
+            addMockedMethod("initializeLicenseCreator").
+            addMockedMethod("generateLicense").
+            createStrictMock();
 
-        String[] arguments = new String[] { "help" };
+        String[] arguments = new String[] {"help"};
 
         this.console.processCommandLineOptions(arguments);
         EasyMock.expectLastCall();
@@ -2073,7 +2222,7 @@ public class TestConsoleLicenseGenerator
         EasyMock.expectLastCall().andThrow(new IOException("message07."));
 
         this.device.printErrLn("An error occurred writing or reading files from the system. Analyze the error " +
-                    "below to determine what went wrong and fix it!");
+                               "below to determine what went wrong and fix it!");
         EasyMock.expectLastCall();
         this.device.printErrLn("java.io.IOException: message07.");
         EasyMock.expectLastCall();
@@ -2096,14 +2245,14 @@ public class TestConsoleLicenseGenerator
     public void testRun08() throws Exception
     {
         this.console = EasyMock.createMockBuilder(ConsoleLicenseGenerator.class).
-                withConstructor(TextInterfaceDevice.class, CommandLineParser.class).
-                withArgs(this.device, new DefaultParser()).
-                addMockedMethod("processCommandLineOptions").
-                addMockedMethod("initializeLicenseCreator").
-                addMockedMethod("generateLicense").
-                createStrictMock();
+            withConstructor(TextInterfaceDevice.class, CommandLineParser.class).
+            withArgs(this.device, new DefaultParser()).
+            addMockedMethod("processCommandLineOptions").
+            addMockedMethod("initializeLicenseCreator").
+            addMockedMethod("generateLicense").
+            createStrictMock();
 
-        String[] arguments = new String[] { "testOption08" };
+        String[] arguments = new String[] {"testOption08"};
 
         this.console.processCommandLineOptions(arguments);
         EasyMock.expectLastCall();
@@ -2133,14 +2282,14 @@ public class TestConsoleLicenseGenerator
     public void testRun09() throws Exception
     {
         this.console = EasyMock.createMockBuilder(ConsoleLicenseGenerator.class).
-                withConstructor(TextInterfaceDevice.class, CommandLineParser.class).
-                withArgs(this.device, new DefaultParser()).
-                addMockedMethod("processCommandLineOptions").
-                addMockedMethod("initializeLicenseCreator").
-                addMockedMethod("generateLicense").
-                createStrictMock();
+            withConstructor(TextInterfaceDevice.class, CommandLineParser.class).
+            withArgs(this.device, new DefaultParser()).
+            addMockedMethod("processCommandLineOptions").
+            addMockedMethod("initializeLicenseCreator").
+            addMockedMethod("generateLicense").
+            createStrictMock();
 
-        String[] arguments = new String[] { "lastOption09" };
+        String[] arguments = new String[] {"lastOption09"};
 
         this.console.processCommandLineOptions(arguments);
         EasyMock.expectLastCall();
@@ -2169,10 +2318,11 @@ public class TestConsoleLicenseGenerator
         private static final long serialVersionUID = 1L;
     }
 
-    @Test(expected=ThisExceptionMeansTestSucceededException.class)
+    @Test(expected = ThisExceptionMeansTestSucceededException.class)
     public void testMain01()
     {
-        SecurityManager securityManager = new MockPermissiveSecurityManager() {
+        SecurityManager securityManager = new MockPermissiveSecurityManager()
+        {
             private boolean active = true;
 
             @Override
@@ -2196,10 +2346,11 @@ public class TestConsoleLicenseGenerator
         System.setSecurityManager(null);
     }
 
-    @Test(expected=ThisExceptionMeansTestSucceededException.class)
+    @Test(expected = ThisExceptionMeansTestSucceededException.class)
     public void testMain02()
     {
-        SecurityManager securityManager = new MockPermissiveSecurityManager() {
+        SecurityManager securityManager = new MockPermissiveSecurityManager()
+        {
             private boolean active = true;
 
             @Override

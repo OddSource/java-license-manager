@@ -15,17 +15,18 @@
  */
 package io.oddsource.java.licensing.licensor.interfaces.cli.spi;
 
-import io.oddsource.java.licensing.licensor.interfaces.spi.OutputDevice;
-import org.easymock.EasyMock;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
+import static org.junit.Assert.*;
 
 import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.io.PrintStream;
 
-import static org.junit.Assert.*;
+import org.easymock.EasyMock;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
+
+import io.oddsource.java.licensing.licensor.interfaces.spi.OutputDevice;
 
 /**
  * Test class for AbstractTextInterfaceDevice.
@@ -48,9 +49,9 @@ public class TestAbstractTextInterfaceDevice
         this.errorStream = EasyMock.createStrictMock(PrintStream.class);
 
         this.device = EasyMock.createMockBuilder(AbstractTextInterfaceDevice.class).
-                withConstructor(InputStream.class, PrintStream.class, PrintStream.class).
-                withArgs(this.inputStream, this.outputStream, this.errorStream).
-                createStrictMock();
+            withConstructor(InputStream.class, PrintStream.class, PrintStream.class).
+            withArgs(this.inputStream, this.outputStream, this.errorStream).
+            createStrictMock();
     }
 
     @After
@@ -392,21 +393,26 @@ public class TestAbstractTextInterfaceDevice
     public void testPromptForValidPasswordSimple01()
     {
         this.device = EasyMock.createMockBuilder(AbstractTextInterfaceDevice.class).
-                withConstructor(InputStream.class, PrintStream.class, PrintStream.class).
-                withArgs(this.inputStream, this.outputStream, this.errorStream).
-                addMockedMethod("promptForValidPassword", int.class, int.class, String.class, String.class,
-                                String.class, String.class, OutputDevice.class).
-                createStrictMock();
+            withConstructor(InputStream.class, PrintStream.class, PrintStream.class).
+            withArgs(this.inputStream, this.outputStream, this.errorStream).
+            addMockedMethod("promptForValidPassword", int.class, int.class, String.class, String.class,
+                            String.class, String.class, OutputDevice.class
+            ).
+            createStrictMock();
 
         char[] password = "testPassword01".toCharArray();
 
         EasyMock.expect(
-                this.device.promptForValidPassword(6, 32,
-                                                   "Enter pass phrase to encrypt coolness: ",
-                                                   "Verifying - Reenter pass phrase to encrypt coolness: ",
-                                                   "The password must be at least six characters and no more than 32 characters long.",
-                                                   "ERROR: Passwords do not match. Please try again, or press Ctrl+C to cancel.",
-                                                   this.device)
+            this.device.promptForValidPassword(6,
+                                               32,
+                                               "Enter pass phrase to encrypt coolness: ",
+                                               "Verifying - Reenter pass phrase to encrypt coolness: ",
+                                               "The password must be at least six characters and no more than 32 " +
+                                               "characters long.",
+                                               "ERROR: Passwords do not match. Please try again, or press Ctrl+C to " +
+                                               "cancel.",
+                                               this.device
+            )
         ).andReturn(password);
 
         EasyMock.replay(this.device, this.inputStream, this.outputStream, this.errorStream);
@@ -422,21 +428,26 @@ public class TestAbstractTextInterfaceDevice
     public void testPromptForValidPasswordSimple02()
     {
         this.device = EasyMock.createMockBuilder(AbstractTextInterfaceDevice.class).
-                withConstructor(InputStream.class, PrintStream.class, PrintStream.class).
-                withArgs(this.inputStream, this.outputStream, this.errorStream).
-                addMockedMethod("promptForValidPassword", int.class, int.class, String.class, String.class,
-                                String.class, String.class, OutputDevice.class).
-                createStrictMock();
+            withConstructor(InputStream.class, PrintStream.class, PrintStream.class).
+            withArgs(this.inputStream, this.outputStream, this.errorStream).
+            addMockedMethod("promptForValidPassword", int.class, int.class, String.class, String.class,
+                            String.class, String.class, OutputDevice.class
+            ).
+            createStrictMock();
 
         char[] password = "anotherPassword02".toCharArray();
 
         EasyMock.expect(
-                this.device.promptForValidPassword(10, 11,
-                                                   "Enter pass phrase to encrypt flying monkeys: ",
-                                                   "Verifying - Reenter pass phrase to encrypt flying monkeys: ",
-                                                   "The password must be at least ten characters and no more than 11 characters long.",
-                                                   "ERROR: Passwords do not match. Please try again, or press Ctrl+C to cancel.",
-                                                   this.device)
+            this.device.promptForValidPassword(10,
+                                               11,
+                                               "Enter pass phrase to encrypt flying monkeys: ",
+                                               "Verifying - Reenter pass phrase to encrypt flying monkeys: ",
+                                               "The password must be at least ten characters and no more than 11 " +
+                                               "characters long.",
+                                               "ERROR: Passwords do not match. Please try again, or press Ctrl+C to " +
+                                               "cancel.",
+                                               this.device
+            )
         ).andReturn(password);
 
         EasyMock.replay(this.device, this.inputStream, this.outputStream, this.errorStream);
@@ -452,21 +463,26 @@ public class TestAbstractTextInterfaceDevice
     public void testPromptForValidPasswordSimple03()
     {
         this.device = EasyMock.createMockBuilder(AbstractTextInterfaceDevice.class).
-                withConstructor(InputStream.class, PrintStream.class, PrintStream.class).
-                withArgs(this.inputStream, this.outputStream, this.errorStream).
-                addMockedMethod("promptForValidPassword", int.class, int.class, String.class, String.class,
-                                String.class, String.class, OutputDevice.class).
-                createStrictMock();
+            withConstructor(InputStream.class, PrintStream.class, PrintStream.class).
+            withArgs(this.inputStream, this.outputStream, this.errorStream).
+            addMockedMethod("promptForValidPassword", int.class, int.class, String.class, String.class,
+                            String.class, String.class, OutputDevice.class
+            ).
+            createStrictMock();
 
         char[] password = "closingPassword03".toCharArray();
 
         EasyMock.expect(
-                this.device.promptForValidPassword(-1, 0,
-                                                   "Enter pass phrase to encrypt warmness: ",
-                                                   "Verifying - Reenter pass phrase to encrypt warmness: ",
-                                                   "The password must be at least -1 characters and no more than zero characters long.",
-                                                   "ERROR: Passwords do not match. Please try again, or press Ctrl+C to cancel.",
-                                                   this.device)
+            this.device.promptForValidPassword(-1,
+                                               0,
+                                               "Enter pass phrase to encrypt warmness: ",
+                                               "Verifying - Reenter pass phrase to encrypt warmness: ",
+                                               "The password must be at least -1 characters and no more than zero " +
+                                               "characters long.",
+                                               "ERROR: Passwords do not match. Please try again, or press Ctrl+C to " +
+                                               "cancel.",
+                                               this.device
+            )
         ).andReturn(password);
 
         EasyMock.replay(this.device, this.inputStream, this.outputStream, this.errorStream);
@@ -482,21 +498,26 @@ public class TestAbstractTextInterfaceDevice
     public void testPromptForValidPasswordSimple04()
     {
         this.device = EasyMock.createMockBuilder(AbstractTextInterfaceDevice.class).
-                withConstructor(InputStream.class, PrintStream.class, PrintStream.class).
-                withArgs(this.inputStream, this.outputStream, this.errorStream).
-                addMockedMethod("promptForValidPassword", int.class, int.class, String.class, String.class,
-                                String.class, String.class, OutputDevice.class).
-                createStrictMock();
+            withConstructor(InputStream.class, PrintStream.class, PrintStream.class).
+            withArgs(this.inputStream, this.outputStream, this.errorStream).
+            addMockedMethod("promptForValidPassword", int.class, int.class, String.class, String.class,
+                            String.class, String.class, OutputDevice.class
+            ).
+            createStrictMock();
 
         char[] password = "finalPassword04".toCharArray();
 
         EasyMock.expect(
-                this.device.promptForValidPassword(5, 10,
-                                                   "Enter pass phrase to encrypt the movie: ",
-                                                   "Verifying - Reenter pass phrase to encrypt the movie: ",
-                                                   "The password must be at least five characters and no more than ten characters long.",
-                                                   "ERROR: Passwords do not match. Please try again, or press Ctrl+C to cancel.",
-                                                   this.device)
+            this.device.promptForValidPassword(5,
+                                               10,
+                                               "Enter pass phrase to encrypt the movie: ",
+                                               "Verifying - Reenter pass phrase to encrypt the movie: ",
+                                               "The password must be at least five characters and no more than ten " +
+                                               "characters long.",
+                                               "ERROR: Passwords do not match. Please try again, or press Ctrl+C to " +
+                                               "cancel.",
+                                               this.device
+            )
         ).andReturn(password);
 
         EasyMock.replay(this.device, this.inputStream, this.outputStream, this.errorStream);

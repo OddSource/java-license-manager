@@ -15,15 +15,15 @@
  */
 package io.oddsource.java.licensing.licensor.interfaces.cli;
 
-import org.apache.commons.io.output.ByteArrayOutputStream;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
+import static org.junit.Assert.*;
 
 import java.io.PrintStream;
 import java.util.Arrays;
 
-import static org.junit.Assert.*;
+import org.apache.commons.io.output.ByteArrayOutputStream;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
 
 /**
  * Test class for Periods.
@@ -76,7 +76,11 @@ public class TestPeriods
 
         byte[] bytes = this.outputStream.toByteArray();
         assertTrue("The length is not correct.", bytes.length >= 6);
-        assertArrayEquals("The arrays are not correct.", Arrays.copyOf(bytes, 6), new byte[] {'.', '.', '.', '.', '.', '.'});
+        assertArrayEquals(
+            "The arrays are not correct.",
+            Arrays.copyOf(bytes, 6),
+            new byte[] {'.', '.', '.', '.', '.', '.'}
+        );
     }
 
     @Test
@@ -93,6 +97,10 @@ public class TestPeriods
 
         byte[] bytes = this.outputStream.toByteArray();
         assertTrue("The length is not correct.", bytes.length >= 6);
-        assertArrayEquals("The arrays are not correct.", Arrays.copyOf(bytes, 6), new byte[] {'.', '.', '.', '.', '.', '.'});
+        assertArrayEquals(
+            "The arrays are not correct.",
+            Arrays.copyOf(bytes, 6),
+            new byte[] {'.', '.', '.', '.', '.', '.'}
+        );
     }
 }

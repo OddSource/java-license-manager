@@ -15,11 +15,12 @@
  */
 package io.oddsource.java.licensing.mock;
 
-import io.oddsource.java.licensing.encryption.PrivateKeyDataProvider;
-import io.oddsource.java.licensing.exception.KeyNotFoundException;
+import java.io.IOException;
+
 import org.apache.commons.io.IOUtils;
 
-import java.io.IOException;
+import io.oddsource.java.licensing.encryption.PrivateKeyDataProvider;
+import io.oddsource.java.licensing.exception.KeyNotFoundException;
 
 public class MockFilePrivateKeyDataProvider implements PrivateKeyDataProvider
 {
@@ -30,14 +31,16 @@ public class MockFilePrivateKeyDataProvider implements PrivateKeyDataProvider
      * in the source code itself.
      *
      * @return the encrypted file contents from the private key file.
-     * @throws KeyNotFoundException if the key data could not be retrieved; an acceptable message or chained cause must be provided.
+     *
+     * @throws KeyNotFoundException if the key data could not be retrieved; an acceptable message or chained cause
+     *     must be provided.
      */
     public byte[] getEncryptedPrivateKeyData() throws KeyNotFoundException
     {
         try
         {
             return IOUtils.toByteArray(
-                    this.getClass().getResourceAsStream("mock.private.key")
+                this.getClass().getResourceAsStream("mock.private.key")
             );
         }
         catch(IOException e)

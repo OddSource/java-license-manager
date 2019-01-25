@@ -15,11 +15,11 @@
  */
 package io.oddsource.java.licensing.licensor.interfaces.cli.spi;
 
+import static org.junit.Assert.*;
+
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-
-import static org.junit.Assert.*;
 
 /**
  * Test class for ConsoleInterfaceDevice.
@@ -63,55 +63,55 @@ public class TestConsoleInterfaceDevice
         assertFalse("The hook should not have been unregistered again.", this.device.unregisterShutdownHook(thread));
     }
 
-    @Test(expected=NullPointerException.class)
+    @Test(expected = NullPointerException.class)
     public void testFormat()
     {
         this.device.format("Test formatted string %d", 10923.0D);
     }
 
-    @Test(expected=NullPointerException.class)
+    @Test(expected = NullPointerException.class)
     public void testPrintf()
     {
         this.device.printf("Test formatted string %d", 10923.0D);
     }
 
-    @Test(expected=NullPointerException.class)
+    @Test(expected = NullPointerException.class)
     public void testFlush()
     {
         this.device.flush();
     }
 
-    @Test(expected=NullPointerException.class)
+    @Test(expected = NullPointerException.class)
     public void testReadLine01()
     {
         this.device.readLine();
     }
 
-    @Test(expected=NullPointerException.class)
+    @Test(expected = NullPointerException.class)
     public void testReadLine02()
     {
         this.device.readLine("Test formatted string %d", 10923.0D);
     }
 
-    @Test(expected=NullPointerException.class)
+    @Test(expected = NullPointerException.class)
     public void testReadPassword01()
     {
         this.device.readPassword();
     }
 
-    @Test(expected=NullPointerException.class)
+    @Test(expected = NullPointerException.class)
     public void testReadPassword02()
     {
         this.device.readPassword("Test formatted string %d", 10923.0D);
     }
 
-    @Test(expected=NullPointerException.class)
+    @Test(expected = NullPointerException.class)
     public void testGetReader()
     {
         this.device.getReader();
     }
 
-    @Test(expected=NullPointerException.class)
+    @Test(expected = NullPointerException.class)
     public void testGetWriter()
     {
         this.device.getWriter();

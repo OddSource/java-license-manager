@@ -45,6 +45,8 @@
     <suppress files="source/test" checks="AvoidStarImport" />
     <suppress files="source/test" checks="AvoidStaticImport" />
     <suppress files="source/test" checks="DeclarationOrder" />
+    <suppress files="source/test" checks="ExecutableStatementCount" />
+    <suppress files="source/test" checks="FileLength" />
     <suppress files="source/test" checks="FinalLocalVariable" />
     <suppress files="source/test" checks="FinalParameters" />
     <suppress files="source/test" checks="IllegalCatch" />
@@ -60,6 +62,7 @@
     <suppress files="source/test" checks="MultipleStringLiterals" />
     <suppress files="source/test" checks="OneTopLevelClass" />
     <suppress files="source/test" checks="OuterTypeNumber" />
+    <suppress files="source/test" checks="SuperFinalize" />
     <suppress files="source/test" checks="ThrowsCount" />
     <suppress files="source/test" checks="VariableDeclarationUsageDistance" />
     <suppress files="source/test" checks="VisibilityModifier" />

@@ -22,7 +22,7 @@ public class MockPasswordProvider implements PasswordProvider
     public char[] getPassword()
     {
         return new char[] {
-            's', 'a', 'm', 'p', 'l', 'e', 'K', 'e', 'y', '1', '9', '8', '4'
+            's', 'a', 'm', 'p', 'l', 'e', 'K', 'e', 'y', '1', '9', '8', '4',
         };
     }
 }

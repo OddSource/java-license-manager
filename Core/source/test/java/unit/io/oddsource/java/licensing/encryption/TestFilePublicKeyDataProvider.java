@@ -23,7 +23,6 @@ import java.io.IOException;
 import org.apache.commons.io.FileUtils;
 import org.junit.After;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import io.oddsource.java.licensing.exception.KeyNotFoundException;
@@ -60,7 +59,7 @@ public class TestFilePublicKeyDataProvider
 
         assertNotNull("The key file should not be null.", provider.getPublicKeyFile());
         assertEquals("The key file is not correct.", file.getAbsoluteFile(), provider.getPublicKeyFile());
-        assertFalse("The paths should not be the same.", fileName.equals(provider.getPublicKeyFile().getPath()));
+        assertNotEquals("The paths should not be the same.", fileName, provider.getPublicKeyFile().getPath());
         assertTrue("The paths should end the same.", provider.getPublicKeyFile().getPath().endsWith(fileName));
     }
 
@@ -80,7 +79,7 @@ public class TestFilePublicKeyDataProvider
         assertNotNull("The key file should not be null.", provider.getPublicKeyFile());
         assertNotSame("The objects should not be the same.", file, provider.getPublicKeyFile());
         assertEquals("The key file is not correct.", file.getAbsoluteFile(), provider.getPublicKeyFile());
-        assertFalse("The paths should not be the same.", fileName.equals(provider.getPublicKeyFile().getPath()));
+        assertNotEquals("The paths should not be the same.", fileName, provider.getPublicKeyFile().getPath());
         assertTrue("The paths should end the same.", provider.getPublicKeyFile().getPath().endsWith(fileName));
     }
 
@@ -109,7 +108,6 @@ public class TestFilePublicKeyDataProvider
     }
 
     @Test
-    @Ignore("canRead()/canWrite() do not work on Win; setReadable()/setWritable() do not work on some Macs.")
     public void testGetEncryptedPublicKeyData02() throws IOException
     {
         final String fileName = "testGetEncryptedPublicKeyData02.key";

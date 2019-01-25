@@ -23,6 +23,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.PrintStream;
 import java.lang.reflect.Field;
+import java.lang.reflect.Modifier;
 import java.util.Date;
 import java.util.HashMap;
 
@@ -35,7 +36,6 @@ import org.easymock.Capture;
 import org.easymock.EasyMock;
 import org.junit.After;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import io.oddsource.java.licensing.License;
@@ -57,7 +57,6 @@ import io.oddsource.java.licensing.licensor.interfaces.cli.spi.TextInterfaceDevi
 import io.oddsource.java.licensing.mock.MockEmbeddedPrivateKeyDataProvider;
 import io.oddsource.java.licensing.mock.MockFilePrivateKeyDataProvider;
 import io.oddsource.java.licensing.mock.MockPasswordProvider;
-import io.oddsource.java.mock.MockPermissiveSecurityManager;
 
 /**
  * Test class for ConsoleLicenseGenerator.
@@ -421,7 +420,6 @@ public class TestConsoleLicenseGenerator
     }
 
     @Test
-    @Ignore("canRead()/canWrite() do not work on Win; setReadable()/setWritable() do not work on some Macs.")
     public void testInitializeLicenseCreator02() throws Exception
     {
         this.resetLicenseCreator();
@@ -960,7 +958,6 @@ public class TestConsoleLicenseGenerator
     }
 
     @Test
-    @Ignore("canRead()/canWrite() do not work on Win; setReadable()/setWritable() do not work on some Macs.")
     public void testGenerateLicense02() throws Exception
     {
         this.resetLicenseCreator();
@@ -2010,6 +2007,8 @@ public class TestConsoleLicenseGenerator
         EasyMock.expectLastCall();
         this.device.exit(51);
         EasyMock.expectLastCall();
+        this.device.exit(0);
+        EasyMock.expectLastCall();
 
         EasyMock.replay(this.device, this.console);
 
@@ -2044,6 +2043,8 @@ public class TestConsoleLicenseGenerator
         this.device.printErrLn("message02. Correct the error and try again.");
         EasyMock.expectLastCall();
         this.device.exit(52);
+        EasyMock.expectLastCall();
+        this.device.exit(0);
         EasyMock.expectLastCall();
 
         EasyMock.replay(this.device, this.console);
@@ -2081,6 +2082,8 @@ public class TestConsoleLicenseGenerator
         EasyMock.expectLastCall();
         this.device.exit(41);
         EasyMock.expectLastCall();
+        this.device.exit(0);
+        EasyMock.expectLastCall();
 
         EasyMock.replay(this.device, this.console);
 
@@ -2115,6 +2118,8 @@ public class TestConsoleLicenseGenerator
         this.device.printErrLn("message04. Contact your system administrator for assistance.");
         EasyMock.expectLastCall();
         this.device.exit(42);
+        EasyMock.expectLastCall();
+        this.device.exit(0);
         EasyMock.expectLastCall();
 
         EasyMock.replay(this.device, this.console);
@@ -2151,6 +2156,8 @@ public class TestConsoleLicenseGenerator
         EasyMock.expectLastCall();
         this.device.exit(43);
         EasyMock.expectLastCall();
+        this.device.exit(0);
+        EasyMock.expectLastCall();
 
         EasyMock.replay(this.device, this.console);
 
@@ -2182,11 +2189,16 @@ public class TestConsoleLicenseGenerator
         this.console.initializeLicenseCreator();
         EasyMock.expectLastCall();
         this.console.generateLicense();
-        EasyMock.expectLastCall().andThrow(new InterruptedException("message06."));
+        EasyMock.expectLastCall().andThrow(new IOException("message07."));
 
-        this.device.printErrLn("The system was interrupted while waiting for events to complete.");
+        this.device.printErrLn(
+            "An error occurred writing or reading files from the system. Analyze the error below to determine what " +
+            "went wrong and fix it!" + TestConsoleLicenseGenerator.LF + "java.io.IOException: message07."
+        );
         EasyMock.expectLastCall();
-        this.device.exit(44);
+        this.device.exit(21);
+        EasyMock.expectLastCall();
+        this.device.exit(0);
         EasyMock.expectLastCall();
 
         EasyMock.replay(this.device, this.console);
@@ -2212,21 +2224,20 @@ public class TestConsoleLicenseGenerator
             addMockedMethod("generateLicense").
             createStrictMock();
 
-        String[] arguments = new String[] {"help"};
+        String[] arguments = new String[] {"testOption08"};
 
         this.console.processCommandLineOptions(arguments);
         EasyMock.expectLastCall();
         this.console.initializeLicenseCreator();
         EasyMock.expectLastCall();
         this.console.generateLicense();
-        EasyMock.expectLastCall().andThrow(new IOException("message07."));
+        EasyMock.expectLastCall().andThrow(new RuntimeException("message08."));
 
-        this.device.printErrLn("An error occurred writing or reading files from the system. Analyze the error " +
-                               "below to determine what went wrong and fix it!");
+        this.device.printErrLn("java.lang.RuntimeException: message08.");
         EasyMock.expectLastCall();
-        this.device.printErrLn("java.io.IOException: message07.");
+        this.device.exit(-1);
         EasyMock.expectLastCall();
-        this.device.exit(21);
+        this.device.exit(0);
         EasyMock.expectLastCall();
 
         EasyMock.replay(this.device, this.console);
@@ -2243,43 +2254,6 @@ public class TestConsoleLicenseGenerator
 
     @Test
     public void testRun08() throws Exception
-    {
-        this.console = EasyMock.createMockBuilder(ConsoleLicenseGenerator.class).
-            withConstructor(TextInterfaceDevice.class, CommandLineParser.class).
-            withArgs(this.device, new DefaultParser()).
-            addMockedMethod("processCommandLineOptions").
-            addMockedMethod("initializeLicenseCreator").
-            addMockedMethod("generateLicense").
-            createStrictMock();
-
-        String[] arguments = new String[] {"testOption08"};
-
-        this.console.processCommandLineOptions(arguments);
-        EasyMock.expectLastCall();
-        this.console.initializeLicenseCreator();
-        EasyMock.expectLastCall();
-        this.console.generateLicense();
-        EasyMock.expectLastCall().andThrow(new RuntimeException("message08."));
-
-        this.device.printErrLn("java.lang.RuntimeException: message08.");
-        EasyMock.expectLastCall();
-        this.device.exit(-1);
-        EasyMock.expectLastCall();
-
-        EasyMock.replay(this.device, this.console);
-
-        try
-        {
-            this.console.run(arguments);
-        }
-        finally
-        {
-            EasyMock.verify(this.console);
-        }
-    }
-
-    @Test
-    public void testRun09() throws Exception
     {
         this.console = EasyMock.createMockBuilder(ConsoleLicenseGenerator.class).
             withConstructor(TextInterfaceDevice.class, CommandLineParser.class).
@@ -2318,59 +2292,108 @@ public class TestConsoleLicenseGenerator
         private static final long serialVersionUID = 1L;
     }
 
-    @Test(expected = ThisExceptionMeansTestSucceededException.class)
-    public void testMain01()
+    @Test
+    public void testMain01() throws Exception
     {
-        SecurityManager securityManager = new MockPermissiveSecurityManager()
-        {
-            private boolean active = true;
+        final ByteArrayOutputStream byteStream = new ByteArrayOutputStream();
+        final PrintStream stream = new PrintStream(byteStream, true, "UTF-8");
 
-            @Override
-            public void checkExit(int status)
-            {
-                if(this.active)
-                {
-                    this.active = false;
-                    assertEquals("The exit status is not correct.", 0, status);
-                    throw new ThisExceptionMeansTestSucceededException();
-                }
-            }
-        };
+        final Capture<String> errorCapture = EasyMock.newCapture();
+
+        this.device.registerShutdownHook(EasyMock.anyObject(Thread.class));
+        EasyMock.expectLastCall().once();
+        this.device.out();
+        EasyMock.expectLastCall().andReturn(stream);
+        this.device.exit(0);
+        EasyMock.expectLastCall().andThrow(new ThisExceptionMeansTestSucceededException());
+        this.device.printErrLn(EasyMock.capture(errorCapture));
+        EasyMock.expectLastCall().once();
+        this.device.exit(EasyMock.anyInt());
+        EasyMock.expectLastCall().anyTimes();
 
         EasyMock.replay(this.device);
 
-        System.setSecurityManager(securityManager);
+        TextInterfaceDevice existingConsole = TextInterfaceDevice.CONSOLE;
 
-        ConsoleLicenseGenerator.main("-help");
+        Field modifiersField = Field.class.getDeclaredField("modifiers");
+        modifiersField.setAccessible(true);
 
-        System.setSecurityManager(null);
+        Field consoleField = TextInterfaceDevice.class.getField("CONSOLE");
+        consoleField.setAccessible(true);
+
+        int existingModifiers = consoleField.getModifiers();
+        modifiersField.setInt(consoleField, consoleField.getModifiers() & ~Modifier.FINAL);
+
+        consoleField.set(null, this.device);
+
+        try
+        {
+            ConsoleLicenseGenerator.main("-help");
+        }
+        finally
+        {
+            consoleField.set(null, existingConsole);
+            modifiersField.setInt(consoleField, existingModifiers);
+        }
+
+        assertTrue(errorCapture.getValue().contains("ThisExceptionMeansTestSucceededException"));
+
+        String output = byteStream.toString();
+        assertTrue(output, output.toLowerCase().contains("usage"));
+        assertTrue(output, output.contains("ConsoleLicenseGenerator -help"));
     }
 
-    @Test(expected = ThisExceptionMeansTestSucceededException.class)
-    public void testMain02()
+    @Test
+    public void testMain02() throws Exception
     {
-        SecurityManager securityManager = new MockPermissiveSecurityManager()
-        {
-            private boolean active = true;
+        final ByteArrayOutputStream byteStream = new ByteArrayOutputStream();
+        final PrintStream stream = new PrintStream(byteStream, true, "UTF-8");
 
-            @Override
-            public void checkExit(int status)
-            {
-                if(this.active)
-                {
-                    this.active = false;
-                    assertEquals("The exit status is not correct.", 1, status);
-                    throw new ThisExceptionMeansTestSucceededException();
-                }
-            }
-        };
+        final Capture<String> firstErrorCapture = EasyMock.newCapture();
+        final Capture<String> secondErrorCapture = EasyMock.newCapture();
+
+        this.device.registerShutdownHook(EasyMock.anyObject(Thread.class));
+        EasyMock.expectLastCall().once();
+        this.device.printErrLn(EasyMock.capture(firstErrorCapture));
+        EasyMock.expectLastCall().once();
+        this.device.out();
+        EasyMock.expectLastCall().andReturn(stream);
+        this.device.exit(1);
+        EasyMock.expectLastCall().andThrow(new ThisExceptionMeansTestSucceededException());
+        this.device.printErrLn(EasyMock.capture(secondErrorCapture));
+        EasyMock.expectLastCall().once();
+        this.device.exit(EasyMock.anyInt());
+        EasyMock.expectLastCall().anyTimes();
 
         EasyMock.replay(this.device);
 
-        System.setSecurityManager(securityManager);
+        TextInterfaceDevice existingConsole = TextInterfaceDevice.CONSOLE;
 
-        ConsoleLicenseGenerator.main("-badOption");
+        Field modifiersField = Field.class.getDeclaredField("modifiers");
+        modifiersField.setAccessible(true);
 
-        System.setSecurityManager(null);
+        Field consoleField = TextInterfaceDevice.class.getField("CONSOLE");
+
+        int existingModifiers = consoleField.getModifiers();
+        modifiersField.setInt(consoleField, consoleField.getModifiers() & ~Modifier.FINAL);
+
+        consoleField.set(null, this.device);
+
+        try
+        {
+            ConsoleLicenseGenerator.main("-badOption");
+        }
+        finally
+        {
+            consoleField.set(null, existingConsole);
+            modifiersField.setInt(consoleField, existingModifiers);
+        }
+
+        assertTrue(firstErrorCapture.getValue().contains("badOption"));
+        assertTrue(secondErrorCapture.getValue().contains("ThisExceptionMeansTestSucceededException"));
+
+        String output = byteStream.toString();
+        assertTrue(output, output.toLowerCase().contains("usage"));
+        assertTrue(output, output.contains("ConsoleLicenseGenerator -help"));
     }
 }

@@ -22,6 +22,8 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.io.PrintStream;
+import java.lang.reflect.Field;
+import java.lang.reflect.Modifier;
 import java.security.KeyPair;
 import java.security.NoSuchAlgorithmException;
 import java.security.PrivateKey;
@@ -36,7 +38,6 @@ import org.easymock.EasyMock;
 import org.easymock.IAnswer;
 import org.junit.After;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import io.oddsource.java.licensing.encryption.RSAKeyPairGeneratorInterface;
@@ -45,7 +46,6 @@ import io.oddsource.java.licensing.exception.InappropriateKeyException;
 import io.oddsource.java.licensing.exception.InappropriateKeySpecificationException;
 import io.oddsource.java.licensing.exception.RSA2048NotSupportedException;
 import io.oddsource.java.licensing.licensor.interfaces.cli.spi.TextInterfaceDevice;
-import io.oddsource.java.mock.MockPermissiveSecurityManager;
 
 /**
  * Test class for ConsoleRSAKeyPairGenerator.
@@ -573,7 +573,6 @@ public class TestConsoleRSAKeyPairGenerator
     }
 
     @Test
-    @Ignore("canRead()/canWrite() do not work on Win; setReadable()/setWritable() do not work on some Macs.")
     public void testCheckAndPromptToOverwriteFile07() throws IOException
     {
         File file = new File("testCheckAndPromptToOverwriteFile07");
@@ -604,7 +603,6 @@ public class TestConsoleRSAKeyPairGenerator
     }
 
     @Test
-    @Ignore("canRead()/canWrite() do not work on Win; setReadable()/setWritable() do not work on some Macs.")
     public void testCheckAndPromptToOverwriteFile08() throws IOException
     {
         File file = new File("testCheckAndPromptToOverwriteFile08");
@@ -1898,6 +1896,8 @@ public class TestConsoleRSAKeyPairGenerator
         EasyMock.expectLastCall();
         this.device.exit(51);
         EasyMock.expectLastCall();
+        this.device.exit(0);
+        EasyMock.expectLastCall();
 
         EasyMock.replay(this.console, this.generator, this.device);
 
@@ -1929,6 +1929,8 @@ public class TestConsoleRSAKeyPairGenerator
         this.device.printErrLn("Message 03.");
         EasyMock.expectLastCall();
         this.device.exit(52);
+        EasyMock.expectLastCall();
+        this.device.exit(0);
         EasyMock.expectLastCall();
 
         EasyMock.replay(this.console, this.generator, this.device);
@@ -1964,6 +1966,8 @@ public class TestConsoleRSAKeyPairGenerator
         EasyMock.expectLastCall();
         this.device.exit(41);
         EasyMock.expectLastCall();
+        this.device.exit(0);
+        EasyMock.expectLastCall();
 
         EasyMock.replay(this.console, this.generator, this.device);
 
@@ -1995,6 +1999,8 @@ public class TestConsoleRSAKeyPairGenerator
         this.device.printErrLn("Message 05. Contact your system administrator for assistance.");
         EasyMock.expectLastCall();
         this.device.exit(42);
+        EasyMock.expectLastCall();
+        this.device.exit(0);
         EasyMock.expectLastCall();
 
         EasyMock.replay(this.console, this.generator, this.device);
@@ -2028,6 +2034,8 @@ public class TestConsoleRSAKeyPairGenerator
         EasyMock.expectLastCall();
         this.device.exit(43);
         EasyMock.expectLastCall();
+        this.device.exit(0);
+        EasyMock.expectLastCall();
 
         EasyMock.replay(this.console, this.generator, this.device);
 
@@ -2059,6 +2067,8 @@ public class TestConsoleRSAKeyPairGenerator
         this.device.printErrLn("The system was interrupted while waiting for events to complete.");
         EasyMock.expectLastCall();
         this.device.exit(44);
+        EasyMock.expectLastCall();
+        this.device.exit(0);
         EasyMock.expectLastCall();
 
         EasyMock.replay(this.console, this.generator, this.device);
@@ -2096,6 +2106,8 @@ public class TestConsoleRSAKeyPairGenerator
         EasyMock.expectLastCall();
         this.device.exit(21);
         EasyMock.expectLastCall();
+        this.device.exit(0);
+        EasyMock.expectLastCall();
 
         EasyMock.replay(this.console, this.generator, this.device);
 
@@ -2128,6 +2140,8 @@ public class TestConsoleRSAKeyPairGenerator
         EasyMock.expectLastCall();
         this.device.exit(-1);
         EasyMock.expectLastCall();
+        this.device.exit(0);
+        EasyMock.expectLastCall();
 
         EasyMock.replay(this.console, this.generator, this.device);
 
@@ -2146,60 +2160,108 @@ public class TestConsoleRSAKeyPairGenerator
         private static final long serialVersionUID = 1L;
     }
 
-    @Test(expected = ThisExceptionMeansTestSucceededException.class)
-    public void testMain01()
+    @Test
+    public void testMain01() throws Exception
     {
-        SecurityManager securityManager = new MockPermissiveSecurityManager()
-        {
-            private boolean active = true;
+        final ByteArrayOutputStream byteStream = new ByteArrayOutputStream();
+        final PrintStream stream = new PrintStream(byteStream, true, "UTF-8");
 
-            @Override
-            public void checkExit(int status)
-            {
-                if(this.active)
-                {
-                    this.active = false;
-                    assertEquals("The exit status is not correct.", 0, status);
-                    throw new ThisExceptionMeansTestSucceededException();
-                }
-            }
-        };
+        final Capture<String> errorCapture = EasyMock.newCapture();
+
+        this.device.registerShutdownHook(EasyMock.anyObject(Thread.class));
+        EasyMock.expectLastCall().once();
+        this.device.out();
+        EasyMock.expectLastCall().andReturn(stream);
+        this.device.exit(0);
+        EasyMock.expectLastCall().andThrow(new ThisExceptionMeansTestSucceededException());
+        this.device.printErrLn(EasyMock.capture(errorCapture));
+        EasyMock.expectLastCall().once();
+        this.device.exit(EasyMock.anyInt());
+        EasyMock.expectLastCall().anyTimes();
 
         EasyMock.replay(this.generator, this.device);
 
-        System.setSecurityManager(securityManager);
+        TextInterfaceDevice existingConsole = TextInterfaceDevice.CONSOLE;
 
-        ConsoleRSAKeyPairGenerator.main("-help");
+        Field modifiersField = Field.class.getDeclaredField("modifiers");
+        modifiersField.setAccessible(true);
 
-        System.setSecurityManager(null);
+        Field consoleField = TextInterfaceDevice.class.getField("CONSOLE");
+
+        int existingModifiers = consoleField.getModifiers();
+        modifiersField.setInt(consoleField, consoleField.getModifiers() & ~Modifier.FINAL);
+
+        consoleField.set(null, this.device);
+
+        try
+        {
+            ConsoleRSAKeyPairGenerator.main("-help");
+        }
+        finally
+        {
+            consoleField.set(null, existingConsole);
+            modifiersField.setInt(consoleField, existingModifiers);
+        }
+
+        assertTrue(errorCapture.getValue().contains("ThisExceptionMeansTestSucceededException"));
+
+        String output = byteStream.toString();
+        assertTrue(output, output.toLowerCase().contains("usage"));
+        assertTrue(output, output.contains("ConsoleRSAKeyPairGenerator -help"));
     }
 
-    @Test(expected = ThisExceptionMeansTestSucceededException.class)
-    public void testMain02()
+    @Test
+    public void testMain02() throws Exception
     {
-        SecurityManager securityManager = new MockPermissiveSecurityManager()
-        {
-            private boolean active = true;
+        final ByteArrayOutputStream byteStream = new ByteArrayOutputStream();
+        final PrintStream stream = new PrintStream(byteStream, true, "UTF-8");
 
-            @Override
-            public void checkExit(int status)
-            {
-                if(this.active)
-                {
-                    this.active = false;
-                    assertEquals("The exit status is not correct.", 1, status);
-                    throw new ThisExceptionMeansTestSucceededException();
-                }
-            }
-        };
+        final Capture<String> firstErrorCapture = EasyMock.newCapture();
+        final Capture<String> secondErrorCapture = EasyMock.newCapture();
+
+        this.device.registerShutdownHook(EasyMock.anyObject(Thread.class));
+        EasyMock.expectLastCall().once();
+        this.device.printErrLn(EasyMock.capture(firstErrorCapture));
+        EasyMock.expectLastCall().once();
+        this.device.out();
+        EasyMock.expectLastCall().andReturn(stream);
+        this.device.exit(1);
+        EasyMock.expectLastCall().andThrow(new ThisExceptionMeansTestSucceededException());
+        this.device.printErrLn(EasyMock.capture(secondErrorCapture));
+        EasyMock.expectLastCall().once();
+        this.device.exit(EasyMock.anyInt());
+        EasyMock.expectLastCall().anyTimes();
 
         EasyMock.replay(this.generator, this.device);
 
-        System.setSecurityManager(securityManager);
+        TextInterfaceDevice existingConsole = TextInterfaceDevice.CONSOLE;
 
-        ConsoleRSAKeyPairGenerator.main("-private");
+        Field modifiersField = Field.class.getDeclaredField("modifiers");
+        modifiersField.setAccessible(true);
 
-        System.setSecurityManager(null);
+        Field consoleField = TextInterfaceDevice.class.getField("CONSOLE");
+
+        int existingModifiers = consoleField.getModifiers();
+        modifiersField.setInt(consoleField, consoleField.getModifiers() & ~Modifier.FINAL);
+
+        consoleField.set(null, this.device);
+
+        try
+        {
+            ConsoleRSAKeyPairGenerator.main("-private");
+        }
+        finally
+        {
+            consoleField.set(null, existingConsole);
+            modifiersField.setInt(consoleField, existingModifiers);
+        }
+
+        assertTrue(firstErrorCapture.getValue().contains("private"));
+        assertTrue(secondErrorCapture.getValue().contains("ThisExceptionMeansTestSucceededException"));
+
+        String output = byteStream.toString();
+        assertTrue(output, output.toLowerCase().contains("usage"));
+        assertTrue(output, output.contains("ConsoleRSAKeyPairGenerator -help"));
     }
 }
 

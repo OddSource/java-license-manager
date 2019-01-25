@@ -16,7 +16,7 @@
 package io.oddsource.java.licensing.licensor;
 
 import io.oddsource.java.licensing.encryption.PasswordProvider;
-import io.oddsource.java.licensing.encryption.PrivateKeyDataProvider;
+import io.oddsource.java.licensing.licensor.encryption.PrivateKeyDataProvider;
 
 /**
  * This class is used to set properties that will be used to instantiate the {@link LicenseCreator}. Read the

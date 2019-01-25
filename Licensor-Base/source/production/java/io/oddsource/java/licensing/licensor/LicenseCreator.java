@@ -25,12 +25,12 @@ import io.oddsource.java.licensing.SignedLicense;
 import io.oddsource.java.licensing.encryption.Encryptor;
 import io.oddsource.java.licensing.encryption.KeyFileUtilities;
 import io.oddsource.java.licensing.encryption.PasswordProvider;
-import io.oddsource.java.licensing.encryption.PrivateKeyDataProvider;
 import io.oddsource.java.licensing.exception.AlgorithmNotSupportedException;
 import io.oddsource.java.licensing.exception.InappropriateKeyException;
 import io.oddsource.java.licensing.exception.InappropriateKeySpecificationException;
 import io.oddsource.java.licensing.exception.KeyNotFoundException;
 import io.oddsource.java.licensing.exception.ObjectSerializationException;
+import io.oddsource.java.licensing.licensor.encryption.PrivateKeyDataProvider;
 
 /**
  * This class manages the creation of licenses in the master application. Use this class within your license generation

@@ -14,10 +14,10 @@
  * limitations under the License.
  */
 /**
- * This package contains all custom exceptions thrown by the License Manager.
+ * This package contains helpers and utilities for encryption and decryption used by licensors.
  *
  * @author Nick Williams
- * @version 1.0.0
+ * @version 2.0.0
  * @since 1.0.0
  */
-package io.oddsource.java.licensing.exception;
+package io.oddsource.java.licensing.licensor.encryption;

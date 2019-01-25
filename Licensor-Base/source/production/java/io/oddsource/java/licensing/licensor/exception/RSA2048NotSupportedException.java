@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.oddsource.java.licensing.exception;
+package io.oddsource.java.licensing.licensor.exception;
 
 /**
  * This exception is thrown when 2048-bit RSA security, which is required for

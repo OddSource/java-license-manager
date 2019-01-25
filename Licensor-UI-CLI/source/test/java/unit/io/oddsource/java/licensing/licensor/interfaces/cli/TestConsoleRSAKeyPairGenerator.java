@@ -15,7 +15,7 @@
  */
 package io.oddsource.java.licensing.licensor.interfaces.cli;
 
-import static io.oddsource.java.licensing.encryption.RSAKeyPairGeneratorInterface.GeneratedClassDescriptor;
+import static io.oddsource.java.licensing.licensor.encryption.RSAKeyPairGeneratorInterface.GeneratedClassDescriptor;
 import static org.junit.Assert.*;
 
 import java.io.ByteArrayOutputStream;
@@ -40,11 +40,11 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import io.oddsource.java.licensing.encryption.RSAKeyPairGeneratorInterface;
 import io.oddsource.java.licensing.exception.AlgorithmNotSupportedException;
 import io.oddsource.java.licensing.exception.InappropriateKeyException;
 import io.oddsource.java.licensing.exception.InappropriateKeySpecificationException;
-import io.oddsource.java.licensing.exception.RSA2048NotSupportedException;
+import io.oddsource.java.licensing.licensor.encryption.RSAKeyPairGeneratorInterface;
+import io.oddsource.java.licensing.licensor.exception.RSA2048NotSupportedException;
 import io.oddsource.java.licensing.licensor.interfaces.cli.spi.TextInterfaceDevice;
 
 /**

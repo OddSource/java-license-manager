@@ -33,14 +33,14 @@ import org.apache.commons.cli.ParseException;
 
 import io.oddsource.java.licensing.LicensingCharsets;
 import io.oddsource.java.licensing.encryption.PasswordProvider;
-import io.oddsource.java.licensing.encryption.PrivateKeyDataProvider;
 import io.oddsource.java.licensing.encryption.PublicKeyDataProvider;
-import io.oddsource.java.licensing.encryption.RSAKeyPairGenerator;
-import io.oddsource.java.licensing.encryption.RSAKeyPairGeneratorInterface;
 import io.oddsource.java.licensing.exception.AlgorithmNotSupportedException;
 import io.oddsource.java.licensing.exception.InappropriateKeyException;
 import io.oddsource.java.licensing.exception.InappropriateKeySpecificationException;
-import io.oddsource.java.licensing.exception.RSA2048NotSupportedException;
+import io.oddsource.java.licensing.licensor.encryption.PrivateKeyDataProvider;
+import io.oddsource.java.licensing.licensor.encryption.RSAKeyPairGenerator;
+import io.oddsource.java.licensing.licensor.encryption.RSAKeyPairGeneratorInterface;
+import io.oddsource.java.licensing.licensor.exception.RSA2048NotSupportedException;
 import io.oddsource.java.licensing.licensor.interfaces.cli.spi.TextInterfaceDevice;
 
 /**

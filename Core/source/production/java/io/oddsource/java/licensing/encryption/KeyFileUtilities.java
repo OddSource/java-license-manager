@@ -59,7 +59,7 @@ public final class KeyFileUtilities
      *
      * @throws IOException if writing fails.
      */
-    protected static void writeEncryptedPrivateKey(
+    public static void writeEncryptedPrivateKey(
         final PrivateKey privateKey,
         final File file,
         final char[] passphrase
@@ -78,7 +78,7 @@ public final class KeyFileUtilities
      *
      * @return the encrypted private key bytes.
      */
-    protected static byte[] writeEncryptedPrivateKey(final PrivateKey privateKey, final char[] passphrase)
+    public static byte[] writeEncryptedPrivateKey(final PrivateKey privateKey, final char[] passphrase)
     {
         final PKCS8EncodedKeySpec pkcs8EncodedKeySpec = new PKCS8EncodedKeySpec(privateKey.getEncoded());
         return Encryptor.encryptRaw(pkcs8EncodedKeySpec.getEncoded(), passphrase);
@@ -93,7 +93,7 @@ public final class KeyFileUtilities
      *
      * @throws IOException if writing fails.
      */
-    protected static void writeEncryptedPublicKey(final PublicKey publicKey, final File file, final char[] passphrase)
+    public static void writeEncryptedPublicKey(final PublicKey publicKey, final File file, final char[] passphrase)
         throws IOException
     {
         FileUtils.writeByteArrayToFile(file, KeyFileUtilities.writeEncryptedPublicKey(publicKey, passphrase));
@@ -107,7 +107,7 @@ public final class KeyFileUtilities
      *
      * @return the encrypted public key bytes.
      */
-    protected static byte[] writeEncryptedPublicKey(final PublicKey publicKey, final char[] passphrase)
+    public static byte[] writeEncryptedPublicKey(final PublicKey publicKey, final char[] passphrase)
     {
         final X509EncodedKeySpec x509EncodedKeySpec = new X509EncodedKeySpec(publicKey.getEncoded());
         return Encryptor.encryptRaw(x509EncodedKeySpec.getEncoded(), passphrase);
@@ -122,7 +122,7 @@ public final class KeyFileUtilities
      * @return the read, decrypted private key.
      * @throws IOException if reading fails.
      */
-    protected static PrivateKey readEncryptedPrivateKey(final File file, final char[] passphrase) throws IOException
+    public static PrivateKey readEncryptedPrivateKey(final File file, final char[] passphrase) throws IOException
     {
         return KeyFileUtilities.readEncryptedPrivateKey(FileUtils.readFileToByteArray(file), passphrase);
     }
@@ -165,7 +165,7 @@ public final class KeyFileUtilities
      *
      * @throws IOException if reading fails.
      */
-    protected static PublicKey readEncryptedPublicKey(final File file, final char[] passphrase) throws IOException
+    public static PublicKey readEncryptedPublicKey(final File file, final char[] passphrase) throws IOException
     {
         return KeyFileUtilities.readEncryptedPublicKey(FileUtils.readFileToByteArray(file), passphrase);
     }

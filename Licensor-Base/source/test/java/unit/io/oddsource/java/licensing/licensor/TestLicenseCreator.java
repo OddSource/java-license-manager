@@ -39,7 +39,7 @@ import io.oddsource.java.licensing.SignedLicense;
 import io.oddsource.java.licensing.encryption.Encryptor;
 import io.oddsource.java.licensing.encryption.KeyFileUtilities;
 import io.oddsource.java.licensing.encryption.PasswordProvider;
-import io.oddsource.java.licensing.encryption.PrivateKeyDataProvider;
+import io.oddsource.java.licensing.licensor.encryption.PrivateKeyDataProvider;
 
 /**
  * Test class for LicenseCreator.

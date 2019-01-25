@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.oddsource.java.licensing.encryption;
+package io.oddsource.java.licensing.licensor.encryption;
 
 import java.io.File;
 import java.io.IOException;
@@ -25,11 +25,14 @@ import java.security.PrivateKey;
 import java.security.PublicKey;
 import java.util.Locale;
 
+import io.oddsource.java.licensing.encryption.KeyFileUtilities;
+import io.oddsource.java.licensing.encryption.PasswordProvider;
+import io.oddsource.java.licensing.encryption.PublicKeyDataProvider;
 import io.oddsource.java.licensing.exception.AlgorithmNotSupportedException;
 import io.oddsource.java.licensing.exception.InappropriateKeyException;
 import io.oddsource.java.licensing.exception.InappropriateKeySpecificationException;
 import io.oddsource.java.licensing.exception.KeyNotFoundException;
-import io.oddsource.java.licensing.exception.RSA2048NotSupportedException;
+import io.oddsource.java.licensing.licensor.exception.RSA2048NotSupportedException;
 
 /**
  * The generator one should use to create public/private key pairs for use with

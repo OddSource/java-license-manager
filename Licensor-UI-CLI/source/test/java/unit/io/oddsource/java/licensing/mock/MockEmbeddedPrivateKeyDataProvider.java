@@ -15,8 +15,8 @@
  */
 package io.oddsource.java.licensing.mock;
 
-import io.oddsource.java.licensing.encryption.PrivateKeyDataProvider;
 import io.oddsource.java.licensing.exception.KeyNotFoundException;
+import io.oddsource.java.licensing.licensor.encryption.PrivateKeyDataProvider;
 
 public final class MockEmbeddedPrivateKeyDataProvider implements PrivateKeyDataProvider
 {

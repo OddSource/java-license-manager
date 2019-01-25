@@ -39,9 +39,7 @@ import org.apache.commons.io.FileUtils;
 
 import io.oddsource.java.licensing.License;
 import io.oddsource.java.licensing.LicensingCharsets;
-import io.oddsource.java.licensing.encryption.FilePrivateKeyDataProvider;
 import io.oddsource.java.licensing.encryption.PasswordProvider;
-import io.oddsource.java.licensing.encryption.PrivateKeyDataProvider;
 import io.oddsource.java.licensing.exception.AlgorithmNotSupportedException;
 import io.oddsource.java.licensing.exception.InappropriateKeyException;
 import io.oddsource.java.licensing.exception.InappropriateKeySpecificationException;
@@ -49,6 +47,8 @@ import io.oddsource.java.licensing.exception.KeyNotFoundException;
 import io.oddsource.java.licensing.exception.ObjectSerializationException;
 import io.oddsource.java.licensing.licensor.LicenseCreator;
 import io.oddsource.java.licensing.licensor.LicenseCreatorProperties;
+import io.oddsource.java.licensing.licensor.encryption.FilePrivateKeyDataProvider;
+import io.oddsource.java.licensing.licensor.encryption.PrivateKeyDataProvider;
 import io.oddsource.java.licensing.licensor.interfaces.cli.spi.TextInterfaceDevice;
 
 /**

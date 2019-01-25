@@ -13,15 +13,17 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.oddsource.java.licensing.encryption;
+package io.oddsource.java.licensing.licensor.encryption;
 
 import java.io.IOException;
 import java.security.KeyPair;
 
+import io.oddsource.java.licensing.encryption.PasswordProvider;
+import io.oddsource.java.licensing.encryption.PublicKeyDataProvider;
 import io.oddsource.java.licensing.exception.AlgorithmNotSupportedException;
 import io.oddsource.java.licensing.exception.InappropriateKeyException;
 import io.oddsource.java.licensing.exception.InappropriateKeySpecificationException;
-import io.oddsource.java.licensing.exception.RSA2048NotSupportedException;
+import io.oddsource.java.licensing.licensor.exception.RSA2048NotSupportedException;
 
 /**
  * An interface for the key pair generator to make unit testing possible. This interface is only implemented by

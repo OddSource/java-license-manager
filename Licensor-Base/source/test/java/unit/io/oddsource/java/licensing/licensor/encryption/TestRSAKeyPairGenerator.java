@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.oddsource.java.licensing.encryption;
+package io.oddsource.java.licensing.licensor.encryption;
 
 import static org.junit.Assert.*;
 
@@ -42,9 +42,14 @@ import javax.tools.ToolProvider;
 import org.apache.commons.io.FileUtils;
 import org.junit.After;
 import org.junit.AfterClass;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
+
+import io.oddsource.java.licensing.encryption.KeyFileUtilities;
+import io.oddsource.java.licensing.encryption.PasswordProvider;
+import io.oddsource.java.licensing.encryption.PublicKeyDataProvider;
 
 /**
  * Test class for RSAKeyPairGenerator.
@@ -91,8 +96,8 @@ public class TestRSAKeyPairGenerator
 
         assertNotNull("The key pair should not be null.", keyPair);
 
-        assertEquals("The algorithm is not correct.", KeyFileUtilities.keyAlgorithm,
-                     keyPair.getPrivate().getAlgorithm()
+        Assert.assertEquals("The algorithm is not correct.", KeyFileUtilities.keyAlgorithm,
+                            keyPair.getPrivate().getAlgorithm()
         );
         assertEquals("The algorithm is not correct.", KeyFileUtilities.keyAlgorithm,
                      keyPair.getPublic().getAlgorithm()
@@ -353,7 +358,7 @@ public class TestRSAKeyPairGenerator
             "com.nicholaswilliams.java.mock",
             "TestGenerateJavaCode02",
             "TestRSAKeyPairGenerator.TestDynamicCompileInterface",
-            new String[] {"io.oddsource.java.licensing.encryption.TestRSAKeyPairGenerator"},
+            new String[] {"io.oddsource.java.licensing.licensor.encryption.TestRSAKeyPairGenerator"},
             "public long getSystemTimeInSeconds()",
             "System.currentTimeMillis() / 1000L"
         );
@@ -364,7 +369,7 @@ public class TestRSAKeyPairGenerator
             "The code is not correct.",
             "package com.nicholaswilliams.java.mock;\n" +
             "\n" +
-            "import io.oddsource.java.licensing.encryption.TestRSAKeyPairGenerator;\n" +
+            "import io.oddsource.java.licensing.licensor.encryption.TestRSAKeyPairGenerator;\n" +
             "\n" +
             "public final class TestGenerateJavaCode02 implements TestRSAKeyPairGenerator" +
             ".TestDynamicCompileInterface\n" +

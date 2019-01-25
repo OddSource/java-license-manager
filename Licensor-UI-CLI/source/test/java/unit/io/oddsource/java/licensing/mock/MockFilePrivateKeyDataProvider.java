@@ -19,8 +19,8 @@ import java.io.IOException;
 
 import org.apache.commons.io.IOUtils;
 
-import io.oddsource.java.licensing.encryption.PrivateKeyDataProvider;
 import io.oddsource.java.licensing.exception.KeyNotFoundException;
+import io.oddsource.java.licensing.licensor.encryption.PrivateKeyDataProvider;
 
 public class MockFilePrivateKeyDataProvider implements PrivateKeyDataProvider
 {

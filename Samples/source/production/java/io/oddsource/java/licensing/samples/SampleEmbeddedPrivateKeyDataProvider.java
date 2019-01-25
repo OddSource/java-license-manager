@@ -15,8 +15,8 @@
  */
 package io.oddsource.java.licensing.samples;
 
-import io.oddsource.java.licensing.encryption.PrivateKeyDataProvider;
 import io.oddsource.java.licensing.exception.KeyNotFoundException;
+import io.oddsource.java.licensing.licensor.encryption.PrivateKeyDataProvider;
 
 /**
  * A sample implementation of the {@link PrivateKeyDataProvider} interface that embeds the public key in Java code.

@@ -27,25 +27,25 @@ import io.oddsource.java.licensing.exception.InsecureEnvironmentError;
 
 /**
  * This security manager is one of the most integral pieces to the license manager. It prevents reflection attacks from
- * disabling or compromising the security features in this product.<br />
- * <br />
+ * disabling or compromising the security features in this product.<br>
+ * <br>
  * When the security manager is initialized, it first checks if a different security manager is already installed in
- * this JVM. If no security manager is installed already, then this security manager installs itself.<br />
- * <br />
+ * this JVM. If no security manager is installed already, then this security manager installs itself.<br>
+ * <br>
  * If another security manager is already installed, this checks to make sure it prevents reflection attacks against
  * critical LicenseManager classes. If it prevents attacks, it is a suitable security manager and allowed to remain. If
  * it does not prevent attacks, this attempts to override the currently installed security manager and install itself.
  * If the existing security manager prevents this from installing itself, an {@link InsecureEnvironmentError} is
- * thrown and the LicenseManager fails to start.<br />
- * <br />
+ * thrown and the LicenseManager fails to start.<br>
+ * <br>
  * When this security manager installs itself over another, it will nest the other security manager within itself and
  * call all appropriate checking methods on that other security manager after this manager performs its analog
- * checks.<br />
- * <br />
+ * checks.<br>
+ * <br>
  * When reflection is used to access non-public methods, fields, classes or interfaces, the JVM first consults the
  * installed security manager to ensure that the access is permitted. This security manager throws an exception if the
- * protected or private object being accessed via reflection belongs to the security manager package.<br />
- * <br />
+ * protected or private object being accessed via reflection belongs to the security manager package.<br>
+ * <br>
  * Finally, this security manager will prevent other security managers from installing themselves over this one, so
  * that these security measures are not compromised.
  *

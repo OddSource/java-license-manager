@@ -29,8 +29,8 @@ import io.oddsource.java.licensing.licensor.interfaces.spi.PasswordPrompter;
 /**
  * Specifies an interface for interacting with text devices in order to abstract the details of interaction away from
  * the application code. In nearly all circumstances, the implementation used will be the
- * {@link ConsoleInterfaceDevice}.<br />
- * <br />
+ * {@link ConsoleInterfaceDevice}.<br>
+ * <br>
  * Much of the documentation for the methods in this class was derived from the documentation for
  * {@link java.io.Console} and {@link java.lang.Runtime} because the default and intended implementation wraps the
  * methods of those classes.
@@ -107,8 +107,8 @@ public interface TextInterfaceDevice extends PasswordPrompter, Flushable, Output
 
     /**
      * A convenience method to write a formatted string to this device's output stream using the specified format
-     * string and arguments.<br />
-     * <br />
+     * string and arguments.<br>
+     * <br>
      * An invocation of this method of the form {@code device.printf(format, args)} behaves in exactly the same way as
      * the invocation of {@code device.format(format, args)}.
      *

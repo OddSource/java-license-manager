@@ -23,8 +23,8 @@ import io.oddsource.java.licensing.immutable.ImmutableLinkedHashSet;
 
 /**
  * This is the license object, which is serialized and signed to a file for use by the application later. All the
- * object fields are immutable and final so as to prevent modification by reflection.<br />
- * <br />
+ * object fields are immutable and final so as to prevent modification by reflection.<br>
+ * <br>
  * This object is not created directly. For instructions on creating licenses, see the documentation for
  * {@link License.Builder}.
  *
@@ -622,8 +622,8 @@ public final class License implements Serializable, Cloneable
     /**
      * A class that represents a licensed feature. Products may have more than one "section" or "module" that is
      * licensed, and the list of features in the {@link License} object allows the user to specify any number of
-     * features and, optionally, separate expiration dates for each.<br />
-     * <br />
+     * features and, optionally, separate expiration dates for each.<br>
+     * <br>
      * This object is not created directly. For instructions on using features, see the documentation for
      * {@link License.Builder}.
      *

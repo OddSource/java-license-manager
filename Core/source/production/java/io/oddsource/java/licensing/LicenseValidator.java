@@ -21,8 +21,8 @@ import io.oddsource.java.licensing.exception.InvalidLicenseException;
 /**
  * Specifies an interface for validating licenses. Users of License Manager do not have to implement this interface.
  * If it is not implemented, it is assumed that all licenses are valid. Users are encouraged, however, to implement
- * interface.<br />
- * <br />
+ * interface.<br>
+ * <br>
  * There is a default implementation, {@link DefaultLicenseValidator}, that ensures the current date is between the
  * license's good-after and good-before dates (the license has taken effect and hasn't expired).
  *

@@ -24,8 +24,8 @@ import java.util.IllegalFormatException;
 /**
  * The default implementation of {@link TextInterfaceDevice}. This is the only implementation currently used by the
  * LicenseManager in production environments, and wraps all of the methods in {@link java.io.Console} and the exit
- * method in {@link java.lang.Runtime}.<br />
- * <br />
+ * method in {@link java.lang.Runtime}.<br>
+ * <br>
  * Much of the documentation for the methods in this class was derived from the documentation for
  * {@link java.io.Console} and {@link java.lang.Runtime} because this implementation wraps the methods of those
  * classes.
@@ -53,8 +53,8 @@ public class ConsoleInterfaceDevice extends AbstractTextInterfaceDevice
 
     /**
      * Terminates the currently running application. The argument serves as a status code; by convention, a nonzero
-     * status code indicates abnormal termination.<br />
-     * <br />
+     * status code indicates abnormal termination.<br>
+     * <br>
      * Note: Wraps {@link java.lang.Runtime#exit(int)}.
      *
      * @param exitCode The exit status to exit with
@@ -67,8 +67,8 @@ public class ConsoleInterfaceDevice extends AbstractTextInterfaceDevice
 
     /**
      * Registers a new application shutdown hook. For the standard behavior, implemented by this implementation,
-     * see the documentation for {@link Runtime#addShutdownHook(Thread)}.<br />
-     * <br />
+     * see the documentation for {@link Runtime#addShutdownHook(Thread)}.<br>
+     * <br>
      * Note: Wraps {@link java.lang.Runtime#addShutdownHook(Thread)}.
      *
      * @param hook An initialized but unstarted Thread object
@@ -86,8 +86,8 @@ public class ConsoleInterfaceDevice extends AbstractTextInterfaceDevice
     }
 
     /**
-     * De-registers a previously-registered application shutdown hook.<br />
-     * <br />
+     * De-registers a previously-registered application shutdown hook.<br>
+     * <br>
      * Note: Wraps {@link java.lang.Runtime#removeShutdownHook(Thread)}.
      *
      * @param hook The hook to remove
@@ -105,8 +105,8 @@ public class ConsoleInterfaceDevice extends AbstractTextInterfaceDevice
     }
 
     /**
-     * Writes a formatted string to this device's output stream using the specified format string and arguments.<br />
-     * <br />
+     * Writes a formatted string to this device's output stream using the specified format string and arguments.<br>
+     * <br>
      * Note: Wraps {@link java.io.Console#format(String, Object...)}.
      *
      * @param format A format string as described in {@link java.util.Formatter #syntax}
@@ -131,11 +131,11 @@ public class ConsoleInterfaceDevice extends AbstractTextInterfaceDevice
 
     /**
      * A convenience method to write a formatted string to this device's output stream using the specified format
-     * string and arguments.<br />
-     * <br />
+     * string and arguments.<br>
+     * <br>
      * An invocation of this method of the form {@code device.printf(format, args)} behaves in exactly the same way as
-     * the invocation of {@code device.format(format, args)}.<br />
-     * <br />
+     * the invocation of {@code device.format(format, args)}.<br>
+     * <br>
      * Note: Wraps {@link java.io.Console#printf(String, Object...)}.
      *
      * @param format A format string as described in {@link java.util.Formatter #syntax}
@@ -161,8 +161,8 @@ public class ConsoleInterfaceDevice extends AbstractTextInterfaceDevice
     }
 
     /**
-     * Flushes this device by writing any buffered output to the underlying stream.<br />
-     * <br />
+     * Flushes this device by writing any buffered output to the underlying stream.<br>
+     * <br>
      * Note: Wraps {@link java.io.Console#flush()}.
      */
     @Override
@@ -172,8 +172,8 @@ public class ConsoleInterfaceDevice extends AbstractTextInterfaceDevice
     }
 
     /**
-     * Reads a single line of text from the device.<br />
-     * <br />
+     * Reads a single line of text from the device.<br>
+     * <br>
      * Note: Wraps {@link java.io.Console#readLine()}.
      *
      * @return a string containing the line read from the interface device input, not including any line-termination
@@ -188,8 +188,8 @@ public class ConsoleInterfaceDevice extends AbstractTextInterfaceDevice
     }
 
     /**
-     * Provides a formatted prompt, then reads a single line of text from the device.<br />
-     * <br />
+     * Provides a formatted prompt, then reads a single line of text from the device.<br>
+     * <br>
      * Note: Wraps {@link java.io.Console#readLine(String, Object...)}.
      *
      * @param format A format string as described in {@link java.util.Formatter #syntax}
@@ -214,8 +214,8 @@ public class ConsoleInterfaceDevice extends AbstractTextInterfaceDevice
     }
 
     /**
-     * Reads a password or passphrase from the device with echoing disabled.<br />
-     * <br />
+     * Reads a password or passphrase from the device with echoing disabled.<br>
+     * <br>
      * Note: Wraps {@link java.io.Console#readPassword()}.
      *
      * @return a character array containing the password or passphrase read from the device, not including any
@@ -230,8 +230,8 @@ public class ConsoleInterfaceDevice extends AbstractTextInterfaceDevice
     }
 
     /**
-     * Provides a formatted prompt, then reads a password or passphrase from the device with echoing disabled.<br />
-     * <br />
+     * Provides a formatted prompt, then reads a password or passphrase from the device with echoing disabled.<br>
+     * <br>
      * Note: Wraps {@link java.io.Console#readPassword(String, Object...)}.
      *
      * @param format A format string as described in {@link java.util.Formatter #syntax}
@@ -257,8 +257,8 @@ public class ConsoleInterfaceDevice extends AbstractTextInterfaceDevice
 
     /**
      * Retrieves the unique Reader object associated with this interface device. For more information regarding the
-     * uses of this method, see the documentation for {@link java.io.Console#reader()}.<br />
-     * <br />
+     * uses of this method, see the documentation for {@link java.io.Console#reader()}.<br>
+     * <br>
      * Note: Wraps {@link java.io.Console#reader()}.
      *
      * @return the reader associated with this interface.
@@ -270,8 +270,8 @@ public class ConsoleInterfaceDevice extends AbstractTextInterfaceDevice
     }
 
     /**
-     * Retrieves the unique PrintWriter object associated with this interface device.<br />
-     * <br />
+     * Retrieves the unique PrintWriter object associated with this interface device.<br>
+     * <br>
      * Note: Wraps {@link java.io.Console#writer()}.
      *
      * @return the print writer associated with this interface.

@@ -29,11 +29,15 @@
     <includeSiteDirectory>false</includeSiteDirectory>
     <moduleSets>
         <moduleSet>
-            <includes><include>io.oddsource.java.licensing:*</include></includes>
-            <excludes><exclude>io.oddsource.java.licensing:licensing-assembly</exclude></excludes>
+            <includes>
+                <include>io.oddsource.java.licensing:*</include>
+            </includes>
+            <excludes>
+                <exclude>io.oddsource.java.licensing:licensing-assembly</exclude>
+            </excludes>
             <useAllReactorProjects>true</useAllReactorProjects>
             <binaries>
-                <outputDirectory>/dist</outputDirectory>
+                <outputDirectory>dist</outputDirectory>
                 <unpack>false</unpack>
             </binaries>
         </moduleSet>
@@ -42,47 +46,45 @@
         <fileSet>
             <directory>../Core/target</directory>
             <includes><include>*-sources.jar</include></includes>
-            <outputDirectory>/sources</outputDirectory>
+            <outputDirectory>sources</outputDirectory>
         </fileSet>
         <fileSet>
             <directory>../Licensor-Base/target</directory>
             <includes><include>*-sources.jar</include></includes>
-            <outputDirectory>/sources</outputDirectory>
+            <outputDirectory>sources</outputDirectory>
         </fileSet>
         <fileSet>
             <directory>../Licensor-UI-Core/target</directory>
             <includes><include>*-sources.jar</include></includes>
-            <outputDirectory>/sources</outputDirectory>
+            <outputDirectory>sources</outputDirectory>
         </fileSet>
         <fileSet>
             <directory>../Licensor-UI-CLI/target</directory>
             <includes><include>*-sources.jar</include></includes>
-            <outputDirectory>/sources</outputDirectory>
+            <outputDirectory>sources</outputDirectory>
         </fileSet>
         <fileSet>
             <directory>../Licensor-UI-Desktop/target</directory>
             <includes><include>*-sources.jar</include></includes>
-            <outputDirectory>/sources</outputDirectory>
+            <outputDirectory>sources</outputDirectory>
         </fileSet>
         <fileSet>
             <directory>../Samples/target</directory>
             <includes><include>*-sources.jar</include></includes>
-            <outputDirectory>/sources</outputDirectory>
+            <outputDirectory>sources</outputDirectory>
         </fileSet>
         <fileSet>
             <directory>target</directory>
             <includes><include>*-javadoc.jar</include></includes>
-            <outputDirectory>/</outputDirectory>
+            <outputDirectory>./</outputDirectory>
         </fileSet>
     </fileSets>
     <files>
         <file>
             <source>../build/jar/META-INF/LICENSE.txt</source>
-            <outputDirectory>/</outputDirectory>
         </file>
         <file>
             <source>../build/jar/META-INF/NOTICE.txt</source>
-            <outputDirectory>/</outputDirectory>
         </file>
     </files>
 </assembly>

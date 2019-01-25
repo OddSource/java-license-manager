@@ -70,8 +70,8 @@ public interface PasswordPrompter
     /**
      * Prompts for a valid password by asking for the password using {@link #readPassword(String, Object...)}, checking
      * its length against the constraints, asking for the password to be confirmed, and checking to make sure the
-     * passwords match.<br />
-     * <br />
+     * passwords match.<br>
+     * <br>
      * This method should continue to ask for the password over and over again until a valid password is entered and
      * confirmed or the user cancels the operation.
      *
@@ -105,8 +105,8 @@ public interface PasswordPrompter
     /**
      * Prompts for a valid password by asking for the password using {@link #readPassword(String, Object...)}, checking
      * its length against the constraints, asking for the password to be confirmed, and checking to make sure the
-     * passwords match.<br />
-     * <br />
+     * passwords match.<br>
+     * <br>
      * This method should continue to ask for the password over and over again until a valid password is entered and
      * confirmed or the user cancels the operation.
      *

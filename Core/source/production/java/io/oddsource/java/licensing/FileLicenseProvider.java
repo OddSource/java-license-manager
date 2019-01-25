@@ -27,8 +27,8 @@ import org.apache.commons.io.FileUtils;
  * A default implementation of the {@link LicenseProvider} that assumes the binary data from the signed and serialized
  * license is stored in a file. Various properties of this provider allow configuration of file prefixes (such as
  * a directory), file suffixes (such as an extension), whether or not the file can be found on the classpath, and
- * whether or not the contents of the file are Base64 encoded.<br />
- * <br />
+ * whether or not the contents of the file are Base64 encoded.<br>
+ * <br>
  * This implementation also assumes that license contexts (lookup keys) are always either strings or have a meaningful
  * {@link Object#toString()} implementation that can be used within the file name.
  *
@@ -223,8 +223,8 @@ public class FileLicenseProvider extends DeserializingLicenseProvider
     /**
      * Indicates whether the file should be found on the file system or on the classpath via a class loader. If
      * {@code false} it will be looked for on the file system; if {@code true} it will be looked for on the classpath.
-     * If {@code true}, the file prefix should be the package-path and prefix and the suffix the suffix.<br />
-     * <br />
+     * If {@code true}, the file prefix should be the package-path and prefix and the suffix the suffix.<br>
+     * <br>
      * For example, if a license context was "customer02" and the file name was "file-customer02.lic" and was located
      * in the package io.oddsource.java.licensing.licenses, then the prefix would be
      * "io/oddsource/java/licensing/licenses/file-" and the suffix should be ".lic".
@@ -239,8 +239,8 @@ public class FileLicenseProvider extends DeserializingLicenseProvider
     /**
      * Sets whether the file should be found on the file system or on the classpath via a class loader. If
      * {@code false} it will be looked for on the file system; if {@code true} it will be looked for on the classpath.
-     * If {@code true}, the file prefix should be the package-path and prefix and the suffix the suffix.<br />
-     * <br />
+     * If {@code true}, the file prefix should be the package-path and prefix and the suffix the suffix.<br>
+     * <br>
      * For example, if a license context was "customer02" and the file name was "file-customer02.lic" and was located
      * in the package io.oddsource.java.licensing.licenses, then the prefix would be
      * "io/oddsource/java/licensing/licenses/file-" and the suffix should be ".lic".

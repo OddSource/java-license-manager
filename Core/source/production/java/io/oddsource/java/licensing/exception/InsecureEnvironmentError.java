@@ -17,11 +17,10 @@ package io.oddsource.java.licensing.exception;
 
 /**
  * Thrown when a security manager is already installed that allows reflection access but doesn't allow a more secure
- * security manager to be installed.
+ * security manager to be installed. See {@code LicenseSecurityManager}.
  *
  * @author Nick Williams
  * @version 1.0.0
- * @see io.oddsource.java.licensing.LicenseSecurityManager
  * @since 1.0.0
  */
 @SuppressWarnings("unused")

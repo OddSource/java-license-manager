@@ -52,42 +52,42 @@ import io.oddsource.java.licensing.licensor.LicenseCreatorProperties;
 import io.oddsource.java.licensing.licensor.interfaces.cli.spi.TextInterfaceDevice;
 
 /**
- * A command-line tool for generating licenses. Usage is as follows:<br />
- * <br />
- * To view usage and help:<br />
- * {@code ConsoleLicenseGenerator -help}<br />
- * <br />
- * To specify just config properties and be prompted for license properties:<br />
- * {@code ConsoleLicenseGenerator -config <file>}<br />
- * <br />
- * To specify just license properties and be prompted for config properties:<br />
- * {@code ConsoleLicenseGenerator -license <file>}<br />
- * <br />
- * To specify all options via properties files:<br />
- * {@code ConsoleLicenseGenerator -config <file> -license <file>}<br />
- * <br />
+ * A command-line tool for generating licenses. Usage is as follows:<br>
+ * <br>
+ * To view usage and help:<br>
+ * {@code ConsoleLicenseGenerator -help}<br>
+ * <br>
+ * To specify just config properties and be prompted for license properties:<br>
+ * {@code ConsoleLicenseGenerator -config <file>}<br>
+ * <br>
+ * To specify just license properties and be prompted for config properties:<br>
+ * {@code ConsoleLicenseGenerator -license <file>}<br>
+ * <br>
+ * To specify all options via properties files:<br>
+ * {@code ConsoleLicenseGenerator -config <file> -license <file>}<br>
+ * <br>
  * The ConsoleLicenseGenerator expects to be passed the path to two properties files, or one of them, or neither.
  * The "config" properties file contains information necessary to generate all licenses (key paths, passwords, etc.)
  * and generally will not need to change. The "license" properties file contains all of the information you need to
  * generate this particular license. See the Javadoc API documentation for information about the contents of these two
- * files.<br />
- * <br />
+ * files.<br>
+ * <br>
  * If you do not specify the "config" properties file, you will be prompted to provide the values that were expected in
  * that file. Likewise, if you do not specify the "license" properties file, you will be prompted to provide the values
- * that were expected in that file.<br />
- * <br />
- * <b>Required Config Properties File Properties</b><br />
+ * that were expected in that file.<br>
+ * <br>
+ * <b>Required Config Properties File Properties</b><br>
  * <code>io.oddsource.java.licensing.privateKeyFile=[The path to the file containing the encrypted private key; either
- * this or io.oddsource.java.licensing.privateKeyClass must be specified.]<br />
+ * this or io.oddsource.java.licensing.privateKeyClass must be specified.]<br>
  * io.oddsource.java.licensing.privateKeyProvider=[The fully-qualified (canonical) name of the implementation of {@link
- * PrivateKeyDataProvider}; either this or io.oddsource.java.licensing.privateKeyFile must be specified.]<br />
+ * PrivateKeyDataProvider}; either this or io.oddsource.java.licensing.privateKeyFile must be specified.]<br>
  * io.oddsource.java.licensing.privateKeyPassword=[The password for decrypting the private key; either this or
- * io.oddsource.java.licensing.privateKeyPasswordClass must be specified.]<br />
+ * io.oddsource.java.licensing.privateKeyPasswordClass must be specified.]<br>
  * io.oddsource.java.licensing.privateKeyPasswordProvider=[The fully-qualified (canonical) name of the implementation of
  * {@link PasswordProvider} that provides the private key password; either this or
- * io.oddsource.java.licensing.privateKeyPassword must be specified]</code><br />
- * <br />
- * <b>License Properties File Properties</b> (Specify only those that you wish to include in the license)<br />
+ * io.oddsource.java.licensing.privateKeyPassword must be specified]</code><br>
+ * <br>
+ * <b>License Properties File Properties</b> (Specify only those that you wish to include in the license)<br>
  * <code>io.oddsource.java.licensing.productKey=[The product key/serial number (String) for this license]
  * io.oddsource.java.licensing.holder=[The holder (String) for this license]
  * io.oddsource.java.licensing.issuer=[The issuer (String) for this license]
@@ -102,18 +102,18 @@ import io.oddsource.java.licensing.licensor.interfaces.cli.spi.TextInterfaceDevi
  * io.oddsource.java.licensing.features.MY_FEATURE=[Feature expiration date for "MY_FEATURE", format: YYYY-MM-DD
  * hh:mm:ss in 24-hour time or "none"]
  * io.oddsource.java.licensing.features.ANOTHER_FEATURE=[Feature expiration date for "ANOTHER_FEATURE", format:
- * YYYY-MM-DD hh:mm:ss in 24-hour time or "none"]</code><br />
- * <br />
+ * YYYY-MM-DD hh:mm:ss in 24-hour time or "none"]</code><br>
+ * <br>
  * You can specify any arbitrary number of features (and their expiration date) using multiple properties that start
  * with {@code io.oddsource.java.licensing.features}. The last part of the property key should be the
  * feature name. The value should either be "none" or the date the feature expires (YYYY-MM-DD hh:mm:ss in 24-hour
- * time).<br />
- * <br />
+ * time).<br>
+ * <br>
  * <b>NOTE:</b> The default behavior is to encrypt the resulting license with the password or password provider
  * specified in the config properties file. To override this and use a different password to encrypt the license,
  * add {@code io.oddsource.java.licensing.password=[encryption password]} to the license properties
- * file.<br />
- * <br />
+ * file.<br>
+ * <br>
  * <b>NOTE:</b> The default behavior is to print the resulting license, Base64-encoded, to standard out. Instead, you
  * can write the raw, binary license data to a specific file with the property
  * {@code io.oddsource.java.licensing.licenseFile=[file name]}.

@@ -236,7 +236,6 @@
                     <artifactId>maven-javadoc-plugin</artifactId>
                     <version>${version.plugin.javadoc}</version>
                     <configuration>
-                        <!--<javadocExecutable>${env.JDK_18}/bin/javadoc</javadocExecutable>-->
                         <includeDependencySources>true</includeDependencySources>
                         <dependencySourceIncludes>
                             <dependencySourceInclude>io.oddsource.java.licensing:*</dependencySourceInclude>
@@ -258,7 +257,8 @@
                         <detectJavaApiLink>true</detectJavaApiLink>
                         <detectLinks>false</detectLinks>
                         <sourceFileExcludes>
-                            <exclude>**Mock*.java</exclude>
+                            <exclude>**/Mock*.java</exclude>
+                            <exclude>**/Test*.java</exclude>
                             <exclude>io/oddsource/java/mock/**</exclude>
                             <exclude>io/oddsource/java/licensing/mock/**</exclude>
                             <exclude>io/oddsource/java/licensing/samples/**</exclude>

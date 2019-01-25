@@ -24,8 +24,8 @@ import org.apache.commons.io.FileUtils;
 import io.oddsource.java.licensing.exception.KeyNotFoundException;
 
 /**
- * A default implementation of {@link PublicKeyDataProvider} that reads the public key from a file.<br />
- * <br />
+ * A default implementation of {@link PublicKeyDataProvider} that reads the public key from a file.<br>
+ * <br>
  * This provider is immutable. Once created, the file that the public key is located at cannot be changed.
  *
  * @author Nick Williams
@@ -60,8 +60,8 @@ public class FilePublicKeyDataProvider implements PublicKeyDataProvider
      * This method returns the data from the file containing the encrypted
      * public key from the public/private key pair. The contract for this
      * method can be fulfilled by storing the data in a byte array literal
-     * in the source code itself.<br/>
-     * <br/>
+     * in the source code itself.<br>
+     * <br>
      * It is <em>imperative</em> that you obfuscate the bytecode for the
      * implementation of this class. It is also imperative that the byte
      * array exist only for the life of this method (i.e., DO NOT store it as

@@ -37,13 +37,13 @@ import io.oddsource.java.licensing.exception.ObjectSerializationException;
  * software to sign and serialize license for distribution to the client. This class is not needed for the client
  * application, and in fact you should <b>not</b> use this class in your client application. For this reason, it is
  * in the package of classes (io.oddsource.java.licensing.licensor) that is packaged separately from the
- * distributable client binary.<br />
- * <br />
+ * distributable client binary.<br>
+ * <br>
  * Before getting the creator instance for the first time, relevant properties should be set in
  * {@link LicenseCreatorProperties}. The values in this class will be used to instantiate the license creator.
  * After setting all the necessary properties there, one can retrieve an instance using {@link #getInstance()}. Be
  * sure to set all the properties first; once {@link #getInstance()} is called for the first time, any changes to
- * {@link LicenseCreatorProperties} will be ignored.<br />
+ * {@link LicenseCreatorProperties} will be ignored.<br>
  *
  * @author Nick Williams
  * @version 1.0.6

@@ -44,20 +44,20 @@ import io.oddsource.java.licensing.exception.RSA2048NotSupportedException;
 import io.oddsource.java.licensing.licensor.interfaces.cli.spi.TextInterfaceDevice;
 
 /**
- * A command-line tool for generating a public/private key pair. Usage is as follows.<br />
- * <br />
- * To view usage and help:<br />
- * {@code java io.oddsource.java.licensing.text ConsoleRSAKeyPairGenerator -help}<br />
- * <br />
- * To use interactive mode:<br />
- * {@code java io.oddsource.java.licensing.text ConsoleRSAKeyPairGenerator -interactive}<br />
- * <br />
- * To specify all options at the command line:<br />
+ * A command-line tool for generating a public/private key pair. Usage is as follows.<br>
+ * <br>
+ * To view usage and help:<br>
+ * {@code java io.oddsource.java.licensing.text ConsoleRSAKeyPairGenerator -help}<br>
+ * <br>
+ * To use interactive mode:<br>
+ * {@code java io.oddsource.java.licensing.text ConsoleRSAKeyPairGenerator -interactive}<br>
+ * <br>
+ * To specify all options at the command line:<br>
  * <code>java io.oddsource.java.licensing.text ConsoleRSAKeyPairGenerator -password &lt;password&gt; -private
  * &lt;file|class name&gt; -public &lt;file|class name&gt; [-privatePassword &lt;password&gt;] [-classes -passwordClass
  * &lt;class name&gt; -privatePasswordClass &lt;class name&gt; [-privatePackage &lt;package&gt;] [-publicPackage
- * &lt;package&gt;] [-passwordPackage &lt;package&gt;] [-privatePasswordPackage &lt;package&gt;]]</code><br />
- * <br />
+ * &lt;package&gt;] [-passwordPackage &lt;package&gt;] [-privatePasswordPackage &lt;package&gt;]]</code><br>
+ * <br>
  * Be sure to review the documentation for {@link PasswordProvider},
  * {@link PrivateKeyDataProvider} and {@link PublicKeyDataProvider} for
  * further instructions.

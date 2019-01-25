@@ -41,10 +41,10 @@ import io.oddsource.java.licensing.exception.InappropriateKeySpecificationExcept
  * A class for easy, strong, two-way encryption/decryption of strings. Versions prior to 0.9.1-beta used 256-bit AES
  * encryption, which is not exportable, and will only work by default on Mac OS X and Linux. The Windows JVM will throw
  * an exception without the JCE Unlimited Strength policy file. Versions 0.9.1-beta and higher use 128-bit AES
- * encryption that is both exportable and platform-independent.<br />
- * <br />
- * This encryptor still uses a combination of MD5+DES and SHA-1+AES encryption.<br />
- * <br />
+ * encryption that is both exportable and platform-independent.<br>
+ * <br>
+ * This encryptor still uses a combination of MD5+DES and SHA-1+AES encryption.<br>
+ * <br>
  * Data encrypted with this class prior to version 0.9.1-beta cannot be decrypted anymore.
  *
  * @author Nick Williams
@@ -345,15 +345,15 @@ public final class Encryptor
      * {@code byte}, when cast to an integer, indicates the
      * number of end {@code byte}s (including itself) that
      * make up the padding. The returned array will always
-     * be at least one element longer than the input.<br/>
-     * <br/>
+     * be at least one element longer than the input.<br>
+     * <br>
      * For example, if passed an array of 5 {@code byte}s and
      * the length 10, the first five {@code byte}s will be the
      * values from {@code bytes}. {@code byte}s 6-10 (indexes
      * 5-9) will be randomized data and {@code byte} 11
      * (index 10) will be the integer 6 cast as a byte. The
-     * actual returned array will be 11 {@code byte}s long.<br/>
-     * <br/>
+     * actual returned array will be 11 {@code byte}s long.<br>
+     * <br>
      * If passed an array of 10 {@code byte}s and the length
      * of 10, the first 10 {@code byte}s will be the input
      * and {@code byte} 11 will be 1.
@@ -400,8 +400,8 @@ public final class Encryptor
      * an input that was padded with
      * {@link Encryptor#pad(byte[], int)}. Its behavior is
      * unspecified if passed an input that was not the
-     * result of {@link Encryptor#pad(byte[], int)}.<br/>
-     * <br/>
+     * result of {@link Encryptor#pad(byte[], int)}.<br>
+     * <br>
      * The returned array will be the {@code byte}s with all
      * the padding removed and the original {@code byte}s
      * left intact.

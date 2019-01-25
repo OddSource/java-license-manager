@@ -33,8 +33,8 @@ public interface PrivateKeyDataProvider
      * This method returns the data from the file containing the encrypted
      * private key from the public/private key pair. The contract for this
      * method can be fulfilled by storing the data in a byte array literal
-     * in the source code itself.<br/>
-     * <br/>
+     * in the source code itself.<br>
+     * <br>
      * It is <em>imperative</em> that you obfuscate the bytecode for the
      * implementation of this class. It is also imperative that the byte
      * array exist only for the life of this method (i.e., DO NOT store it as

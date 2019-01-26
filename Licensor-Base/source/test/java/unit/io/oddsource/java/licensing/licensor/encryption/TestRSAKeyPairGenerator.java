@@ -341,7 +341,7 @@ public class TestRSAKeyPairGenerator
         Class<?> classObject = compiled.getClassLoader(null).loadClass("TestGenerateJavaCode01");
         System.out.println("Successfully compiled " + classObject.toString() + ".");
 
-        Object instance = classObject.newInstance();
+        Object instance = classObject.getConstructor().newInstance();
         Method method = classObject.getMethod("testMethod01", String.class);
 
         String value = (String) method.invoke(instance, "Test text and");
@@ -353,7 +353,8 @@ public class TestRSAKeyPairGenerator
 
     @Test
     public void testGenerateJavaCode02()
-        throws ClassNotFoundException, IllegalAccessException, InstantiationException, InterruptedException
+        throws ClassNotFoundException, IllegalAccessException, InstantiationException, NoSuchMethodException,
+               InvocationTargetException, InterruptedException
     {
         String code = this.generator.generateJavaCode(
             "com.nicholaswilliams.java.mock",
@@ -390,7 +391,7 @@ public class TestRSAKeyPairGenerator
             "com.nicholaswilliams.java.mock.TestGenerateJavaCode02");
         System.out.println("Successfully compiled " + classObject.toString() + ".");
 
-        TestDynamicCompileInterface instance = (TestDynamicCompileInterface) classObject.newInstance();
+        TestDynamicCompileInterface instance = (TestDynamicCompileInterface) classObject.getConstructor().newInstance();
 
         long seconds = System.currentTimeMillis() / 1000L;
         assertTrue("The return value is not correct (1).", instance.getSystemTimeInSeconds() >= seconds);
@@ -563,7 +564,8 @@ public class TestRSAKeyPairGenerator
 
     @Test
     public void testSaveKeysToProviders01()
-        throws ClassNotFoundException, IllegalAccessException, InstantiationException
+        throws ClassNotFoundException, IllegalAccessException, InstantiationException, InvocationTargetException,
+               NoSuchMethodException
     {
         String pn = "com.nicholaswilliams.mock";
 
@@ -594,7 +596,8 @@ public class TestRSAKeyPairGenerator
             pn + ".TestPrivateKeyProvider01", privateKeyProviderDescriptor.getJavaFileContents()
         ).getClassLoader(null).loadClass(pn + ".TestPrivateKeyProvider01");
 
-        PrivateKeyDataProvider privateKeyDataProvider = (PrivateKeyDataProvider) privateKeyProviderClass.newInstance();
+        PrivateKeyDataProvider privateKeyDataProvider =
+            (PrivateKeyDataProvider) privateKeyProviderClass.getConstructor().newInstance();
         assertNotNull("The private key data provider should not be null.", privateKeyDataProvider);
 
         byte[] privateKeyData = privateKeyDataProvider.getEncryptedPrivateKeyData();
@@ -619,7 +622,8 @@ public class TestRSAKeyPairGenerator
             pn + ".TestPublicKeyProvider01", publicKeyProviderDescriptor.getJavaFileContents()
         ).getClassLoader(null).loadClass(pn + ".TestPublicKeyProvider01");
 
-        PublicKeyDataProvider publicKeyDataProvider = (PublicKeyDataProvider) publicKeyProviderClass.newInstance();
+        PublicKeyDataProvider publicKeyDataProvider =
+            (PublicKeyDataProvider) publicKeyProviderClass.getConstructor().newInstance();
         assertNotNull("The public key data provider should not be null.", publicKeyDataProvider);
 
         byte[] publicKeyData = publicKeyDataProvider.getEncryptedPublicKeyData();
@@ -633,7 +637,8 @@ public class TestRSAKeyPairGenerator
 
     @Test
     public void testSaveKeysToProviders02()
-        throws ClassNotFoundException, IllegalAccessException, InstantiationException
+        throws ClassNotFoundException, IllegalAccessException, InstantiationException, InvocationTargetException,
+               NoSuchMethodException
     {
         String pn = "com.nicholaswilliams.another";
 
@@ -665,7 +670,8 @@ public class TestRSAKeyPairGenerator
             pn + ".TestPrivateKeyProvider02", privateKeyProviderDescriptor.getJavaFileContents()
         ).getClassLoader(null).loadClass(pn + ".TestPrivateKeyProvider02");
 
-        PrivateKeyDataProvider privateKeyDataProvider = (PrivateKeyDataProvider) privateKeyProviderClass.newInstance();
+        PrivateKeyDataProvider privateKeyDataProvider =
+            (PrivateKeyDataProvider) privateKeyProviderClass.getConstructor().newInstance();
         assertNotNull("The private key data provider should not be null.", privateKeyDataProvider);
 
         byte[] privateKeyData = privateKeyDataProvider.getEncryptedPrivateKeyData();
@@ -694,7 +700,8 @@ public class TestRSAKeyPairGenerator
             pn + ".TestPublicKeyProvider02", publicKeyProviderDescriptor.getJavaFileContents()
         ).getClassLoader(null).loadClass(pn + ".TestPublicKeyProvider02");
 
-        PublicKeyDataProvider publicKeyDataProvider = (PublicKeyDataProvider) publicKeyProviderClass.newInstance();
+        PublicKeyDataProvider publicKeyDataProvider =
+            (PublicKeyDataProvider) publicKeyProviderClass.getConstructor().newInstance();
         assertNotNull("The public key data provider should not be null.", publicKeyDataProvider);
 
         byte[] publicKeyData = publicKeyDataProvider.getEncryptedPublicKeyData();
@@ -708,7 +715,8 @@ public class TestRSAKeyPairGenerator
 
     @Test
     public void testSaveKeysToProviders03()
-        throws ClassNotFoundException, IllegalAccessException, InstantiationException
+        throws ClassNotFoundException, IllegalAccessException, InstantiationException, InvocationTargetException,
+               NoSuchMethodException
     {
         String pn = "com.nicholaswilliams.last";
 
@@ -740,7 +748,8 @@ public class TestRSAKeyPairGenerator
             pn + ".TestPrivateKeyProvider03", privateKeyProviderDescriptor.getJavaFileContents()
         ).getClassLoader(null).loadClass(pn + ".TestPrivateKeyProvider03");
 
-        PrivateKeyDataProvider privateKeyDataProvider = (PrivateKeyDataProvider) privateKeyProviderClass.newInstance();
+        PrivateKeyDataProvider privateKeyDataProvider =
+            (PrivateKeyDataProvider) privateKeyProviderClass.getConstructor().newInstance();
         assertNotNull("The private key data provider should not be null.", privateKeyDataProvider);
 
         byte[] privateKeyData = privateKeyDataProvider.getEncryptedPrivateKeyData();
@@ -765,7 +774,8 @@ public class TestRSAKeyPairGenerator
             pn + ".TestPublicKeyProvider03", publicKeyProviderDescriptor.getJavaFileContents()
         ).getClassLoader(null).loadClass(pn + ".TestPublicKeyProvider03");
 
-        PublicKeyDataProvider publicKeyDataProvider = (PublicKeyDataProvider) publicKeyProviderClass.newInstance();
+        PublicKeyDataProvider publicKeyDataProvider =
+            (PublicKeyDataProvider) publicKeyProviderClass.getConstructor().newInstance();
         assertNotNull("The public key data provider should not be null.", publicKeyDataProvider);
 
         byte[] publicKeyData = publicKeyDataProvider.getEncryptedPublicKeyData();
@@ -814,7 +824,8 @@ public class TestRSAKeyPairGenerator
 
     @Test
     public void testSavePasswordToProvider01()
-        throws ClassNotFoundException, IllegalAccessException, InstantiationException
+        throws ClassNotFoundException, IllegalAccessException, InstantiationException, InvocationTargetException,
+               NoSuchMethodException
     {
         String pn = "com.nicholaswilliams.mock";
 
@@ -835,7 +846,7 @@ public class TestRSAKeyPairGenerator
             pn + ".TestKeyPasswordProvider01", passwordProviderDescriptor.getJavaFileContents()
         ).getClassLoader(null).loadClass(pn + ".TestKeyPasswordProvider01");
 
-        PasswordProvider passwordProvider = (PasswordProvider) passwordProviderClass.newInstance();
+        PasswordProvider passwordProvider = (PasswordProvider) passwordProviderClass.getConstructor().newInstance();
         assertNotNull("The key password provider should not be null.", passwordProvider);
 
         char[] password = passwordProvider.getPassword();
@@ -847,7 +858,8 @@ public class TestRSAKeyPairGenerator
 
     @Test
     public void testSavePasswordToProvider02()
-        throws ClassNotFoundException, IllegalAccessException, InstantiationException
+        throws ClassNotFoundException, IllegalAccessException, InstantiationException, InvocationTargetException,
+               NoSuchMethodException
     {
         String pn = "com.nicholaswilliams.another";
 
@@ -868,7 +880,7 @@ public class TestRSAKeyPairGenerator
             pn + ".TestKeyPasswordProvider02", passwordProviderDescriptor.getJavaFileContents()
         ).getClassLoader(null).loadClass(pn + ".TestKeyPasswordProvider02");
 
-        PasswordProvider passwordProvider = (PasswordProvider) passwordProviderClass.newInstance();
+        PasswordProvider passwordProvider = (PasswordProvider) passwordProviderClass.getConstructor().newInstance();
         assertNotNull("The key password provider should not be null.", passwordProvider);
 
         char[] password = passwordProvider.getPassword();

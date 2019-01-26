@@ -16,6 +16,7 @@
 package io.oddsource.java.licensing;
 
 import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 
 /**
  * Defines the default character set used in license serialization and deserialization.
@@ -29,7 +30,7 @@ public final class LicensingCharsets
     /**
      * All operations in License Manager use the universal UTF-8 character set.
      */
-    public static final Charset UTF_8 = Charset.forName("UTF-8");
+    public static final Charset UTF_8 = StandardCharsets.UTF_8;
 
     /**
      * This class cannot be instantiated.

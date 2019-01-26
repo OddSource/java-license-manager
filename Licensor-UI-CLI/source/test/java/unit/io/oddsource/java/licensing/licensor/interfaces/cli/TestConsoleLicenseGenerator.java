@@ -23,7 +23,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.PrintStream;
 import java.lang.reflect.Field;
-import java.lang.reflect.Modifier;
+import java.nio.charset.StandardCharsets;
 import java.util.Date;
 import java.util.HashMap;
 
@@ -74,15 +74,7 @@ public class TestConsoleLicenseGenerator
     {
         this.device = EasyMock.createMock(TextInterfaceDevice.class);
 
-        this.console = new ConsoleLicenseGenerator(this.device, new DefaultParser())
-        {
-            @Override
-            @SuppressWarnings("MethodDoesntCallSuperMethod")
-            protected void finalize()
-            {
-
-            }
-        };
+        this.console = new ConsoleLicenseGenerator(this.device, new DefaultParser());
     }
 
     @After
@@ -432,7 +424,7 @@ public class TestConsoleLicenseGenerator
             FileUtils.forceDelete(file);
         }
 
-        FileUtils.writeStringToFile(file, "test", "UTF-8");
+        FileUtils.writeStringToFile(file, "test", StandardCharsets.UTF_8);
 
         assertTrue("Setting the file to not readable should have returned true.", file.setReadable(false, false));
         assertTrue("The file should be writable.", file.canWrite());
@@ -484,7 +476,7 @@ public class TestConsoleLicenseGenerator
             file,
             "io.oddsource.java.licensing.privateKeyFile=testInitializeLicenseCreator03.key\r\n" +
             "io.oddsource.java.licensing.privateKeyPassword=testPassword03",
-            "UTF-8"
+            StandardCharsets.UTF_8
         );
 
         this.console.setCli(
@@ -530,13 +522,13 @@ public class TestConsoleLicenseGenerator
         }
 
         File keyFile = new File("testInitializeLicenseCreator04.key");
-        FileUtils.writeStringToFile(keyFile, "aKey", "UTF-8");
+        FileUtils.writeStringToFile(keyFile, "aKey", StandardCharsets.UTF_8);
 
         FileUtils.writeStringToFile(
             file,
             "io.oddsource.java.licensing.privateKeyFile=testInitializeLicenseCreator04.key\r\n" +
             "io.oddsource.java.licensing.privateKeyPassword=testPassword04",
-            "UTF-8"
+            StandardCharsets.UTF_8
         );
 
         this.console.setCli(
@@ -593,12 +585,12 @@ public class TestConsoleLicenseGenerator
         }
 
         File keyFile = new File("testInitializeLicenseCreator05.key");
-        FileUtils.writeStringToFile(keyFile, "aKey", "UTF-8");
+        FileUtils.writeStringToFile(keyFile, "aKey", StandardCharsets.UTF_8);
 
         FileUtils.writeStringToFile(
             file,
             "io.oddsource.java.licensing.privateKeyFile=testInitializeLicenseCreator05.key",
-            "UTF-8"
+            StandardCharsets.UTF_8
         );
 
         this.console.setCli(
@@ -648,12 +640,12 @@ public class TestConsoleLicenseGenerator
         }
 
         File keyFile = new File("testInitializeLicenseCreator06.key");
-        FileUtils.writeStringToFile(keyFile, "aKey", "UTF-8");
+        FileUtils.writeStringToFile(keyFile, "aKey", StandardCharsets.UTF_8);
 
         FileUtils.writeStringToFile(
             file,
             "io.oddsource.java.licensing.privateKeyPassword=testPassword06",
-            "UTF-8"
+            StandardCharsets.UTF_8
         );
 
         this.console.setCli(
@@ -708,7 +700,7 @@ public class TestConsoleLicenseGenerator
             ".MockFilePrivateKeyDataProvider\r\n" +
             "io.oddsource.java.licensing.privateKeyPasswordProvider=io.oddsource.java.licensing.mock" +
             ".MockPasswordProvider",
-            "UTF-8"
+            StandardCharsets.UTF_8
         );
 
         this.console.setCli(
@@ -754,7 +746,7 @@ public class TestConsoleLicenseGenerator
         this.resetLicenseCreator();
 
         File keyFile = new File("testInitializeLicenseCreator08.key");
-        FileUtils.writeStringToFile(keyFile, "aKey", "UTF-8");
+        FileUtils.writeStringToFile(keyFile, "aKey", StandardCharsets.UTF_8);
 
         this.console.setCli(
             EasyMock.createMockBuilder(CommandLine.class).withConstructor().
@@ -970,7 +962,7 @@ public class TestConsoleLicenseGenerator
             FileUtils.forceDelete(file);
         }
 
-        FileUtils.writeStringToFile(file, "test", "UTF-8");
+        FileUtils.writeStringToFile(file, "test", StandardCharsets.UTF_8);
 
         assertTrue("Setting the file to not readable should have returned true.", file.setReadable(false, false));
         assertTrue("The file should be writable.", file.canWrite());
@@ -1020,7 +1012,7 @@ public class TestConsoleLicenseGenerator
             FileUtils.forceDelete(file);
         }
 
-        FileUtils.writeStringToFile(file, "", "UTF-8");
+        FileUtils.writeStringToFile(file, "", StandardCharsets.UTF_8);
 
         Capture<String> capture = EasyMock.newCapture();
 
@@ -1102,7 +1094,7 @@ public class TestConsoleLicenseGenerator
             "io.oddsource.java.licensing.password=somePassword04\r\n" +
             "io.oddsource.java.licensing.issueDate=abcdefg\r\n" +
             "io.oddsource.java.licensing.numberOfLicenses=gfedcba",
-            "UTF-8"
+            StandardCharsets.UTF_8
         );
 
         Capture<String> capture = EasyMock.newCapture();
@@ -2296,7 +2288,7 @@ public class TestConsoleLicenseGenerator
     public void testMain01() throws Exception
     {
         final ByteArrayOutputStream byteStream = new ByteArrayOutputStream();
-        final PrintStream stream = new PrintStream(byteStream, true, "UTF-8");
+        final PrintStream stream = new PrintStream(byteStream, true, StandardCharsets.UTF_8.name());
 
         final Capture<String> errorCapture = EasyMock.newCapture();
 
@@ -2313,17 +2305,8 @@ public class TestConsoleLicenseGenerator
 
         EasyMock.replay(this.device);
 
-        TextInterfaceDevice existingConsole = TextInterfaceDevice.CONSOLE;
-
-        Field modifiersField = Field.class.getDeclaredField("modifiers");
-        modifiersField.setAccessible(true);
-
-        Field consoleField = TextInterfaceDevice.class.getField("CONSOLE");
+        Field consoleField = ConsoleLicenseGenerator.class.getDeclaredField("TEST_CONSOLE");
         consoleField.setAccessible(true);
-
-        int existingModifiers = consoleField.getModifiers();
-        modifiersField.setInt(consoleField, consoleField.getModifiers() & ~Modifier.FINAL);
-
         consoleField.set(null, this.device);
 
         try
@@ -2332,8 +2315,7 @@ public class TestConsoleLicenseGenerator
         }
         finally
         {
-            consoleField.set(null, existingConsole);
-            modifiersField.setInt(consoleField, existingModifiers);
+            consoleField.set(null, null);
         }
 
         assertTrue(errorCapture.getValue().contains("ThisExceptionMeansTestSucceededException"));
@@ -2347,7 +2329,7 @@ public class TestConsoleLicenseGenerator
     public void testMain02() throws Exception
     {
         final ByteArrayOutputStream byteStream = new ByteArrayOutputStream();
-        final PrintStream stream = new PrintStream(byteStream, true, "UTF-8");
+        final PrintStream stream = new PrintStream(byteStream, true, StandardCharsets.UTF_8.name());
 
         final Capture<String> firstErrorCapture = EasyMock.newCapture();
         final Capture<String> secondErrorCapture = EasyMock.newCapture();
@@ -2367,16 +2349,8 @@ public class TestConsoleLicenseGenerator
 
         EasyMock.replay(this.device);
 
-        TextInterfaceDevice existingConsole = TextInterfaceDevice.CONSOLE;
-
-        Field modifiersField = Field.class.getDeclaredField("modifiers");
-        modifiersField.setAccessible(true);
-
-        Field consoleField = TextInterfaceDevice.class.getField("CONSOLE");
-
-        int existingModifiers = consoleField.getModifiers();
-        modifiersField.setInt(consoleField, consoleField.getModifiers() & ~Modifier.FINAL);
-
+        Field consoleField = ConsoleLicenseGenerator.class.getDeclaredField("TEST_CONSOLE");
+        consoleField.setAccessible(true);
         consoleField.set(null, this.device);
 
         try
@@ -2385,8 +2359,7 @@ public class TestConsoleLicenseGenerator
         }
         finally
         {
-            consoleField.set(null, existingConsole);
-            modifiersField.setInt(consoleField, existingModifiers);
+            consoleField.set(null, null);
         }
 
         assertTrue(firstErrorCapture.getValue().contains("badOption"));

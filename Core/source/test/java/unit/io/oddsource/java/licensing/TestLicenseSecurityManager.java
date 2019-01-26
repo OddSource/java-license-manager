@@ -363,7 +363,16 @@ public class TestLicenseSecurityManager
     @Test(expected = SecurityException.class)
     public void testCheckMemberAccess12() throws NoSuchMethodException
     {
-        this.checkMemberAccess(String.class, "checkBounds", byte[].class, int.class, int.class);
+        try
+        {
+            // A private method that exists in Java 8
+            this.checkMemberAccess(String.class, "checkBounds", byte[].class, int.class, int.class);
+        }
+        catch(NoSuchMethodException e)
+        {
+            // A private method that exists in Java 11
+            this.checkMemberAccess(String.class, "checkBoundsOffCount", int.class, int.class, int.class);
+        }
     }
 
     @Test(expected = SecurityException.class)
@@ -435,7 +444,7 @@ public class TestLicenseSecurityManager
     @Test
     public void testCheckMemberAccess24() throws NoSuchMethodException
     {
-        this.checkMemberAccess(java.util.ArrayList.class, "ensureCapacityInternal", int.class);
+        this.checkMemberAccess(java.util.ArrayList.class, "grow", int.class);
     }
 
     @Test(expected = SecurityException.class)

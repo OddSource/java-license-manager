@@ -19,6 +19,7 @@ import static org.junit.Assert.*;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
+import java.nio.charset.StandardCharsets;
 
 import org.junit.After;
 import org.junit.Before;
@@ -67,6 +68,6 @@ public class TestLicensingCharsets
     @Test
     public void testUtf8()
     {
-        assertEquals("The UTF-8 charset is not correct.", "UTF-8", LicensingCharsets.UTF_8.name());
+        assertEquals("The UTF-8 charset is not correct.", StandardCharsets.UTF_8, LicensingCharsets.UTF_8);
     }
 }

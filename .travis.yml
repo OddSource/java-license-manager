@@ -1,0 +1,98 @@
+# Copyright © 2010-2019 OddSource Code (license@oddsource.io)
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+# This build is overkill for a POM-packaged artifact, but it serves as a test bed for some principles we'll use in
+# child projects. Also, here's some documentation about Maven and GitHub publication:
+#
+# $ gpg --full-generate-key
+# $ gpg --list-keys
+# $ gpg --export-secret-keys [key ID] > travis.gpg
+# $ gpg --keyserver pgp.mit.edu --send-key [key ID]
+# $ tar -cvf .travis.secrets.tar settings.xml travis.gpg
+# $ travis login --org
+# $ travis encrypt-file .travis.secrets.tar
+# $ rm .travis.secrets.tar settings.xml travis.gpg
+# $ travis setup releases
+
+language: java
+sudo: false
+cache:
+  directories:
+    - "$HOME/.cache"
+jobs:
+  include:
+    - stage: build
+      os: linux
+      dist: trusty
+      jdk: oraclejdk8
+      script:
+        - mvn test -B -V -e
+    - stage: build
+      os: linux
+      dist: trusty
+      jdk: openjdk8
+      script:
+        - mvn test -B -V -e
+    - stage: build
+      os: linux
+      dist: xenial
+      jdk: oraclejdk11
+      script:
+        - mvn test -B -V -e
+    - stage: build
+      os: linux
+      dist: xenial
+      jdk: openjdk11
+      script:
+        - mvn test -B -V -e
+    - stage: deploy
+      os: linux
+      dist: xenial
+      jdk: openjdk8
+      deploy:
+        - provider: script
+          script:
+            openssl aes-256-cbc -K $encrypted_a3a662639502_key -iv $encrypted_a3a662639502_iv -in .travis.secrets.tar.enc -out .travis.secrets.tar -d &&
+            tar -xvf .travis.secrets.tar &&
+            rm .travis.secrets.tar &&
+            gpg --import travis.gpg &&
+            rm travis.gpg &&
+            mv settings.xml $HOME/.m2/settings.xml &&
+            mvn clean deploy -Dmaven.test.skip=true -Dmaven.javadoc.skip=true -P sign -B -V -e
+          on:
+            tags: true
+          skip_cleanup: true
+        - provider: releases
+          api_key:
+            secure: P46R90OY2vUkvC2qN+j3excHP/Wui501K3IyY/9GarSu3M8XqgmiSTjS/zkF6osUoV7l5mbuccDeULPfwx/LpTxgZAMum+XQqVQ9IcMHLquKC/y+j463wR9rAtfyhxzpRDgYDiH/sMY2mfwvdeLFK1NemQ1QWi8zkTJs9Hl738aNf4mPgvf6/eThYOwbpxr7lLanatVk/YesFFPio16NVcKmq8+SDgjwHQCqMhXGL7BNMGoIKH2qD4GVXZLqh4DpTNhBhcva7BNiHVPMHyS1G00HNVna/l37eZzH2wc8JfJZnA/Wv9dqLptbuphi6BtqJQ38/xTXLiX1eI2ZY+kUUB0nZfWAiVoAz+2NjtlDuC99PrwKFO49EOb6JCc9H+yOauAcAx593+w2014hhX6e//fIig4/qFpsM3M6FE4qJH+qEQ3AIawZbXrzIVBmyzNMpdXX7ThZMdO8RL7tGMp9iDX36UMFgNEiOopDimSbhFgomxjEkvkVUexjPu6bpDmhCx0Vzpm/UhEOVXJn4cD8iRtVE7kVeL6EcQCSFly1I8zUAViic9yB2tOmIOvCNYv4LLsY4unYirEd6HeKJIO+cnyjbtfZVsgqMDKV5qrjJI6RZdv/vfPsdwuvUYD/3YlMHOkqO2P1dJ6xNT75w4BvJYgJ334X5icfwO2B+BsVZ8U=
+          file_glob: true
+          file:
+            - $HOME/.m2/repository/io/oddsource/java/licensing/licensing-assembly/*/licensing-assembly-*.zip
+            - $HOME/.m2/repository/io/oddsource/java/licensing/licensing-assembly/*/licensing-assembly-*.zip.asc
+            - $HOME/.m2/repository/io/oddsource/java/licensing/licensing-assembly/*/licensing-assembly-*.zip.md5
+            - $HOME/.m2/repository/io/oddsource/java/licensing/licensing-assembly/*/licensing-assembly-*.zip.sha1
+            - $HOME/.m2/repository/io/oddsource/java/licensing/licensing-assembly/*/licensing-assembly-*.tar.gz
+            - $HOME/.m2/repository/io/oddsource/java/licensing/licensing-assembly/*/licensing-assembly-*.tar.gz.asc
+            - $HOME/.m2/repository/io/oddsource/java/licensing/licensing-assembly/*/licensing-assembly-*.tar.gz.md5
+            - $HOME/.m2/repository/io/oddsource/java/licensing/licensing-assembly/*/licensing-assembly-*.tar.gz.sha1
+          on:
+            tags: true
+stages:
+  - build
+  - name: deploy
+    if: tag =~ ^[0-9]+\.[0-9]+(\.[0-9]+)?(-[0-9A-Za-z-]+(\.[0-9A-Za-z-]+)*)?$
+install:
+  - gpg --version
+script:
+  - mvn --version

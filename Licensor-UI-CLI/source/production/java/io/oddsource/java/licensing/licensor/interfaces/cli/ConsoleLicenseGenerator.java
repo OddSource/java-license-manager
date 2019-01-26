@@ -22,6 +22,8 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
 import java.text.SimpleDateFormat;
 import java.util.HashMap;
 import java.util.Map;
@@ -205,6 +207,8 @@ public class ConsoleLicenseGenerator
 
     private static final short HELP_DISPLAY_DESC_PAD = 3;
 
+    @SuppressWarnings("unused") private static TextInterfaceDevice TEST_CONSOLE;
+
     private final SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
     private final TextInterfaceDevice device;
@@ -223,18 +227,6 @@ public class ConsoleLicenseGenerator
     {
         this.device = textInterfaceDevice;
         this.cliParser = cliParser;
-    }
-
-    /**
-     * Prints a new line.
-     *
-     * @throws Throwable only if {@code super} does.
-     */
-    @Override
-    protected void finalize() throws Throwable
-    {
-        super.finalize();
-        this.device.printOutLn();
     }
 
     /**
@@ -570,7 +562,9 @@ public class ConsoleLicenseGenerator
         try
         {
             final Class<?> objectClass = Class.forName(className);
-            return objectClass.asSubclass(castClass).newInstance();
+            final Class<? extends T> tClass = objectClass.asSubclass(castClass);
+            final Constructor<? extends T> constructor = tClass.getConstructor();
+            return constructor.newInstance();
         }
         catch(final ClassNotFoundException e)
         {
@@ -578,10 +572,17 @@ public class ConsoleLicenseGenerator
         }
         catch(final ClassCastException e)
         {
-            throw new RuntimeException("The class [" + className + "] does not implement interface [" +
-                                       castClass.getCanonicalName() + "].");
+            throw new RuntimeException(
+                "The class [" + className + "] does not implement interface [" + castClass.getCanonicalName() + "]."
+            );
         }
-        catch(final InstantiationException | IllegalAccessException e)
+        catch(final NoSuchMethodException e)
+        {
+            throw new RuntimeException(
+                "The class [" + className + "] does not implement a public zero-argument constructor"
+            );
+        }
+        catch(final InstantiationException | IllegalAccessException | InvocationTargetException e)
         {
             throw new RuntimeException("Unable to instantiate class [" + className + "].", e);
         }
@@ -988,7 +989,9 @@ public class ConsoleLicenseGenerator
      */
     public static void main(final String... arguments)
     {
-        final TextInterfaceDevice device = TextInterfaceDevice.CONSOLE;
+        final TextInterfaceDevice device = ConsoleLicenseGenerator.TEST_CONSOLE != null ?
+                                           ConsoleLicenseGenerator.TEST_CONSOLE :
+                                           TextInterfaceDevice.CONSOLE;
 
         ConsoleUtilities.configureInterfaceDevice(device);
 

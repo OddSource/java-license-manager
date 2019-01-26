@@ -61,8 +61,8 @@
         <version.dependency.commons.cli>1.4</version.dependency.commons.cli>
         <version.dependency.commons.codec>1.11</version.dependency.commons.codec>
         <version.dependency.commons.io>2.6</version.dependency.commons.io>
-        <version.dependence.test.asm>4.2</version.dependence.test.asm>
-        <version.dependence.test.easymock>4.0.2</version.dependence.test.easymock>
+        <version.dependency.test.asm>4.2</version.dependency.test.asm>
+        <version.dependency.test.easymock>4.0.2</version.dependency.test.easymock>
         <version.dependency.test.junit>4.11</version.dependency.test.junit>
         <version.plugin.compiler>3.8.0</version.plugin.compiler>
         <version.plugin.jar>3.1.1</version.plugin.jar>
@@ -115,13 +115,13 @@
             <dependency>
                 <groupId>org.easymock</groupId>
                 <artifactId>easymock</artifactId>
-                <version>${version.dependence.test.easymock}</version>
+                <version>${version.dependency.test.easymock}</version>
             </dependency>
 
             <dependency>
                 <groupId>org.ow2.asm</groupId>
                 <artifactId>asm</artifactId>
-                <version>${version.dependence.test.asm}</version>
+                <version>${version.dependency.test.asm}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>

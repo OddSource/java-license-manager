@@ -167,6 +167,8 @@ public class ConsoleRSAKeyPairGenerator
 
     private static final short HELP_DISPLAY_DESC_PAD = 3;
 
+    @SuppressWarnings("unused") private static TextInterfaceDevice TEST_CONSOLE;
+
     private final RSAKeyPairGeneratorInterface generator;
 
     private final TextInterfaceDevice device;
@@ -193,18 +195,6 @@ public class ConsoleRSAKeyPairGenerator
         this.generator = generator;
         this.device = textInterfaceDevice;
         this.cliParser = cliParser;
-    }
-
-    /**
-     * Prints a new line.
-     *
-     * @throws Throwable only if {@code super} does.
-     */
-    @Override
-    protected void finalize() throws Throwable
-    {
-        super.finalize();
-        this.device.printOutLn();
     }
 
     /**
@@ -662,7 +652,9 @@ public class ConsoleRSAKeyPairGenerator
      */
     public static void main(final String... arguments)
     {
-        final TextInterfaceDevice device = TextInterfaceDevice.CONSOLE;
+        final TextInterfaceDevice device = ConsoleRSAKeyPairGenerator.TEST_CONSOLE != null ?
+                                           ConsoleRSAKeyPairGenerator.TEST_CONSOLE :
+                                           TextInterfaceDevice.CONSOLE;
 
         ConsoleUtilities.configureInterfaceDevice(device);
 

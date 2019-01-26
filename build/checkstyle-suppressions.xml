@@ -22,8 +22,8 @@
 <suppressions>
     <suppress files="AbstractTextInterfaceDevice.java" checks="MultipleStringLiterals" />
     <suppress files="ConsoleLicenseGenerator.java" checks="MultipleStringLiterals" />
-    <suppress files="ConsoleLicenseGenerator.java" checks="IllegalCatch" lines="932-981" />
-    <suppress files="ConsoleLicenseGenerator.java" checks="NoWhitespaceBefore" lines="568" />
+    <suppress files="ConsoleLicenseGenerator.java" checks="IllegalCatch" lines="933-983" />
+    <suppress files="ConsoleLicenseGenerator.java" checks="NoWhitespaceBefore" lines="560" />
     <suppress files="ConsoleRSAKeyPairGenerator.java" checks="MultipleStringLiterals" />
     <suppress files="ConsoleRSAKeyPairGenerator.java" checks="IllegalCatch" lines="613-656" />
     <suppress files="DefaultLicenseValidator" checks="MultipleStringLiterals" />

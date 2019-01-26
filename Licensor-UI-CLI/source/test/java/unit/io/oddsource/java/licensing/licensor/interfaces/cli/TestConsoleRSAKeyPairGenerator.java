@@ -23,7 +23,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.PrintStream;
 import java.lang.reflect.Field;
-import java.lang.reflect.Modifier;
+import java.nio.charset.StandardCharsets;
 import java.security.KeyPair;
 import java.security.NoSuchAlgorithmException;
 import java.security.PrivateKey;
@@ -66,15 +66,7 @@ public class TestConsoleRSAKeyPairGenerator
         this.generator = EasyMock.createMock(RSAKeyPairGeneratorInterface.class);
         this.device = EasyMock.createMock(TextInterfaceDevice.class);
 
-        this.console = new ConsoleRSAKeyPairGenerator(this.generator, this.device, new DefaultParser())
-        {
-            @Override
-            @SuppressWarnings("MethodDoesntCallSuperMethod")
-            protected void finalize()
-            {
-
-            }
-        };
+        this.console = new ConsoleRSAKeyPairGenerator(this.generator, this.device, new DefaultParser());
     }
 
     @After
@@ -446,7 +438,7 @@ public class TestConsoleRSAKeyPairGenerator
     public void testCheckAndPromptToOverwriteFile02() throws IOException
     {
         File file = new File("testCheckAndPromptToOverwriteFile02");
-        FileUtils.writeStringToFile(file, "test string", "UTF-8");
+        FileUtils.writeStringToFile(file, "test string", StandardCharsets.UTF_8);
 
         try
         {
@@ -472,7 +464,7 @@ public class TestConsoleRSAKeyPairGenerator
     public void testCheckAndPromptToOverwriteFile03() throws IOException
     {
         File file = new File("testCheckAndPromptToOverwriteFile03");
-        FileUtils.writeStringToFile(file, "test string", "UTF-8");
+        FileUtils.writeStringToFile(file, "test string", StandardCharsets.UTF_8);
 
         try
         {
@@ -498,7 +490,7 @@ public class TestConsoleRSAKeyPairGenerator
     public void testCheckAndPromptToOverwriteFile04() throws IOException
     {
         File file = new File("testCheckAndPromptToOverwriteFile04");
-        FileUtils.writeStringToFile(file, "test string", "UTF-8");
+        FileUtils.writeStringToFile(file, "test string", StandardCharsets.UTF_8);
 
         try
         {
@@ -524,7 +516,7 @@ public class TestConsoleRSAKeyPairGenerator
     public void testCheckAndPromptToOverwriteFile05() throws IOException
     {
         File file = new File("testCheckAndPromptToOverwriteFile05");
-        FileUtils.writeStringToFile(file, "test string", "UTF-8");
+        FileUtils.writeStringToFile(file, "test string", StandardCharsets.UTF_8);
 
         try
         {
@@ -550,7 +542,7 @@ public class TestConsoleRSAKeyPairGenerator
     public void testCheckAndPromptToOverwriteFile06() throws IOException
     {
         File file = new File("testCheckAndPromptToOverwriteFile06");
-        FileUtils.writeStringToFile(file, "test string", "UTF-8");
+        FileUtils.writeStringToFile(file, "test string", StandardCharsets.UTF_8);
 
         try
         {
@@ -577,7 +569,7 @@ public class TestConsoleRSAKeyPairGenerator
     {
         File file = new File("testCheckAndPromptToOverwriteFile07");
         file = file.getCanonicalFile();
-        FileUtils.writeStringToFile(file, "test string", "UTF-8");
+        FileUtils.writeStringToFile(file, "test string", StandardCharsets.UTF_8);
 
         assertTrue("Setting the file readable flag to false should have succeeded.", file.setReadable(false, false));
         assertTrue("The file should still be writable.", file.canWrite());
@@ -607,7 +599,7 @@ public class TestConsoleRSAKeyPairGenerator
     {
         File file = new File("testCheckAndPromptToOverwriteFile08");
         file = file.getCanonicalFile();
-        FileUtils.writeStringToFile(file, "test string", "UTF-8");
+        FileUtils.writeStringToFile(file, "test string", StandardCharsets.UTF_8);
 
         assertTrue("Setting the file readable flag to false should have succeeded.", file.setWritable(false, false));
         assertTrue("The file should still be readable.", file.canRead());
@@ -2164,7 +2156,7 @@ public class TestConsoleRSAKeyPairGenerator
     public void testMain01() throws Exception
     {
         final ByteArrayOutputStream byteStream = new ByteArrayOutputStream();
-        final PrintStream stream = new PrintStream(byteStream, true, "UTF-8");
+        final PrintStream stream = new PrintStream(byteStream, true, StandardCharsets.UTF_8.name());
 
         final Capture<String> errorCapture = EasyMock.newCapture();
 
@@ -2181,16 +2173,8 @@ public class TestConsoleRSAKeyPairGenerator
 
         EasyMock.replay(this.generator, this.device);
 
-        TextInterfaceDevice existingConsole = TextInterfaceDevice.CONSOLE;
-
-        Field modifiersField = Field.class.getDeclaredField("modifiers");
-        modifiersField.setAccessible(true);
-
-        Field consoleField = TextInterfaceDevice.class.getField("CONSOLE");
-
-        int existingModifiers = consoleField.getModifiers();
-        modifiersField.setInt(consoleField, consoleField.getModifiers() & ~Modifier.FINAL);
-
+        Field consoleField = ConsoleRSAKeyPairGenerator.class.getDeclaredField("TEST_CONSOLE");
+        consoleField.setAccessible(true);
         consoleField.set(null, this.device);
 
         try
@@ -2199,8 +2183,7 @@ public class TestConsoleRSAKeyPairGenerator
         }
         finally
         {
-            consoleField.set(null, existingConsole);
-            modifiersField.setInt(consoleField, existingModifiers);
+            consoleField.set(null, null);
         }
 
         assertTrue(errorCapture.getValue().contains("ThisExceptionMeansTestSucceededException"));
@@ -2214,7 +2197,7 @@ public class TestConsoleRSAKeyPairGenerator
     public void testMain02() throws Exception
     {
         final ByteArrayOutputStream byteStream = new ByteArrayOutputStream();
-        final PrintStream stream = new PrintStream(byteStream, true, "UTF-8");
+        final PrintStream stream = new PrintStream(byteStream, true, StandardCharsets.UTF_8.name());
 
         final Capture<String> firstErrorCapture = EasyMock.newCapture();
         final Capture<String> secondErrorCapture = EasyMock.newCapture();
@@ -2234,16 +2217,8 @@ public class TestConsoleRSAKeyPairGenerator
 
         EasyMock.replay(this.generator, this.device);
 
-        TextInterfaceDevice existingConsole = TextInterfaceDevice.CONSOLE;
-
-        Field modifiersField = Field.class.getDeclaredField("modifiers");
-        modifiersField.setAccessible(true);
-
-        Field consoleField = TextInterfaceDevice.class.getField("CONSOLE");
-
-        int existingModifiers = consoleField.getModifiers();
-        modifiersField.setInt(consoleField, consoleField.getModifiers() & ~Modifier.FINAL);
-
+        Field consoleField = ConsoleRSAKeyPairGenerator.class.getDeclaredField("TEST_CONSOLE");
+        consoleField.setAccessible(true);
         consoleField.set(null, this.device);
 
         try
@@ -2252,8 +2227,7 @@ public class TestConsoleRSAKeyPairGenerator
         }
         finally
         {
-            consoleField.set(null, existingConsole);
-            modifiersField.setInt(consoleField, existingModifiers);
+            consoleField.set(null, null);
         }
 
         assertTrue(firstErrorCapture.getValue().contains("private"));

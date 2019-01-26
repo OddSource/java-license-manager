@@ -251,45 +251,6 @@
                     <artifactId>maven-javadoc-plugin</artifactId>
                     <version>${version.plugin.javadoc}</version>
                     <configuration>
-                        <includeDependencySources>true</includeDependencySources>
-                        <dependencySourceIncludes>
-                            <dependencySourceInclude>io.oddsource.java.licensing:*</dependencySourceInclude>
-                        </dependencySourceIncludes>
-                        <maxmemory>${project.tasks.maximum.memory}</maxmemory>
-                        <breakiterator>true</breakiterator>
-                        <failOnError>true</failOnError>
-                        <show>protected</show>
-                        <version>true</version>
-                        <use>true</use>
-                        <author>true</author>
-                        <windowtitle><![CDATA[${project.name} ${project.version} API Documentation]]></windowtitle>
-                        <doctitle><![CDATA[<h2>${project.name} ${project.version} API Documentation</h2>]]></doctitle>
-                        <bottom>
-                            <![CDATA[<i>Copyright &#169; {inceptionYear}-{currentYear} {organizationName}. All Rights
-                            Reserved. Licensed Under the <a href="http://www.apache.org/licenses/LICENSE-2.0">Apache
-                            License version 2.0</a>.</i>]]>
-                        </bottom>
-                        <detectJavaApiLink>true</detectJavaApiLink>
-                        <detectLinks>false</detectLinks>
-                        <sourceFileExcludes>
-                            <exclude>**/Mock*.java</exclude>
-                            <exclude>**/Test*.java</exclude>
-                            <exclude>io/oddsource/java/mock/**</exclude>
-                            <exclude>io/oddsource/java/licensing/mock/**</exclude>
-                            <exclude>io/oddsource/java/licensing/samples/**</exclude>
-                        </sourceFileExcludes>
-                        <tags>
-                            <tag>
-                                <name>issue</name>
-                                <placement>a</placement>
-                                <head>GitHub Issue:</head>
-                            </tag>
-                            <tag>
-                                <name>todo</name>
-                                <placement>a</placement>
-                                <head>To Do:</head>
-                            </tag>
-                        </tags>
                         <archive>
                             <addMavenDescriptor>true</addMavenDescriptor>
                             <compress>true</compress>
@@ -326,6 +287,47 @@
                                 <Sealed>false</Sealed>
                             </manifestEntries>
                         </archive>
+                        <author>true</author>
+                        <bottom>
+                            <![CDATA[<i>Copyright &#169; {inceptionYear}-{currentYear} {organizationName}. All Rights
+                            Reserved. Licensed Under the <a href="http://www.apache.org/licenses/LICENSE-2.0">Apache
+                            License version 2.0</a>.</i>]]>
+                        </bottom>
+                        <breakiterator>true</breakiterator>
+                        <dependencySourceIncludes>
+                            <dependencySourceInclude>io.oddsource.java.licensing:*</dependencySourceInclude>
+                        </dependencySourceIncludes>
+                        <detectJavaApiLink>true</detectJavaApiLink>
+                        <detectLinks>false</detectLinks>
+                        <doctitle><![CDATA[<h2>${project.name} ${project.version} API Documentation</h2>]]></doctitle>
+                        <encoding>UTF-8</encoding>
+                        <failOnError>true</failOnError>
+                        <includeDependencySources>true</includeDependencySources>
+                        <maxmemory>${project.tasks.maximum.memory}</maxmemory>
+                        <show>protected</show>
+                        <source>${javac.source.version}</source>
+                        <sourceFileExcludes>
+                            <exclude>**/Mock*.java</exclude>
+                            <exclude>**/Test*.java</exclude>
+                            <exclude>io/oddsource/java/mock/**</exclude>
+                            <exclude>io/oddsource/java/licensing/mock/**</exclude>
+                            <exclude>io/oddsource/java/licensing/samples/**</exclude>
+                        </sourceFileExcludes>
+                        <tags>
+                            <tag>
+                                <name>issue</name>
+                                <placement>a</placement>
+                                <head>GitHub Issue:</head>
+                            </tag>
+                            <tag>
+                                <name>todo</name>
+                                <placement>a</placement>
+                                <head>To Do:</head>
+                            </tag>
+                        </tags>
+                        <use>true</use>
+                        <version>true</version>
+                        <windowtitle><![CDATA[${project.name} ${project.version} API Documentation]]></windowtitle>
                     </configuration>
                 </plugin>
             </plugins>

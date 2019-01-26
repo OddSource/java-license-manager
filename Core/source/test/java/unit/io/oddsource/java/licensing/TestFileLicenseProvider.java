@@ -21,6 +21,7 @@ import java.io.File;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.net.URL;
+import java.nio.charset.StandardCharsets;
 
 import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.io.FileUtils;
@@ -184,7 +185,7 @@ public class TestFileLicenseProvider
 
         temp = new File(temp, "io/oddsource/java/licensing/testGetLicenseFile03.lic");
 
-        FileUtils.writeStringToFile(temp, "temp", "UTF-8");
+        FileUtils.writeStringToFile(temp, "temp", StandardCharsets.UTF_8);
 
         this.provider.setFilePrefix("io/oddsource/java/licensing/");
         this.provider.setFileSuffix(".lic");
@@ -215,7 +216,7 @@ public class TestFileLicenseProvider
 
         temp = new File(temp, "io/oddsource/java/licensing/licensor/testGetLicenseFile04.prop");
 
-        FileUtils.writeStringToFile(temp, "temp", "UTF-8");
+        FileUtils.writeStringToFile(temp, "temp", StandardCharsets.UTF_8);
 
         this.provider.setFilePrefix("/io/oddsource/java/licensing/licensor/");
         this.provider.setFileSuffix(".prop");
@@ -266,7 +267,7 @@ public class TestFileLicenseProvider
     public void testGetLicenseData04() throws IOException
     {
         File temp = new File("testGetLicenseData04.lic");
-        FileUtils.writeStringToFile(temp, "test get 04", "UTF-8");
+        FileUtils.writeStringToFile(temp, "test get 04", StandardCharsets.UTF_8);
 
         this.provider = EasyMock.createMockBuilder(FileLicenseProvider.class).
             addMockedMethod("getLicenseFile").createStrictMock();

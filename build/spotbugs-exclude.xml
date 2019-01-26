@@ -48,4 +48,13 @@
         </Or>
         <Bug pattern="PZLA_PREFER_ZERO_LENGTH_ARRAYS" />
     </Match>
+
+    <Match>
+        <Field name="TEST_CONSOLE" />
+        <Or>
+            <Class name="io.oddsource.java.licensing.licensor.interfaces.cli.ConsoleLicenseGenerator" />
+            <Class name="io.oddsource.java.licensing.licensor.interfaces.cli.ConsoleRSAKeyPairGenerator" />
+        </Or>
+        <Bug pattern="UWF_UNWRITTEN_FIELD" />
+    </Match>
 </FindBugsFilter>
